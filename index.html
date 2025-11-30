@@ -52,13 +52,14 @@
         
         /* Header */
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-        h1 { color: var(--accent); margin: 0; font-size: 1.5rem; }
+        h1 { color: var(--accent); margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
+        .header-count { font-size: 0.9rem; color: var(--text-muted); font-weight: 400; background: var(--row); padding: 2px 8px; border-radius: 12px; border: 1px solid var(--border); }
+        
         .theme-toggle { background: none; border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 20px; cursor: pointer; font-size: 1.2rem; }
         
         .nav { margin-bottom: 20px; font-size: 0.9rem; }
         a { color: var(--accent); text-decoration: none; font-weight: 600; }
-        .stats { background: var(--row); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px; display: flex; gap: 15px; font-size: 0.9rem; color: var(--text-muted); flex-wrap: wrap; }
-
+        
         /* Filter Section */
         .sticky-header { position: sticky; top: 0; z-index: 100; background: var(--header-bg); padding: 10px 0; backdrop-filter: blur(5px); margin: 0 -20px; padding: 15px 20px; border-bottom: 1px solid var(--border); }
         .search-controls { display: flex; gap: 10px; margin-bottom: 10px; }
@@ -81,7 +82,11 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 20px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-in forwards;
         }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .dog-card {
             background: var(--row);
@@ -95,75 +100,24 @@
             transition: transform 0.2s, box-shadow 0.2s;
         }
         
-        .dog-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            border-color: var(--accent);
-        }
+        .dog-card:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); border-color: var(--accent); }
 
-        /* Card Header */
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .dog-name { font-size: 1.4rem; font-weight: 700; color: var(--text); margin: 0; line-height: 1.2; }
 
-        .dog-name {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--text);
-            margin: 0;
-            line-height: 1.2;
-        }
+        .tag.id { color: var(--text-muted); background: rgba(139, 148, 158, 0.15); border: 1px solid rgba(139, 148, 158, 0.3); font-family: monospace; font-size: 0.85rem; letter-spacing: 0.5px; }
 
-        /* ID Tag (Ghost Gray) */
-        .tag.id {
-            color: var(--text-muted);
-            background: rgba(139, 148, 158, 0.15);
-            border: 1px solid rgba(139, 148, 158, 0.3);
-            font-family: monospace;
-            font-size: 0.85rem;
-            letter-spacing: 0.5px;
-        }
+        .card-attrs { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 4px; }
+        .breed-info { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 5px; }
 
-        /* Attributes Row */
-        .card-attrs {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 12px;
-            margin-bottom: 4px;
-        }
-
-        .breed-info {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            margin-bottom: 5px;
-        }
-
-        /* Footer & Actions */
-        .card-footer {
-            margin-top: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 10px;
-        }
+        .card-footer { margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding-top: 10px; }
 
         /* Badges */
         .tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; background: var(--border); }
         .tag.male { color: var(--gender-male-text); background: var(--gender-male-bg); border: 1px solid var(--gender-male-border); } 
         .tag.female { color: var(--gender-female-text); background: var(--gender-female-bg); border: 1px solid var(--gender-female-border); }
-        
-        /* Dynamic Ghost Colors for Coats */
         .tag.color { border: 1px solid transparent; }
-        
-        /* Stray Badge (New Location) */
-        .tag.stray { 
-            border: 1px solid var(--stray-border); color: var(--stray-color); 
-            background: transparent; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;
-        }
+        .tag.stray { border: 1px solid var(--stray-border); color: var(--stray-color); background: transparent; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
         
         .los-badge { font-weight: 600; padding: 4px 8px; border-radius: 6px; font-size: 12px; display: inline-block; min-width: 70px; text-align: center; border: 1px solid transparent; }
         .los-green { color: var(--los-green-text); background: var(--los-green-bg); border-color: var(--los-green-border); }
@@ -177,13 +131,11 @@
         .share-btn:hover { color: var(--text); border-color: var(--text-muted); }
 
         .section-title { margin-top: 30px; color: var(--accent); border-bottom: 1px solid var(--border); margin-bottom: 20px; }
-        #loading-state { text-align: center; padding: 40px; color: var(--text-muted); }
+        .footer { margin-top: 40px; border-top: 1px solid var(--border); padding-top: 20px; color: var(--text-muted); font-size: 0.85rem; text-align: center; display: flex; flex-direction: column; gap: 5px; }
+        #loading-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
 
-        /* Mobile specific adjustments */
-        @media (max-width: 600px) {
-            .dog-grid { grid-template-columns: 1fr; } 
-        }
-    </style></head><body><div class=container><div class=top-bar><h1>🐕 CACC Dogs</h1><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button></div><div class=nav><a href=map.html>🗺️ Map</a> | <a href=trends.html>📈 Trends</a> | <a href=rescues.html>🚑 Rescues</a> | <a href=breeds.html>🐶 Breeds</a></div><div class=stats><span>Last Updated: 2025-11-29 18:59</span><span>208 Available</span></div><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input onkeyup=handleGlobalSearch() placeholder="Search Name, ID, Breed..."></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-spinner fa-spin fa-2x"></i><br><br>Fetching live data...</div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div></div><div class=footer>Generated by CACC Dog Bot</div></div><script>
+        @media (max-width: 600px) { .dog-grid { grid-template-columns: 1fr; } }
+    </style></head><body><div class=container><div class=top-bar><h1>🐕 CACC Dogs <span class=header-count>208</span></h1><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button></div><div class=nav><a href=map.html>🗺️ Map</a> | <a href=trends.html>📈 Trends</a> | <a href=rescues.html>🚑 Rescues</a> | <a href=breeds.html>🐶 Breeds</a></div><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input onkeyup=handleGlobalSearch() placeholder="Search Name, ID, Breed..."></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div></div><div class=footer><span>Last Updated: 2025-11-29 19:10 CST</span><span>Generated by CACC Dog Bot</span></div></div><script>
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
         const icon = document.querySelector('.theme-toggle i');
@@ -324,10 +276,8 @@
         renderGrid(results);
     }
 
-    // --- COLOR MAPPING HELPER ---
     function getColorStyle(colorText) {
         const c = colorText.toLowerCase();
-        // Ghost Color Map
         if (c.includes('black')) return 'background: rgba(100,100,100,0.15); color: #c9d1d9; border: 1px solid rgba(100,100,100,0.5);';
         if (c.includes('white')) return 'background: rgba(255,255,255,0.1); color: #f0f6fc; border: 1px solid rgba(255,255,255,0.3);';
         if (c.includes('brown') || c.includes('choc') || c.includes('liver')) return 'background: rgba(160, 82, 45, 0.15); color: #dcbfa3; border: 1px solid rgba(160, 82, 45, 0.4);';
@@ -336,8 +286,6 @@
         if (c.includes('red')) return 'background: rgba(205, 92, 92, 0.15); color: #f0a0a0; border: 1px solid rgba(205, 92, 92, 0.4);';
         if (c.includes('brindle')) return 'background: rgba(139, 69, 19, 0.15); color: #cdb499; border: 1px solid rgba(139, 69, 19, 0.4);';
         if (c.includes('tricolor')) return 'background: rgba(128, 128, 128, 0.15); color: #d0d0d0; border: 1px solid rgba(128, 128, 128, 0.4);';
-        
-        // Default
         return 'background: rgba(128, 128, 128, 0.1); color: #8b949e; border: 1px solid rgba(128,128,128,0.3);';
     }
 
@@ -355,7 +303,6 @@
             if (days >= 30) badgeClass = 'los-red';
             else if (days >= 15) badgeClass = 'los-yellow';
             
-            // Stray Badge Logic
             let strayBadge = '';
             if (dog.is_stray) {
                 if (dog.is_mappable) {
@@ -365,13 +312,11 @@
                 }
             }
 
-            // Age Logic: Hide if Unknown
             let ageHtml = '';
             if (dog.age && dog.age !== 'Unknown') {
                 ageHtml = `<div class="tag" style="background:var(--row-hover); color:var(--text-muted); border:1px solid var(--border); margin-right:5px;">${dog.age}</div>`;
             }
 
-            // Color Tags Logic (Splitter)
             let colorHtml = '';
             if (dog.color) {
                 const colors = dog.color.split('/').map(c => c.trim());
@@ -389,9 +334,7 @@
                         <h3 class="dog-name">${dog.name}</h3>
                         <span class="tag id">${dog.id}</span>
                     </div>
-                    
                     <div class="breed-info">${dog.breed}</div>
-
                     <div class="card-attrs">
                         <div class="left-attr">
                             <span class="tag ${genderClass}">${genderIcon} ${dog.gender}</span>
@@ -401,7 +344,6 @@
                             ${colorHtml}
                         </div>
                     </div>
-
                     <div class="card-footer">
                         <div class="status-badges">
                             <span class="los-badge ${badgeClass}">${days} Days</span>
