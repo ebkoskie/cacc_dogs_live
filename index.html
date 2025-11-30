@@ -76,42 +76,114 @@
         .chip-close { font-size: 1.1em; opacity: 0.8; font-weight: bold; display: none; }
         .chip.active .chip-close { display: inline-block; }
 
-        /* Table */
-        .section-title { margin-top: 30px; color: var(--accent); border-bottom: 1px solid var(--border); }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
-        th { background: var(--row); padding: 12px; border-bottom: 2px solid var(--border); color: var(--text-muted); cursor: pointer; }
-        td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-        tr:hover { background-color: var(--row-hover); }
+        /* --- TILE GRID SYSTEM --- */
+        .dog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .dog-card {
+            background: var(--row);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 5px var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .dog-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border-color: var(--accent);
+        }
+
+        /* Card Header */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .dog-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        /* ID Tag (Ghost Gray) */
+        .tag.id {
+            color: var(--text-muted);
+            background: rgba(139, 148, 158, 0.15);
+            border: 1px solid rgba(139, 148, 158, 0.3);
+            font-family: monospace;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* Attributes Row */
+        .card-attrs {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+            margin-bottom: 4px;
+        }
+
+        .breed-info {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        /* Footer & Actions */
+        .card-footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+        }
 
         /* Badges */
-        .tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; background: var(--border); }
+        .tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; background: var(--border); }
         .tag.male { color: var(--gender-male-text); background: var(--gender-male-bg); border: 1px solid var(--gender-male-border); } 
         .tag.female { color: var(--gender-female-text); background: var(--gender-female-bg); border: 1px solid var(--gender-female-border); }
-        .tag.stray { border: 1px solid var(--stray-border); color: var(--stray-color); background: transparent; cursor: default; }
-        a .tag.stray { cursor: pointer; }
+        
+        /* Dynamic Ghost Colors for Coats */
+        .tag.color { border: 1px solid transparent; }
+        
+        /* Stray Badge (New Location) */
+        .tag.stray { 
+            border: 1px solid var(--stray-border); color: var(--stray-color); 
+            background: transparent; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;
+        }
         
         .los-badge { font-weight: 600; padding: 4px 8px; border-radius: 6px; font-size: 12px; display: inline-block; min-width: 70px; text-align: center; border: 1px solid transparent; }
         .los-green { color: var(--los-green-text); background: var(--los-green-bg); border-color: var(--los-green-border); }
         .los-yellow { color: var(--los-yellow-text); background: var(--los-yellow-bg); border-color: var(--los-yellow-border); }
         .los-red { color: var(--los-red-text); background: var(--los-red-bg); border-color: var(--los-red-border); }
 
-        .action-btn { padding: 6px 12px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; font-size: 13px; background: var(--row); border: 1px solid var(--border); color: var(--accent); }
-        .share-btn { color: var(--text-muted); margin-left: 5px; cursor: pointer; border: none; background: transparent; font-size: 1.1em; }
+        .action-group { display: flex; gap: 8px; }
+        .action-btn { padding: 6px 14px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; background: var(--row); border: 1px solid var(--border); color: var(--accent); transition: background 0.2s; }
+        .action-btn:hover { background: var(--row-hover); }
+        .share-btn { color: var(--text-muted); padding: 6px 10px; cursor: pointer; border: 1px solid var(--border); border-radius: 6px; background: transparent; font-size: 1.1em; transition: color 0.2s; }
+        .share-btn:hover { color: var(--text); border-color: var(--text-muted); }
+
+        .section-title { margin-top: 30px; color: var(--accent); border-bottom: 1px solid var(--border); margin-bottom: 20px; }
         #loading-state { text-align: center; padding: 40px; color: var(--text-muted); }
 
-        @media (max-width: 768px) {
-            thead { display: none; }
-            tr { display: block; background: var(--row); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 15px; padding: 15px; box-shadow: 0 2px 5px var(--card-shadow); }
-            td { display: block; padding: 4px 0; border: none; text-align: left; padding-left: 0; }
-            td:nth-child(1), td:nth-child(2) { display: inline-block; font-size: 1.1em; font-weight: bold; margin-bottom: 5px; }
-            td:nth-child(1)::after { content: " - "; margin: 0 5px; color: var(--text-muted); }
-            td:nth-child(3) { color: var(--text-muted); font-size: 0.9em; margin-bottom: 5px; }
-            td:nth-child(4) { display: inline-block; font-size: 0.9em; color: var(--text-muted); margin-right: 10px; }
-            td:nth-child(6) { float: right; margin-top: -30px; }
-            td:nth-child(7) { clear: both; margin-top: 10px; }
-            td:last-child { margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; }
+        /* Mobile specific adjustments */
+        @media (max-width: 600px) {
+            .dog-grid { grid-template-columns: 1fr; } 
         }
-    </style></head><body><div class=container><div class=top-bar><h1>🐕 CACC Dogs</h1><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button></div><div class=nav><a href=map.html>🗺️ Map</a> | <a href=trends.html>📈 Trends</a> | <a href=rescues.html>🚑 Rescues</a> | <a href=breeds.html>🐶 Breeds</a></div><div class=stats><span>Last Updated: 2025-11-29 18:39</span><span>208 Available</span></div><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input onkeyup=handleGlobalSearch() placeholder="Search Name, ID, Breed..."></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-spinner fa-spin fa-2x"></i><br><br>Fetching live data...</div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div class=table-container><table id=main-table><thead><tr><th>ID</th><th>Name</th><th>Breed</th><th>Age</th><th>Color</th><th>Gender</th><th>Time in Shelter</th><th>Actions</th></tr></thead><tbody id=table-body class=dog-list></tbody></table></div></div><div class=footer>Generated by CACC Dog Bot</div></div><script>
+    </style></head><body><div class=container><div class=top-bar><h1>🐕 CACC Dogs</h1><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button></div><div class=nav><a href=map.html>🗺️ Map</a> | <a href=trends.html>📈 Trends</a> | <a href=rescues.html>🚑 Rescues</a> | <a href=breeds.html>🐶 Breeds</a></div><div class=stats><span>Last Updated: 2025-11-29 18:59</span><span>208 Available</span></div><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input onkeyup=handleGlobalSearch() placeholder="Search Name, ID, Breed..."></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-spinner fa-spin fa-2x"></i><br><br>Fetching live data...</div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div></div><div class=footer>Generated by CACC Dog Bot</div></div><script>
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
         const icon = document.querySelector('.theme-toggle i');
@@ -188,22 +260,17 @@
             return true;
         });
 
-        // Smart Sort Logic
-        let sortMode = 'longest'; // Default
+        let sortMode = 'longest';
         if (activeFilters.has('new') || activeFilters.has('stray') || activeFilters.has('puppy')) {
             sortMode = 'newest';
         }
-        
-        // Update Sort UI
         document.getElementById('sortSelect').value = sortMode;
-        renderTable(sortDogs(filtered, sortMode));
+        renderGrid(sortDogs(filtered, sortMode));
     }
 
     function handleSortChange() {
-        // Manual override of sort (maintains filters)
         const mode = document.getElementById('sortSelect').value;
         const today = new Date();
-        
         let filtered = allDogs.filter(dog => {
             if (activeFilters.size === 0) return true;
             const intake = new Date(dog.date);
@@ -223,8 +290,7 @@
             }
             return true;
         });
-        
-        renderTable(sortDogs(filtered, mode));
+        renderGrid(sortDogs(filtered, mode));
     }
 
     function sortDogs(list, mode) {
@@ -255,13 +321,30 @@
             (dog.id && dog.id.toLowerCase().includes(query)) ||
             (dog.breed && dog.breed.toLowerCase().includes(query))
         );
-        renderTable(results);
+        renderGrid(results);
     }
 
-    function renderTable(dogs) {
-        const tbody = document.getElementById('table-body');
-        tbody.innerHTML = '';
-        if (dogs.length === 0) { tbody.innerHTML = '<tr><td colspan="8">No dogs found matching this criteria.</td></tr>'; return; }
+    // --- COLOR MAPPING HELPER ---
+    function getColorStyle(colorText) {
+        const c = colorText.toLowerCase();
+        // Ghost Color Map
+        if (c.includes('black')) return 'background: rgba(100,100,100,0.15); color: #c9d1d9; border: 1px solid rgba(100,100,100,0.5);';
+        if (c.includes('white')) return 'background: rgba(255,255,255,0.1); color: #f0f6fc; border: 1px solid rgba(255,255,255,0.3);';
+        if (c.includes('brown') || c.includes('choc') || c.includes('liver')) return 'background: rgba(160, 82, 45, 0.15); color: #dcbfa3; border: 1px solid rgba(160, 82, 45, 0.4);';
+        if (c.includes('tan') || c.includes('fawn') || c.includes('buff') || c.includes('cream') || c.includes('gold')) return 'background: rgba(210, 180, 140, 0.15); color: #e8d0a9; border: 1px solid rgba(210, 180, 140, 0.4);';
+        if (c.includes('blue') || c.includes('gray')) return 'background: rgba(119, 136, 153, 0.15); color: #b0c4de; border: 1px solid rgba(119, 136, 153, 0.4);';
+        if (c.includes('red')) return 'background: rgba(205, 92, 92, 0.15); color: #f0a0a0; border: 1px solid rgba(205, 92, 92, 0.4);';
+        if (c.includes('brindle')) return 'background: rgba(139, 69, 19, 0.15); color: #cdb499; border: 1px solid rgba(139, 69, 19, 0.4);';
+        if (c.includes('tricolor')) return 'background: rgba(128, 128, 128, 0.15); color: #d0d0d0; border: 1px solid rgba(128, 128, 128, 0.4);';
+        
+        // Default
+        return 'background: rgba(128, 128, 128, 0.1); color: #8b949e; border: 1px solid rgba(128,128,128,0.3);';
+    }
+
+    function renderGrid(dogs) {
+        const grid = document.getElementById('dog-grid');
+        grid.innerHTML = '';
+        if (dogs.length === 0) { grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#8b949e;">No dogs found matching this criteria.</div>'; return; }
 
         dogs.slice(0, 100).forEach(dog => {
             const today = new Date();
@@ -272,27 +355,66 @@
             if (days >= 30) badgeClass = 'los-red';
             else if (days >= 15) badgeClass = 'los-yellow';
             
+            // Stray Badge Logic
             let strayBadge = '';
             if (dog.is_stray) {
-                strayBadge = dog.is_mappable 
-                    ? `<a href="map.html?id=${dog.id}"><span class="tag stray"><span class="stray-label">Stray</span> 📍</span></a>`
-                    : `<span class="tag stray"><span class="stray-label">Stray</span></span>`;
+                if (dog.is_mappable) {
+                    strayBadge = `<a href="map.html?id=${dog.id}" title="View Map" style="text-decoration:none;"><span class="tag stray"><i class="fas fa-map-marker-alt"></i> Stray</span></a>`;
+                } else {
+                    strayBadge = `<span class="tag stray" style="cursor:help" title="Location unknown"><i class="fas fa-question-circle"></i> Stray</span>`;
+                }
             }
 
-            tbody.innerHTML += `
-                <tr>
-                    <td>${dog.id}</td>
-                    <td>${dog.name} ${strayBadge}</td>
-                    <td>${dog.breed}</td>
-                    <td>${dog.age || 'Unknown'}</td>
-                    <td>${dog.color}</td>
-                    <td><span class="tag ${dog.gender && dog.gender.includes('Female') ? 'female' : 'male'}">${dog.gender}</span></td>
-                    <td><span class="los-badge ${badgeClass}">${days} Days</span></td>
-                    <td>
-                        <a href="${dog.link}" target="_blank" class="action-btn">View</a>
-                        <button class="share-btn" onclick="shareDog('${dog.name}', '${dog.id}', '${dog.link}')"><i class="fas fa-share-alt"></i></button>
-                    </td>
-                </tr>`;
+            // Age Logic: Hide if Unknown
+            let ageHtml = '';
+            if (dog.age && dog.age !== 'Unknown') {
+                ageHtml = `<div class="tag" style="background:var(--row-hover); color:var(--text-muted); border:1px solid var(--border); margin-right:5px;">${dog.age}</div>`;
+            }
+
+            // Color Tags Logic (Splitter)
+            let colorHtml = '';
+            if (dog.color) {
+                const colors = dog.color.split('/').map(c => c.trim());
+                colors.forEach(c => {
+                    colorHtml += `<span class="tag color" style="${getColorStyle(c)}">${c}</span> `;
+                });
+            }
+
+            const genderClass = (dog.gender && dog.gender.includes('Female')) ? 'female' : 'male';
+            const genderIcon = genderClass === 'female' ? '♀️' : '♂️';
+
+            const card = `
+                <div class="dog-card">
+                    <div class="card-header">
+                        <h3 class="dog-name">${dog.name}</h3>
+                        <span class="tag id">${dog.id}</span>
+                    </div>
+                    
+                    <div class="breed-info">${dog.breed}</div>
+
+                    <div class="card-attrs">
+                        <div class="left-attr">
+                            <span class="tag ${genderClass}">${genderIcon} ${dog.gender}</span>
+                            ${ageHtml}
+                        </div>
+                        <div class="right-attr" style="text-align:right;">
+                            ${colorHtml}
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="status-badges">
+                            <span class="los-badge ${badgeClass}">${days} Days</span>
+                            ${strayBadge}
+                        </div>
+                        <div class="action-group">
+                            <a href="${dog.link}" target="_blank" class="action-btn">View</a>
+                            <button class="share-btn" onclick="shareDog('${dog.name}', '${dog.id}', '${dog.link}')"><i class="fas fa-share-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            grid.innerHTML += card;
         });
     }
 
