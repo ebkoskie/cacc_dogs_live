@@ -1,0 +1,640 @@
+{
+  "0 E 123Rd St, Chicago, Il 60628": [
+    41.6707948,
+    -87.6188344
+  ],
+  "0 E Garfield Blvd, Chicago, Il 60637": [
+    41.7947601,
+    -87.6192222
+  ],
+  "0 W 77Th Pl, Chicago, Il 60620": [
+    41.7532164,
+    -87.6774177
+  ],
+  "0 W 95Th St, Chicago Il 60620": [
+    41.7211773,
+    -87.6699432
+  ],
+  "100 N Mason Chicago, Il 60644": [
+    41.8836327,
+    -87.7733376
+  ],
+  "100 S Indiana Ave, Chicago Il 60628": [
+    41.7154903,
+    -87.6188671
+  ],
+  "100 W 112Th Pl Chicago, Il 60628": [
+    41.689913,
+    -87.62591
+  ],
+  "100 W Delaware Pl, Chestnut Street Il 60610, Chicago, IL": null,
+  "1000 N Springfield Ave, Chicago Il 60651": [
+    41.899166,
+    -87.723869
+  ],
+  "1000 N Springfield Ave, Chicago, Il 60651": [
+    41.899166,
+    -87.723869
+  ],
+  "1000 N St Louis Ave Chicago Il60651": null,
+  "10200 S Perry Ave, Chicago Il 60628": [
+    41.7087981,
+    -87.6262497
+  ],
+  "10500 S Ewing Ave, Chicago Il 60617": [
+    41.7044433,
+    -87.5356536
+  ],
+  "10500 S State St, Chicago, Il 60628": [
+    41.7033725,
+    -87.6236727
+  ],
+  "10500 S Wood St, Chicago Il 60643": [
+    41.702739,
+    -87.6671
+  ],
+  "11200 S Langley, Chicago, IL": null,
+  "11500 S Troop St Chicago Il 60643": null,
+  "11500 S Yale Ave, Chicago, Il 60628": [
+    41.684665,
+    -87.628983
+  ],
+  "11700 S Parnell Ave Chicago Il  60628": [
+    41.6813676,
+    -87.636297
+  ],
+  "12000 S Eggleston Ave, Chicago Il 60628": [
+    41.6758892,
+    -87.633656
+  ],
+  "1300 S Christiana Ave, Chicago, Il 60623": [
+    41.864406,
+    -87.709378
+  ],
+  "13200 S Dr Martin Luther King Jr Dr, Chicago Il 60827": [
+    41.6576564,
+    -87.6130497
+  ],
+  "1400 N, Chicago, IL": [
+    41.8861544,
+    -87.6625039
+  ],
+  "1400 S Blue Island Ave Chicago, Il 60608": [
+    41.863178,
+    -87.656756
+  ],
+  "1400 S Fairfield Ave, Chicago, Il 60608": [
+    41.862477,
+    -87.694629
+  ],
+  "1600 S Pulaski Chicago Il 60623": [
+    41.8388701,
+    -87.724408
+  ],
+  "1600 S Trumbull Ave, Chicago Il 60623": [
+    41.85889,
+    -87.711658
+  ],
+  "1600 W 38Th St, Chicago Il 60609": [
+    41.825095,
+    -87.666134
+  ],
+  "1700 N Lotus Ave, Chicago Il 60639": [
+    41.9113866,
+    -87.7621445
+  ],
+  "1700 S State St Chicago, Il 60616": [
+    41.858875,
+    -87.627422
+  ],
+  "1700 S State St, Chicago Il 60616": [
+    41.858875,
+    -87.627422
+  ],
+  "1900 S State St Chicago Il 60616": [
+    41.8562178,
+    -87.6274256
+  ],
+  "200 S Kenton Ave, Chicago Il 60644": [
+    41.877997,
+    -87.740632
+  ],
+  "200 S Troy St, Chicago, Il 60612": [
+    41.8780789,
+    -87.7049257
+  ],
+  "2100 S California Ave Chciago Il 60608, Chicago, IL": null,
+  "2100 S Rockwell St, Chicago Il 60608": [
+    41.851844,
+    -87.690649
+  ],
+  "2100 W 19Th St, Chicago Il 60608": [
+    41.8560225,
+    -87.678567
+  ],
+  "2200 E 103Rd St, Chicago Il 60617": [
+    41.708122,
+    -87.568565
+  ],
+  "2200 E 103Rd St, Chicago, Il 60617": [
+    41.708122,
+    -87.568565
+  ],
+  "2300 E 67Th St, Chicago Il 60649": [
+    41.7735417,
+    -87.576083
+  ],
+  "2600 E 73Rd St, Chicago Il 60649": [
+    41.763525,
+    -87.561871
+  ],
+  "2600 S Kedzie Ave, Chicago Il 60623": [
+    41.844393,
+    -87.705147
+  ],
+  "2600 W Monroe St, Chicago Il 60612": [
+    41.880286,
+    -87.692288
+  ],
+  "2700 S Karlov Chicago Il 60623": [
+    41.8422559,
+    -87.7271826
+  ],
+  "2700 S Prairie Ave, Chicago Il 60616": [
+    41.84351,
+    -87.620533
+  ],
+  "2700 S Western Ave Chicago Il 60608": [
+    41.8437183,
+    -87.6867462
+  ],
+  "2700 S Western Ave Chicago, Il 60608": [
+    41.8437183,
+    -87.6867462
+  ],
+  "2700 S Western Ave, Chicago Il 60608": [
+    41.8437183,
+    -87.6867462
+  ],
+  "2741 South Western AvenueChicago, IL 60608": null,
+  "2800 S Throop Stchicago, Il 60608": null,
+  "2900 S Shields Chicago, Il 60609": [
+    41.840994,
+    -87.635496
+  ],
+  "300 E 136Th Pl, Chicago Il 60827": [
+    41.6472175,
+    -87.6147306
+  ],
+  "300 W 31St St, Chicago, Il 60616": [
+    41.8383786,
+    -87.6343653
+  ],
+  "3100 W 61St St, Chicago Il 60629": [
+    41.782726,
+    -87.700973
+  ],
+  "3100 W Harrison St, Chicago Il 60612": [
+    41.873793,
+    -87.703635
+  ],
+  "3500 S Morgan St, Chicago Il 60609": [
+    41.8304805,
+    -87.6513598
+  ],
+  "3600 S California Ave, Chicago Il 60632": [
+    41.828148,
+    -87.694871
+  ],
+  "3600 S State St, Chicago Il 60609": [
+    41.82913,
+    -87.626687
+  ],
+  "3700 W 16Th St, Chicago Il 60623": [
+    41.859019,
+    -87.718438
+  ],
+  "3900 W Division St, Chicago, Il 60651": [
+    41.9029142,
+    -87.724034
+  ],
+  "400 N Lawler Ave, Chicago Il 60644": [
+    41.8879809,
+    -87.7519014
+  ],
+  "400 N Leclaire Ave, Chicago, Il 60644": [
+    41.8879237,
+    -87.7532154
+  ],
+  "4200 W 16Th St Chicago, Il 60623": [
+    41.858871,
+    -87.730621
+  ],
+  "4200 W Gladys Ave, Chicago, Il 60624": [
+    41.876196,
+    -87.730585
+  ],
+  "4300 S California Ave, Chicago Il 60632": [
+    41.8153481,
+    -87.6948046
+  ],
+  "4300 W Adams St, Chicago Il 60624": [
+    41.877968,
+    -87.733183
+  ],
+  "4400 S Ashland Ave, Chicago Il 60609": [
+    41.8138234,
+    -87.6656194
+  ],
+  "4500 W Carroll Dr, Chicago, Il 60624": [
+    41.8885222,
+    -87.6362122
+  ],
+  "4500 W Congress Pkwy, Chicago Il 60624": [
+    41.8743826,
+    -87.7378738
+  ],
+  "4500 W Van Buren St, Chicago, Il 60624": [
+    41.875195,
+    -87.7379
+  ],
+  "4700 S Ashland Ave, Chicago Il 60609": [
+    41.8083594,
+    -87.6656011
+  ],
+  "4700 S Ellis Ave, Chicago Il 60615": [
+    41.80947,
+    -87.601808
+  ],
+  "4700 S Wentworth Ave, Chicago Il 60609": [
+    41.8391224,
+    -87.6316981
+  ],
+  "4700 W West End Chicago Il 60644": null,
+  "4800 S Michigan Ave, Chicago, Il 60615": [
+    41.807341,
+    -87.622894
+  ],
+  "4800 S Winchester Ave, Chicago Il 60609": [
+    41.8065795,
+    -87.6736663
+  ],
+  "4800 W Westend Chicago,ill 60644": null,
+  "4900 S Ashland Ave, Chicago Il 60609": [
+    41.80463,
+    -87.664969
+  ],
+  "500 E 38Th St, Chicago, Il 60653": [
+    41.825787,
+    -87.614237
+  ],
+  "500 E 89Th St, Chicago Il 60619": [
+    41.733105,
+    -87.6118479
+  ],
+  "500 N Lasalle St, Chicago Il 60602": [
+    41.8831143,
+    -87.6324113
+  ],
+  "5100 S Damen Ave, Chicago Il 60609": [
+    41.800649,
+    -87.674604
+  ],
+  "5100 S Wentworth Ave, Chicago Il 60609": [
+    41.8391224,
+    -87.6316981
+  ],
+  "5100 W Gladys Ave, Chicago Il 60644": [
+    41.875854,
+    -87.753551
+  ],
+  "5200 S Drexel Blvd, Chicago Il 60615": [
+    41.8059317,
+    -87.6038128
+  ],
+  "5200 S Indiana Ave, Chicago Il 60615": [
+    41.7998176,
+    -87.6213672
+  ],
+  "5200 W Quincy St, Chicago, Il 60644": [
+    41.877646,
+    -87.75513
+  ],
+  "5400 N Cumberland Ave, Chicago, Il 60656": [
+    41.978168,
+    -87.836705
+  ],
+  "5400 S Justine St, Chicago Il 60609": [
+    41.795744,
+    -87.663526
+  ],
+  "5500 S Lowe Ave, Chicago Il 60621": [
+    41.79341,
+    -87.641598
+  ],
+  "5500 S Throop St, Chicago Il 60636": [
+    41.793116,
+    -87.657385
+  ],
+  "5500 W Grand Ave, Chicago, Il 60639": [
+    41.9183828,
+    -87.7633215
+  ],
+  "5600 S Francisco Ave, Chicago Il 60629": [
+    41.7916529,
+    -87.6966349
+  ],
+  "5600 S Maplewood Ave Chicago Il 60629": [
+    41.791844,
+    -87.687759
+  ],
+  "5600 W Cortland St, Chicago, Il 60639": [
+    41.9150621,
+    -87.7487271
+  ],
+  "5600 W Jackson Blvd, Chicago Il 60644": [
+    41.876773,
+    -87.765966
+  ],
+  "5700 W Jackson Blvd, Chicago Il 60644": [
+    41.8771859,
+    -87.7674257
+  ],
+  "5700 W Madison St, Chicago Il 60644": [
+    41.8804768,
+    -87.7683469
+  ],
+  "5800 S Artesian Ave, Chicago, Il 60629": [
+    41.7882008,
+    -87.6855557
+  ],
+  "5800 S Halsted Ave Chicago, Il 60621": null,
+  "5900 S Bishop St, Chicago Il 60636": [
+    41.786211,
+    -87.660854
+  ],
+  "5900 S Justine St, Chicago Il 60636": [
+    41.786185,
+    -87.66326
+  ],
+  "5900 S Racine Ave, Chicago Il 60621": [
+    41.786306,
+    -87.65478
+  ],
+  "5900 S Wood St, Chicago, Il 60636": [
+    41.786118,
+    -87.669341
+  ],
+  "6000 S Damen Ave Chicago, Il 60636": [
+    41.784681,
+    -87.674157
+  ],
+  "6100 S Artesian Ave, Chicago Il 60629": [
+    41.7827204,
+    -87.6853437
+  ],
+  "6300 S Calumet Ave, Chicago, Il 60637": [
+    41.779028,
+    -87.617366
+  ],
+  "6400 S Maplewood Ave, Chicago Il 60629": [
+    41.7772543,
+    -87.6875468
+  ],
+  "6400 S Minerva Ave, Chicago Il 60637": [
+    41.7783882,
+    -87.5967436
+  ],
+  "6400 S Parnell Chicago Il 60621": [
+    41.777896,
+    -87.638798
+  ],
+  "6500 S Ashland Ave, Chicago Il 60636": [
+    41.775708,
+    -87.664227
+  ],
+  "6500 S Sangamon St, Chicago, Il 60621": [
+    41.775933,
+    -87.648443
+  ],
+  "6700 S Cornell Ave Chicago Illinois 60647": [
+    41.8082005,
+    -87.5892009
+  ],
+  "6700 S Cornell Dr, Chicago Il 60649": [
+    41.7770318,
+    -87.5856671
+  ],
+  "6700 S Crandon Ave, Chicago Il 60649": [
+    41.7732407,
+    -87.5701811
+  ],
+  "6900 S Stoneyisland, Chicago Il": null,
+  "700 E 131St St, Calumet Park, Il 60827, Chicago, IL": null,
+  "700 E 88Th St, Chicago Il 60619": [
+    41.7349507,
+    -87.6069973
+  ],
+  "700 E 88Th St, Chicago, Il 60619": [
+    41.7349507,
+    -87.6069973
+  ],
+  "700 S Oakley Blvd, Chicago Il 60612": [
+    41.8729816,
+    -87.6840658
+  ],
+  "7000 S Cottage Grove Ave Chicago, Il 60619": [
+    41.7678523,
+    -87.6055241
+  ],
+  "7000 S Cottage Grove Chicago, Il 60637": [
+    41.7678523,
+    -87.6055241
+  ],
+  "7000 S Emerald Ave, Chicago Il 60621": [
+    41.770687,
+    -87.6432073
+  ],
+  "7000 S Paxton Ave, Chicago Il 60633": [
+    41.7677726,
+    -87.5716836
+  ],
+  "7100 S Racine Ave, Chicago Il 60636": [
+    41.7647917,
+    -87.6543182
+  ],
+  "7100 S Shore Dr, Chicago Il 60649": [
+    41.7659953,
+    -87.5628472
+  ],
+  "7300 S Aberdeen St, Chicago, Il 60621": [
+    41.761329,
+    -87.651703
+  ],
+  "7300 S Honore St, Chicago Il 60636": [
+    41.7610449,
+    -87.6700665
+  ],
+  "7300 S Princeton Ave Chicago Il 60621": [
+    41.7615206,
+    -87.6323632
+  ],
+  "7400 S Champlain Ave, Chicago, Il 60619": [
+    41.760219,
+    -87.609202
+  ],
+  "7400 S Kenwood Ave, Chicago Il 60619": [
+    41.7603828,
+    -87.5923026
+  ],
+  "7500 S Carpenter St, Chicago Il 60620": [
+    41.7575259,
+    -87.6505819
+  ],
+  "7500 S Evans Ave, Chicago Il 60619": [
+    41.75803,
+    -87.606725
+  ],
+  "7500 S Pulaski Rd, Chicago, Il 60652": [
+    41.7558648,
+    -87.7239978
+  ],
+  "7500 S Saginaw Ave, Chicago Il 60649": [
+    41.758722,
+    -87.560159
+  ],
+  "7500 S State St, Chicago Il 60620": [
+    41.7506487,
+    -87.6245505
+  ],
+  "7600 S Union Ave, Chicago Il 60620": [
+    41.75599,
+    -87.641847
+  ],
+  "7600 S Wood St, Chicago, Il 60620": [
+    41.755616,
+    -87.6687192
+  ],
+  "7700 S Jeffery Blvd, Chicago Il 60649": [
+    41.7549846,
+    -87.5765051
+  ],
+  "7700 S Kenton Ave, Ashburn Park Il 60652, Chicago, IL": null,
+  "7700 S Loomis St, Chicago Il 60620": [
+    41.7339571,
+    -87.6581516
+  ],
+  "7700 S May St, Chicago Il 60620": [
+    41.7540314,
+    -87.6529554
+  ],
+  "7900 S Colfax Ave, Chicago Il 60649": [
+    41.751225,
+    -87.561486
+  ],
+  "7900 S Washtenaw Ave, Ashburn Park Il 60652, Chicago, IL": [
+    41.7354055,
+    -87.6896852
+  ],
+  "7900 S Wood St, Chicago Il 60620": [
+    41.750168,
+    -87.668398
+  ],
+  "800 E 88Th St, Chicago Il 60619": [
+    41.734921,
+    -87.603853
+  ],
+  "800 N Leamington Ave, Chicago Il 60651": [
+    41.895074,
+    -87.754491
+  ],
+  "800 W 66Th St, Chicago Il 60621": [
+    41.774353,
+    -87.646028
+  ],
+  "8000 S Evans Ave, Chicago Il 60619": [
+    41.749312,
+    -87.606506
+  ],
+  "8000 S Evans Ave, Chicago, Il 60619": [
+    41.749312,
+    -87.606506
+  ],
+  "8000 S Muskegon Ave, Chicago Il 60617": [
+    41.7499075,
+    -87.5556674
+  ],
+  "8000 S Perry Ave, Chicago Il 60620": [
+    41.7489041,
+    -87.6272235
+  ],
+  "8100 S Colfax Ave, Chicago, Il 60617": [
+    41.7480183,
+    -87.5616043
+  ],
+  "8100 S Saginaw Ave Chicago Il 60617": [
+    41.748053,
+    -87.56022
+  ],
+  "8300 S Francisco Ave, Chicago, Il 60652": [
+    41.742483,
+    -87.695649
+  ],
+  "8400 S Escanaba Ave, Chicago Il 60617": [
+    41.742677,
+    -87.5542601
+  ],
+  "8400 S State St Chicago Il 60620": [
+    41.7506487,
+    -87.6245505
+  ],
+  "8600 S Cottage Grove Ave, Chicago Il 60619": [
+    41.7373902,
+    -87.6049539
+  ],
+  "8800 S Euclid Ave, Chicago Il 60617": [
+    41.7350828,
+    -87.5771528
+  ],
+  "8800 S Lowe Ave, Chicago Il 60620": [
+    41.7342037,
+    -87.6401616
+  ],
+  "900 E 130Th Pl, Chicago Il 60827": [
+    41.6586271,
+    -87.5998122
+  ],
+  "9000 S Harvard Ave Chicago, Il 60620": [
+    41.729317,
+    -87.632065
+  ],
+  "9100 S Michigan Ave Chicago Il 6019": [
+    41.7289561,
+    -87.6211674
+  ],
+  "93Rd /Ashland, Chicago, IL": [
+    41.7249786,
+    -87.6629272
+  ],
+  "9500 S Yale Ave, Chicago, Il 60628": [
+    41.7213131,
+    -87.6300467
+  ],
+  "9700 S Luella Ave, Chicago, Il 60617": [
+    41.718273,
+    -87.569323
+  ],
+  "9700 S Marquette Chicago Il 60617": [
+    41.7868155,
+    -87.6838562
+  ],
+  "9800 S Avenue G, Chicago, Il 60617": [
+    41.717702,
+    -87.531758
+  ],
+  "9800 S Prospect Sq, Chicago Il 60643": [
+    41.7279719,
+    -87.6675406
+  ],
+  "Kelly Park Archer/California, Chicago, IL": null
+}
