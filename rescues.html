@@ -36,14 +36,22 @@
         tr:last-child td { border-bottom: none; }
         tr:hover td { background: var(--row-hover); }
 
-        .footer { margin-top: 60px; border-top: 1px solid var(--border); padding-top: 20px; color: #8b949e; font-size: 0.8rem; text-align: center; }
+        /* Footer with Disclaimer */
+        .footer { 
+            margin-top: 60px; border-top: 1px solid var(--border); padding-top: 20px; 
+            color: #8b949e; font-size: 0.85rem; text-align: center; 
+            display: flex; flex-direction: column; gap: 8px; line-height: 1.4;
+        }
+        .footer .disclaimer {
+            font-size: 0.75rem; opacity: 0.8; max-width: 800px; margin: 0 auto;
+        }
 
         @media (max-width: 800px) { .details-grid { grid-template-columns: 1fr; } }
-    </style></head><body><div class=container><h1>🚑 Rescue Partner Analytics</h1><div class=nav><a href=index.html>🐕 Dashboard</a> | <a href=map.html>🗺️ Map</a> | <a href=trends.html>📈 Trends</a> | <strong>🚑 Rescues</strong> | <a href=breeds.html>🐶 Breeds</a></div><div class=stats-summary><div><strong>Last Updated:</strong> November 30, 2025 11:11 AM</div><div><strong>Total Partners Active:</strong> <span id=partnerCount>0</span></div><div><strong>Total Dogs Pulled:</strong> <span id=totalPulled>0</span></div></div><div class=chart-section><div class=chart-container><canvas id=rescueChart></canvas></div><div class=chart-hint>👆 Click any bar above to see the specific breeds pulled by that partner.</div></div><div id=drillDownSection><div class=details-header><h2 class=details-title id=selectedPartnerName>Partner Details</h2><button class=close-btn onclick=closeDrillDown()>Close Details <i class="fas fa-times"></i></button></div><div class=details-grid><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Composition</h3><div class=pie-container><canvas id=breedPieChart></canvas></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Recent Pulls</h3><div class=table-wrapper><table id=drillDownTable><thead><tr><th>Date</th><th>Name</th><th>Breed</th></tr></thead><tbody id=drillDownBody></tbody></table></div></div></div></div><div class=footer> Generated on November 30, 2025 11:11 AM • Data source: Chicago Animal Care & Control </div></div><script>
+    </style></head><body><div class=container><h1>🚑 Rescue Partner Analytics</h1><div class=nav><a href=index.html>🐕 Dashboard</a> | <a href=map.html>🗺️ Map</a> | <a href=trends.html>📈 Trends</a> | <strong>🚑 Rescues</strong> | <a href=breeds.html>🐶 Breeds</a></div><div class=stats-summary><div><strong>Last Updated:</strong> November 30, 2025 11:18 AM</div><div><strong>Total Partners Active:</strong> <span id=partnerCount>0</span></div><div><strong>Total Dogs Pulled:</strong> <span id=totalPulled>0</span></div></div><div class=chart-section><div class=chart-container><canvas id=rescueChart></canvas></div><div class=chart-hint>👆 Click any bar above to see the specific breeds pulled by that partner.</div></div><div id=drillDownSection><div class=details-header><h2 class=details-title id=selectedPartnerName>Partner Details</h2><button class=close-btn onclick=closeDrillDown()>Close Details <i class="fas fa-times"></i></button></div><div class=details-grid><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Composition</h3><div class=pie-container><canvas id=breedPieChart></canvas></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Recent Pulls</h3><div class=table-wrapper><table id=drillDownTable><thead><tr><th>Date</th><th>Name</th><th>Breed</th></tr></thead><tbody id=drillDownBody></tbody></table></div></div></div></div><div class=footer><span>Last Updated: November 30, 2025 11:18 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
     // 1. Data Initialization
     const rawData = [{"breed": "Chihuahua - Smooth Coated", "date": "2025-11-29", "name": "Buddy", "partner": "Paws Chicago"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-24", "name": "Enchantress", "partner": "Tails Together Co"}, {"breed": "German Shepherd Dog", "date": "2025-11-23", "name": "Ramen Noodles", "partner": "Mit Liebe German Shepherd Dog Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-25", "name": "Randie", "partner": "Heartland Animal Shelter"}, {"breed": "American Pit Bull Terrier and American Staffordshire Terrier", "date": "2025-11-21", "name": "Butchie", "partner": "Dark Horse Dogs, Nfp"}, {"breed": "Labrador Retriever", "date": "2025-11-26", "name": "Piers", "partner": "One Tail At A Time"}, {"breed": "Belgian Malinois", "date": "2025-11-20", "name": "Willow", "partner": "Midwest Working Dog Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-28", "name": "Primo", "partner": "Border Tails Rescue"}, {"breed": "German Shepherd Dog", "date": "2025-11-21", "name": "Hannah", "partner": "German Shepherd Rescue Inc."}, {"breed": "Yorkshire Terrier", "date": "2025-11-29", "name": "Riley", "partner": "Paws Chicago"}, {"breed": "Doberman Pinscher", "date": "2025-11-20", "name": "Unknown", "partner": "Il Doberman Rescue Plus"}, {"breed": "Miniature Pinscher", "date": "2025-11-25", "name": "Chocolate Chip", "partner": "Tails Together Co"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-20", "name": "Lois", "partner": "Border Tails Rescue"}, {"breed": "Pomeranian", "date": "2025-11-20", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "Great Dane", "date": "2025-11-20", "name": "Unknown", "partner": "Chicago Rescue Authority"}, {"breed": "Golden Retriever", "date": "2025-11-20", "name": "Unknown", "partner": "As Good As Gold"}, {"breed": "English Bulldog and American Pit Bull Terrier", "date": "2025-11-20", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "Collie - Smooth", "date": "2025-11-20", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "Poodle - Toy", "date": "2025-11-23", "name": "Unknown", "partner": "Pet Profile Rescue"}, {"breed": "Poodle - Toy", "date": "2025-11-23", "name": "Unknown", "partner": "Pet Profile Rescue"}, {"breed": "Shih Tzu", "date": "2025-11-24", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "Chihuahua - Smooth Coated", "date": "2025-11-21", "name": "Unknown", "partner": "Paws Chicago"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-24", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-28", "name": "Rex", "partner": "Border Tails Rescue"}, {"breed": "Poodle - Toy", "date": "2025-11-29", "name": "Unknown", "partner": "Paws Chicago"}, {"breed": "Poodle - Miniature", "date": "2025-11-21", "name": "Unknown", "partner": "Paws Of Tinley Park"}, {"breed": "Chinese Sharpei", "date": "2025-11-21", "name": "Unknown", "partner": "Anti Cruelty Society"}, {"breed": "Shih Tzu", "date": "2025-11-27", "name": "Unknown", "partner": "One More Dog Rescue Inc"}, {"breed": "Chihuahua - Smooth Coated", "date": "2025-11-24", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "Labrador Retriever", "date": "2025-11-28", "name": "Lola Mae", "partner": "Chicagoland Lab Rescue"}, {"breed": "Labrador Retriever", "date": "2025-11-28", "name": "Panthos", "partner": "Chicagoland Lab Rescue"}, {"breed": "Border Collie", "date": "2025-11-22", "name": "Unknown", "partner": "Garrido Stray Rescue Foundation"}, {"breed": "Poodle - Standard", "date": "2025-11-22", "name": "Unknown", "partner": "Garrido Stray Rescue Foundation"}, {"breed": "Yorkshire Terrier", "date": "2025-11-27", "name": "Unknown", "partner": "One More Dog Rescue Inc"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-26", "name": "Elwood", "partner": "One Tail At A Time"}, {"breed": "Cocker Spaniel", "date": "2025-11-28", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "West Highland White Terrier", "date": "2025-11-28", "name": "Unknown", "partner": "One Tail At A Time"}, {"breed": "Pomeranian", "date": "2025-11-26", "name": "Unknown", "partner": "One More Dog Rescue Inc"}, {"breed": "Collie - Smooth and Siberian Husky", "date": "2025-11-28", "name": "Misha", "partner": "Border Tails Rescue"}, {"breed": "French Bulldog", "date": "2025-11-28", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-25", "name": "Unknown", "partner": "It\u0027S A Pittie Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-25", "name": "Unknown", "partner": "It\u0027S A Pittie Rescue"}, {"breed": "Chihuahua - Smooth Coated", "date": "2025-11-29", "name": "Unknown", "partner": "Paws Chicago"}, {"breed": "Labrador Retriever", "date": "2025-11-29", "name": "Schroeder", "partner": "Wagging Hearts"}, {"breed": "Belgian Sheepdog", "date": "2025-11-28", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-23", "name": "Unknown", "partner": "Mission Compassion Paw Inc (Mcp)"}, {"breed": "Bulldog", "date": "2025-11-28", "name": "Unknown", "partner": "One More Dog Rescue Inc"}, {"breed": "Chihuahua - Long Haired", "date": "2025-11-29", "name": "Unknown", "partner": "Paws Chicago"}];
     
-    // Global chart instances
+    // Global chart instances for managing updates
     let mainChart = null;
     let pieChart = null;
 
@@ -110,21 +118,26 @@
     function showDrillDown(partner) {
         document.getElementById('selectedPartnerName').innerText = partner;
         document.getElementById('drillDownSection').style.display = 'block';
+        
+        // Scroll to details smoothly
         document.getElementById('drillDownSection').scrollIntoView({ behavior: 'smooth' });
 
+        // Filter Data
         const partnerRecords = rawData.filter(d => d.partner === partner);
         
-        // --- Build Pie Data ---
+        // --- Build Pie Chart Data ---
         const breedCounts = {};
         partnerRecords.forEach(r => {
+            // Simplify breed name for chart clarity
             let b = r.breed.split('/')[0].trim(); 
             if(b.includes('Pit Bull')) b = 'Pit Bull';
             breedCounts[b] = (breedCounts[b] || 0) + 1;
         });
 
+        // Group small percentages into "Other"
         const total = partnerRecords.length;
         const finalBreeds = { 'Other': 0 };
-        const threshold = 0.05; 
+        const threshold = 0.05; // 5%
 
         Object.entries(breedCounts).forEach(([breed, count]) => {
             if (count / total < threshold && breed !== 'Pit Bull') { 
@@ -134,6 +147,7 @@
             }
         });
         
+        // Remove 'Other' if empty
         if (finalBreeds['Other'] === 0) delete finalBreeds['Other'];
 
         // Sort: Specific breeds by count (desc), 'Other' always last
@@ -147,7 +161,7 @@
         const pieLabels = entries.map(e => e[0]);
         const pieData = entries.map(e => e[1]);
 
-        // --- UPDATED COLOR STRATEGY ---
+        // --- BEST PRACTICE COLOR STRATEGY ---
         const fixedColors = {
             'Pit Bull': '#58a6ff',      // Brand Blue
             'Other': '#6e7681'          // UI Gray
@@ -191,7 +205,6 @@
             if (i === 0) firstSliceColor = color;
 
             // 3. Collision Check (Prevent Last Slice == First Slice)
-            // If this is the last slice, and it's not the ONLY slice...
             if (i === pieLabels.length - 1 && pieLabels.length > 1) {
                 if (color === firstSliceColor) {
                     // Shift to the next color in the palette to break the visual merge
@@ -225,7 +238,9 @@
                         callbacks: {
                             label: function(context) {
                                 let label = context.label || '';
-                                if (label) { label += ': '; }
+                                if (label) {
+                                    label += ': ';
+                                }
                                 let value = context.parsed;
                                 let total = context.dataset.data.reduce((a, b) => a + b, 0);
                                 let percentage = ((value / total) * 100).toFixed(1) + '%';
@@ -240,6 +255,8 @@
         // --- Populate Table ---
         const tbody = document.getElementById('drillDownBody');
         tbody.innerHTML = '';
+        
+        // Sort by date descending
         partnerRecords.sort((a,b) => new Date(b.date) - new Date(a.date));
         
         partnerRecords.forEach(row => {
