@@ -31,13 +31,12 @@
         .is-revealed .spoiler-overlay { opacity: 0; pointer-events: none; }
         .is-revealed .spoiler-content { filter: none; }
 
-        /* Legacy Grid */
-        .legacy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .legacy-img { width: 100%; border-radius: 6px; border: 1px solid var(--border); }
-
         .footer { margin-top: 60px; border-top: 1px solid var(--border); padding-top: 20px; color: #8b949e; font-size: 0.8rem; text-align: center; }
-    </style></head><body><div class=container><h1>📈 Data Trends</h1><div class=nav><a href=index.html>🐕 Dashboard</a> | <a href=map.html>🗺️ Map</a> | <strong>📈 Trends</strong> | <a href=rescues.html>🚑 Rescues</a> | <a href=breeds.html>🐶 Breeds</a></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-hourglass-half" style=color:#e3b341;></i> Current Length of Stay (Active Dogs)</h2></div><div class=canvas-container><canvas id=losChart></canvas></div><p style="font-size:0.85rem; color:#8b949e; margin-top:10px;"> * Shows the average days currently available dogs have been waiting, grouped by their Intake Month. </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-door-open" style=color:#3fb950;></i> Daily Intakes (Last 30 Days)</h2></div><div class=canvas-container><canvas id=intakeChart></canvas></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-heart-broken" style=color:#ff7b72;></i> Other Outcomes (Last 7 Days)</h2></div><div class=spoiler-wrapper id=euthSpoiler onclick=revealSpoiler()><div class=spoiler-overlay><i class="fas fa-eye-slash spoiler-icon"></i><div class=spoiler-text>Sensitive Content</div><div class=spoiler-sub>Tap to reveal daily count of non-live outcomes</div></div><div class="canvas-container spoiler-content"><canvas id=euthChart></canvas></div></div></div><h2 style="margin-bottom:20px; margin-top:60px; border-bottom:1px solid var(--border); padding-bottom:10px;">📸 Historical Snapshots</h2><div class=legacy-grid><div class=chart-card><h3>Intake vs Outcome</h3><img src=assets/intake_trend.png class=legacy-img alt="Intake Trend"></div><div class=chart-card><h3>LOS Distribution</h3><img src=assets/los_dist.png class=legacy-img alt="LOS Distribution"></div><div class=chart-card><h3>Outcome Distribution</h3><img src=assets/outcomes_pie.png class=legacy-img alt=Outcomes></div></div><div class=footer> Generated on December 01, 2025 07:38 AM • Data source: Chicago Animal Care & Control </div></div><script>
-    const data = {"euth": {"count": [1, 2, 2], "labels": ["2025-11-27", "2025-11-28", "2025-11-29"]}, "intake": {"count": [4, 5, 2, 2, 4, 4, 5, 3, 1, 7, 8, 9, 6, 7, 9, 2, 10, 9, 3, 7, 7, 9, 4, 6, 8, 5, 9, 10, 4], "labels": ["2025-11-02", "2025-11-03", "2025-11-04", "2025-11-05", "2025-11-06", "2025-11-07", "2025-11-08", "2025-11-09", "2025-11-10", "2025-11-11", "2025-11-12", "2025-11-13", "2025-11-14", "2025-11-15", "2025-11-16", "2025-11-17", "2025-11-18", "2025-11-19", "2025-11-20", "2025-11-21", "2025-11-22", "2025-11-23", "2025-11-24", "2025-11-25", "2025-11-26", "2025-11-27", "2025-11-28", "2025-11-29", "2025-11-30"]}, "los": {"avg": [66.2, 42.9, 13.7], "labels": ["2025-09", "2025-10", "2025-11"], "median": [66.0, 40.0, 13.0]}};
+        
+        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; }
+        @media (max-width: 800px) { .charts-grid { grid-template-columns: 1fr; } }
+    </style></head><body><div class=container><h1>📈 Data Trends</h1><div class=nav><a href=index.html>🐕 Dashboard</a> | <a href=map.html>🗺️ Map</a> | <strong>📈 Trends</strong> | <a href=rescues.html>🚑 Rescues</a> | <a href=breeds.html>🐶 Breeds</a></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-hourglass-half" style=color:#e3b341;></i> Current Length of Stay (Active Dogs)</h2></div><div class=canvas-container><canvas id=losChart></canvas></div><p style="font-size:0.85rem; color:#8b949e; margin-top:10px;"> * Shows average wait time for currently active dogs based on their Intake Month. </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-balance-scale" style=color:#58a6ff;></i> Intake vs. Outcomes (6 Months)</h2></div><div class=canvas-container><canvas id=weeklyChart></canvas></div></div><div class=charts-grid><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-bar" style=color:#79c0ff;></i> LOS Distribution</h2></div><div class=canvas-container style=height:300px;><canvas id=losDistChart></canvas></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-pie" style=color:#d29922;></i> Historical Outcomes</h2></div><div class=canvas-container style=height:300px;><canvas id=outcomePieChart></canvas></div></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-heart-broken" style=color:#ff7b72;></i> Other Outcomes (Last 7 Days)</h2></div><div class=spoiler-wrapper id=euthSpoiler onclick=revealSpoiler()><div class=spoiler-overlay><i class="fas fa-eye-slash spoiler-icon"></i><div class=spoiler-text>Sensitive Content</div><div class=spoiler-sub>Tap to reveal daily count of non-live outcomes</div></div><div class="canvas-container spoiler-content"><canvas id=euthChart></canvas></div></div></div><div class=footer> Generated on December 01, 2025 07:49 AM • Data source: Chicago Animal Care & Control </div></div><script>
+    const data = {"euth": {"count": [1, 2, 2], "labels": ["2025-11-27", "2025-11-28", "2025-11-29"]}, "intake": {"count": [4, 5, 2, 2, 4, 4, 5, 3, 1, 7, 8, 9, 6, 7, 9, 2, 10, 9, 3, 7, 7, 9, 4, 6, 8, 5, 9, 10, 4], "labels": ["2025-11-02", "2025-11-03", "2025-11-04", "2025-11-05", "2025-11-06", "2025-11-07", "2025-11-08", "2025-11-09", "2025-11-10", "2025-11-11", "2025-11-12", "2025-11-13", "2025-11-14", "2025-11-15", "2025-11-16", "2025-11-17", "2025-11-18", "2025-11-19", "2025-11-20", "2025-11-21", "2025-11-22", "2025-11-23", "2025-11-24", "2025-11-25", "2025-11-26", "2025-11-27", "2025-11-28", "2025-11-29", "2025-11-30"]}, "los": {"avg": [66.2, 42.9, 13.7], "labels": ["2025-09", "2025-10", "2025-11"], "median": [66.0, 40.0, 13.0]}, "los_dist": {"data": [58, 69, 37, 20, 7, 8, 6, 0, 0, 0, 0, 0, 0], "labels": ["0-9", "10-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80-89", "90-99", "100-109", "110-119", "120+"]}, "outcomes_pie": {"data": [54, 33, 22], "labels": ["Transferred", "Adopted", "RTO"]}, "weekly": {"intakes": [4, 5, 7, 4, 10, 20, 21, 48, 49, 42], "labels": ["Sep 29", "Oct 06", "Oct 13", "Oct 20", "Oct 27", "Nov 03", "Nov 10", "Nov 17", "Nov 24", "Dec 01"], "outcomes": [0, 0, 0, 0, 0, 0, 0, 0, 52, 57]}};
 
     const commonOptions = {
         responsive: true,
@@ -46,7 +45,7 @@
         plugins: {
             legend: { labels: { color: '#8b949e' } },
             tooltip: { 
-                backgroundColor: 'rgba(22, 27, 34, 0.9)', 
+                backgroundColor: 'rgba(22, 27, 34, 0.95)', 
                 titleColor: '#c9d1d9', 
                 bodyColor: '#c9d1d9',
                 borderColor: '#30363d',
@@ -57,14 +56,14 @@
             x: { grid: { color: '#30363d' }, ticks: { color: '#8b949e' } },
             y: { 
                 grid: { color: '#30363d' }, 
-                ticks: { color: '#8b949e', stepSize: 1 }, 
+                ticks: { color: '#8b949e' }, 
                 beginAtZero: true 
             }
         }
     };
 
-    // 1. LOS Chart
-    if (data.los.labels.length > 0) {
+    // 1. LOS Cohort Chart
+    if (data.los && data.los.labels.length > 0) {
         new Chart(document.getElementById('losChart'), {
             type: 'line',
             data: {
@@ -95,28 +94,95 @@
         });
     }
 
-    // 2. Intake Chart
-    if (data.intake.labels.length > 0) {
-        new Chart(document.getElementById('intakeChart'), {
+    // 2. Weekly Intake vs Outcome Chart
+    if (data.weekly && data.weekly.labels.length > 0) {
+        new Chart(document.getElementById('weeklyChart'), {
             type: 'line',
             data: {
-                labels: data.intake.labels,
-                datasets: [{
-                    label: 'Dogs Admitted',
-                    data: data.intake.count,
-                    borderColor: '#3fb950',
-                    backgroundColor: 'rgba(63, 185, 80, 0.1)',
-                    fill: true,
-                    tension: 0.3,
-                    pointRadius: 4
-                }]
+                labels: data.weekly.labels,
+                datasets: [
+                    {
+                        label: 'Intakes',
+                        data: data.weekly.intakes,
+                        borderColor: '#58a6ff',
+                        backgroundColor: 'rgba(88, 166, 255, 0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 3
+                    },
+                    {
+                        label: 'Outcomes',
+                        data: data.weekly.outcomes,
+                        borderColor: '#238636',
+                        backgroundColor: 'rgba(35, 134, 54, 0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 3
+                    }
+                ]
             },
             options: commonOptions
         });
     }
 
-    // 3. Other Outcomes Chart
-    if (data.euth.labels.length > 0) {
+    // 3. LOS Distribution Chart (Bar)
+    if (data.los_dist && data.los_dist.labels.length > 0) {
+        const distColors = data.los_dist.labels.map(l => {
+            if (l.includes('+')) return '#ff7b72'; // Red for long stays
+            const val = parseInt(l.split('-')[0]);
+            return val >= 30 ? '#ff7b72' : '#58a6ff';
+        });
+
+        new Chart(document.getElementById('losDistChart'), {
+            type: 'bar',
+            data: {
+                labels: data.los_dist.labels,
+                datasets: [{
+                    label: 'Dogs',
+                    data: data.los_dist.data,
+                    backgroundColor: distColors,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                ...commonOptions,
+                plugins: { legend: { display: false } }
+            }
+        });
+    }
+
+    // 4. Outcomes Pie Chart
+    if (data.outcomes_pie && data.outcomes_pie.labels.length > 0) {
+        const outcomeColors = {
+            'Adopted': '#58a6ff',
+            'Transferred': '#238636',
+            'RTO': '#d29922',
+            'Other': '#da3633'
+        };
+        const bgColors = data.outcomes_pie.labels.map(l => outcomeColors[l] || '#8b949e');
+
+        new Chart(document.getElementById('outcomePieChart'), {
+            type: 'doughnut',
+            data: {
+                labels: data.outcomes_pie.labels,
+                datasets: [{
+                    data: data.outcomes_pie.data,
+                    backgroundColor: bgColors,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'right', labels: { color: '#8b949e', boxWidth: 12 } }
+                }
+            }
+        });
+    }
+
+    // 5. Sensitive Outcomes Chart
+    if (data.euth && data.euth.labels.length > 0) {
         new Chart(document.getElementById('euthChart'), {
             type: 'line',
             data: {
