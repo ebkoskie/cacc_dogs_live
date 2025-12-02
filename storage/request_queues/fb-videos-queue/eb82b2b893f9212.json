@@ -1,0 +1,16 @@
+{
+  "unique_key": "https://www.facebook.com/caccdogs/videos",
+  "url": "https://www.facebook.com/CACCDogs/videos/",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    }
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://www.facebook.com/caccdogs/videos/",
+  "handled_at": "2025-12-02 19:23:29.779142+00:00"
+}
