@@ -1,131 +1,4 @@
-<style>
-    /* --- Global Theme Variables (Moved here to support Map Overlay) --- */
-    :root {
-        /* Core Colors */
-        --header-bg: rgba(13, 17, 23, 0.85);
-        --nav-item-hover: rgba(177, 186, 196, 0.12);
-        --accent: #58a6ff;
-        --text: #c9d1d9;
-        --text-muted: #8b949e;
-        --border: #30363d;
-        --row: #161b22;
-        --bg: #0d1117;
-        --input-bg: #0d1117;
-        --card-shadow: rgba(0,0,0,0.3);
-
-        /* Badge & Status Colors (Dark Mode) */
-        --gender-male-text: #79c0ff; --gender-male-bg: rgba(56, 139, 253, 0.15); --gender-male-border: rgba(56, 139, 253, 0.4);
-        --gender-female-text: #ff7b72; --gender-female-bg: rgba(235, 87, 87, 0.15); --gender-female-border: rgba(235, 87, 87, 0.4);
-        --stray-text: #d2a8ff; --stray-bg: rgba(187, 128, 255, 0.15); --stray-border: rgba(187, 128, 255, 0.4);
-
-        --success-text: #7ee787; --success-bg: rgba(46, 160, 67, 0.15); --success-border: rgba(46, 160, 67, 0.4);
-        --warning-text: #d29922; --warning-bg: rgba(187, 128, 9, 0.15);  --warning-border: rgba(187, 128, 9, 0.4);
-        --danger-text: #ffa198;  --danger-bg: rgba(248, 81, 73, 0.15);  --danger-border: rgba(248, 81, 73, 0.4);
-        --info-text: #a5d6ff;    --info-bg: rgba(56, 139, 253, 0.15);   --info-border: rgba(56, 139, 253, 0.4);
-        
-        --rto-text: var(--warning-text); --rto-bg: var(--warning-bg); --rto-border: var(--warning-border);
-        --rescue-text: var(--info-text); --rescue-bg: var(--info-bg); --rescue-border: var(--info-border);
-        --adopted-text: var(--success-text); --adopted-bg: var(--success-bg); --adopted-border: var(--success-border);
-        
-        --row-hover: #21262d;
-    }
-    
-    body.light-mode {
-        --header-bg: rgba(255, 255, 255, 0.85);
-        --nav-item-hover: rgba(0, 0, 0, 0.08);
-        --accent: #0969da;
-        --text: #24292f;
-        --text-muted: #57606a;
-        --border: #d0d7de;
-        --row: #f6f8fa;
-        --bg: #ffffff;
-        --input-bg: #ffffff;
-        --card-shadow: rgba(0,0,0,0.1);
-
-        --gender-male-text: #0969da; --gender-male-bg: #ddf4ff; --gender-male-border: #54aeff;
-        --gender-female-text: #bf3989; --gender-female-bg: #ffeff7; --gender-female-border: #ff80c8;
-        --stray-text: #8250df; --stray-bg: #fbefff; --stray-border: #d4a7ff;
-        
-        --success-text: #1a7f37; --success-bg: #dafbe1; --success-border: #4ac26b;
-        --warning-text: #9a6700; --warning-bg: #fff8c5; --warning-border: #d4a72c;
-        --danger-text: #cf222e; --danger-bg: #ffebe9; --danger-border: #ff8182;
-        --info-text: #0969da;    --info-bg: #ddf4ff;    --info-border: #54aeff;
-        
-        --row-hover: #eaeef2;
-    }
-
-    .site-header {
-        position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
-        background: var(--header-bg);
-        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-        border-bottom: 1px solid var(--border);
-        height: 64px;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    }
-
-    .header-content {
-        max-width: 1200px; margin: 0 auto; height: 100%;
-        display: flex; align-items: center; justify-content: space-between;
-        padding: 0 20px;
-    }
-
-    .brand-section h1 { 
-        color: var(--accent); margin: 0; font-size: 1.25rem; 
-        display: flex; align-items: center; gap: 8px; white-space: nowrap; 
-    }
-
-    /* Desktop Navigation */
-    .nav-links { display: flex; gap: 8px; align-items: center; }
-    .nav-link {
-        color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.95rem;
-        padding: 6px 12px; border-radius: 6px; transition: all 0.2s;
-    }
-    .nav-link:hover { color: var(--text); background: var(--nav-item-hover); }
-    .nav-link.active { color: var(--accent); background: var(--nav-item-hover); font-weight: 600; }
-
-    .actions { display: flex; align-items: center; gap: 10px; }
-    .theme-toggle, .mobile-menu-btn { 
-        background: transparent; border: 1px solid var(--border); color: var(--text-muted); 
-        width: 36px; height: 36px; border-radius: 50%; 
-        cursor: pointer; display: flex; align-items: center; justify-content: center; 
-        font-size: 1rem; transition: all 0.2s;
-    }
-    .theme-toggle:hover, .mobile-menu-btn:hover { color: var(--text); border-color: var(--text-muted); }
-    .mobile-menu-btn { display: none; border-radius: 6px; }
-
-    /* Mobile Drawer */
-    .mobile-nav-drawer {
-        display: none; position: fixed; top: 64px; left: 0; right: 0; z-index: 9998;
-        background: var(--bg); border-bottom: 1px solid var(--border);
-        padding: 15px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    .mobile-nav-drawer.open { display: flex; flex-direction: column; gap: 10px; }
-    
-    .mobile-link {
-        padding: 12px; border-radius: 8px; color: var(--text); text-decoration: none; font-weight: 600;
-        border: 1px solid transparent; display: flex; align-items: center; gap: 10px;
-    }
-    .mobile-link:hover { background: var(--row); }
-    .mobile-link.active { background: var(--nav-item-hover); border-color: var(--border); color: var(--accent); }
-
-    @media (max-width: 850px) {
-        .nav-links { display: none; }
-        .mobile-menu-btn { display: flex; }
-    }
-</style><header class=site-header><div class=header-content><div class=brand-section><h1> 🗺️ CACC Map </h1></div><nav class=nav-links><a href=index.html class="nav-link ">Dashboard</a><a href=map.html class="nav-link active">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link ">Breeds</a></nav><div class=actions><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button><button class=mobile-menu-btn onclick=toggleMobileMenu()><i class="fas fa-bars"></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=index.html class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=map.html class="mobile-link active"><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link "><i class="fas fa-paw" style=width:20px></i> Breeds</a></div></header><script>
-    function toggleTheme() {
-        document.body.classList.toggle('light-mode');
-        const icon = document.querySelector('.theme-toggle i');
-        if(icon) icon.className = document.body.classList.contains('light-mode') ? 'fas fa-sun' : 'fas fa-moon';
-        localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
-    }
-    // Auto-init theme if localstorage is set
-    if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
-
-    function toggleMobileMenu() {
-        document.getElementById('mobileDrawer').classList.toggle('open');
-    }
-</script><!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>CACC Dogs Dashboard</title><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css><script src=https://cdn.jsdelivr.net/npm/chart.js></script><style>
+<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>CACC Dogs Dashboard</title><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css><script src=https://cdn.jsdelivr.net/npm/chart.js></script><style>
         /* Note: :root Variables are now in partials/navbar.html so map_overlay.html can share them */
 
         /* Base styles that don't belong in the navbar partial */
@@ -199,7 +72,25 @@
 
         
     /* --- Layout & Components --- */
-    .sticky-header { position: sticky; top: 0; z-index: 100; background: var(--header-bg); padding: 15px 20px; margin: 0 -20px; backdrop-filter: blur(5px); border-bottom: 1px solid var(--border); }
+    .sticky-header { 
+        position: sticky; 
+        top: 64px; 
+        z-index: 90; 
+        background: var(--header-bg); 
+        padding: 15px 20px; 
+        margin: 0 -20px; 
+        backdrop-filter: blur(5px); 
+        border-bottom: 1px solid var(--border); 
+        transition: top 0.2s;
+    }
+
+    @media (max-width: 600px) {
+        .sticky-header {
+            top: 56px; /* Mobile Navbar Height */
+            padding: 10px 15px;
+        }
+    }
+
     .search-controls { display: flex; gap: 10px; margin-bottom: 10px; }
     .search-container { position: relative; flex-grow: 1; }
     .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
@@ -377,7 +268,7 @@
         .nav-links { display: none; }
         .mobile-menu-btn { display: flex; }
     }
-</style><header class=site-header><div class=header-content><div class=brand-section><h1> 🗺️ CACC Map </h1></div><nav class=nav-links><a href=index.html class="nav-link ">Dashboard</a><a href=map.html class="nav-link active">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link ">Breeds</a></nav><div class=actions><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button><button class=mobile-menu-btn onclick=toggleMobileMenu()><i class="fas fa-bars"></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=index.html class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=map.html class="mobile-link active"><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link "><i class="fas fa-paw" style=width:20px></i> Breeds</a></div></header><script>
+</style><header class=site-header><div class=header-content><div class=brand-section><h1> 🐕 CACC Dogs <span class=header-count id=headerCount></span></h1></div><nav class=nav-links><a href=index.html class="nav-link active">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link ">Breeds</a></nav><div class=actions><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button><button class=mobile-menu-btn onclick=toggleMobileMenu()><i class="fas fa-bars"></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=index.html class="mobile-link active"><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link "><i class="fas fa-paw" style=width:20px></i> Breeds</a></div></header><script>
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
         const icon = document.querySelector('.theme-toggle i');
@@ -390,7 +281,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input onkeyup=handleGlobalSearch() placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div></div><div class=footer><span>Last Updated: December 03, 2025 11:27 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input onkeyup=handleGlobalSearch() placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div></div><div class=footer><span>Last Updated: December 03, 2025 11:57 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
     // Close Dropdowns on Click Outside
     document.addEventListener('click', function(event) {
         if (!event.target.closest('.media-wrapper')) {
@@ -730,6 +621,7 @@
             if (dog.color) {
                 const colors = dog.color.split('/').map(c => c.trim());
                 colors.forEach(c => {
+                    // FIX: Use className instead of inline style
                     colorHtml += `<span class="tag color ${getColorClass(c)}">${c}</span> `;
                 });
             }
