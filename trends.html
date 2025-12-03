@@ -223,9 +223,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=chart-card><div class=chart-header><h2><i class="fas fa-clock" style=color:var(--warning-text);></i> Historical Time to Outcome (12 Month Trend)</h2></div><div class=canvas-container><canvas id=losChart></canvas></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> * Shows the <strong>Median Days</strong> dogs waited in the shelter before finding an outcome (Adopted, Rescued, or Returned). </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-balance-scale" style=color:var(--accent);></i> Intake vs. Outcomes (6 Months)</h2></div><div class=canvas-container><canvas id=weeklyChart></canvas></div></div><div class=charts-grid><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-bar" style=color:var(--gender-male-text);></i> Current Population: Days in Shelter</h2></div><div class=canvas-container style=height:300px;><canvas id=losDistChart></canvas></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-pie" style=color:var(--warning-text);></i> Historical Outcomes</h2></div><div class=canvas-container style=height:300px;><canvas id=outcomePieChart></canvas></div></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-heart-broken" style=color:var(--danger-text);></i> Other Outcomes (Last 7 Days)</h2></div><div class=spoiler-wrapper id=euthSpoiler onclick=revealSpoiler()><div class=spoiler-overlay><i class="fas fa-eye-slash spoiler-icon"></i><div class=spoiler-text>Sensitive Content</div><div class=spoiler-sub>Tap to reveal daily count of non-live outcomes</div></div><div class="canvas-container spoiler-content"><canvas id=euthChart></canvas></div></div></div><div class=footer><span>Last Updated: December 03, 2025 10:35 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
-    const data = {"euth": {"count": [1, 2, 2, 0, 1, 1], "labels": ["2025-11-27", "2025-11-28", "2025-11-29", "2025-11-30", "2025-12-01", "2025-12-02"]}, "intake": {"count": [2, 2, 4, 4, 5, 3, 1, 7, 8, 9, 6, 7, 9, 2, 10, 9, 3, 7, 7, 9, 4, 6, 9, 6, 11, 12, 5, 18, 7], "labels": ["2025-11-04", "2025-11-05", "2025-11-06", "2025-11-07", "2025-11-08", "2025-11-09", "2025-11-10", "2025-11-11", "2025-11-12", "2025-11-13", "2025-11-14", "2025-11-15", "2025-11-16", "2025-11-17", "2025-11-18", "2025-11-19", "2025-11-20", "2025-11-21", "2025-11-22", "2025-11-23", "2025-11-24", "2025-11-25", "2025-11-26", "2025-11-27", "2025-11-28", "2025-11-29", "2025-11-30", "2025-12-01", "2025-12-02"]}, "los": {"adopted": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 27.0], "labels": ["Dec 2024", "Jan 2025", "Feb 2025", "Mar 2025", "Apr 2025", "May 2025", "Jun 2025", "Jul 2025", "Aug 2025", "Sep 2025", "Oct 2025", "Nov 2025", "Dec 2025"], "rescued": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 7.0], "rto": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.0]}, "los_dist": {"data": [51, 57, 36, 22, 8, 6, 5, 1, 0], "labels": ["0-9", "10-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80-89"]}, "outcomes_pie": {"data": [97, 41, 26], "labels": ["Transferred", "Adopted", "RTO"]}, "weekly": {"intakes": [4, 5, 7, 4, 10, 20, 21, 48, 49, 67, 7], "labels": ["Sep 29", "Oct 06", "Oct 13", "Oct 20", "Oct 27", "Nov 03", "Nov 10", "Nov 17", "Nov 24", "Dec 01", "Dec 08"], "outcomes": [0, 0, 0, 0, 0, 0, 0, 0, 52, 70, 42]}};
-
+</script><div class=container><div class=chart-card><div class=chart-header><h2><i class="fas fa-clock" style=color:var(--warning-text);></i> Historical Time to Outcome (12 Month Trend)</h2></div><div class=canvas-container><canvas id=losChart></canvas></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> * Shows the <strong>Median Days</strong> dogs waited in the shelter before finding an outcome (Adopted, Rescued, or Returned). </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-balance-scale" style=color:var(--accent);></i> Intake vs. Outcomes (6 Months)</h2></div><div class=canvas-container><canvas id=weeklyChart></canvas></div></div><div class=charts-grid><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-bar" style=color:var(--gender-male-text);></i> Current Population: Days in Shelter</h2></div><div class=canvas-container style=height:300px;><canvas id=losDistChart></canvas></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-pie" style=color:var(--warning-text);></i> Historical Outcomes</h2></div><div class=canvas-container style=height:300px;><canvas id=outcomePieChart></canvas></div></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-heart-broken" style=color:var(--danger-text);></i> Other Outcomes (Last 7 Days)</h2></div><div class=spoiler-wrapper id=euthSpoiler onclick=revealSpoiler()><div class=spoiler-overlay><i class="fas fa-eye-slash spoiler-icon"></i><div class=spoiler-text>Sensitive Content</div><div class=spoiler-sub>Tap to reveal daily count of non-live outcomes</div></div><div class="canvas-container spoiler-content"><canvas id=euthChart></canvas></div></div></div><div class=footer><span>Last Updated: December 03, 2025 11:01 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
     const commonOptions = {
         responsive: true,
         maintainAspectRatio: false,
@@ -250,72 +248,82 @@
         }
     };
 
-    if (data.los && data.los.labels.length > 0) {
-        new Chart(document.getElementById('losChart'), {
-            type: 'line',
-            data: {
-                labels: data.los.labels,
-                datasets: [
-                    { label: 'Adoption (Median)', data: data.los.adopted, borderColor: '#58a6ff', backgroundColor: 'rgba(88, 166, 255, 0.1)', tension: 0.3, pointRadius: 4 },
-                    { label: 'Rescue (Median)', data: data.los.rescued, borderColor: '#238636', backgroundColor: 'rgba(35, 134, 54, 0.1)', tension: 0.3, pointRadius: 4 },
-                    { label: 'RTO (Median)', data: data.los.rto, borderColor: '#d29922', backgroundColor: 'rgba(210, 153, 34, 0.1)', tension: 0.3, pointRadius: 4 }
-                ]
-            },
-            options: commonOptions
-        });
-    }
+    // PERFORMANCE: Fetch externalized JSON asynchronously
+    fetch('trends.json')
+        .then(response => response.json())
+        .then(data => {
+            initCharts(data);
+        })
+        .catch(err => console.error("Failed to load trends data:", err));
 
-    if (data.weekly && data.weekly.labels.length > 0) {
-        new Chart(document.getElementById('weeklyChart'), {
-            type: 'line',
-            data: {
-                labels: data.weekly.labels,
-                datasets: [
-                    { label: 'Intakes', data: data.weekly.intakes, borderColor: '#58a6ff', backgroundColor: 'rgba(88, 166, 255, 0.1)', fill: true, tension: 0.3, pointRadius: 3 },
-                    { label: 'Outcomes', data: data.weekly.outcomes, borderColor: '#238636', backgroundColor: 'rgba(35, 134, 54, 0.1)', fill: true, tension: 0.3, pointRadius: 3 }
-                ]
-            },
-            options: commonOptions
-        });
-    }
+    function initCharts(data) {
+        if (data.los && data.los.labels.length > 0) {
+            new Chart(document.getElementById('losChart'), {
+                type: 'line',
+                data: {
+                    labels: data.los.labels,
+                    datasets: [
+                        { label: 'Adoption (Median)', data: data.los.adopted, borderColor: '#58a6ff', backgroundColor: 'rgba(88, 166, 255, 0.1)', tension: 0.3, pointRadius: 4 },
+                        { label: 'Rescue (Median)', data: data.los.rescued, borderColor: '#238636', backgroundColor: 'rgba(35, 134, 54, 0.1)', tension: 0.3, pointRadius: 4 },
+                        { label: 'RTO (Median)', data: data.los.rto, borderColor: '#d29922', backgroundColor: 'rgba(210, 153, 34, 0.1)', tension: 0.3, pointRadius: 4 }
+                    ]
+                },
+                options: commonOptions
+            });
+        }
 
-    if (data.los_dist && data.los_dist.labels.length > 0) {
-        const distColors = data.los_dist.labels.map(l => parseInt(l.split('-')[0]) >= 30 ? '#ff7b72' : '#58a6ff');
-        new Chart(document.getElementById('losDistChart'), {
-            type: 'bar',
-            data: {
-                labels: data.los_dist.labels,
-                datasets: [{ label: 'Dogs', data: data.los_dist.data, backgroundColor: distColors, borderRadius: 4 }]
-            },
-            options: { ...commonOptions, plugins: { legend: { display: false } } }
-        });
-    }
+        if (data.weekly && data.weekly.labels.length > 0) {
+            new Chart(document.getElementById('weeklyChart'), {
+                type: 'line',
+                data: {
+                    labels: data.weekly.labels,
+                    datasets: [
+                        { label: 'Intakes', data: data.weekly.intakes, borderColor: '#58a6ff', backgroundColor: 'rgba(88, 166, 255, 0.1)', fill: true, tension: 0.3, pointRadius: 3 },
+                        { label: 'Outcomes', data: data.weekly.outcomes, borderColor: '#238636', backgroundColor: 'rgba(35, 134, 54, 0.1)', fill: true, tension: 0.3, pointRadius: 3 }
+                    ]
+                },
+                options: commonOptions
+            });
+        }
 
-    if (data.outcomes_pie && data.outcomes_pie.labels.length > 0) {
-        const outcomeColors = { 'Adopted': '#58a6ff', 'Transferred': '#238636', 'RTO': '#d29922', 'Other': '#da3633' };
-        const bgColors = data.outcomes_pie.labels.map(l => outcomeColors[l] || '#8b949e');
-        new Chart(document.getElementById('outcomePieChart'), {
-            type: 'doughnut',
-            data: {
-                labels: data.outcomes_pie.labels,
-                datasets: [{ data: data.outcomes_pie.data, backgroundColor: bgColors, borderWidth: 0 }]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { position: 'right', labels: { color: '#8b949e', boxWidth: 12 } } }
-            }
-        });
-    }
+        if (data.los_dist && data.los_dist.labels.length > 0) {
+            const distColors = data.los_dist.labels.map(l => parseInt(l.split('-')[0]) >= 30 ? '#ff7b72' : '#58a6ff');
+            new Chart(document.getElementById('losDistChart'), {
+                type: 'bar',
+                data: {
+                    labels: data.los_dist.labels,
+                    datasets: [{ label: 'Dogs', data: data.los_dist.data, backgroundColor: distColors, borderRadius: 4 }]
+                },
+                options: { ...commonOptions, plugins: { legend: { display: false } } }
+            });
+        }
 
-    if (data.euth && data.euth.labels.length > 0) {
-        new Chart(document.getElementById('euthChart'), {
-            type: 'line',
-            data: {
-                labels: data.euth.labels,
-                datasets: [{ label: 'Other Outcomes', data: data.euth.count, borderColor: '#ff7b72', backgroundColor: 'rgba(255, 123, 114, 0.1)', fill: true, tension: 0.3, pointRadius: 4 }]
-            },
-            options: commonOptions
-        });
+        if (data.outcomes_pie && data.outcomes_pie.labels.length > 0) {
+            const outcomeColors = { 'Adopted': '#58a6ff', 'Transferred': '#238636', 'RTO': '#d29922', 'Other': '#da3633' };
+            const bgColors = data.outcomes_pie.labels.map(l => outcomeColors[l] || '#8b949e');
+            new Chart(document.getElementById('outcomePieChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: data.outcomes_pie.labels,
+                    datasets: [{ data: data.outcomes_pie.data, backgroundColor: bgColors, borderWidth: 0 }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { position: 'right', labels: { color: '#8b949e', boxWidth: 12 } } }
+                }
+            });
+        }
+
+        if (data.euth && data.euth.labels.length > 0) {
+            new Chart(document.getElementById('euthChart'), {
+                type: 'line',
+                data: {
+                    labels: data.euth.labels,
+                    datasets: [{ label: 'Other Outcomes', data: data.euth.count, borderColor: '#ff7b72', backgroundColor: 'rgba(255, 123, 114, 0.1)', fill: true, tension: 0.3, pointRadius: 4 }]
+                },
+                options: commonOptions
+            });
+        }
     }
 
     function revealSpoiler() {

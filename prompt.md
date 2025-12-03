@@ -21,7 +21,7 @@ I am building `cacc_dogs`, a Python-based static site generator that scrapes, tr
 **Complete Architecture & File Manifest:**
 
 1.  **Entry Point:**
-    * `main.py`: Async orchestrator using `asyncio.to_thread` to manage blocking scraper calls alongside async enrichment. Handles the pipeline: Scrape -> Storage -> Analytics -> Report -> Map -> Minification.
+    * `main.py`: Async orchestrator implementing a **Timeboxed Circuit Breaker** pattern. It manages blocking scraper calls via `asyncio.to_thread`, enforces a strict 15-minute timeout on the optional Facebook scraping phase to prevent pipeline hangs, and handles the pipeline: Scrape -> Storage -> Analytics -> Report -> Map -> Minification.
 
 2.  **Scraping & Data Logic (`src/`):**
     * `src/scraper.py`: SeleniumBase scraper for primary CACC portal discovery and ID extraction.
@@ -32,7 +32,7 @@ I am building `cacc_dogs`, a Python-based static site generator that scrapes, tr
     * `src/geo.py`: Geocoding service using `geopy` with persistent JSON caching.
 
 3.  **Analytics & Visualization (`src/analytics/`):**
-    * `src/analytics/stats.py`: **Dual-Mode Engine.** Generates dynamic JSON for interactive charts AND triggers static PNG generation. Includes logic for "Active Cohort" LOS analysis.
+    * `src/analytics/stats.py`: **Dual-Mode Engine.** Generates dynamic JSON for interactive charts AND triggers static PNG generation. Includes logic for **Historical Time to Outcome** (Median LOS) analysis.
     * `src/analytics/charts.py`: Generates legacy static PNG charts (Intake Trends, LOS, Outcomes) to `assets/`.
 
 4.  **Reporting & Templates (`src/report.py` & `templates/`):**
@@ -40,7 +40,7 @@ I am building `cacc_dogs`, a Python-based static site generator that scrapes, tr
     * `templates/base.html`: **Master Layout.** Defines the skeleton, footer, and **Global Utility Classes** (e.g., `.tag`, `.status-badge`) used across all child pages.
     * `templates/partials/navbar.html`: **Theme Source & Nav.** Defines the **Global CSS Variables** (`:root`) for the design system (Colors, Light/Dark mode overrides) and the navigation structure. Included by `base.html` and `map_overlay.html` to ensure consistent theming.
     * `templates/index.html`: **Main Dashboard (Extends Base).** Tile grid with advanced filters (Puppy < 1yr, etc.), "Ghost" badging, multi-link Facebook dropdowns, and smart LOS formatting ("Yesterday").
-    * `templates/trends.html`: **Analytics Dashboard (Extends Base).** Features interactive charts (LOS Cohorts, Daily Intakes) and a "Frosted Glass" spoiler for sensitive euthanasia data.
+    * `templates/trends.html`: **Analytics Dashboard (Extends Base).** Features interactive charts (**Median LOS Trends**, Daily Intakes) and a "Frosted Glass" spoiler for sensitive euthanasia data.
     * `templates/rescues.html`: **Partner Analytics (Extends Base).** Interactive bar chart with "Click-to-Drill-Down" functionality revealing breed distribution pie charts, plus a **"Recent Rescues"** section.
     * `templates/removed.html`: "Lost/Unaccounted" report (Extends Base) filtering out known positive outcomes.
     * `templates/breeds.html`: Breed-specific statistics and outcome tables (Extends Base).
