@@ -142,6 +142,7 @@
 
     .section-title { margin-top: 30px; color: var(--accent); border-bottom: 1px solid var(--border); margin-bottom: 20px; }
     #loading-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+    #scroll-sentinel { height: 50px; margin-top: 20px; }
 
     @media (max-width: 480px) {
         .dog-grid { grid-template-columns: 1fr; }
@@ -281,13 +282,74 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input onkeyup=handleGlobalSearch() placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div></div><div class=footer><span>Last Updated: December 03, 2025 01:40 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
-    // Close Dropdowns on Click Outside
+</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input onkeyup=handleGlobalSearch() placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: December 03, 2025 01:45 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+    // --- Global State ---
+    let fullDataset = []; 
+    let activeFilters = new Set();
+    let currentDisplayList = [];
+    let displayedCount = 0;
+    const BATCH_SIZE = 48; // Multiples of 2, 3, 4 for nice grids
+    let observer = null;
+
+    // --- Init ---
     document.addEventListener('click', function(event) {
         if (!event.target.closest('.media-wrapper')) {
             document.querySelectorAll('.media-menu').forEach(menu => menu.classList.remove('show'));
         }
     });
+
+    // --- Data Loading ---
+    fetch('search_index.json').then(r => r.json()).then(payload => {
+        const { meta, data } = payload;
+        
+        fullDataset = data.map(item => {
+            const breedName = meta.b[item.b] || "Unknown";
+            const partnerName = item.p !== undefined ? meta.p[item.p] : null;
+            const statusName = meta.s[item.s] || "Other";
+            
+            const dog = {
+                id: item.id,
+                name: item.n,
+                breed: breedName,
+                status: statusName,
+                date: item.d, 
+                outcome_date: item.od,
+                age: item.a,
+                color: item.c,
+                is_stray: !!item.st,
+                facebook_url: item.l,
+                link: `https://24petconnect.com/chgoall/Details/CHGO/${item.id}`,
+                rescue_partner: partnerName,
+                is_active: statusName === "Available",
+                gender: item.g === 1 ? "Female" : (item.g === 0 ? "Male" : "Unknown"),
+                is_mappable: !!item.m
+            };
+            
+            dog.ageMonths = parseAgeToMonths(dog.age);
+            return dog;
+        });
+        
+        activeFilters.clear();
+        setupObserver();
+        applyFiltersAndSort(); 
+        document.getElementById('loading-state').style.display = 'none';
+        document.getElementById('main-view').style.display = 'block';
+    }).catch(err => { 
+        console.error("Data Load Error:", err); 
+        document.getElementById('loading-state').innerHTML = `<p style="color:#ff7b72"><i class="fas fa-exclamation-triangle"></i> Failed to load data.<br><small>${err.message}</small></p>`; 
+    });
+
+    function setupObserver() {
+        const options = { root: null, rootMargin: '400px', threshold: 0.1 };
+        observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                renderNextBatch();
+            }
+        }, options);
+        
+        const sentinel = document.getElementById('scroll-sentinel');
+        if (sentinel) observer.observe(sentinel);
+    }
 
     function toggleMediaMenu(btn, event) {
         event.stopPropagation();
@@ -309,52 +371,6 @@
         }
     }
 
-    let fullDataset = []; 
-    let activeFilters = new Set();
-
-    // PERFORMANCE: Compressed JSON fetching
-    fetch('search_index.json').then(r => r.json()).then(payload => {
-        const { meta, data } = payload;
-        
-        // HYDRATION: Reconstruct objects from compressed array
-        fullDataset = data.map(item => {
-            const breedName = meta.b[item.b] || "Unknown";
-            const partnerName = item.p !== undefined ? meta.p[item.p] : null;
-            const statusName = meta.s[item.s] || "Other";
-            
-            // Computed fields
-            const dog = {
-                id: item.id,
-                name: item.n,
-                breed: breedName,
-                status: statusName,
-                date: item.d, // Intake Date (Use this for LOS logic)
-                outcome_date: item.od, // Outcome Date (Use this for display)
-                age: item.a,
-                color: item.c,
-                is_stray: !!item.st,
-                facebook_url: item.l,
-                link: `https://24petconnect.com/chgoall/Details/CHGO/${item.id}`,
-                rescue_partner: partnerName,
-                is_active: statusName === "Available",
-                // 0=Male, 1=Female, 2=Unknown
-                gender: item.g === 1 ? "Female" : (item.g === 0 ? "Male" : "Unknown"),
-                is_mappable: !!item.m
-            };
-            
-            dog.ageMonths = parseAgeToMonths(dog.age);
-            return dog;
-        });
-        
-        activeFilters.clear();
-        applyFiltersAndSort(); 
-        document.getElementById('loading-state').style.display = 'none';
-        document.getElementById('main-view').style.display = 'block';
-    }).catch(err => { 
-        console.error("Data Load Error:", err); 
-        document.getElementById('loading-state').innerHTML = `<p style="color:#ff7b72"><i class="fas fa-exclamation-triangle"></i> Failed to load data.<br><small>${err.message}</small></p>`; 
-    });
-
     function parseAgeToMonths(ageStr) {
         if (!ageStr) return 999;
         let months = 0;
@@ -369,14 +385,12 @@
         if (type === 'all') { 
             activeFilters.clear(); 
         } else { 
-            // Mutually Exclusive Groups
             const exclusiveOutcomes = ['adopted', 'rto', 'rescued'];
             const exclusiveAges = ['puppy', 'senior'];
 
             if (exclusiveOutcomes.includes(type)) {
                 exclusiveOutcomes.forEach(t => { if (t !== type) activeFilters.delete(t); });
             }
-            
             if (exclusiveAges.includes(type)) {
                 exclusiveAges.forEach(t => { if (t !== type) activeFilters.delete(t); });
             }
@@ -440,14 +454,12 @@
         });
 
         let sortMode = 'longest';
-        
         if (isArchiveMode) {
             sortMode = 'outcome_newest';
         } else if (activeFilters.has('new') || activeFilters.has('stray') || activeFilters.has('puppy')) {
             sortMode = 'newest';
         }
         
-        // Update Select UI to match effective mode (mapped to nearest valid option)
         const select = document.getElementById('sortSelect');
         const uiMap = { 'outcome_newest': 'newest', 'outcome_oldest': 'longest' };
         select.value = uiMap[sortMode] || sortMode;
@@ -455,8 +467,9 @@
         const countEl = document.getElementById('headerCount');
         if (countEl) countEl.innerText = filtered.length;
 
-        // FIX: Increased limit from 100 to 500 to ensure new arrivals are not cut off
-        renderGrid(sortDogs(filtered, sortMode).slice(0, 500));
+        // Reset Infinite Scroll State
+        currentDisplayList = sortDogs(filtered, sortMode);
+        resetGrid();
     }
 
     function handleSortChange() {
@@ -466,61 +479,14 @@
         const showAdopted = activeFilters.has('adopted');
         const isArchiveMode = showRTO || showRescued || showAdopted;
 
-        // Map generic "Newest/Longest" to Outcome dates if in Archive Mode
         if (isArchiveMode) {
             if (mode === 'newest') mode = 'outcome_newest';
             if (mode === 'longest') mode = 'outcome_oldest';
         }
 
-        const today = new Date();
-        let filtered = fullDataset.filter(dog => {
-            if (showRTO && dog.status !== 'RTO') return false;
-            if (showRescued && dog.status !== 'Rescued') return false;
-            if (showAdopted && dog.status !== 'Adopted') return false;
-            if (!isArchiveMode && !dog.is_active) return false;
-            
-            const intake = new Date(dog.date);
-            const days = (today - intake) / (1000 * 60 * 60 * 24);
-            
-            for (let type of activeFilters) {
-                if (type === 'rto' || type === 'rescued' || type === 'adopted') continue;
-                if (type === 'long_stay' && days < 30) return false;
-                if (type === 'new' && days >= 7) return false;
-                if (type === 'stray' && !dog.is_stray) return false;
-                if (type === 'male' && !(dog.gender || '').includes('Male')) return false;
-                if (type === 'female' && !(dog.gender || '').includes('Female')) return false;
-                if (type === 'puppy' && dog.ageMonths >= 12) return false;
-                if (type === 'senior' && (dog.ageMonths < 60 || dog.ageMonths === 999)) return false;
-                if (type === 'small') {
-                    const isSmall = (dog.breed || '').toLowerCase().includes('small');
-                    if (!isSmall) return false;
-                }
-            }
-            return true;
-        });
-        
-        renderGrid(sortDogs(filtered, mode).slice(0, 500));
-    }
-
-    function sortDogs(list, mode) {
-        return list.sort((a, b) => {
-            // Helper to get date value
-            const getD = (d, m) => {
-                if (m.includes('outcome')) return new Date(d.outcome_date || d.date);
-                return new Date(d.date);
-            };
-
-            // Sorting logic
-            if (mode === 'longest' || mode === 'outcome_oldest') return getD(a, mode) - getD(b, mode);
-            if (mode === 'newest' || mode === 'outcome_newest') return getD(b, mode) - getD(a, mode);
-            
-            if (mode === 'age_young') return a.ageMonths - b.ageMonths;
-            if (mode === 'age_old') return b.ageMonths - a.ageMonths;
-            if (mode === 'name_asc') return a.name.localeCompare(b.name);
-            if (mode === 'breed_asc') return (a.breed || '').localeCompare(b.breed || '');
-            if (mode === 'id_asc') return a.id.localeCompare(b.id);
-            return 0;
-        });
+        // Just re-sort the existing filtered list
+        currentDisplayList = sortDogs(currentDisplayList, mode);
+        resetGrid();
     }
 
     function handleGlobalSearch() {
@@ -548,12 +514,171 @@
         const countEl = document.getElementById('headerCount');
         if (countEl) countEl.innerText = results.length;
         
-        renderGrid(results.slice(0, 500));
+        currentDisplayList = results;
+        resetGrid();
     }
     
     function clearSearch() {
         document.getElementById('mainSearch').value = '';
         handleGlobalSearch(); 
+    }
+
+    // --- Infinite Scroll Rendering ---
+
+    function resetGrid() {
+        displayedCount = 0;
+        document.getElementById('dog-grid').innerHTML = '';
+        if (currentDisplayList.length === 0) {
+            document.getElementById('dog-grid').innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#8b949e;">No dogs found matching this criteria.</div>';
+            return;
+        }
+        renderNextBatch();
+    }
+
+    function renderNextBatch() {
+        if (displayedCount >= currentDisplayList.length) return;
+
+        const batch = currentDisplayList.slice(displayedCount, displayedCount + BATCH_SIZE);
+        let htmlBuffer = '';
+
+        batch.forEach(dog => {
+            htmlBuffer += buildDogCard(dog);
+        });
+
+        document.getElementById('dog-grid').insertAdjacentHTML('beforeend', htmlBuffer);
+        displayedCount += BATCH_SIZE;
+    }
+
+    function buildDogCard(dog) {
+        const today = new Date();
+        const intake = new Date(dog.date);
+        const days = Math.floor((today - intake) / (1000 * 60 * 60 * 24));
+        
+        let statusBadge = '';
+        if (!dog.is_active) {
+            const displayDate = dog.outcome_date || dog.date;
+            if (dog.status === 'RTO') {
+                statusBadge = `<span class="status-badge status-rto"><i class="fas fa-home"></i> Returned: ${displayDate}</span>`;
+            } else if (dog.status === 'Rescued') {
+                const partner = dog.rescue_partner || 'Rescued';
+                const safePartner = partner.replace(/'/g, "\\'");
+                statusBadge = `<span class="status-badge status-rescue" onclick="toggleRescueDate(this, '${displayDate}', '${safePartner}')" title="Tap to see date"><i class="fas fa-ambulance"></i> ${partner}</span>`;
+            } else if (dog.status === 'Adopted') {
+                statusBadge = `<span class="status-badge status-adopted"><i class="fas fa-heart"></i> Adopted: ${displayDate}</span>`;
+            } else {
+                statusBadge = `<span class="status-badge" style="border:1px solid #555; color:#aaa;">${dog.status}</span>`;
+            }
+        } else {
+            let badgeClass = 'los-green';
+            const safeDays = isNaN(days) ? 0 : days;
+            if (safeDays >= 30) badgeClass = 'los-red';
+            else if (safeDays >= 15) badgeClass = 'los-yellow';
+            const dayText = safeDays === 0 ? 'Today' : (safeDays === 1 ? 'Yesterday' : `${safeDays} Days`);
+            statusBadge = `<span class="status-badge ${badgeClass}">${dayText}</span>`;
+        }
+        
+        let strayBadge = '';
+        if (dog.is_stray) {
+            if (dog.is_mappable) {
+                strayBadge = `<a href="map.html?id=${dog.id}" title="View Map" style="text-decoration:none;"><span class="tag stray"><i class="fas fa-map-marker-alt"></i> Stray</span></a>`;
+            } else {
+                strayBadge = `<span class="tag stray" style="cursor:help" title="Location unknown"><i class="fas fa-question-circle"></i> Stray</span>`;
+            }
+        }
+
+        let fbBtn = '';
+        if (dog.facebook_url) {
+            const links = dog.facebook_url.split(' | ').filter(l => l.trim() !== '');
+            if (links.length === 1) {
+                const url = links[0];
+                fbBtn = `<a href="${url}" target="_blank" class="action-btn" title="View on Facebook"><i class="fab fa-facebook"></i></a>`;
+            } else if (links.length > 1) {
+                let menuItems = '';
+                links.forEach((link, idx) => {
+                    const icon = getMediaIcon(link);
+                    const typeLabel = link.includes('/video') ? 'Video' : 'Photo';
+                    menuItems += `<a href="${link}" target="_blank" class="media-item">${icon} ${typeLabel} ${idx+1}</a>`;
+                });
+                fbBtn = `
+                    <div class="media-wrapper">
+                        <button class="action-btn" onclick="toggleMediaMenu(this, event)">
+                            <i class="fab fa-facebook"></i> <i class="fas fa-caret-down" style="font-size: 0.8em; margin-left: 2px;"></i>
+                        </button>
+                        <div class="media-menu">
+                            ${menuItems}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        let ageHtml = '';
+        if (dog.age && dog.age !== 'Unknown') {
+            const displayAge = dog.age === 'My age is unknown' ? 'Age unknown' : dog.age;
+            ageHtml = `<div class="tag" style="background:var(--row-hover); color:var(--text-muted); border:1px solid var(--border); margin-right:5px;">${displayAge}</div>`;
+        }
+
+        let colorHtml = '';
+        if (dog.color) {
+            const colors = dog.color.split('/').map(c => c.trim());
+            colors.forEach(c => {
+                colorHtml += `<span class="tag color ${getColorClass(c)}">${c}</span> `;
+            });
+        }
+
+        const genderClass = (dog.gender && dog.gender.includes('Female')) ? 'female' : 'male';
+        const genderIcon = genderClass === 'female' ? '♀️' : '♂️';
+
+        return `
+            <div class="dog-card">
+                <div class="card-header">
+                    <h3 class="dog-name">${dog.name}</h3>
+                    <span class="tag id">${dog.id}</span>
+                </div>
+                <div class="breed-info">${dog.breed}</div>
+                <div class="card-attrs">
+                    <div class="left-attr">
+                        <span class="tag ${genderClass}">${genderIcon} ${dog.gender}</span>
+                        ${ageHtml}
+                    </div>
+                    <div class="right-attr" style="text-align:right;">
+                        ${colorHtml}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="status-badges">
+                        ${statusBadge}
+                        ${strayBadge}
+                    </div>
+                    <div class="action-group">
+                        ${fbBtn}
+                        <a href="${dog.link}" target="_blank" class="action-btn">View</a>
+                        <button class="share-btn" onclick="shareDog('${dog.name}', '${dog.id}', '${dog.link}')"><i class="fas fa-share-alt"></i></button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // --- Helpers ---
+
+    function sortDogs(list, mode) {
+        return list.sort((a, b) => {
+            const getD = (d, m) => {
+                if (m.includes('outcome')) return new Date(d.outcome_date || d.date);
+                return new Date(d.date);
+            };
+
+            if (mode === 'longest' || mode === 'outcome_oldest') return getD(a, mode) - getD(b, mode);
+            if (mode === 'newest' || mode === 'outcome_newest') return getD(b, mode) - getD(a, mode);
+            
+            if (mode === 'age_young') return a.ageMonths - b.ageMonths;
+            if (mode === 'age_old') return b.ageMonths - a.ageMonths;
+            if (mode === 'name_asc') return a.name.localeCompare(b.name);
+            if (mode === 'breed_asc') return (a.breed || '').localeCompare(b.breed || '');
+            if (mode === 'id_asc') return a.id.localeCompare(b.id);
+            return 0;
+        });
     }
 
     function getColorClass(colorText) {
@@ -574,130 +699,6 @@
             return '<i class="fas fa-video media-icon"></i>';
         }
         return '<i class="fas fa-camera media-icon"></i>';
-    }
-
-    function renderGrid(dogs) {
-        const grid = document.getElementById('dog-grid');
-        grid.innerHTML = '';
-        if (dogs.length === 0) { grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#8b949e;">No dogs found matching this criteria.</div>'; return; }
-
-        dogs.forEach(dog => {
-            const today = new Date();
-            const intake = new Date(dog.date);
-            const days = Math.floor((today - intake) / (1000 * 60 * 60 * 24));
-            
-            let statusBadge = '';
-            
-            // Computed Status Badge
-            if (!dog.is_active) {
-                // Use Outcome Date if available, fallback to intake/scrape date
-                const displayDate = dog.outcome_date || dog.date;
-                
-                if (dog.status === 'RTO') {
-                    statusBadge = `<span class="status-badge status-rto"><i class="fas fa-home"></i> Returned: ${displayDate}</span>`;
-                } else if (dog.status === 'Rescued') {
-                    const partner = dog.rescue_partner || 'Rescued';
-                    const safePartner = partner.replace(/'/g, "\\'");
-                    statusBadge = `<span class="status-badge status-rescue" onclick="toggleRescueDate(this, '${displayDate}', '${safePartner}')" title="Tap to see date"><i class="fas fa-ambulance"></i> ${partner}</span>`;
-                } else if (dog.status === 'Adopted') {
-                    statusBadge = `<span class="status-badge status-adopted"><i class="fas fa-heart"></i> Adopted: ${displayDate}</span>`;
-                } else {
-                    statusBadge = `<span class="status-badge" style="border:1px solid #555; color:#aaa;">${dog.status}</span>`;
-                }
-            } else {
-                let badgeClass = 'los-green';
-                const safeDays = isNaN(days) ? 0 : days;
-                
-                if (safeDays >= 30) badgeClass = 'los-red';
-                else if (safeDays >= 15) badgeClass = 'los-yellow';
-                
-                const dayText = safeDays === 0 ? 'Today' : (safeDays === 1 ? 'Yesterday' : `${safeDays} Days`);
-                statusBadge = `<span class="status-badge ${badgeClass}">${dayText}</span>`;
-            }
-            
-            let strayBadge = '';
-            if (dog.is_stray) {
-                if (dog.is_mappable) {
-                    strayBadge = `<a href="map.html?id=${dog.id}" title="View Map" style="text-decoration:none;"><span class="tag stray"><i class="fas fa-map-marker-alt"></i> Stray</span></a>`;
-                } else {
-                    strayBadge = `<span class="tag stray" style="cursor:help" title="Location unknown"><i class="fas fa-question-circle"></i> Stray</span>`;
-                }
-            }
-
-            let fbBtn = '';
-            if (dog.facebook_url) {
-                const links = dog.facebook_url.split(' | ').filter(l => l.trim() !== '');
-                if (links.length === 1) {
-                    const url = links[0];
-                    fbBtn = `<a href="${url}" class="action-btn" title="View on Facebook"><i class="fab fa-facebook"></i></a>`;
-                } else if (links.length > 1) {
-                    let menuItems = '';
-                    links.forEach((link, idx) => {
-                        const icon = getMediaIcon(link);
-                        const typeLabel = link.includes('/video') ? 'Video' : 'Photo';
-                        menuItems += `<a href="${link}" class="media-item">${icon} ${typeLabel} ${idx+1}</a>`;
-                    });
-                    fbBtn = `
-                        <div class="media-wrapper">
-                            <button class="action-btn" onclick="toggleMediaMenu(this, event)">
-                                <i class="fab fa-facebook"></i> <i class="fas fa-caret-down" style="font-size: 0.8em; margin-left: 2px;"></i>
-                            </button>
-                            <div class="media-menu">
-                                ${menuItems}
-                            </div>
-                        </div>
-                    `;
-                }
-            }
-
-            let ageHtml = '';
-            if (dog.age && dog.age !== 'Unknown') {
-                const displayAge = dog.age === 'My age is unknown' ? 'Age unknown' : dog.age;
-                ageHtml = `<div class="tag" style="background:var(--row-hover); color:var(--text-muted); border:1px solid var(--border); margin-right:5px;">${displayAge}</div>`;
-            }
-
-            let colorHtml = '';
-            if (dog.color) {
-                const colors = dog.color.split('/').map(c => c.trim());
-                colors.forEach(c => {
-                    colorHtml += `<span class="tag color ${getColorClass(c)}">${c}</span> `;
-                });
-            }
-
-            const genderClass = (dog.gender && dog.gender.includes('Female')) ? 'female' : 'male';
-            const genderIcon = genderClass === 'female' ? '♀️' : '♂️';
-
-            const card = `
-                <div class="dog-card">
-                    <div class="card-header">
-                        <h3 class="dog-name">${dog.name}</h3>
-                        <span class="tag id">${dog.id}</span>
-                    </div>
-                    <div class="breed-info">${dog.breed}</div>
-                    <div class="card-attrs">
-                        <div class="left-attr">
-                            <span class="tag ${genderClass}">${genderIcon} ${dog.gender}</span>
-                            ${ageHtml}
-                        </div>
-                        <div class="right-attr" style="text-align:right;">
-                            ${colorHtml}
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="status-badges">
-                            ${statusBadge}
-                            ${strayBadge}
-                        </div>
-                        <div class="action-group">
-                            ${fbBtn}
-                            <a href="${dog.link}" target="_blank" class="action-btn">View</a>
-                            <button class="share-btn" onclick="shareDog('${dog.name}', '${dog.id}', '${dog.link}')"><i class="fas fa-share-alt"></i></button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            grid.innerHTML += card;
-        });
     }
 
     async function shareDog(name, id, url) {
