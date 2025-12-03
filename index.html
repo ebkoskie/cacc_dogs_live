@@ -196,7 +196,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input onkeyup=handleGlobalSearch() placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div></div><div class=footer><span>Last Updated: December 03, 2025 08:27 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input onkeyup=handleGlobalSearch() placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div></div><div class=footer><span>Last Updated: December 03, 2025 08:38 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
     // Close Dropdowns on Click Outside
     document.addEventListener('click', function(event) {
         if (!event.target.closest('.media-wrapper')) {
@@ -240,6 +240,10 @@
             fullDataset = data;
         }
         
+        if (!Array.isArray(fullDataset)) {
+            throw new Error("Data format error: Expected array of dogs.");
+        }
+        
         fullDataset = fullDataset.map(dog => {
             dog.ageMonths = parseAgeToMonths(dog.age);
             if (dog.pid !== undefined && dog.pid !== null && partnersList[dog.pid]) {
@@ -255,7 +259,10 @@
         applyFiltersAndSort(); 
         document.getElementById('loading-state').style.display = 'none';
         document.getElementById('main-view').style.display = 'block';
-    }).catch(err => { console.error(err); document.getElementById('loading-state').innerText = "Failed to load data."; });
+    }).catch(err => { 
+        console.error("Data Load Error:", err); 
+        document.getElementById('loading-state').innerHTML = `<p style="color:#ff7b72"><i class="fas fa-exclamation-triangle"></i> Failed to load data.<br><small>${err.message}</small></p>`; 
+    });
 
     function parseAgeToMonths(ageStr) {
         if (!ageStr) return 999;
@@ -306,7 +313,8 @@
             if (showAdopted && dog.status !== 'Adopted') return false;
             if (!isArchiveMode && !dog.is_active) return false;
 
-            const intake = new Date(dog.date);
+            // Use intake_date instead of date (which has text)
+            const intake = new Date(dog.intake_date || dog.date);
             const days = (today - intake) / (1000 * 60 * 60 * 24);
             
             for (let type of activeFilters) {
@@ -319,7 +327,7 @@
                 if (type === 'puppy' && dog.ageMonths >= 12) return false;
                 if (type === 'senior' && (dog.ageMonths < 60 || dog.ageMonths === 999)) return false;
                 if (type === 'small') {
-                    const isSmall = (dog.breed || '').toLowerCase().includes('small') || (dog.weight && parseInt(dog.weight) < 25);
+                    const isSmall = (dog.breed || '').toLowerCase().includes('small');
                     if (!isSmall) return false;
                 }
             }
@@ -349,8 +357,9 @@
             if (showAdopted && dog.status !== 'Adopted') return false;
             if (!isArchiveMode && !dog.is_active) return false;
             
-            const intake = new Date(dog.date);
+            const intake = new Date(dog.intake_date || dog.date);
             const days = (today - intake) / (1000 * 60 * 60 * 24);
+            
             for (let type of activeFilters) {
                 if (type === 'rto' || type === 'rescued' || type === 'adopted') continue;
                 if (type === 'long_stay' && days < 30) return false;
@@ -361,7 +370,7 @@
                 if (type === 'puppy' && dog.ageMonths >= 12) return false;
                 if (type === 'senior' && (dog.ageMonths < 60 || dog.ageMonths === 999)) return false;
                 if (type === 'small') {
-                    const isSmall = (dog.breed || '').toLowerCase().includes('small') || (dog.weight && parseInt(dog.weight) < 25);
+                    const isSmall = (dog.breed || '').toLowerCase().includes('small');
                     if (!isSmall) return false;
                 }
             }
@@ -373,8 +382,12 @@
 
     function sortDogs(list, mode) {
         return list.sort((a, b) => {
-            if (mode === 'longest') return new Date(a.date) - new Date(b.date);
-            if (mode === 'newest') return new Date(b.date) - new Date(a.date);
+            // Use intake_date if available for accurate sorting
+            const dateA = new Date(a.intake_date || a.date);
+            const dateB = new Date(b.intake_date || b.date);
+            
+            if (mode === 'longest') return dateA - dateB;
+            if (mode === 'newest') return dateB - dateA;
             if (mode === 'age_young') return a.ageMonths - b.ageMonths;
             if (mode === 'age_old') return b.ageMonths - a.ageMonths;
             if (mode === 'name_asc') return a.name.localeCompare(b.name);
@@ -442,7 +455,8 @@
 
         dogs.slice(0, 100).forEach(dog => {
             const today = new Date();
-            const intake = new Date(dog.date);
+            // Use intake_date if available to avoid "Invalid Date"
+            const intake = new Date(dog.intake_date || dog.date);
             const days = Math.floor((today - intake) / (1000 * 60 * 60 * 24));
             
             let statusBadge = '';
@@ -461,9 +475,13 @@
                 }
             } else {
                 let badgeClass = 'los-green';
-                if (days >= 30) badgeClass = 'los-red';
-                else if (days >= 15) badgeClass = 'los-yellow';
-                const dayText = days === 0 ? 'Today' : `${days} Days`;
+                // Handle NaN days gracefully (treat as 0)
+                const safeDays = isNaN(days) ? 0 : days;
+                
+                if (safeDays >= 30) badgeClass = 'los-red';
+                else if (safeDays >= 15) badgeClass = 'los-yellow';
+                
+                const dayText = safeDays === 0 ? 'Today' : `${safeDays} Days`;
                 statusBadge = `<span class="status-badge ${badgeClass}">${dayText}</span>`;
             }
             

@@ -14,7 +14,7 @@ I am building `cacc_dogs`, a Python-based static site generator that scrapes, tr
     * **Interactive:** `Chart.js` for responsive, client-side charts (Trends, Rescues).
     * **Static:** `matplotlib` generating PNG snapshots for historical archiving.
     * **Mapping:** Leaflet.js with client-side clustering and spatial indexing.
-* **Frontend:** Jinja2 templating generating static HTML with a responsive **Tile Grid** UI supporting multiple media links per card.
+* **Frontend:** Jinja2 templating using **Template Inheritance** (`base.html`) and **Partials** (`navbar.html`) for a unified, maintainable UI. Features a responsive "Frosted Glass" sticky header, Theme Toggle (Dark/Light), and Tile Grid layout.
 * **Search & Logic:** Client-side logic powered by `search_index.json`. Features include **Multi-Select Filtering**, **Smart Sorting**, **Drill-Down Analytics**, **Archive Modes**, and **Dictionary Compression** to optimize data payloads.
 * **CI/CD:** GitHub Actions with **Playwright caching**, `xvfb` support for headless browsing, deploying to an external public repository.
 
@@ -36,13 +36,15 @@ I am building `cacc_dogs`, a Python-based static site generator that scrapes, tr
     * `src/analytics/charts.py`: Generates legacy static PNG charts (Intake Trends, LOS, Outcomes) to `assets/`.
 
 4.  **Reporting & Templates (`src/report.py` & `templates/`):**
-    * `src/report.py`: Logic for status normalization (RTO/Rescued/Adopted), timezone conversion (Chicago), and report generation. Implements **Dictionary Compression** (lookup tables for partners/breeds) to minimize `search_index.json` size.
-    * `templates/index.html`: **Main Dashboard.** Tile grid with advanced filters, "Ghost" badging, and multi-link Facebook dropdowns. Supports "Archive Mode" for adopted/rescued dogs.
-    * `templates/trends.html`: **Analytics Dashboard.** Features interactive charts (LOS Cohorts, Daily Intakes) and a "Frosted Glass" spoiler for sensitive euthanasia data.
-    * `templates/rescues.html`: **Partner Analytics.** Interactive bar chart with "Click-to-Drill-Down" functionality revealing breed distribution pie charts, plus a **"Recent Rescues"** section displaying the last 7 days of activity in a responsive tile grid.
-    * `templates/removed.html`: "Lost/Unaccounted" report filtering out known positive outcomes (Adoptions/Rescues).
-    * `templates/breeds.html`: Breed-specific statistics and outcome tables.
-    * `templates/map_overlay.html`: Leaflet map logic.
+    * `src/report.py`: Logic for status normalization (RTO/Rescued/Adopted), timezone conversion (Chicago), and report generation. Implements **Dictionary Compression** to minimize `search_index.json`.
+    * `templates/base.html`: **Master Layout.** Defines the skeleton, global CSS variables, sticky header structure, and footer. Implements Jinja2 blocks for child templates.
+    * `templates/partials/navbar.html`: **Shared Component.** Modular navigation bar used by `base.html` and the standalone `map_overlay.html` to ensure UI consistency across contexts.
+    * `templates/index.html`: **Main Dashboard (Extends Base).** Tile grid with advanced filters (Puppy < 1yr, etc.), "Ghost" badging, and multi-link Facebook dropdowns.
+    * `templates/trends.html`: **Analytics Dashboard (Extends Base).** Features interactive charts (LOS Cohorts, Daily Intakes) and a "Frosted Glass" spoiler for sensitive euthanasia data.
+    * `templates/rescues.html`: **Partner Analytics (Extends Base).** Interactive bar chart with "Click-to-Drill-Down" functionality revealing breed distribution pie charts, plus a **"Recent Rescues"** section.
+    * `templates/removed.html`: "Lost/Unaccounted" report (Extends Base) filtering out known positive outcomes.
+    * `templates/breeds.html`: Breed-specific statistics and outcome tables (Extends Base).
+    * `templates/map_overlay.html`: **Standalone Overlay.** Injected into the Folium map. Uses `partials/navbar.html` to maintain visual consistency with the main site.
 
 5.  **Deployment Workflows (`.github/workflows/`):**
     * `scrape.yml`: Hourly job. Caches and installs **Playwright browsers**, runs scraper, commits data to private repo, and deploys artifacts to **public external repo** (`cacc_dogs_live`) via PAT.
