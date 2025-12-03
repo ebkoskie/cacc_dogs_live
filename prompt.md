@@ -15,7 +15,7 @@ I am building `cacc_dogs`, a Python-based static site generator that scrapes, tr
     * **Static:** `matplotlib` generating PNG snapshots for historical archiving.
     * **Mapping:** Leaflet.js with client-side clustering and spatial indexing.
 * **Frontend:** Jinja2 templating generating static HTML with a responsive **Tile Grid** UI supporting multiple media links per card.
-* **Search & Logic:** Client-side logic powered by `search_index.json`. Features include **Multi-Select Filtering**, **Smart Sorting**, **Drill-Down Analytics**, and **Archive Modes**.
+* **Search & Logic:** Client-side logic powered by `search_index.json`. Features include **Multi-Select Filtering**, **Smart Sorting**, **Drill-Down Analytics**, **Archive Modes**, and **Dictionary Compression** to optimize data payloads.
 * **CI/CD:** GitHub Actions with **Playwright caching**, `xvfb` support for headless browsing, deploying to an external public repository.
 
 **Complete Architecture & File Manifest:**
@@ -36,10 +36,10 @@ I am building `cacc_dogs`, a Python-based static site generator that scrapes, tr
     * `src/analytics/charts.py`: Generates legacy static PNG charts (Intake Trends, LOS, Outcomes) to `assets/`.
 
 4.  **Reporting & Templates (`src/report.py` & `templates/`):**
-    * `src/report.py`: Logic for status normalization (RTO/Rescued/Adopted), timezone conversion (Chicago), and report generation.
-    * `templates/index.html`: **Main Dashboard.** Tile grid with advanced filters, "Ghost" badging, and multi-link Facebook dropdowns.
+    * `src/report.py`: Logic for status normalization (RTO/Rescued/Adopted), timezone conversion (Chicago), and report generation. Implements **Dictionary Compression** (lookup tables for partners/breeds) to minimize `search_index.json` size.
+    * `templates/index.html`: **Main Dashboard.** Tile grid with advanced filters, "Ghost" badging, and multi-link Facebook dropdowns. Supports "Archive Mode" for adopted/rescued dogs.
     * `templates/trends.html`: **Analytics Dashboard.** Features interactive charts (LOS Cohorts, Daily Intakes) and a "Frosted Glass" spoiler for sensitive euthanasia data.
-    * `templates/rescues.html`: **Partner Analytics.** Interactive bar chart with "Click-to-Drill-Down" functionality revealing breed distribution pie charts.
+    * `templates/rescues.html`: **Partner Analytics.** Interactive bar chart with "Click-to-Drill-Down" functionality revealing breed distribution pie charts, plus a **"Recent Rescues"** section displaying the last 7 days of activity in a responsive tile grid.
     * `templates/removed.html`: "Lost/Unaccounted" report filtering out known positive outcomes (Adoptions/Rescues).
     * `templates/breeds.html`: Breed-specific statistics and outcome tables.
     * `templates/map_overlay.html`: Leaflet map logic.
