@@ -1,45 +1,5 @@
 <!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>CACC - Removed (No Outcome)</title><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css><script src=https://cdn.jsdelivr.net/npm/chart.js></script><style>
-        /* --- GLOBAL THEME VARIABLES --- */
-        :root {
-            --bg: #0d1117; --text: #c9d1d9; --text-muted: #8b949e;
-            --border: #30363d; --row: #161b22; --row-hover: #21262d;
-            --accent: #58a6ff; --input-bg: #0d1117;
-            --header-bg: rgba(13, 17, 23, 0.85); /* Transparent for glass effect */
-            --nav-item-hover: rgba(177, 186, 196, 0.12);
-            
-            /* Status Colors */
-            --stray-color: #d2a8ff; --stray-border: #bc8cff;
-            --gender-male-text: #79c0ff; --gender-male-bg: rgba(56, 139, 253, 0.15); --gender-male-border: rgba(56, 139, 253, 0.4);
-            --gender-female-text: #ff79c6; --gender-female-bg: rgba(255, 121, 198, 0.15); --gender-female-border: rgba(255, 121, 198, 0.4);
-            
-            --los-red-text: #ff7b72; --los-red-bg: rgba(255, 123, 114, 0.1); --los-red-border: rgba(255, 123, 114, 0.3);
-            --los-yellow-text: #d29922; --los-yellow-bg: rgba(210, 153, 34, 0.1); --los-yellow-border: rgba(210, 153, 34, 0.3);
-            --los-green-text: #3fb950; --los-green-bg: rgba(63, 185, 80, 0.1); --los-green-border: rgba(63, 185, 80, 0.3);
-            --rto-text: #38d9a9; --rto-bg: rgba(56, 217, 169, 0.1); --rto-border: rgba(56, 217, 169, 0.3);
-            --rescue-text: #a371f7; --rescue-bg: rgba(163, 113, 247, 0.1); --rescue-border: rgba(163, 113, 247, 0.3);
-            --adopted-text: #2ea043; --adopted-bg: rgba(46, 160, 67, 0.15); --adopted-border: rgba(46, 160, 67, 0.3);
-        }
-        
-        body.light-mode {
-            --bg: #ffffff; --text: #24292f; --text-muted: #57606a;
-            --border: #d0d7de; --row: #f6f8fa; --row-hover: #eaeef2;
-            --accent: #0969da; --input-bg: #ffffff;
-            --header-bg: rgba(255, 255, 255, 0.85);
-            --nav-item-hover: rgba(0, 0, 0, 0.08);
-
-            /* Light Mode Badge Colors */
-            --stray-color: #8250df; --stray-border: #a475f9;
-            --gender-male-text: #0969da; --gender-male-bg: rgba(221, 244, 255, 0.6); --gender-male-border: rgba(9, 105, 218, 0.3);
-            --gender-female-text: #d03592; --gender-female-bg: rgba(255, 235, 245, 0.7); --gender-female-border: rgba(208, 53, 146, 0.3);
-            
-            --los-red-text: #cf222e; --los-red-bg: rgba(207, 34, 46, 0.1); --los-red-border: rgba(207, 34, 46, 0.3);
-            --los-yellow-text: #9a6700; --los-yellow-bg: rgba(154, 103, 0, 0.1); --los-yellow-border: rgba(154, 103, 0, 0.3);
-            --los-green-text: #1a7f37; --los-green-bg: rgba(26, 127, 55, 0.1); --los-green-border: rgba(26, 127, 55, 0.3);
-            --rto-text: #059669; --rto-bg: rgba(52, 211, 153, 0.15); --rto-border: rgba(5, 150, 105, 0.3);
-            --rescue-text: #7c3aed; --rescue-bg: rgba(139, 92, 246, 0.15); --rescue-border: rgba(124, 58, 237, 0.3);
-            --adopted-text: #1a7f37; --adopted-bg: rgba(26, 127, 55, 0.15); --adopted-border: rgba(26, 127, 55, 0.3);
-        }
-
+        /* Base styles that don't belong in the navbar partial */
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; 
             background: var(--bg); color: var(--text); 
@@ -47,87 +7,9 @@
             padding-top: 80px; /* Offset for fixed header */
             transition: background 0.3s, color 0.3s; 
         }
-        
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; }
-
-        /* --- MODERN NAVBAR --- */
-        .site-header {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-            background: var(--header-bg);
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
-            height: 64px;
-        }
-
-        .header-content {
-            max-width: 1200px; margin: 0 auto; height: 100%;
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 20px;
-        }
-
-        .brand-section {
-            display: flex; align-items: center; gap: 12px;
-        }
-
-        h1 { color: var(--accent); margin: 0; font-size: 1.25rem; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
         
-        .header-count { 
-            font-size: 0.8rem; color: var(--text-muted); font-weight: 500; 
-            background: var(--nav-item-hover); padding: 2px 8px; 
-            border-radius: 12px; border: 1px solid var(--border); 
-        }
-
-        /* Desktop Navigation */
-        .nav-links {
-            display: flex; gap: 8px; align-items: center;
-        }
-
-        .nav-link {
-            color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.95rem;
-            padding: 6px 12px; border-radius: 6px; transition: all 0.2s;
-        }
-
-        .nav-link:hover { color: var(--text); background: var(--nav-item-hover); }
-        .nav-link.active { color: var(--accent); background: var(--nav-item-hover); font-weight: 600; }
-
-        .actions { display: flex; align-items: center; gap: 10px; }
-
-        .theme-toggle { 
-            background: transparent; border: 1px solid var(--border); color: var(--text-muted); 
-            width: 36px; height: 36px; border-radius: 50%; 
-            cursor: pointer; display: flex; align-items: center; justify-content: center; 
-            font-size: 1rem; transition: all 0.2s;
-        }
-        .theme-toggle:hover { color: var(--text); border-color: var(--text-muted); }
-
-        /* Mobile Trigger */
-        .mobile-menu-btn {
-            display: none; background: transparent; border: none; 
-            color: var(--text); font-size: 1.4rem; cursor: pointer; padding: 5px;
-        }
-
-        /* Mobile Drawer */
-        .mobile-nav-drawer {
-            display: none; position: absolute; top: 64px; left: 0; right: 0;
-            background: var(--bg); border-bottom: 1px solid var(--border);
-            padding: 15px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .mobile-nav-drawer.open { display: flex; flex-direction: column; gap: 10px; }
-        
-        .mobile-link {
-            padding: 12px; border-radius: 8px; color: var(--text); text-decoration: none; font-weight: 600;
-            border: 1px solid transparent; display: flex; align-items: center; gap: 10px;
-        }
-        .mobile-link:hover { background: var(--row); }
-        .mobile-link.active { background: var(--nav-item-hover); border-color: var(--border); color: var(--accent); }
-
-        /* Responsive Breakpoints */
-        @media (max-width: 850px) {
-            .nav-links { display: none; } /* Hide desktop links */
-            .mobile-menu-btn { display: block; } /* Show hamburger */
-        }
-
-        /* Common Styles */
+        /* Stats & Footer (Keep these here or move to another partial if desired) */
         .stats { background: var(--row); padding: 15px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 30px; display: flex; gap: 20px; font-size: 1.1em; }
         .table-container { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
         table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
@@ -143,16 +25,99 @@
     .tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; background: var(--border); color: var(--text); }
     .tag.male { color: #79c0ff; } .tag.female { color: #ff7b72; }
 
-    </style></head><body><header class=site-header><div class=header-content><div class=brand-section><h1>📉 Removed Dogs (No Outcome Recorded)</h1></div><nav class=nav-links><a href=index.html class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link ">Breeds</a></nav><div class=actions><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button><button class=mobile-menu-btn onclick=toggleMobileMenu()><i class="fas fa-bars"></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=index.html class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link "><i class="fas fa-paw" style=width:20px></i> Breeds</a></div></header><div class=container><div class=stats><div><strong>Updated:</strong> December 03, 2025 07:52 AM CST</div><div><strong>Total:</strong> 7</div></div><p style="color: #8b949e;">These dogs were removed from the public listing while their status was still "Available".</p><div class=table-container><table><thead><tr><th>ID</th><th>Name</th><th>Breed</th><th>Gender</th><th>Last Seen</th><th>Link</th></tr></thead><tbody><tr><td>A304436</td><td>Spunky</td><td>Shih Tzu</td><td><span class="tag male"> Neutered Male </span></td><td>2025-12-02</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304436 target=_blank>View Profile</a></td></tr><tr><td>A304758</td><td>Unknown</td><td>Doberman Pinscher</td><td><span class="tag male"> Male </span></td><td>2025-12-01</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304758 target=_blank>View Profile</a></td></tr><tr><td>A304496</td><td>Unknown</td><td>American Pit Bull Terrier</td><td><span class="tag male"> Male </span></td><td>2025-11-29</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304496 target=_blank>View Profile</a></td></tr><tr><td>A304514</td><td>Unknown</td><td>American Pit Bull Terrier</td><td><span class="tag female"> Female </span></td><td>2025-11-29</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304514 target=_blank>View Profile</a></td></tr><tr><td>A304483</td><td>Unknown</td><td>American Pit Bull Terrier</td><td><span class="tag male"> Male </span></td><td>2025-11-28</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304483 target=_blank>View Profile</a></td></tr><tr><td>A304481</td><td>Unknown</td><td>Bull Terrier</td><td><span class="tag male"> Male </span></td><td>2025-11-28</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304481 target=_blank>View Profile</a></td></tr><tr><td>A304413</td><td>Unknown</td><td>American Pit Bull Terrier</td><td><span class="tag male"> Male </span></td><td>2025-11-27</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304413 target=_blank>View Profile</a></td></tr></tbody></table></div><div class=footer><span>Last Updated: December 03, 2025 07:52 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+    </style></head><body><style>
+    /* Navbar Styles (Scoped slightly to ensure they work in overlays) */
+    :root {
+        --header-bg: rgba(13, 17, 23, 0.85);
+        --nav-item-hover: rgba(177, 186, 196, 0.12);
+        --accent: #58a6ff;
+        --text: #c9d1d9;
+        --text-muted: #8b949e;
+        --border: #30363d;
+        --row: #161b22;
+        --bg: #0d1117;
+    }
+    
+    body.light-mode {
+        --header-bg: rgba(255, 255, 255, 0.85);
+        --nav-item-hover: rgba(0, 0, 0, 0.08);
+        --accent: #0969da;
+        --text: #24292f;
+        --text-muted: #57606a;
+        --border: #d0d7de;
+        --row: #f6f8fa;
+        --bg: #ffffff;
+    }
+
+    .site-header {
+        position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+        background: var(--header-bg);
+        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        height: 64px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    .header-content {
+        max-width: 1200px; margin: 0 auto; height: 100%;
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 0 20px;
+    }
+
+    .brand-section h1 { 
+        color: var(--accent); margin: 0; font-size: 1.25rem; 
+        display: flex; align-items: center; gap: 8px; white-space: nowrap; 
+    }
+
+    /* Desktop Navigation */
+    .nav-links { display: flex; gap: 8px; align-items: center; }
+    .nav-link {
+        color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.95rem;
+        padding: 6px 12px; border-radius: 6px; transition: all 0.2s;
+    }
+    .nav-link:hover { color: var(--text); background: var(--nav-item-hover); }
+    .nav-link.active { color: var(--accent); background: var(--nav-item-hover); font-weight: 600; }
+
+    .actions { display: flex; align-items: center; gap: 10px; }
+    .theme-toggle, .mobile-menu-btn { 
+        background: transparent; border: 1px solid var(--border); color: var(--text-muted); 
+        width: 36px; height: 36px; border-radius: 50%; 
+        cursor: pointer; display: flex; align-items: center; justify-content: center; 
+        font-size: 1rem; transition: all 0.2s;
+    }
+    .theme-toggle:hover, .mobile-menu-btn:hover { color: var(--text); border-color: var(--text-muted); }
+    .mobile-menu-btn { display: none; border-radius: 6px; }
+
+    /* Mobile Drawer */
+    .mobile-nav-drawer {
+        display: none; position: fixed; top: 64px; left: 0; right: 0; z-index: 9998;
+        background: var(--bg); border-bottom: 1px solid var(--border);
+        padding: 15px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .mobile-nav-drawer.open { display: flex; flex-direction: column; gap: 10px; }
+    
+    .mobile-link {
+        padding: 12px; border-radius: 8px; color: var(--text); text-decoration: none; font-weight: 600;
+        border: 1px solid transparent; display: flex; align-items: center; gap: 10px;
+    }
+    .mobile-link:hover { background: var(--row); }
+    .mobile-link.active { background: var(--nav-item-hover); border-color: var(--border); color: var(--accent); }
+
+    @media (max-width: 850px) {
+        .nav-links { display: none; }
+        .mobile-menu-btn { display: flex; }
+    }
+</style><header class=site-header><div class=header-content><div class=brand-section><h1> 🐕 CACC Dogs </h1></div><nav class=nav-links><a href=index.html class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link ">Breeds</a></nav><div class=actions><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button><button class=mobile-menu-btn onclick=toggleMobileMenu()><i class="fas fa-bars"></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=index.html class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link "><i class="fas fa-paw" style=width:20px></i> Breeds</a></div></header><script>
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
         const icon = document.querySelector('.theme-toggle i');
-        icon.className = document.body.classList.contains('light-mode') ? 'fas fa-sun' : 'fas fa-moon';
+        if(icon) icon.className = document.body.classList.contains('light-mode') ? 'fas fa-sun' : 'fas fa-moon';
         localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
     }
-    if (localStorage.getItem('theme') === 'light') toggleTheme();
+    // Auto-init theme if localstorage is set
+    if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
 
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-    </script></body></html>
+</script><div class=container><div class=stats><div><strong>Updated:</strong> December 03, 2025 08:08 AM CST</div><div><strong>Total:</strong> 7</div></div><p style="color: #8b949e;">These dogs were removed from the public listing while their status was still "Available".</p><div class=table-container><table><thead><tr><th>ID</th><th>Name</th><th>Breed</th><th>Gender</th><th>Last Seen</th><th>Link</th></tr></thead><tbody><tr><td>A304436</td><td>Spunky</td><td>Shih Tzu</td><td><span class="tag male"> Neutered Male </span></td><td>2025-12-02</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304436 target=_blank>View Profile</a></td></tr><tr><td>A304758</td><td>Unknown</td><td>Doberman Pinscher</td><td><span class="tag male"> Male </span></td><td>2025-12-01</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304758 target=_blank>View Profile</a></td></tr><tr><td>A304514</td><td>Unknown</td><td>American Pit Bull Terrier</td><td><span class="tag female"> Female </span></td><td>2025-11-29</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304514 target=_blank>View Profile</a></td></tr><tr><td>A304496</td><td>Unknown</td><td>American Pit Bull Terrier</td><td><span class="tag male"> Male </span></td><td>2025-11-29</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304496 target=_blank>View Profile</a></td></tr><tr><td>A304483</td><td>Unknown</td><td>American Pit Bull Terrier</td><td><span class="tag male"> Male </span></td><td>2025-11-28</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304483 target=_blank>View Profile</a></td></tr><tr><td>A304481</td><td>Unknown</td><td>Bull Terrier</td><td><span class="tag male"> Male </span></td><td>2025-11-28</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304481 target=_blank>View Profile</a></td></tr><tr><td>A304413</td><td>Unknown</td><td>American Pit Bull Terrier</td><td><span class="tag male"> Male </span></td><td>2025-11-27</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304413 target=_blank>View Profile</a></td></tr></tbody></table></div><div class=footer><span>Last Updated: December 03, 2025 08:08 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div></body></html>
