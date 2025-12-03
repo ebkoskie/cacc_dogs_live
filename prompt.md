@@ -15,7 +15,7 @@ I am building `cacc_dogs`, a Python-based static site generator that scrapes, tr
     * **Static:** `matplotlib` generating PNG snapshots for historical archiving.
     * **Mapping:** Leaflet.js with client-side clustering and spatial indexing.
 * **Frontend:** Jinja2 templating with a **Global CSS Variable Design System**. Features a responsive "Frosted Glass" sticky header, seamless Light/Dark Mode switching, and centralized badge styling.
-* **Search & Logic:** Client-side logic powered by `search_index.json`. Features include **Multi-Select Filtering**, **Smart Sorting**, **Drill-Down Analytics**, and **Dictionary Compression**.
+* **Search & Logic:** Client-side logic powered by **Dictionary Compressed JSON Assets** (`search_index.json`, `rescues.json`, `trends.json`) to minimize payload size. Features include **Infinite Scroll (Intersection Observer)**, **DOM Batching**, **Mutually Exclusive Filters**, and client-side data hydration.
 * **CI/CD:** GitHub Actions with **Playwright caching**, `xvfb` support for headless browsing, deploying to an external public repository.
 
 **Complete Architecture & File Manifest:**
@@ -32,19 +32,19 @@ I am building `cacc_dogs`, a Python-based static site generator that scrapes, tr
     * `src/geo.py`: Geocoding service using `geopy` with persistent JSON caching.
 
 3.  **Analytics & Visualization (`src/analytics/`):**
-    * `src/analytics/stats.py`: **Dual-Mode Engine.** Generates dynamic JSON for interactive charts AND triggers static PNG generation. Includes logic for **Historical Time to Outcome** (Median LOS) analysis.
+    * `src/analytics/stats.py`: **Dual-Mode Engine.** Generates dynamic JSON structures for interactive charts AND triggers static PNG generation. Includes logic for **Historical Time to Outcome** (Median LOS) analysis.
     * `src/analytics/charts.py`: Generates legacy static PNG charts (Intake Trends, LOS, Outcomes) to `assets/`.
 
 4.  **Reporting & Templates (`src/report.py` & `templates/`):**
-    * `src/report.py`: Logic for status normalization (RTO/Rescued/Adopted), timezone conversion (Chicago), and report generation. Implements **Dictionary Compression** to minimize `search_index.json`.
+    * `src/report.py`: Logic for status normalization (RTO/Rescued/Adopted), timezone conversion (Chicago), and report generation. Implements **Dictionary Compression** (mapping repetitive strings to integers) and generates externalized JSON assets (`search_index.json`, `rescues.json`, `trends.json`) to unblock rendering.
     * `templates/base.html`: **Master Layout.** Defines the skeleton, footer, and **Global Utility Classes** (e.g., `.tag`, `.status-badge`) used across all child pages.
     * `templates/partials/navbar.html`: **Theme Source & Nav.** Defines the **Global CSS Variables** (`:root`) for the design system (Colors, Light/Dark mode overrides) and the navigation structure. Included by `base.html` and `map_overlay.html` to ensure consistent theming.
-    * `templates/index.html`: **Main Dashboard (Extends Base).** Tile grid with advanced filters (Puppy < 1yr, etc.), "Ghost" badging, multi-link Facebook dropdowns, and smart LOS formatting ("Yesterday").
-    * `templates/trends.html`: **Analytics Dashboard (Extends Base).** Features interactive charts (**Median LOS Trends**, Daily Intakes) and a "Frosted Glass" spoiler for sensitive euthanasia data.
-    * `templates/rescues.html`: **Partner Analytics (Extends Base).** Interactive bar chart with "Click-to-Drill-Down" functionality revealing breed distribution pie charts, plus a **"Recent Rescues"** section.
+    * `templates/index.html`: **Main Dashboard (Extends Base).** Features **Infinite Scroll** via Intersection Observer, optimized DOM batching for large datasets, advanced mutually exclusive filters (e.g., Puppy vs Senior), and client-side hydration of compressed data.
+    * `templates/trends.html`: **Analytics Dashboard (Extends Base).** Fetches `trends.json` asynchronously. Features interactive charts (**Median LOS Trends**, Daily Intakes) and a "Frosted Glass" spoiler for sensitive euthanasia data.
+    * `templates/rescues.html`: **Partner Analytics (Extends Base).** Fetches `rescues.json` asynchronously. Interactive bar chart with "Click-to-Drill-Down" functionality revealing breed distribution pie charts, plus a **"Recent Rescues"** section.
     * `templates/removed.html`: "Lost/Unaccounted" report (Extends Base) filtering out known positive outcomes.
     * `templates/breeds.html`: Breed-specific statistics and outcome tables (Extends Base).
-    * `templates/map_overlay.html`: **Standalone Overlay.** Injected into the Folium map. Includes `partials/navbar.html` to inherit the global theme variables and search styles.
+    * `templates/map_overlay.html`: **Standalone Overlay.** Injected into the Folium map. Fetches compressed `map_data.json`. Includes `partials/navbar.html` to inherit the global theme variables and search styles.
 
 5.  **Deployment Workflows (`.github/workflows/`):**
     * `scrape.yml`: Hourly job. Caches and installs **Playwright browsers**, runs scraper, commits data to private repo, and deploys artifacts to **public external repo** (`cacc_dogs_live`) via PAT.
