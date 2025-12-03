@@ -135,11 +135,15 @@
         .los-red { color: var(--los-red-text); background: var(--los-red-bg); border-color: var(--los-red-border); }
         
         .status-rto { color: var(--rto-text); background: var(--rto-bg); border-color: var(--rto-border); }
+        .status-adopted { color: var(--adopted-text); background: var(--adopted-bg); border-color: var(--adopted-border); }
+        
+        /* INTERACTIVE RESCUE BADGE */
         .status-rescue { 
             color: var(--rescue-text); background: var(--rescue-bg); border-color: var(--rescue-border);
             max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;
+            cursor: pointer; user-select: none; transition: transform 0.1s, opacity 0.2s;
         }
-        .status-adopted { color: var(--adopted-text); background: var(--adopted-bg); border-color: var(--adopted-border); }
+        .status-rescue:active { transform: scale(0.96); opacity: 0.8; }
 
         .action-group { display: flex; gap: 8px; margin-left: auto; }
         .action-btn { 
@@ -188,7 +192,7 @@
         #loading-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
 
         @media (max-width: 600px) { .dog-grid { grid-template-columns: 1fr; } }
-    </style></head><body><div class=container><div class=top-bar><h1>🐕 CACC Dogs <span class=header-count id=headerCount></span></h1><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button></div><div class=nav><a href=map.html>🗺️ Map</a> | <a href=trends.html>📈 Trends</a> | <a href=rescues.html>🚑 Rescues</a> | <a href=breeds.html>🐶 Breeds</a></div><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input onkeyup=handleGlobalSearch() placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div></div><div class=footer><span>Last Updated: December 02, 2025 09:22 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+    </style></head><body><div class=container><div class=top-bar><h1>🐕 CACC Dogs <span class=header-count id=headerCount></span></h1><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button></div><div class=nav><a href=map.html>🗺️ Map</a> | <a href=trends.html>📈 Trends</a> | <a href=rescues.html>🚑 Rescues</a> | <a href=breeds.html>🐶 Breeds</a></div><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input onkeyup=handleGlobalSearch() placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div></div><div class=footer><span>Last Updated: December 02, 2025 09:25 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
         const icon = document.querySelector('.theme-toggle i');
@@ -216,6 +220,17 @@
         });
         
         menu.classList.toggle('show');
+    }
+
+    // Toggle Rescue Date Function
+    function toggleRescueDate(el, date, partner) {
+        if (el.getAttribute('data-showing') === 'date') {
+            el.innerHTML = `<i class="fas fa-ambulance"></i> ${partner}`;
+            el.setAttribute('data-showing', 'partner');
+        } else {
+            el.innerHTML = `<i class="fas fa-calendar-alt"></i> ${date}`;
+            el.setAttribute('data-showing', 'date');
+        }
     }
 
     let fullDataset = []; 
@@ -453,7 +468,8 @@
                 } else if (dog.status === 'Rescued') {
                     // Use inflated partner name
                     const partner = dog.rescue_partner || 'Rescued';
-                    statusBadge = `<span class="status-badge status-rescue" title="Rescued: ${dog.date}"><i class="fas fa-ambulance"></i> ${partner}</span>`;
+                    const safePartner = partner.replace(/'/g, "\\'");
+                    statusBadge = `<span class="status-badge status-rescue" onclick="toggleRescueDate(this, '${dog.date}', '${safePartner}')" title="Tap to see date"><i class="fas fa-ambulance"></i> ${partner}</span>`;
                 } else if (dog.status === 'Adopted') {
                     statusBadge = `<span class="status-badge status-adopted"><i class="fas fa-heart"></i> Adopted: ${dog.date}</span>`;
                 } else {
