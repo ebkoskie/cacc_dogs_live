@@ -1,4 +1,6 @@
 <!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>CACC - Removed (No Outcome)</title><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css><script src=https://cdn.jsdelivr.net/npm/chart.js></script><style>
+        /* Note: :root Variables are now in partials/navbar.html so map_overlay.html can share them */
+
         /* Base styles that don't belong in the navbar partial */
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; 
@@ -9,7 +11,54 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; }
         
-        /* Stats & Footer (Keep these here or move to another partial if desired) */
+        /* --- Global Utility Classes (Badges, Tags, Counts) --- */
+        
+        /* Header Count Styling */
+        .header-count { color: var(--text-muted); font-size: 0.8em; font-weight: 500; background: var(--nav-item-hover); padding: 2px 8px; border-radius: 12px; margin-left: 8px; vertical-align: middle; letter-spacing: 0.5px; }
+
+        /* Standard Badges */
+        .tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; background: var(--border); transition: all 0.3s ease; }
+        
+        .tag.male   { color: var(--gender-male-text); background: var(--gender-male-bg); border: 1px solid var(--gender-male-border); } 
+        .tag.female { color: var(--gender-female-text); background: var(--gender-female-bg); border: 1px solid var(--gender-female-border); }
+        .tag.stray  { color: var(--stray-text); background: var(--stray-bg); border: 1px solid var(--stray-border); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+        
+        /* Color Tags */
+        .tag.color { border: 1px solid transparent; }
+        .tag.color-black { background: rgba(100,100,100,0.15); color: #c9d1d9; border: 1px solid rgba(100,100,100,0.5); }
+        .tag.color-white { background: rgba(255,255,255,0.1); color: #f0f6fc; border: 1px solid rgba(255,255,255,0.3); }
+        .tag.color-brown { background: rgba(160, 82, 45, 0.15); color: #dcbfa3; border: 1px solid rgba(160, 82, 45, 0.4); }
+        .tag.color-tan   { background: rgba(210, 180, 140, 0.15); color: #e8d0a9; border: 1px solid rgba(210, 180, 140, 0.4); }
+        .tag.color-blue  { background: rgba(119, 136, 153, 0.15); color: #b0c4de; border: 1px solid rgba(119, 136, 153, 0.4); }
+        .tag.color-red   { background: rgba(205, 92, 92, 0.15); color: #f0a0a0; border: 1px solid rgba(205, 92, 92, 0.4); }
+        .tag.color-brindle { background: rgba(139, 69, 19, 0.15); color: #cdb499; border: 1px solid rgba(139, 69, 19, 0.4); }
+        .tag.color-tricolor { background: rgba(128, 128, 128, 0.15); color: #d0d0d0; border: 1px solid rgba(128, 128, 128, 0.4); }
+        .tag.color-default { background: rgba(128, 128, 128, 0.1); color: #8b949e; border: 1px solid rgba(128,128,128,0.3); }
+
+        /* Light Mode Color Overrides */
+        body.light-mode .tag.color-black { background: #f6f8fa; color: #24292f; border-color: #d0d7de; }
+        body.light-mode .tag.color-white { background: #ffffff; color: #24292f; border-color: #d0d7de; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        body.light-mode .tag.color-brown { background: #fff8f2; color: #8c5e2a; border-color: #e6ccb3; }
+        body.light-mode .tag.color-tan   { background: #fffcf0; color: #9a6700; border-color: #e6ccb3; }
+        body.light-mode .tag.color-blue  { background: #f1f8ff; color: #0969da; border-color: #d0d7de; }
+        body.light-mode .tag.color-red   { background: #ffebe9; color: #cf222e; border-color: #ff8182; }
+        body.light-mode .tag.color-brindle { background: #fff8c5; color: #574619; border-color: #eac54f; }
+        body.light-mode .tag.color-tricolor { background: #f6f8fa; color: #57606a; border-color: #d0d7de; }
+        body.light-mode .tag.color-default { background: #f6f8fa; color: #57606a; border-color: #d0d7de; }
+
+        /* Status Badges (LOS & Outcome) */
+        .status-badge { font-weight: 600; padding: 4px 8px; border-radius: 6px; font-size: 12px; display: inline-block; min-width: 60px; text-align: center; border: 1px solid transparent; }
+        
+        .los-green  { color: var(--success-text); background: var(--success-bg); border-color: var(--success-border); }
+        .los-yellow { color: var(--warning-text); background: var(--warning-bg); border-color: var(--warning-border); }
+        .los-red    { color: var(--danger-text);  background: var(--danger-bg);  border-color: var(--danger-border); }
+        
+        .status-rto     { color: var(--warning-text); background: var(--warning-bg); border-color: var(--warning-border); }
+        .status-rescue  { color: var(--info-text);    background: var(--info-bg);    border-color: var(--info-border); max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; cursor: pointer; }
+        .status-adopted { color: var(--success-text); background: var(--success-bg); border-color: var(--success-border); }
+
+
+        /* Stats & Footer */
         .stats { background: var(--row); padding: 15px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 30px; display: flex; gap: 20px; font-size: 1.1em; }
         .table-container { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
         table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
@@ -22,12 +71,10 @@
         .footer .disclaimer { font-size: 0.75rem; opacity: 0.8; max-width: 800px; margin: 0 auto; }
 
         
-    .tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; background: var(--border); color: var(--text); }
-    .tag.male { color: #79c0ff; } .tag.female { color: #ff7b72; }
-
     </style></head><body><style>
-    /* Navbar Styles (Scoped slightly to ensure they work in overlays) */
+    /* --- Global Theme Variables (Moved here to support Map Overlay) --- */
     :root {
+        /* Core Colors */
         --header-bg: rgba(13, 17, 23, 0.85);
         --nav-item-hover: rgba(177, 186, 196, 0.12);
         --accent: #58a6ff;
@@ -36,6 +83,24 @@
         --border: #30363d;
         --row: #161b22;
         --bg: #0d1117;
+        --input-bg: #0d1117;
+        --card-shadow: rgba(0,0,0,0.3);
+
+        /* Badge & Status Colors (Dark Mode) */
+        --gender-male-text: #79c0ff; --gender-male-bg: rgba(56, 139, 253, 0.15); --gender-male-border: rgba(56, 139, 253, 0.4);
+        --gender-female-text: #ff7b72; --gender-female-bg: rgba(235, 87, 87, 0.15); --gender-female-border: rgba(235, 87, 87, 0.4);
+        --stray-text: #d2a8ff; --stray-bg: rgba(187, 128, 255, 0.15); --stray-border: rgba(187, 128, 255, 0.4);
+
+        --success-text: #7ee787; --success-bg: rgba(46, 160, 67, 0.15); --success-border: rgba(46, 160, 67, 0.4);
+        --warning-text: #d29922; --warning-bg: rgba(187, 128, 9, 0.15);  --warning-border: rgba(187, 128, 9, 0.4);
+        --danger-text: #ffa198;  --danger-bg: rgba(248, 81, 73, 0.15);  --danger-border: rgba(248, 81, 73, 0.4);
+        --info-text: #a5d6ff;    --info-bg: rgba(56, 139, 253, 0.15);   --info-border: rgba(56, 139, 253, 0.4);
+        
+        --rto-text: var(--warning-text); --rto-bg: var(--warning-bg); --rto-border: var(--warning-border);
+        --rescue-text: var(--info-text); --rescue-bg: var(--info-bg); --rescue-border: var(--info-border);
+        --adopted-text: var(--success-text); --adopted-bg: var(--success-bg); --adopted-border: var(--success-border);
+        
+        --row-hover: #21262d;
     }
     
     body.light-mode {
@@ -47,6 +112,19 @@
         --border: #d0d7de;
         --row: #f6f8fa;
         --bg: #ffffff;
+        --input-bg: #ffffff;
+        --card-shadow: rgba(0,0,0,0.1);
+
+        --gender-male-text: #0969da; --gender-male-bg: #ddf4ff; --gender-male-border: #54aeff;
+        --gender-female-text: #bf3989; --gender-female-bg: #ffeff7; --gender-female-border: #ff80c8;
+        --stray-text: #8250df; --stray-bg: #fbefff; --stray-border: #d4a7ff;
+        
+        --success-text: #1a7f37; --success-bg: #dafbe1; --success-border: #4ac26b;
+        --warning-text: #9a6700; --warning-bg: #fff8c5; --warning-border: #d4a72c;
+        --danger-text: #cf222e; --danger-bg: #ffebe9; --danger-border: #ff8182;
+        --info-text: #0969da;    --info-bg: #ddf4ff;    --info-border: #54aeff;
+        
+        --row-hover: #eaeef2;
     }
 
     .site-header {
@@ -120,4 +198,4 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=stats><div><strong>Updated:</strong> December 03, 2025 08:45 AM CST</div><div><strong>Total:</strong> 7</div></div><p style="color: #8b949e;">These dogs were removed from the public listing while their status was still "Available".</p><div class=table-container><table><thead><tr><th>ID</th><th>Name</th><th>Breed</th><th>Gender</th><th>Last Seen</th><th>Link</th></tr></thead><tbody><tr><td>A304436</td><td>Spunky</td><td>Shih Tzu</td><td><span class="tag male"> Neutered Male </span></td><td>2025-12-02</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304436 target=_blank>View Profile</a></td></tr><tr><td>A304758</td><td>Unknown</td><td>Doberman Pinscher</td><td><span class="tag male"> Male </span></td><td>2025-12-01</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304758 target=_blank>View Profile</a></td></tr><tr><td>A304514</td><td>Unknown</td><td>American Pit Bull Terrier</td><td><span class="tag female"> Female </span></td><td>2025-11-29</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304514 target=_blank>View Profile</a></td></tr><tr><td>A304496</td><td>Unknown</td><td>American Pit Bull Terrier</td><td><span class="tag male"> Male </span></td><td>2025-11-29</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304496 target=_blank>View Profile</a></td></tr><tr><td>A304483</td><td>Unknown</td><td>American Pit Bull Terrier</td><td><span class="tag male"> Male </span></td><td>2025-11-28</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304483 target=_blank>View Profile</a></td></tr><tr><td>A304481</td><td>Unknown</td><td>Bull Terrier</td><td><span class="tag male"> Male </span></td><td>2025-11-28</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304481 target=_blank>View Profile</a></td></tr><tr><td>A304413</td><td>Unknown</td><td>American Pit Bull Terrier</td><td><span class="tag male"> Male </span></td><td>2025-11-27</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304413 target=_blank>View Profile</a></td></tr></tbody></table></div><div class=footer><span>Last Updated: December 03, 2025 08:45 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div></body></html>
+</script><div class=container><div class=stats><div><strong>Updated:</strong> December 03, 2025 09:12 AM CST</div><div><strong>Total:</strong> 7</div></div><p style="color: #8b949e;">These dogs were removed from the public listing while their status was still "Available".</p><div class=table-container><table><thead><tr><th>ID</th><th>Name</th><th>Breed</th><th>Gender</th><th>Last Seen</th><th>Link</th></tr></thead><tbody><tr><td>A304436</td><td>Spunky</td><td>Shih Tzu</td><td><span class="tag male"> Neutered Male </span></td><td>2025-12-02</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304436 target=_blank>View Profile</a></td></tr><tr><td>A304758</td><td>Unknown</td><td>Doberman Pinscher</td><td><span class="tag male"> Male </span></td><td>2025-12-01</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304758 target=_blank>View Profile</a></td></tr><tr><td>A304496</td><td>Unknown</td><td>American Pit Bull Terrier</td><td><span class="tag male"> Male </span></td><td>2025-11-29</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304496 target=_blank>View Profile</a></td></tr><tr><td>A304514</td><td>Unknown</td><td>American Pit Bull Terrier</td><td><span class="tag female"> Female </span></td><td>2025-11-29</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304514 target=_blank>View Profile</a></td></tr><tr><td>A304481</td><td>Unknown</td><td>Bull Terrier</td><td><span class="tag male"> Male </span></td><td>2025-11-28</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304481 target=_blank>View Profile</a></td></tr><tr><td>A304483</td><td>Unknown</td><td>American Pit Bull Terrier</td><td><span class="tag male"> Male </span></td><td>2025-11-28</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304483 target=_blank>View Profile</a></td></tr><tr><td>A304413</td><td>Unknown</td><td>American Pit Bull Terrier</td><td><span class="tag male"> Male </span></td><td>2025-11-27</td><td><a href=https://24petconnect.com/chgoall/Details/CHGO/A304413 target=_blank>View Profile</a></td></tr></tbody></table></div><div class=footer><span>Last Updated: December 03, 2025 09:12 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div></body></html>

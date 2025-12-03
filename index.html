@@ -1,4 +1,6 @@
 <!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>CACC Dogs Dashboard</title><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css><script src=https://cdn.jsdelivr.net/npm/chart.js></script><style>
+        /* Note: :root Variables are now in partials/navbar.html so map_overlay.html can share them */
+
         /* Base styles that don't belong in the navbar partial */
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; 
@@ -9,7 +11,54 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; }
         
-        /* Stats & Footer (Keep these here or move to another partial if desired) */
+        /* --- Global Utility Classes (Badges, Tags, Counts) --- */
+        
+        /* Header Count Styling */
+        .header-count { color: var(--text-muted); font-size: 0.8em; font-weight: 500; background: var(--nav-item-hover); padding: 2px 8px; border-radius: 12px; margin-left: 8px; vertical-align: middle; letter-spacing: 0.5px; }
+
+        /* Standard Badges */
+        .tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; background: var(--border); transition: all 0.3s ease; }
+        
+        .tag.male   { color: var(--gender-male-text); background: var(--gender-male-bg); border: 1px solid var(--gender-male-border); } 
+        .tag.female { color: var(--gender-female-text); background: var(--gender-female-bg); border: 1px solid var(--gender-female-border); }
+        .tag.stray  { color: var(--stray-text); background: var(--stray-bg); border: 1px solid var(--stray-border); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+        
+        /* Color Tags */
+        .tag.color { border: 1px solid transparent; }
+        .tag.color-black { background: rgba(100,100,100,0.15); color: #c9d1d9; border: 1px solid rgba(100,100,100,0.5); }
+        .tag.color-white { background: rgba(255,255,255,0.1); color: #f0f6fc; border: 1px solid rgba(255,255,255,0.3); }
+        .tag.color-brown { background: rgba(160, 82, 45, 0.15); color: #dcbfa3; border: 1px solid rgba(160, 82, 45, 0.4); }
+        .tag.color-tan   { background: rgba(210, 180, 140, 0.15); color: #e8d0a9; border: 1px solid rgba(210, 180, 140, 0.4); }
+        .tag.color-blue  { background: rgba(119, 136, 153, 0.15); color: #b0c4de; border: 1px solid rgba(119, 136, 153, 0.4); }
+        .tag.color-red   { background: rgba(205, 92, 92, 0.15); color: #f0a0a0; border: 1px solid rgba(205, 92, 92, 0.4); }
+        .tag.color-brindle { background: rgba(139, 69, 19, 0.15); color: #cdb499; border: 1px solid rgba(139, 69, 19, 0.4); }
+        .tag.color-tricolor { background: rgba(128, 128, 128, 0.15); color: #d0d0d0; border: 1px solid rgba(128, 128, 128, 0.4); }
+        .tag.color-default { background: rgba(128, 128, 128, 0.1); color: #8b949e; border: 1px solid rgba(128,128,128,0.3); }
+
+        /* Light Mode Color Overrides */
+        body.light-mode .tag.color-black { background: #f6f8fa; color: #24292f; border-color: #d0d7de; }
+        body.light-mode .tag.color-white { background: #ffffff; color: #24292f; border-color: #d0d7de; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        body.light-mode .tag.color-brown { background: #fff8f2; color: #8c5e2a; border-color: #e6ccb3; }
+        body.light-mode .tag.color-tan   { background: #fffcf0; color: #9a6700; border-color: #e6ccb3; }
+        body.light-mode .tag.color-blue  { background: #f1f8ff; color: #0969da; border-color: #d0d7de; }
+        body.light-mode .tag.color-red   { background: #ffebe9; color: #cf222e; border-color: #ff8182; }
+        body.light-mode .tag.color-brindle { background: #fff8c5; color: #574619; border-color: #eac54f; }
+        body.light-mode .tag.color-tricolor { background: #f6f8fa; color: #57606a; border-color: #d0d7de; }
+        body.light-mode .tag.color-default { background: #f6f8fa; color: #57606a; border-color: #d0d7de; }
+
+        /* Status Badges (LOS & Outcome) */
+        .status-badge { font-weight: 600; padding: 4px 8px; border-radius: 6px; font-size: 12px; display: inline-block; min-width: 60px; text-align: center; border: 1px solid transparent; }
+        
+        .los-green  { color: var(--success-text); background: var(--success-bg); border-color: var(--success-border); }
+        .los-yellow { color: var(--warning-text); background: var(--warning-bg); border-color: var(--warning-border); }
+        .los-red    { color: var(--danger-text);  background: var(--danger-bg);  border-color: var(--danger-border); }
+        
+        .status-rto     { color: var(--warning-text); background: var(--warning-bg); border-color: var(--warning-border); }
+        .status-rescue  { color: var(--info-text);    background: var(--info-bg);    border-color: var(--info-border); max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; cursor: pointer; }
+        .status-adopted { color: var(--success-text); background: var(--success-bg); border-color: var(--success-border); }
+
+
+        /* Stats & Footer */
         .stats { background: var(--row); padding: 15px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 30px; display: flex; gap: 20px; font-size: 1.1em; }
         .table-container { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
         table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
@@ -22,7 +71,8 @@
         .footer .disclaimer { font-size: 0.75rem; opacity: 0.8; max-width: 800px; margin: 0 auto; }
 
         
-    .sticky-header { position: sticky; top: 0; z-index: 100; background: var(--header-bg); padding: 10px 0; backdrop-filter: blur(5px); margin: 0 -20px; padding: 15px 20px; border-bottom: 1px solid var(--border); }
+    /* --- Layout & Components (Index Specific) --- */
+    .sticky-header { position: sticky; top: 0; z-index: 100; background: var(--header-bg); padding: 15px 20px; margin: 0 -20px; backdrop-filter: blur(5px); border-bottom: 1px solid var(--border); }
     .search-controls { display: flex; gap: 10px; margin-bottom: 10px; }
     .search-container { position: relative; flex-grow: 1; }
     .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
@@ -41,7 +91,7 @@
     .chip-close { font-size: 1.1em; opacity: 0.8; font-weight: bold; display: none; }
     .chip.active .chip-close { display: inline-block; }
 
-    /* Tile Grid & Cards */
+    /* Grid & Cards */
     .dog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; opacity: 0; animation: fadeIn 0.5s ease-in forwards; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -57,21 +107,6 @@
 
     .card-footer { margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding-top: 10px; flex-wrap: wrap; gap: 10px; }
     .status-badges { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
-
-    /* Badges */
-    .tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; background: var(--border); }
-    .tag.male { color: var(--gender-male-text); background: var(--gender-male-bg); border: 1px solid var(--gender-male-border); } 
-    .tag.female { color: var(--gender-female-text); background: var(--gender-female-bg); border: 1px solid var(--gender-female-border); }
-    .tag.color { border: 1px solid transparent; }
-    .tag.stray { border: 1px solid var(--stray-border); color: var(--stray-color); background: transparent; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
-    
-    .status-badge { font-weight: 600; padding: 4px 8px; border-radius: 6px; font-size: 12px; display: inline-block; min-width: 60px; text-align: center; border: 1px solid transparent; }
-    .los-green { color: var(--los-green-text); background: var(--los-green-bg); border-color: var(--los-green-border); }
-    .los-yellow { color: var(--los-yellow-text); background: var(--los-yellow-bg); border-color: var(--los-yellow-border); }
-    .los-red { color: var(--los-red-text); background: var(--los-red-bg); border-color: var(--los-red-border); }
-    .status-rto { color: var(--rto-text); background: var(--rto-bg); border-color: var(--rto-border); }
-    .status-rescue { color: var(--rescue-text); background: var(--rescue-bg); border-color: var(--rescue-border); max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; cursor: pointer; }
-    .status-adopted { color: var(--adopted-text); background: var(--adopted-bg); border-color: var(--adopted-border); }
 
     .action-group { display: flex; gap: 8px; margin-left: auto; }
     .action-btn { cursor: pointer; padding: 6px 14px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; background: var(--row); border: 1px solid var(--border); color: var(--accent); transition: background 0.2s; }
@@ -102,8 +137,9 @@
     }
 
     </style></head><body><style>
-    /* Navbar Styles (Scoped slightly to ensure they work in overlays) */
+    /* --- Global Theme Variables (Moved here to support Map Overlay) --- */
     :root {
+        /* Core Colors */
         --header-bg: rgba(13, 17, 23, 0.85);
         --nav-item-hover: rgba(177, 186, 196, 0.12);
         --accent: #58a6ff;
@@ -112,6 +148,24 @@
         --border: #30363d;
         --row: #161b22;
         --bg: #0d1117;
+        --input-bg: #0d1117;
+        --card-shadow: rgba(0,0,0,0.3);
+
+        /* Badge & Status Colors (Dark Mode) */
+        --gender-male-text: #79c0ff; --gender-male-bg: rgba(56, 139, 253, 0.15); --gender-male-border: rgba(56, 139, 253, 0.4);
+        --gender-female-text: #ff7b72; --gender-female-bg: rgba(235, 87, 87, 0.15); --gender-female-border: rgba(235, 87, 87, 0.4);
+        --stray-text: #d2a8ff; --stray-bg: rgba(187, 128, 255, 0.15); --stray-border: rgba(187, 128, 255, 0.4);
+
+        --success-text: #7ee787; --success-bg: rgba(46, 160, 67, 0.15); --success-border: rgba(46, 160, 67, 0.4);
+        --warning-text: #d29922; --warning-bg: rgba(187, 128, 9, 0.15);  --warning-border: rgba(187, 128, 9, 0.4);
+        --danger-text: #ffa198;  --danger-bg: rgba(248, 81, 73, 0.15);  --danger-border: rgba(248, 81, 73, 0.4);
+        --info-text: #a5d6ff;    --info-bg: rgba(56, 139, 253, 0.15);   --info-border: rgba(56, 139, 253, 0.4);
+        
+        --rto-text: var(--warning-text); --rto-bg: var(--warning-bg); --rto-border: var(--warning-border);
+        --rescue-text: var(--info-text); --rescue-bg: var(--info-bg); --rescue-border: var(--info-border);
+        --adopted-text: var(--success-text); --adopted-bg: var(--success-bg); --adopted-border: var(--success-border);
+        
+        --row-hover: #21262d;
     }
     
     body.light-mode {
@@ -123,6 +177,19 @@
         --border: #d0d7de;
         --row: #f6f8fa;
         --bg: #ffffff;
+        --input-bg: #ffffff;
+        --card-shadow: rgba(0,0,0,0.1);
+
+        --gender-male-text: #0969da; --gender-male-bg: #ddf4ff; --gender-male-border: #54aeff;
+        --gender-female-text: #bf3989; --gender-female-bg: #ffeff7; --gender-female-border: #ff80c8;
+        --stray-text: #8250df; --stray-bg: #fbefff; --stray-border: #d4a7ff;
+        
+        --success-text: #1a7f37; --success-bg: #dafbe1; --success-border: #4ac26b;
+        --warning-text: #9a6700; --warning-bg: #fff8c5; --warning-border: #d4a72c;
+        --danger-text: #cf222e; --danger-bg: #ffebe9; --danger-border: #ff8182;
+        --info-text: #0969da;    --info-bg: #ddf4ff;    --info-border: #54aeff;
+        
+        --row-hover: #eaeef2;
     }
 
     .site-header {
@@ -196,7 +263,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input onkeyup=handleGlobalSearch() placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div></div><div class=footer><span>Last Updated: December 03, 2025 08:45 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input onkeyup=handleGlobalSearch() placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div></div><div class=footer><span>Last Updated: December 03, 2025 09:12 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
     // Close Dropdowns on Click Outside
     document.addEventListener('click', function(event) {
         if (!event.target.closest('.media-wrapper')) {
@@ -434,17 +501,17 @@
         handleGlobalSearch(); 
     }
 
-    function getColorStyle(colorText) {
+    function getColorClass(colorText) {
         const c = colorText.toLowerCase();
-        if (c.includes('black')) return 'background: rgba(100,100,100,0.15); color: #c9d1d9; border: 1px solid rgba(100,100,100,0.5);';
-        if (c.includes('white')) return 'background: rgba(255,255,255,0.1); color: #f0f6fc; border: 1px solid rgba(255,255,255,0.3);';
-        if (c.includes('brown') || c.includes('choc') || c.includes('liver')) return 'background: rgba(160, 82, 45, 0.15); color: #dcbfa3; border: 1px solid rgba(160, 82, 45, 0.4);';
-        if (c.includes('tan') || c.includes('fawn') || c.includes('buff') || c.includes('cream') || c.includes('gold')) return 'background: rgba(210, 180, 140, 0.15); color: #e8d0a9; border: 1px solid rgba(210, 180, 140, 0.4);';
-        if (c.includes('blue') || c.includes('gray')) return 'background: rgba(119, 136, 153, 0.15); color: #b0c4de; border: 1px solid rgba(119, 136, 153, 0.4);';
-        if (c.includes('red')) return 'background: rgba(205, 92, 92, 0.15); color: #f0a0a0; border: 1px solid rgba(205, 92, 92, 0.4);';
-        if (c.includes('brindle')) return 'background: rgba(139, 69, 19, 0.15); color: #cdb499; border: 1px solid rgba(139, 69, 19, 0.4);';
-        if (c.includes('tricolor')) return 'background: rgba(128, 128, 128, 0.15); color: #d0d0d0; border: 1px solid rgba(128, 128, 128, 0.4);';
-        return 'background: rgba(128, 128, 128, 0.1); color: #8b949e; border: 1px solid rgba(128,128,128,0.3);';
+        if (c.includes('black')) return 'color-black';
+        if (c.includes('white')) return 'color-white';
+        if (c.includes('brown') || c.includes('choc') || c.includes('liver')) return 'color-brown';
+        if (c.includes('tan') || c.includes('fawn') || c.includes('buff') || c.includes('cream') || c.includes('gold')) return 'color-tan';
+        if (c.includes('blue') || c.includes('gray')) return 'color-blue';
+        if (c.includes('red')) return 'color-red';
+        if (c.includes('brindle')) return 'color-brindle';
+        if (c.includes('tricolor')) return 'color-tricolor';
+        return 'color-default';
     }
 
     function getMediaIcon(url) {
@@ -485,6 +552,7 @@
                 
                 if (safeDays >= 30) badgeClass = 'los-red';
                 else if (safeDays >= 15) badgeClass = 'los-yellow';
+                
                 const dayText = safeDays === 0 ? 'Today' : `${safeDays} Days`;
                 statusBadge = `<span class="status-badge ${badgeClass}">${dayText}</span>`;
             }
@@ -534,7 +602,8 @@
             if (dog.color) {
                 const colors = dog.color.split('/').map(c => c.trim());
                 colors.forEach(c => {
-                    colorHtml += `<span class="tag color" style="${getColorStyle(c)}">${c}</span> `;
+                    // FIX: Use className instead of inline style
+                    colorHtml += `<span class="tag color ${getColorClass(c)}">${c}</span> `;
                 });
             }
 
