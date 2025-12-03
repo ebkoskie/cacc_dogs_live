@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>CACC - Rescue Stats</title><script src=https://cdn.jsdelivr.net/npm/chart.js></script><style>
+<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>CACC - Rescue Stats</title><script src=https://cdn.jsdelivr.net/npm/chart.js></script><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css><style>
         :root { --bg: #0d1117; --text: #c9d1d9; --border: #30363d; --accent: #58a6ff; --row: #161b22; --row-hover: #21262d; --input-bg: #0d1117; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; line-height: 1.5; }
         .container { max-width: 1200px; margin: 0 auto; }
@@ -17,20 +17,37 @@
         .nav { margin-bottom: 20px; }
         
         .chart-container { background: #161b22; padding: 20px; border-radius: 6px; border: 1px solid #30363d; height: 600px; position: relative; margin-bottom: 30px; }
+        .chart-hint { text-align: center; font-size: 0.85rem; color: #8b949e; margin-top: 10px; font-style: italic; }
+        
         input { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 10px; width: 100%; max-width: 300px; border-radius: 6px; margin-bottom: 10px; }
 
         /* Search Styles */
         #globalResults { display: none; margin-bottom: 30px; border: 1px solid var(--accent); border-radius: 6px; padding: 10px; }
-    </style></head><body><div class=container><h1>🚑 Rescue Partner Statistics</h1><div class=nav><a href=index.html>🐕 Dashboard</a> | <a href=map.html>🗺️ Location Map</a> | <a href=trends.html>📈 Trends</a> | <strong>🚑 Rescue Stats</strong> | <a href=breeds.html>🐶 Breeds</a></div><div class=stats><div><strong>Updated:</strong> December 02, 2025 09:39 PM CST</div><div><strong>Top Partners:</strong> 15</div></div><input type=text id=globalSearch onkeyup=handleSearch() placeholder="Search specific dog (e.g. 'Rex')..."><div id=globalResults><h3>🔍 Search Result (Is this dog rescued?)</h3><div class=table-container><table><thead><tr><th>Name</th><th>Status</th><th>Partner/Info</th></tr></thead><tbody id=searchResultsBody></tbody></table></div></div><div class=chart-container><canvas id=rescueChart></canvas></div><h2>📋 Detailed Rescue History</h2><input type=text id=searchPartner onkeyup=filterTable() placeholder="Filter table by Partner or Breed..."><div class=table-container><table id=rescue_tbl><thead><tr><th>Date</th><th>Rescue Partner</th><th>Breed</th></tr></thead><tbody id=tableBody></tbody></table></div><div class=footer><span>Last Updated: December 02, 2025 09:39 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+
+        /* Drill Down Section */
+        #drillDownSection { display: none; margin-top: 40px; animation: slideDown 0.4s ease-out; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .details-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px; }
+        .details-title { font-size: 1.5rem; margin: 0; color: var(--text); }
+        .close-btn { background: transparent; border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+        .close-btn:hover { background: var(--row-hover); border-color: var(--accent); color: var(--accent); }
+
+        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .pie-container { background: var(--row); padding: 20px; border-radius: 8px; border: 1px solid var(--border); height: 400px; display: flex; justify-content: center; align-items: center; }
+        
+        @media (max-width: 800px) { .details-grid { grid-template-columns: 1fr; } }
+    </style></head><body><div class=container><h1>🚑 Rescue Partner Statistics</h1><div class=nav><a href=index.html>🐕 Dashboard</a> | <a href=map.html>🗺️ Location Map</a> | <a href=trends.html>📈 Trends</a> | <strong>🚑 Rescue Stats</strong> | <a href=breeds.html>🐶 Breeds</a></div><div class=stats><div><strong>Updated:</strong> December 02, 2025 09:48 PM CST</div><div><strong>Top Partners:</strong> 15</div></div><input type=text id=globalSearch onkeyup=handleSearch() placeholder="Search specific dog (e.g. 'Rex')..."><div id=globalResults><h3>🔍 Search Result (Is this dog rescued?)</h3><div class=table-container><table><thead><tr><th>Name</th><th>Status</th><th>Partner/Info</th></tr></thead><tbody id=searchResultsBody></tbody></table></div></div><div class=chart-container><canvas id=rescueChart></canvas></div><div class=chart-hint>👆 Click any bar above to see the specific breeds pulled by that partner.</div><div id=drillDownSection><div class=details-header><h2 class=details-title id=selectedPartnerName>Partner Details</h2><button class=close-btn onclick=closeDrillDown()>Close Details <i class="fas fa-times"></i></button></div><div class=details-grid><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Composition</h3><div class=pie-container><canvas id=breedPieChart></canvas></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Recent Pulls</h3><div class=table-container><table id=drillDownTable><thead><tr><th>Date</th><th>Name</th><th>Breed</th></tr></thead><tbody id=drillDownBody></tbody></table></div></div></div></div><h2>📋 Detailed Rescue History</h2><input type=text id=searchPartner onkeyup=filterTable() placeholder="Filter table by Partner or Breed..."><div class=table-container><table id=rescue_tbl><thead><tr><th>Date</th><th>Rescue Partner</th><th>Breed</th></tr></thead><tbody id=tableBody></tbody></table></div><div class=footer><span>Last Updated: December 02, 2025 09:48 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
     // 1. Load Data
     const rawData = [{"breed": "Shih Tzu", "date": "2025-12-02", "name": "Spunky", "partner": "Border Tails Rescue"}, {"breed": "Labrador Retriever and American Pit Bull Terrier", "date": "2025-12-02", "name": "Kronos", "partner": "Border Tails Rescue"}, {"breed": "Labrador Retriever", "date": "2025-12-01", "name": "Modena", "partner": "Paws Of Tinley Park"}, {"breed": "Chihuahua - Smooth Coated", "date": "2025-11-29", "name": "Buddy", "partner": "Paws Chicago"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Cyanne", "partner": "One Tail At A Time"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-24", "name": "Enchantress", "partner": "Tails Together Co"}, {"breed": "Boxer", "date": "2025-11-30", "name": "Chesney", "partner": "Chi-Town Pitties Inc"}, {"breed": "Mastiff", "date": "2025-11-30", "name": "Dodger", "partner": "Chi-Town Pitties Inc"}, {"breed": "German Shepherd Dog", "date": "2025-11-23", "name": "Ramen Noodles", "partner": "Mit Liebe German Shepherd Dog Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Irma", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Kiki", "partner": "One Tail At A Time"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-25", "name": "Randie", "partner": "Heartland Animal Shelter"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Angelhair", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Adar", "partner": "Heartland Animal Shelter"}, {"breed": "American Pit Bull Terrier and American Staffordshire Terrier", "date": "2025-11-21", "name": "Butchie", "partner": "Dark Horse Dogs, Nfp"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Vivaldi", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-30", "name": "Apostolos", "partner": "Players For Pits Nfp"}, {"breed": "Labrador Retriever", "date": "2025-11-26", "name": "Piers", "partner": "One Tail At A Time"}, {"breed": "Belgian Malinois", "date": "2025-11-20", "name": "Willow", "partner": "Midwest Working Dog Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-28", "name": "Primo", "partner": "Border Tails Rescue"}, {"breed": "German Shepherd Dog", "date": "2025-11-21", "name": "Hannah", "partner": "German Shepherd Rescue Inc."}, {"breed": "Alaskan Husky", "date": "2025-12-02", "name": "Lunita", "partner": "Adopt- A-Husky"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Llana", "partner": "Heartland Animal Shelter"}, {"breed": "Yorkshire Terrier", "date": "2025-11-29", "name": "Riley", "partner": "Paws Chicago"}, {"breed": "Doberman Pinscher", "date": "2025-11-20", "name": "Unknown", "partner": "Il Doberman Rescue Plus"}, {"breed": "Miniature Pinscher", "date": "2025-11-25", "name": "Chocolate Chip", "partner": "Tails Together Co"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-20", "name": "Lois", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Swiss Roll", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Pougkeepsie", "partner": "One Tail At A Time"}, {"breed": "Pomeranian", "date": "2025-11-20", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Kori", "partner": "Border Tails Rescue"}, {"breed": "Great Dane", "date": "2025-11-20", "name": "Unknown", "partner": "Chicago Rescue Authority"}, {"breed": "Golden Retriever", "date": "2025-11-20", "name": "Unknown", "partner": "As Good As Gold"}, {"breed": "English Bulldog and American Pit Bull Terrier", "date": "2025-11-20", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "Collie - Smooth", "date": "2025-11-20", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "Poodle - Toy", "date": "2025-11-23", "name": "Unknown", "partner": "Pet Profile Rescue"}, {"breed": "Poodle - Toy", "date": "2025-11-23", "name": "Unknown", "partner": "Pet Profile Rescue"}, {"breed": "German Shepherd Dog", "date": "2025-12-02", "name": "Shasta", "partner": "One Tail At A Time"}, {"breed": "German Shepherd Dog", "date": "2025-12-02", "name": "Belldina", "partner": "One Tail At A Time"}, {"breed": "Shih Tzu", "date": "2025-11-24", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "Chihuahua - Smooth Coated", "date": "2025-11-21", "name": "Unknown", "partner": "Paws Chicago"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-24", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-28", "name": "Rex", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Jay", "partner": "Border Tails Rescue"}, {"breed": "Poodle - Toy", "date": "2025-11-29", "name": "Unknown", "partner": "Paws Chicago"}, {"breed": "Poodle - Miniature", "date": "2025-11-21", "name": "Unknown", "partner": "Paws Of Tinley Park"}, {"breed": "Chinese Sharpei", "date": "2025-11-21", "name": "Unknown", "partner": "Anti Cruelty Society"}, {"breed": "Shih Tzu", "date": "2025-11-27", "name": "Unknown", "partner": "One More Dog Rescue Inc"}, {"breed": "Chihuahua - Smooth Coated", "date": "2025-11-24", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "Labrador Retriever", "date": "2025-11-28", "name": "Lola Mae", "partner": "Chicagoland Lab Rescue"}, {"breed": "Labrador Retriever", "date": "2025-11-28", "name": "Panthos", "partner": "Chicagoland Lab Rescue"}, {"breed": "Border Collie", "date": "2025-11-22", "name": "Unknown", "partner": "Garrido Stray Rescue Foundation"}, {"breed": "Poodle - Standard", "date": "2025-11-22", "name": "Unknown", "partner": "Garrido Stray Rescue Foundation"}, {"breed": "Yorkshire Terrier", "date": "2025-11-27", "name": "Unknown", "partner": "One More Dog Rescue Inc"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-26", "name": "Elwood", "partner": "One Tail At A Time"}, {"breed": "Cocker Spaniel", "date": "2025-11-28", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "West Highland White Terrier", "date": "2025-11-28", "name": "Unknown", "partner": "One Tail At A Time"}, {"breed": "Pomeranian", "date": "2025-11-26", "name": "Unknown", "partner": "One More Dog Rescue Inc"}, {"breed": "Collie - Smooth and Siberian Husky", "date": "2025-11-28", "name": "Misha", "partner": "Border Tails Rescue"}, {"breed": "French Bulldog", "date": "2025-11-28", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-25", "name": "Unknown", "partner": "It\u0027S A Pittie Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-25", "name": "Unknown", "partner": "It\u0027S A Pittie Rescue"}, {"breed": "Chihuahua - Smooth Coated", "date": "2025-11-29", "name": "Unknown", "partner": "Paws Chicago"}, {"breed": "Labrador Retriever", "date": "2025-11-29", "name": "Schroeder", "partner": "Wagging Hearts"}, {"breed": "Belgian Sheepdog", "date": "2025-11-28", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-23", "name": "Unknown", "partner": "Mission Compassion Paw Inc (Mcp)"}, {"breed": "Shih Tzu", "date": "2025-11-30", "name": "Unknown", "partner": "Paws Chicago"}, {"breed": "French Bulldog", "date": "2025-12-02", "name": "Dougie", "partner": "Border Tails Rescue"}, {"breed": "Bulldog", "date": "2025-11-28", "name": "Unknown", "partner": "One More Dog Rescue Inc"}, {"breed": "Chihuahua - Long Haired", "date": "2025-11-29", "name": "Unknown", "partner": "Paws Chicago"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Bubbles", "partner": "Heartland Animal Shelter"}, {"breed": "Boxer", "date": "2025-12-01", "name": "Unknown", "partner": "Paws Of Tinley Park"}, {"breed": "Doberman Pinscher", "date": "2025-12-01", "name": "Unknown", "partner": "Il Doberman Rescue Plus"}, {"breed": "Pug", "date": "2025-12-02", "name": "Pug", "partner": "Border Tails Rescue"}, {"breed": "Labrador Retriever", "date": "2025-12-02", "name": "Jada", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Goosefraba", "partner": "Border Tails Rescue"}, {"breed": "Old English Sheepdog", "date": "2025-11-30", "name": "Unknown", "partner": "Paws Chicago"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-30", "name": "Unknown", "partner": "Players For Pits Nfp"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Gargoyle", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Chubbs", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Stewie", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Thunder", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Squidy", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Squirty", "partner": "Border Tails Rescue"}, {"breed": "German Shepherd Dog", "date": "2025-12-01", "name": "Kobe", "partner": "Paws Of Tinley Park"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-01", "name": "Ralphie", "partner": "Mission Compassion Paw Inc (Mcp)"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Nandy", "partner": "Anti Cruelty Society"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Bella", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-11-30", "name": "Unknown", "partner": "Garrido Stray Rescue Foundation"}, {"breed": "Bulldog", "date": "2025-12-01", "name": "Unknown", "partner": "Anti Cruelty Society"}, {"breed": "Poodle - Miniature", "date": "2025-12-02", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Unknown", "partner": "Border Tails Rescue"}, {"breed": "German Shepherd Dog", "date": "2025-12-02", "name": "Unknown", "partner": "Garrido Stray Rescue Foundation"}, {"breed": "American Pit Bull Terrier", "date": "2025-12-02", "name": "Unknown", "partner": "Community Animal Rescue Effort (Care)"}];
     
+    // Global chart instances
+    let pieChart = null;
+    
     // 2. Global Search Logic
     let searchIndex = [];
-    
-    // Updated for dictionary compression
     fetch('search_index.json').then(r => r.json()).then(d => {
-        searchIndex = d.dogs ? d.dogs : d; // Handle new or old format
+        searchIndex = d.dogs ? d.dogs : d; 
     });
 
     function handleSearch() {
@@ -41,21 +58,13 @@
         if (val.length > 0) {
             resultsDiv.style.display = 'block';
             tbody.innerHTML = '';
-            
-            // Search global index
             let results = searchIndex.filter(d => d.name && d.name.toUpperCase().includes(val)).slice(0, 10);
-            
             if (results.length === 0) {
                  tbody.innerHTML = "<tr><td colspan='3'>No dogs found.</td></tr>";
                  return;
             }
-
             results.forEach(d => {
-                tbody.innerHTML += `<tr>
-                    <td>${d.name}</td>
-                    <td>${d.status}</td>
-                    <td><a href="${d.link}" target="_blank">View</a></td>
-                </tr>`;
+                tbody.innerHTML += `<tr><td>${d.name}</td><td>${d.status}</td><td><a href="${d.link}" target="_blank">View</a></td></tr>`;
             });
         } else {
             resultsDiv.style.display = 'none';
@@ -64,7 +73,6 @@
 
     // 3. Populate Table & Chart
     if (rawData && rawData.length > 0) {
-        // Populate Table
         const tbody = document.getElementById('tableBody');
         rawData.forEach(row => {
             const tr = document.createElement('tr');
@@ -72,24 +80,23 @@
             tbody.appendChild(tr);
         });
         
-        // --- Chart Logic ---
         // Aggregate Data
         const counts = {};
-        rawData.forEach(r => {
-            counts[r.partner] = (counts[r.partner] || 0) + 1;
-        });
+        rawData.forEach(r => { counts[r.partner] = (counts[r.partner] || 0) + 1; });
         
         // Sort & Top 15
         const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 15);
+        const labels = sorted.map(i => i[0]);
+        const dataValues = sorted.map(i => i[1]);
         
         const ctx = document.getElementById('rescueChart').getContext('2d');
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: sorted.map(i => i[0]),
+                labels: labels,
                 datasets: [{
                     label: 'Dogs Pulled',
-                    data: sorted.map(i => i[1]),
+                    data: dataValues,
                     backgroundColor: '#58a6ff',
                     borderColor: '#0d1117',
                     borderWidth: 1
@@ -99,8 +106,18 @@
                 indexAxis: 'y',
                 responsive: true,
                 maintainAspectRatio: false,
+                onHover: (event, chartElement) => {
+                    event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
+                },
+                onClick: (evt, elements) => {
+                    if (elements.length > 0) {
+                        const index = elements[0].index;
+                        const partnerName = labels[index];
+                        showDrillDown(partnerName);
+                    }
+                },
                 plugins: {
-                    title: { display: true, text: 'Top 15 Rescue Partners', color: '#c9d1d9', font: { size: 16 } },
+                    title: { display: true, text: 'Top 15 Rescue Partners (Click to Drill Down)', color: '#c9d1d9', font: { size: 16 } },
                     legend: { display: false }
                 },
                 scales: {
@@ -109,6 +126,88 @@
                 }
             }
         });
+    }
+
+    // 4. Drill Down Logic
+    function showDrillDown(partner) {
+        document.getElementById('selectedPartnerName').innerText = partner;
+        document.getElementById('drillDownSection').style.display = 'block';
+        document.getElementById('drillDownSection').scrollIntoView({ behavior: 'smooth' });
+
+        const partnerRecords = rawData.filter(d => d.partner === partner);
+        
+        // Build Pie Data
+        const breedCounts = {};
+        partnerRecords.forEach(r => {
+            let b = r.breed.split('/')[0].trim(); 
+            if(b.includes('Pit Bull')) b = 'Pit Bull';
+            breedCounts[b] = (breedCounts[b] || 0) + 1;
+        });
+
+        const total = partnerRecords.length;
+        const finalBreeds = { 'Other': 0 };
+        const threshold = 0.05;
+
+        Object.entries(breedCounts).forEach(([breed, count]) => {
+            if (count / total < threshold && breed !== 'Pit Bull') { 
+                finalBreeds['Other'] += count;
+            } else {
+                finalBreeds[breed] = count;
+            }
+        });
+        
+        if (finalBreeds['Other'] === 0) delete finalBreeds['Other'];
+
+        const entries = Object.entries(finalBreeds).filter(([k]) => k !== 'Other');
+        entries.sort((a,b) => b[1] - a[1]);
+        if (finalBreeds['Other']) entries.push(['Other', finalBreeds['Other']]);
+
+        const pieLabels = entries.map(e => e[0]);
+        const pieData = entries.map(e => e[1]);
+        
+        // Color Logic
+        const dynamicPalette = ['#d29922', '#a371f7', '#3fb950', '#f85149', '#39c5cf', '#e3b341', '#f778ba', '#2ea043', '#db6d28', '#8957e5', '#1f6feb', '#ff7b72', '#bc8cff', '#238636', '#d2a8ff'];
+        let paletteIndex = 0;
+        const pieColors = pieLabels.map(label => {
+            if (label === 'Pit Bull') return '#58a6ff';
+            if (label === 'Other') return '#6e7681';
+            return dynamicPalette[paletteIndex++ % dynamicPalette.length];
+        });
+        
+        if (pieChart) pieChart.destroy();
+        
+        const pieCtx = document.getElementById('breedPieChart').getContext('2d');
+        pieChart = new Chart(pieCtx, {
+            type: 'doughnut',
+            data: {
+                labels: pieLabels,
+                datasets: [{
+                    data: pieData,
+                    backgroundColor: pieColors,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'right', labels: { color: '#c9d1d9', boxWidth: 12 } }
+                }
+            }
+        });
+
+        // Populate Drilldown Table
+        const drillBody = document.getElementById('drillDownBody');
+        drillBody.innerHTML = '';
+        partnerRecords.sort((a,b) => new Date(b.date) - new Date(a.date));
+        partnerRecords.forEach(row => {
+            drillBody.innerHTML += `<tr><td>${row.date}</td><td style="font-weight:600; color:#58a6ff;">${row.name}</td><td>${row.breed}</td></tr>`;
+        });
+    }
+
+    function closeDrillDown() {
+        document.getElementById('drillDownSection').style.display = 'none';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function filterTable() {
