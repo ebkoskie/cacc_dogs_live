@@ -1,0 +1,30 @@
+{
+  "sequence_counter": 10,
+  "forefront_sequence_counter": 0,
+  "forefront_requests": {},
+  "regular_requests": {
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/ukulele/1224278009752260/&show_text=true&width=500": 0,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/foxina-is-so-fancyher-beauty-is-a-10-out-of-10-but-what-is-really-show-stopping-/2991115427763884/&show_text=true&width=500": 1,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/baby-nutty-buddy-is-hoping-this-givingtuesday-he-gets-the-greatest-gift-of-all-a/855824500741438/&show_text=true&width=500": 2,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/cyanne/1287383583149608/&show_text=true&width=500": 3,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/private-conversations-with-elyseare-very-funny-because-she-is-a-fun-girl-elyse-i/2232845503907572/&show_text=true&width=500": 4,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/1208319064552507&show_text=true&width=500": 5,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/jigsaw/1698560344446559/&show_text=true&width=500": 6,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/vivi-is-a-great-example-of-dont-judge-me-by-my-kennel-presenceshe-is-scared-at-t/2713321845668689/&show_text=true&width=500": 7,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/giving-tuesday/858058970103722/&show_text=true&width=500": 8,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/delano-will-never-blend-into-the-crowdhes-a-stunner-outgoing-and-pretty-darn-nic/824452837088364/&show_text=true&width=500": 9
+  },
+  "in_progress_requests": [],
+  "handled_requests": [
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/ukulele/1224278009752260/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/cyanne/1287383583149608/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/foxina-is-so-fancyher-beauty-is-a-10-out-of-10-but-what-is-really-show-stopping-/2991115427763884/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/vivi-is-a-great-example-of-dont-judge-me-by-my-kennel-presenceshe-is-scared-at-t/2713321845668689/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/jigsaw/1698560344446559/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/delano-will-never-blend-into-the-crowdhes-a-stunner-outgoing-and-pretty-darn-nic/824452837088364/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/private-conversations-with-elyseare-very-funny-because-she-is-a-fun-girl-elyse-i/2232845503907572/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/giving-tuesday/858058970103722/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/baby-nutty-buddy-is-hoping-this-givingtuesday-he-gets-the-greatest-gift-of-all-a/855824500741438/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/1208319064552507&show_text=true&width=500"
+  ]
+}
