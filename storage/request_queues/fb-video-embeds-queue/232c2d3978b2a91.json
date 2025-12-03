@@ -1,0 +1,17 @@
+{
+  "unique_key": "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/baby-nutty-buddy-is-hoping-this-givingtuesday-he-gets-the-greatest-gift-of-all-a/855824500741438/&show_text=true&width=500",
+  "url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/caccdogs/videos/baby-nutty-buddy-is-hoping-this-givingtuesday-he-gets-the-greatest-gift-of-all-a/855824500741438/&show_text=true&width=500",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    },
+    "original_url": "https://www.facebook.com/caccdogs/videos/baby-nutty-buddy-is-hoping-this-givingtuesday-he-gets-the-greatest-gift-of-all-a/855824500741438/"
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fcaccdogs%2Fvideos%2Fbaby-nutty-buddy-is-hoping-this-givingtuesday-he-gets-the-greatest-gift-of-all-a%2F855824500741438%2F&show_text=true&width=500",
+  "handled_at": "2025-12-03 02:17:31.063649+00:00"
+}
