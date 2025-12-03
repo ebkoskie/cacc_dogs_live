@@ -4,15 +4,14 @@
             --bg: #0d1117; --text: #c9d1d9; --text-muted: #8b949e;
             --border: #30363d; --row: #161b22; --row-hover: #21262d;
             --accent: #58a6ff; --input-bg: #0d1117;
-            --card-shadow: rgba(0,0,0,0.5);
-            --header-bg: rgba(13, 17, 23, 0.95);
+            --header-bg: rgba(13, 17, 23, 0.85); /* Transparent for glass effect */
+            --nav-item-hover: rgba(177, 186, 196, 0.12);
             
-            /* Badges */
+            /* Status Colors */
             --stray-color: #d2a8ff; --stray-border: #bc8cff;
             --gender-male-text: #79c0ff; --gender-male-bg: rgba(56, 139, 253, 0.15); --gender-male-border: rgba(56, 139, 253, 0.4);
             --gender-female-text: #ff79c6; --gender-female-bg: rgba(255, 121, 198, 0.15); --gender-female-border: rgba(255, 121, 198, 0.4);
             
-            /* Status Colors */
             --los-red-text: #ff7b72; --los-red-bg: rgba(255, 123, 114, 0.1); --los-red-border: rgba(255, 123, 114, 0.3);
             --los-yellow-text: #d29922; --los-yellow-bg: rgba(210, 153, 34, 0.1); --los-yellow-border: rgba(210, 153, 34, 0.3);
             --los-green-text: #3fb950; --los-green-bg: rgba(63, 185, 80, 0.1); --los-green-border: rgba(63, 185, 80, 0.3);
@@ -25,9 +24,10 @@
             --bg: #ffffff; --text: #24292f; --text-muted: #57606a;
             --border: #d0d7de; --row: #f6f8fa; --row-hover: #eaeef2;
             --accent: #0969da; --input-bg: #ffffff;
-            --card-shadow: rgba(0,0,0,0.1);
-            --header-bg: rgba(255, 255, 255, 0.95);
-            
+            --header-bg: rgba(255, 255, 255, 0.85);
+            --nav-item-hover: rgba(0, 0, 0, 0.08);
+
+            /* Light Mode Badge Colors */
             --stray-color: #8250df; --stray-border: #a475f9;
             --gender-male-text: #0969da; --gender-male-bg: rgba(221, 244, 255, 0.6); --gender-male-border: rgba(9, 105, 218, 0.3);
             --gender-female-text: #d03592; --gender-female-bg: rgba(255, 235, 245, 0.7); --gender-female-border: rgba(208, 53, 146, 0.3);
@@ -40,22 +40,94 @@
             --adopted-text: #1a7f37; --adopted-bg: rgba(26, 127, 55, 0.15); --adopted-border: rgba(26, 127, 55, 0.3);
         }
 
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.5; transition: background 0.3s, color 0.3s; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; 
+            background: var(--bg); color: var(--text); 
+            margin: 0; padding: 0; line-height: 1.5; 
+            padding-top: 80px; /* Offset for fixed header */
+            transition: background 0.3s, color 0.3s; 
+        }
         
-        /* Header */
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-        h1 { color: var(--accent); margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
-        .header-count { font-size: 0.9rem; color: var(--text-muted); font-weight: 400; background: var(--row); padding: 2px 8px; border-radius: 12px; border: 1px solid var(--border); }
-        .theme-toggle { background: none; border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 20px; cursor: pointer; font-size: 1.2rem; }
-        
-        /* Navigation */
-        .nav { margin-bottom: 30px; font-size: 0.95rem; }
-        .nav a { color: var(--accent); text-decoration: none; font-weight: 600; margin-right: 15px; opacity: 0.8; }
-        .nav a:hover, .nav a.active { opacity: 1; text-decoration: underline; }
-        .nav a.active { border-bottom: 2px solid var(--accent); padding-bottom: 2px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; }
 
-        /* Stats & Cards Common */
+        /* --- MODERN NAVBAR --- */
+        .site-header {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: var(--header-bg);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            height: 64px;
+        }
+
+        .header-content {
+            max-width: 1200px; margin: 0 auto; height: 100%;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .brand-section {
+            display: flex; align-items: center; gap: 12px;
+        }
+
+        h1 { color: var(--accent); margin: 0; font-size: 1.25rem; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+        
+        .header-count { 
+            font-size: 0.8rem; color: var(--text-muted); font-weight: 500; 
+            background: var(--nav-item-hover); padding: 2px 8px; 
+            border-radius: 12px; border: 1px solid var(--border); 
+        }
+
+        /* Desktop Navigation */
+        .nav-links {
+            display: flex; gap: 8px; align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.95rem;
+            padding: 6px 12px; border-radius: 6px; transition: all 0.2s;
+        }
+
+        .nav-link:hover { color: var(--text); background: var(--nav-item-hover); }
+        .nav-link.active { color: var(--accent); background: var(--nav-item-hover); font-weight: 600; }
+
+        .actions { display: flex; align-items: center; gap: 10px; }
+
+        .theme-toggle { 
+            background: transparent; border: 1px solid var(--border); color: var(--text-muted); 
+            width: 36px; height: 36px; border-radius: 50%; 
+            cursor: pointer; display: flex; align-items: center; justify-content: center; 
+            font-size: 1rem; transition: all 0.2s;
+        }
+        .theme-toggle:hover { color: var(--text); border-color: var(--text-muted); }
+
+        /* Mobile Trigger */
+        .mobile-menu-btn {
+            display: none; background: transparent; border: none; 
+            color: var(--text); font-size: 1.4rem; cursor: pointer; padding: 5px;
+        }
+
+        /* Mobile Drawer */
+        .mobile-nav-drawer {
+            display: none; position: absolute; top: 64px; left: 0; right: 0;
+            background: var(--bg); border-bottom: 1px solid var(--border);
+            padding: 15px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .mobile-nav-drawer.open { display: flex; flex-direction: column; gap: 10px; }
+        
+        .mobile-link {
+            padding: 12px; border-radius: 8px; color: var(--text); text-decoration: none; font-weight: 600;
+            border: 1px solid transparent; display: flex; align-items: center; gap: 10px;
+        }
+        .mobile-link:hover { background: var(--row); }
+        .mobile-link.active { background: var(--nav-item-hover); border-color: var(--border); color: var(--accent); }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 850px) {
+            .nav-links { display: none; } /* Hide desktop links */
+            .mobile-menu-btn { display: block; } /* Show hamburger */
+        }
+
+        /* Common Styles */
         .stats { background: var(--row); padding: 15px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 30px; display: flex; gap: 20px; font-size: 1.1em; }
         .table-container { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
         table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
@@ -64,11 +136,9 @@
         tr:nth-child(even) { background-color: var(--row); }
         tr:hover { background-color: var(--row-hover); }
         
-        /* Footer */
         .footer { margin-top: 60px; border-top: 1px solid var(--border); padding-top: 20px; color: var(--text-muted); font-size: 0.85rem; text-align: center; display: flex; flex-direction: column; gap: 8px; line-height: 1.4; }
         .footer .disclaimer { font-size: 0.75rem; opacity: 0.8; max-width: 800px; margin: 0 auto; }
 
-        /* Page Specific Styles */
         
     .val-rescued { color: #238636; font-weight: bold; }
     .val-rto { color: #d29922; font-weight: bold; }
@@ -82,7 +152,7 @@
     
     #globalResults { display: none; margin-top: 20px; }
 
-    </style></head><body><div class=container><div class=top-bar><h1>🐶 Breed Outcomes</h1><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button></div><div class=nav><a href=index.html class>🐕 Dashboard</a><a href=map.html class>🗺️ Map</a><a href=trends.html class>📈 Trends</a><a href=rescues.html class>🚑 Rescues</a><a href=breeds.html class=active>🐶 Breeds</a></div><div class=stats><div><strong>Updated:</strong> December 03, 2025 07:40 AM CST</div><div><strong>Unique Breeds Tracked:</strong> </div></div><div class=search-container><input type=text id=globalSearch class=search-input onkeyup=handleSearch() placeholder='Search for a specific dog (e.g. "Husky")...'></div><div id=globalResults><h2>🔍 Search Results</h2><div class=table-container><table><thead><tr><th>Name</th><th>Breed</th><th>Status</th><th>Link</th></tr></thead><tbody id=searchResultsBody></tbody></table></div></div><div id=mainContent><div class=chart-container><canvas id=breedChart></canvas></div><h2>📋 Detailed Breed Statistics</h2><input type=text id=searchBreed class=search-input onkeyup='filterTable("searchBreed", "breed_tbl")' placeholder="Filter list below..."><div class=table-container><table id=breed_tbl><thead><tr><th>Rank</th><th>Breed</th><th>Total Tracked</th><th>Rescued</th><th>Adopted</th><th>Returned</th><th>Other</th></tr></thead><tbody><tr><td>1</td><td style="font-weight:bold; color: var(--text);">American Pitbull / Mix</td><td>229</td><td class=val-rescued>42</td><td class=val-adopted>30</td><td class=val-rto>9</td><td class=val-other>4</td></tr><tr><td>2</td><td style="font-weight:bold; color: var(--text);">Husky / Mix</td><td>21</td><td class=val-rescued>3</td><td class=val-adopted>5</td><td class=val-rto>2</td><td class=val-other>0</td></tr><tr><td>3</td><td style="font-weight:bold; color: var(--text);">Labrador Retriever</td><td>15</td><td class=val-rescued>6</td><td class=val-adopted>2</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>4</td><td style="font-weight:bold; color: var(--text);">German Shepherd Dog</td><td>12</td><td class=val-rescued>6</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>5</td><td style="font-weight:bold; color: var(--text);">Shih Tzu</td><td>6</td><td class=val-rescued>4</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>1</td></tr><tr><td>6</td><td style="font-weight:bold; color: var(--text);">Boxer</td><td>5</td><td class=val-rescued>2</td><td class=val-adopted>2</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>7</td><td style="font-weight:bold; color: var(--text);">Doberman Pinscher</td><td>5</td><td class=val-rescued>2</td><td class=val-adopted>0</td><td class=val-rto>2</td><td class=val-other>1</td></tr><tr><td>8</td><td style="font-weight:bold; color: var(--text);">Yorkshire Terrier</td><td>5</td><td class=val-rescued>2</td><td class=val-adopted>0</td><td class=val-rto>2</td><td class=val-other>0</td></tr><tr><td>9</td><td style="font-weight:bold; color: var(--text);">Chihuahua - Smooth Coated</td><td>5</td><td class=val-rescued>4</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>10</td><td style="font-weight:bold; color: var(--text);">Rottweiler</td><td>4</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>2</td><td class=val-other>0</td></tr><tr><td>11</td><td style="font-weight:bold; color: var(--text);">Bulldog</td><td>4</td><td class=val-rescued>2</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>12</td><td style="font-weight:bold; color: var(--text);">Mastiff</td><td>3</td><td class=val-rescued>1</td><td class=val-adopted>1</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>13</td><td style="font-weight:bold; color: var(--text);">Poodle - Miniature</td><td>3</td><td class=val-rescued>2</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>14</td><td style="font-weight:bold; color: var(--text);">Cane Corso</td><td>3</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>15</td><td style="font-weight:bold; color: var(--text);">Poodle - Toy</td><td>3</td><td class=val-rescued>3</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>16</td><td style="font-weight:bold; color: var(--text);">Alaskan Malamute</td><td>2</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>17</td><td style="font-weight:bold; color: var(--text);">American Staffordshire Terrier</td><td>2</td><td class=val-rescued>0</td><td class=val-adopted>1</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>18</td><td style="font-weight:bold; color: var(--text);">Pomeranian</td><td>2</td><td class=val-rescued>2</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>19</td><td style="font-weight:bold; color: var(--text);">French Bulldog</td><td>2</td><td class=val-rescued>2</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>20</td><td style="font-weight:bold; color: var(--text);">Dachshund</td><td>2</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>21</td><td style="font-weight:bold; color: var(--text);">Great Dane</td><td>2</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>22</td><td style="font-weight:bold; color: var(--text);">American Bulldog</td><td>2</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>23</td><td style="font-weight:bold; color: var(--text);">Border Collie</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>24</td><td style="font-weight:bold; color: var(--text);">Belgian Sheepdog</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>25</td><td style="font-weight:bold; color: var(--text);">Belgian Malinois</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>26</td><td style="font-weight:bold; color: var(--text);">Brussels Griffon</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>27</td><td style="font-weight:bold; color: var(--text);">Golden Retriever</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>28</td><td style="font-weight:bold; color: var(--text);">Chinese Sharpei</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>29</td><td style="font-weight:bold; color: var(--text);">Collie - Smooth</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>30</td><td style="font-weight:bold; color: var(--text);">Bullmastiff</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>31</td><td style="font-weight:bold; color: var(--text);">Chihuahua - Long Haired</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>32</td><td style="font-weight:bold; color: var(--text);">Cocker Spaniel</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>33</td><td style="font-weight:bold; color: var(--text);">Bull Terrier</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>1</td></tr><tr><td>34</td><td style="font-weight:bold; color: var(--text);">Poodle - Standard</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>35</td><td style="font-weight:bold; color: var(--text);">Old English Sheepdog</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>36</td><td style="font-weight:bold; color: var(--text);">Miniature Pinscher</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>37</td><td style="font-weight:bold; color: var(--text);">Pug</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>38</td><td style="font-weight:bold; color: var(--text);">Shiba Inu</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>39</td><td style="font-weight:bold; color: var(--text);">Schnauzer - Giant</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>40</td><td style="font-weight:bold; color: var(--text);">Shih Tzu and Chihuahua - Smooth Coated</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>41</td><td style="font-weight:bold; color: var(--text);">West Highland White Terrier</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr></tbody></table></div></div><div class=footer><span>Last Updated: December 03, 2025 07:40 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+    </style></head><body><header class=site-header><div class=header-content><div class=brand-section><h1>🐶 Breed Outcomes</h1></div><nav class=nav-links><a href=index.html class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link active">Breeds</a></nav><div class=actions><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button><button class=mobile-menu-btn onclick=toggleMobileMenu()><i class="fas fa-bars"></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=index.html class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link active"><i class="fas fa-paw" style=width:20px></i> Breeds</a></div></header><div class=container><div class=stats><div><strong>Updated:</strong> December 03, 2025 07:52 AM CST</div><div><strong>Unique Breeds Tracked:</strong> </div></div><div class=search-container><input type=text id=globalSearch class=search-input onkeyup=handleSearch() placeholder='Search for a specific dog (e.g. "Husky")...'></div><div id=globalResults><h2>🔍 Search Results</h2><div class=table-container><table><thead><tr><th>Name</th><th>Breed</th><th>Status</th><th>Link</th></tr></thead><tbody id=searchResultsBody></tbody></table></div></div><div id=mainContent><div class=chart-container><canvas id=breedChart></canvas></div><h2>📋 Detailed Breed Statistics</h2><input type=text id=searchBreed class=search-input onkeyup='filterTable("searchBreed", "breed_tbl")' placeholder="Filter list below..."><div class=table-container><table id=breed_tbl><thead><tr><th>Rank</th><th>Breed</th><th>Total Tracked</th><th>Rescued</th><th>Adopted</th><th>Returned</th><th>Other</th></tr></thead><tbody><tr><td>1</td><td style="font-weight:bold; color: var(--text);">American Pitbull / Mix</td><td>229</td><td class=val-rescued>42</td><td class=val-adopted>30</td><td class=val-rto>9</td><td class=val-other>4</td></tr><tr><td>2</td><td style="font-weight:bold; color: var(--text);">Husky / Mix</td><td>21</td><td class=val-rescued>3</td><td class=val-adopted>5</td><td class=val-rto>2</td><td class=val-other>0</td></tr><tr><td>3</td><td style="font-weight:bold; color: var(--text);">Labrador Retriever</td><td>15</td><td class=val-rescued>6</td><td class=val-adopted>2</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>4</td><td style="font-weight:bold; color: var(--text);">German Shepherd Dog</td><td>12</td><td class=val-rescued>6</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>5</td><td style="font-weight:bold; color: var(--text);">Shih Tzu</td><td>6</td><td class=val-rescued>4</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>1</td></tr><tr><td>6</td><td style="font-weight:bold; color: var(--text);">Boxer</td><td>5</td><td class=val-rescued>2</td><td class=val-adopted>2</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>7</td><td style="font-weight:bold; color: var(--text);">Doberman Pinscher</td><td>5</td><td class=val-rescued>2</td><td class=val-adopted>0</td><td class=val-rto>2</td><td class=val-other>1</td></tr><tr><td>8</td><td style="font-weight:bold; color: var(--text);">Yorkshire Terrier</td><td>5</td><td class=val-rescued>2</td><td class=val-adopted>0</td><td class=val-rto>2</td><td class=val-other>0</td></tr><tr><td>9</td><td style="font-weight:bold; color: var(--text);">Chihuahua - Smooth Coated</td><td>5</td><td class=val-rescued>4</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>10</td><td style="font-weight:bold; color: var(--text);">Rottweiler</td><td>4</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>2</td><td class=val-other>0</td></tr><tr><td>11</td><td style="font-weight:bold; color: var(--text);">Bulldog</td><td>4</td><td class=val-rescued>2</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>12</td><td style="font-weight:bold; color: var(--text);">Mastiff</td><td>3</td><td class=val-rescued>1</td><td class=val-adopted>1</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>13</td><td style="font-weight:bold; color: var(--text);">Poodle - Miniature</td><td>3</td><td class=val-rescued>2</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>14</td><td style="font-weight:bold; color: var(--text);">Cane Corso</td><td>3</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>15</td><td style="font-weight:bold; color: var(--text);">Poodle - Toy</td><td>3</td><td class=val-rescued>3</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>16</td><td style="font-weight:bold; color: var(--text);">Alaskan Malamute</td><td>2</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>17</td><td style="font-weight:bold; color: var(--text);">American Staffordshire Terrier</td><td>2</td><td class=val-rescued>0</td><td class=val-adopted>1</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>18</td><td style="font-weight:bold; color: var(--text);">Pomeranian</td><td>2</td><td class=val-rescued>2</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>19</td><td style="font-weight:bold; color: var(--text);">French Bulldog</td><td>2</td><td class=val-rescued>2</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>20</td><td style="font-weight:bold; color: var(--text);">Dachshund</td><td>2</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>21</td><td style="font-weight:bold; color: var(--text);">Great Dane</td><td>2</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>22</td><td style="font-weight:bold; color: var(--text);">American Bulldog</td><td>2</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>23</td><td style="font-weight:bold; color: var(--text);">Border Collie</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>24</td><td style="font-weight:bold; color: var(--text);">Belgian Sheepdog</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>25</td><td style="font-weight:bold; color: var(--text);">Belgian Malinois</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>26</td><td style="font-weight:bold; color: var(--text);">Brussels Griffon</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>27</td><td style="font-weight:bold; color: var(--text);">Golden Retriever</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>28</td><td style="font-weight:bold; color: var(--text);">Chinese Sharpei</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>29</td><td style="font-weight:bold; color: var(--text);">Collie - Smooth</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>30</td><td style="font-weight:bold; color: var(--text);">Bullmastiff</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>31</td><td style="font-weight:bold; color: var(--text);">Chihuahua - Long Haired</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>32</td><td style="font-weight:bold; color: var(--text);">Cocker Spaniel</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>33</td><td style="font-weight:bold; color: var(--text);">Bull Terrier</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>1</td></tr><tr><td>34</td><td style="font-weight:bold; color: var(--text);">Poodle - Standard</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>35</td><td style="font-weight:bold; color: var(--text);">Old English Sheepdog</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>36</td><td style="font-weight:bold; color: var(--text);">Miniature Pinscher</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>37</td><td style="font-weight:bold; color: var(--text);">Pug</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>38</td><td style="font-weight:bold; color: var(--text);">Shiba Inu</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>39</td><td style="font-weight:bold; color: var(--text);">Schnauzer - Giant</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>40</td><td style="font-weight:bold; color: var(--text);">Shih Tzu and Chihuahua - Smooth Coated</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>41</td><td style="font-weight:bold; color: var(--text);">West Highland White Terrier</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr></tbody></table></div></div><div class=footer><span>Last Updated: December 03, 2025 07:52 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
         const icon = document.querySelector('.theme-toggle i');
@@ -90,6 +160,10 @@
         localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
     }
     if (localStorage.getItem('theme') === 'light') toggleTheme();
+
+    function toggleMobileMenu() {
+        document.getElementById('mobileDrawer').classList.toggle('open');
+    }
     </script><script>
     let searchIndex = [];
     let breedsList = [];

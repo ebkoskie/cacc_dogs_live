@@ -4,15 +4,14 @@
             --bg: #0d1117; --text: #c9d1d9; --text-muted: #8b949e;
             --border: #30363d; --row: #161b22; --row-hover: #21262d;
             --accent: #58a6ff; --input-bg: #0d1117;
-            --card-shadow: rgba(0,0,0,0.5);
-            --header-bg: rgba(13, 17, 23, 0.95);
+            --header-bg: rgba(13, 17, 23, 0.85); /* Transparent for glass effect */
+            --nav-item-hover: rgba(177, 186, 196, 0.12);
             
-            /* Badges */
+            /* Status Colors */
             --stray-color: #d2a8ff; --stray-border: #bc8cff;
             --gender-male-text: #79c0ff; --gender-male-bg: rgba(56, 139, 253, 0.15); --gender-male-border: rgba(56, 139, 253, 0.4);
             --gender-female-text: #ff79c6; --gender-female-bg: rgba(255, 121, 198, 0.15); --gender-female-border: rgba(255, 121, 198, 0.4);
             
-            /* Status Colors */
             --los-red-text: #ff7b72; --los-red-bg: rgba(255, 123, 114, 0.1); --los-red-border: rgba(255, 123, 114, 0.3);
             --los-yellow-text: #d29922; --los-yellow-bg: rgba(210, 153, 34, 0.1); --los-yellow-border: rgba(210, 153, 34, 0.3);
             --los-green-text: #3fb950; --los-green-bg: rgba(63, 185, 80, 0.1); --los-green-border: rgba(63, 185, 80, 0.3);
@@ -25,9 +24,10 @@
             --bg: #ffffff; --text: #24292f; --text-muted: #57606a;
             --border: #d0d7de; --row: #f6f8fa; --row-hover: #eaeef2;
             --accent: #0969da; --input-bg: #ffffff;
-            --card-shadow: rgba(0,0,0,0.1);
-            --header-bg: rgba(255, 255, 255, 0.95);
-            
+            --header-bg: rgba(255, 255, 255, 0.85);
+            --nav-item-hover: rgba(0, 0, 0, 0.08);
+
+            /* Light Mode Badge Colors */
             --stray-color: #8250df; --stray-border: #a475f9;
             --gender-male-text: #0969da; --gender-male-bg: rgba(221, 244, 255, 0.6); --gender-male-border: rgba(9, 105, 218, 0.3);
             --gender-female-text: #d03592; --gender-female-bg: rgba(255, 235, 245, 0.7); --gender-female-border: rgba(208, 53, 146, 0.3);
@@ -40,22 +40,94 @@
             --adopted-text: #1a7f37; --adopted-bg: rgba(26, 127, 55, 0.15); --adopted-border: rgba(26, 127, 55, 0.3);
         }
 
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.5; transition: background 0.3s, color 0.3s; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; 
+            background: var(--bg); color: var(--text); 
+            margin: 0; padding: 0; line-height: 1.5; 
+            padding-top: 80px; /* Offset for fixed header */
+            transition: background 0.3s, color 0.3s; 
+        }
         
-        /* Header */
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-        h1 { color: var(--accent); margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
-        .header-count { font-size: 0.9rem; color: var(--text-muted); font-weight: 400; background: var(--row); padding: 2px 8px; border-radius: 12px; border: 1px solid var(--border); }
-        .theme-toggle { background: none; border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 20px; cursor: pointer; font-size: 1.2rem; }
-        
-        /* Navigation */
-        .nav { margin-bottom: 30px; font-size: 0.95rem; }
-        .nav a { color: var(--accent); text-decoration: none; font-weight: 600; margin-right: 15px; opacity: 0.8; }
-        .nav a:hover, .nav a.active { opacity: 1; text-decoration: underline; }
-        .nav a.active { border-bottom: 2px solid var(--accent); padding-bottom: 2px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; }
 
-        /* Stats & Cards Common */
+        /* --- MODERN NAVBAR --- */
+        .site-header {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: var(--header-bg);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            height: 64px;
+        }
+
+        .header-content {
+            max-width: 1200px; margin: 0 auto; height: 100%;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .brand-section {
+            display: flex; align-items: center; gap: 12px;
+        }
+
+        h1 { color: var(--accent); margin: 0; font-size: 1.25rem; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+        
+        .header-count { 
+            font-size: 0.8rem; color: var(--text-muted); font-weight: 500; 
+            background: var(--nav-item-hover); padding: 2px 8px; 
+            border-radius: 12px; border: 1px solid var(--border); 
+        }
+
+        /* Desktop Navigation */
+        .nav-links {
+            display: flex; gap: 8px; align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.95rem;
+            padding: 6px 12px; border-radius: 6px; transition: all 0.2s;
+        }
+
+        .nav-link:hover { color: var(--text); background: var(--nav-item-hover); }
+        .nav-link.active { color: var(--accent); background: var(--nav-item-hover); font-weight: 600; }
+
+        .actions { display: flex; align-items: center; gap: 10px; }
+
+        .theme-toggle { 
+            background: transparent; border: 1px solid var(--border); color: var(--text-muted); 
+            width: 36px; height: 36px; border-radius: 50%; 
+            cursor: pointer; display: flex; align-items: center; justify-content: center; 
+            font-size: 1rem; transition: all 0.2s;
+        }
+        .theme-toggle:hover { color: var(--text); border-color: var(--text-muted); }
+
+        /* Mobile Trigger */
+        .mobile-menu-btn {
+            display: none; background: transparent; border: none; 
+            color: var(--text); font-size: 1.4rem; cursor: pointer; padding: 5px;
+        }
+
+        /* Mobile Drawer */
+        .mobile-nav-drawer {
+            display: none; position: absolute; top: 64px; left: 0; right: 0;
+            background: var(--bg); border-bottom: 1px solid var(--border);
+            padding: 15px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .mobile-nav-drawer.open { display: flex; flex-direction: column; gap: 10px; }
+        
+        .mobile-link {
+            padding: 12px; border-radius: 8px; color: var(--text); text-decoration: none; font-weight: 600;
+            border: 1px solid transparent; display: flex; align-items: center; gap: 10px;
+        }
+        .mobile-link:hover { background: var(--row); }
+        .mobile-link.active { background: var(--nav-item-hover); border-color: var(--border); color: var(--accent); }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 850px) {
+            .nav-links { display: none; } /* Hide desktop links */
+            .mobile-menu-btn { display: block; } /* Show hamburger */
+        }
+
+        /* Common Styles */
         .stats { background: var(--row); padding: 15px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 30px; display: flex; gap: 20px; font-size: 1.1em; }
         .table-container { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
         table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
@@ -64,11 +136,9 @@
         tr:nth-child(even) { background-color: var(--row); }
         tr:hover { background-color: var(--row-hover); }
         
-        /* Footer */
         .footer { margin-top: 60px; border-top: 1px solid var(--border); padding-top: 20px; color: var(--text-muted); font-size: 0.85rem; text-align: center; display: flex; flex-direction: column; gap: 8px; line-height: 1.4; }
         .footer .disclaimer { font-size: 0.75rem; opacity: 0.8; max-width: 800px; margin: 0 auto; }
 
-        /* Page Specific Styles */
         
     .chart-card { background: var(--row); padding: 20px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 40px; }
     .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -95,7 +165,7 @@
     .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; }
     @media (max-width: 800px) { .charts-grid { grid-template-columns: 1fr; } }
 
-    </style></head><body><div class=container><div class=top-bar><h1>📈 Data Trends</h1><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button></div><div class=nav><a href=index.html class>🐕 Dashboard</a><a href=map.html class>🗺️ Map</a><a href=trends.html class=active>📈 Trends</a><a href=rescues.html class>🚑 Rescues</a><a href=breeds.html class>🐶 Breeds</a></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-clock" style=color:#e3b341;></i> Historical Time to Outcome (12 Month Trend)</h2></div><div class=canvas-container><canvas id=losChart></canvas></div><p style="font-size:0.85rem; color:#8b949e; margin-top:10px;"> * Shows the <strong>Median Days</strong> dogs waited in the shelter before finding an outcome (Adopted, Rescued, or Returned). </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-balance-scale" style=color:#58a6ff;></i> Intake vs. Outcomes (6 Months)</h2></div><div class=canvas-container><canvas id=weeklyChart></canvas></div></div><div class=charts-grid><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-bar" style=color:#79c0ff;></i> Current Population: Days in Shelter</h2></div><div class=canvas-container style=height:300px;><canvas id=losDistChart></canvas></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-pie" style=color:#d29922;></i> Historical Outcomes</h2></div><div class=canvas-container style=height:300px;><canvas id=outcomePieChart></canvas></div></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-heart-broken" style=color:#ff7b72;></i> Other Outcomes (Last 7 Days)</h2></div><div class=spoiler-wrapper id=euthSpoiler onclick=revealSpoiler()><div class=spoiler-overlay><i class="fas fa-eye-slash spoiler-icon"></i><div class=spoiler-text>Sensitive Content</div><div class=spoiler-sub>Tap to reveal daily count of non-live outcomes</div></div><div class="canvas-container spoiler-content"><canvas id=euthChart></canvas></div></div></div><div class=footer><span>Last Updated: December 03, 2025 07:40 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+    </style></head><body><header class=site-header><div class=header-content><div class=brand-section><h1>📈 Data Trends</h1></div><nav class=nav-links><a href=index.html class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link active">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link ">Breeds</a></nav><div class=actions><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button><button class=mobile-menu-btn onclick=toggleMobileMenu()><i class="fas fa-bars"></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=index.html class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=trends.html class="mobile-link active"><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link "><i class="fas fa-paw" style=width:20px></i> Breeds</a></div></header><div class=container><div class=chart-card><div class=chart-header><h2><i class="fas fa-clock" style=color:#e3b341;></i> Historical Time to Outcome (12 Month Trend)</h2></div><div class=canvas-container><canvas id=losChart></canvas></div><p style="font-size:0.85rem; color:#8b949e; margin-top:10px;"> * Shows the <strong>Median Days</strong> dogs waited in the shelter before finding an outcome (Adopted, Rescued, or Returned). </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-balance-scale" style=color:#58a6ff;></i> Intake vs. Outcomes (6 Months)</h2></div><div class=canvas-container><canvas id=weeklyChart></canvas></div></div><div class=charts-grid><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-bar" style=color:#79c0ff;></i> Current Population: Days in Shelter</h2></div><div class=canvas-container style=height:300px;><canvas id=losDistChart></canvas></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-pie" style=color:#d29922;></i> Historical Outcomes</h2></div><div class=canvas-container style=height:300px;><canvas id=outcomePieChart></canvas></div></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-heart-broken" style=color:#ff7b72;></i> Other Outcomes (Last 7 Days)</h2></div><div class=spoiler-wrapper id=euthSpoiler onclick=revealSpoiler()><div class=spoiler-overlay><i class="fas fa-eye-slash spoiler-icon"></i><div class=spoiler-text>Sensitive Content</div><div class=spoiler-sub>Tap to reveal daily count of non-live outcomes</div></div><div class="canvas-container spoiler-content"><canvas id=euthChart></canvas></div></div></div><div class=footer><span>Last Updated: December 03, 2025 07:52 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
         const icon = document.querySelector('.theme-toggle i');
@@ -103,6 +173,10 @@
         localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
     }
     if (localStorage.getItem('theme') === 'light') toggleTheme();
+
+    function toggleMobileMenu() {
+        document.getElementById('mobileDrawer').classList.toggle('open');
+    }
     </script><script>
     const data = {"euth": {"count": [1, 2, 2, 0, 1, 1], "labels": ["2025-11-27", "2025-11-28", "2025-11-29", "2025-11-30", "2025-12-01", "2025-12-02"]}, "intake": {"count": [2, 2, 4, 4, 5, 3, 1, 7, 8, 9, 6, 7, 9, 2, 10, 9, 3, 7, 7, 9, 4, 6, 9, 6, 11, 12, 5, 18, 6], "labels": ["2025-11-04", "2025-11-05", "2025-11-06", "2025-11-07", "2025-11-08", "2025-11-09", "2025-11-10", "2025-11-11", "2025-11-12", "2025-11-13", "2025-11-14", "2025-11-15", "2025-11-16", "2025-11-17", "2025-11-18", "2025-11-19", "2025-11-20", "2025-11-21", "2025-11-22", "2025-11-23", "2025-11-24", "2025-11-25", "2025-11-26", "2025-11-27", "2025-11-28", "2025-11-29", "2025-11-30", "2025-12-01", "2025-12-02"]}, "los": {"adopted": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 27.0], "labels": ["Dec 2024", "Jan 2025", "Feb 2025", "Mar 2025", "Apr 2025", "May 2025", "Jun 2025", "Jul 2025", "Aug 2025", "Sep 2025", "Oct 2025", "Nov 2025", "Dec 2025"], "rescued": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 7.0], "rto": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.0]}, "los_dist": {"data": [50, 57, 36, 22, 8, 6, 5, 1, 0], "labels": ["0-9", "10-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80-89"]}, "outcomes_pie": {"data": [97, 41, 26], "labels": ["Transferred", "Adopted", "RTO"]}, "weekly": {"intakes": [4, 5, 7, 4, 10, 20, 21, 48, 49, 67, 6], "labels": ["Sep 29", "Oct 06", "Oct 13", "Oct 20", "Oct 27", "Nov 03", "Nov 10", "Nov 17", "Nov 24", "Dec 01", "Dec 08"], "outcomes": [0, 0, 0, 0, 0, 0, 0, 0, 52, 70, 42]}};
 
