@@ -1,50 +1,101 @@
-<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>CACC - Data Trends</title><script src=https://cdn.jsdelivr.net/npm/chart.js></script><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css><style>
-        :root { --bg: #0d1117; --text: #c9d1d9; --border: #30363d; --accent: #58a6ff; --row: #161b22; --row-hover: #21262d; }
-        body.light-mode { --bg: #ffffff; --text: #24292f; --border: #d0d7de; --row: #f6f8fa; --row-hover: #eaeef2; --accent: #0969da; }
+<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>CACC - Data Trends</title><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css><script src=https://cdn.jsdelivr.net/npm/chart.js></script><style>
+        /* --- GLOBAL THEME VARIABLES --- */
+        :root {
+            --bg: #0d1117; --text: #c9d1d9; --text-muted: #8b949e;
+            --border: #30363d; --row: #161b22; --row-hover: #21262d;
+            --accent: #58a6ff; --input-bg: #0d1117;
+            --card-shadow: rgba(0,0,0,0.5);
+            --header-bg: rgba(13, 17, 23, 0.95);
+            
+            /* Badges */
+            --stray-color: #d2a8ff; --stray-border: #bc8cff;
+            --gender-male-text: #79c0ff; --gender-male-bg: rgba(56, 139, 253, 0.15); --gender-male-border: rgba(56, 139, 253, 0.4);
+            --gender-female-text: #ff79c6; --gender-female-bg: rgba(255, 121, 198, 0.15); --gender-female-border: rgba(255, 121, 198, 0.4);
+            
+            /* Status Colors */
+            --los-red-text: #ff7b72; --los-red-bg: rgba(255, 123, 114, 0.1); --los-red-border: rgba(255, 123, 114, 0.3);
+            --los-yellow-text: #d29922; --los-yellow-bg: rgba(210, 153, 34, 0.1); --los-yellow-border: rgba(210, 153, 34, 0.3);
+            --los-green-text: #3fb950; --los-green-bg: rgba(63, 185, 80, 0.1); --los-green-border: rgba(63, 185, 80, 0.3);
+            --rto-text: #38d9a9; --rto-bg: rgba(56, 217, 169, 0.1); --rto-border: rgba(56, 217, 169, 0.3);
+            --rescue-text: #a371f7; --rescue-bg: rgba(163, 113, 247, 0.1); --rescue-border: rgba(163, 113, 247, 0.3);
+            --adopted-text: #2ea043; --adopted-bg: rgba(46, 160, 67, 0.15); --adopted-border: rgba(46, 160, 67, 0.3);
+        }
         
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; line-height: 1.5; transition: background 0.3s, color 0.3s; }
-        .container { max-width: 1200px; margin: 0 auto; }
+        body.light-mode {
+            --bg: #ffffff; --text: #24292f; --text-muted: #57606a;
+            --border: #d0d7de; --row: #f6f8fa; --row-hover: #eaeef2;
+            --accent: #0969da; --input-bg: #ffffff;
+            --card-shadow: rgba(0,0,0,0.1);
+            --header-bg: rgba(255, 255, 255, 0.95);
+            
+            --stray-color: #8250df; --stray-border: #a475f9;
+            --gender-male-text: #0969da; --gender-male-bg: rgba(221, 244, 255, 0.6); --gender-male-border: rgba(9, 105, 218, 0.3);
+            --gender-female-text: #d03592; --gender-female-bg: rgba(255, 235, 245, 0.7); --gender-female-border: rgba(208, 53, 146, 0.3);
+            
+            --los-red-text: #cf222e; --los-red-bg: rgba(207, 34, 46, 0.1); --los-red-border: rgba(207, 34, 46, 0.3);
+            --los-yellow-text: #9a6700; --los-yellow-bg: rgba(154, 103, 0, 0.1); --los-yellow-border: rgba(154, 103, 0, 0.3);
+            --los-green-text: #1a7f37; --los-green-bg: rgba(26, 127, 55, 0.1); --los-green-border: rgba(26, 127, 55, 0.3);
+            --rto-text: #059669; --rto-bg: rgba(52, 211, 153, 0.15); --rto-border: rgba(5, 150, 105, 0.3);
+            --rescue-text: #7c3aed; --rescue-bg: rgba(139, 92, 246, 0.15); --rescue-border: rgba(124, 58, 237, 0.3);
+            --adopted-text: #1a7f37; --adopted-bg: rgba(26, 127, 55, 0.15); --adopted-border: rgba(26, 127, 55, 0.3);
+        }
+
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.5; transition: background 0.3s, color 0.3s; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         
-        /* Header & Nav */
+        /* Header */
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
         h1 { color: var(--accent); margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
+        .header-count { font-size: 0.9rem; color: var(--text-muted); font-weight: 400; background: var(--row); padding: 2px 8px; border-radius: 12px; border: 1px solid var(--border); }
         .theme-toggle { background: none; border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 20px; cursor: pointer; font-size: 1.2rem; }
         
-        .nav { margin-bottom: 30px; }
-        a { color: var(--accent); text-decoration: none; font-weight: 600; margin-right: 15px; opacity: 0.8; }
-        a:hover, a.active { opacity: 1; text-decoration: underline; }
-        a.active { border-bottom: 2px solid var(--accent); padding-bottom: 2px; }
+        /* Navigation */
+        .nav { margin-bottom: 30px; font-size: 0.95rem; }
+        .nav a { color: var(--accent); text-decoration: none; font-weight: 600; margin-right: 15px; opacity: 0.8; }
+        .nav a:hover, .nav a.active { opacity: 1; text-decoration: underline; }
+        .nav a.active { border-bottom: 2px solid var(--accent); padding-bottom: 2px; }
 
-        .chart-card { background: var(--row); padding: 20px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 40px; }
-        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        h2 { margin: 0; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; color: var(--text); }
-        .canvas-container { position: relative; height: 400px; width: 100%; }
-
-        /* Spoiler Styles */
-        .spoiler-wrapper { position: relative; border-radius: 8px; overflow: hidden; }
-        .spoiler-overlay {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            background: rgba(13, 17, 23, 0.7);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 10; cursor: pointer; transition: opacity 0.3s ease;
-        }
-        .light-mode .spoiler-overlay { background: rgba(255, 255, 255, 0.6); }
-        .spoiler-icon { font-size: 2rem; color: #ff7b72; margin-bottom: 15px; }
-        .spoiler-text { font-size: 1.2rem; font-weight: bold; color: var(--text); margin-bottom: 5px; }
-        .spoiler-sub { font-size: 0.9rem; color: #8b949e; }
-        .spoiler-content { filter: blur(5px); transition: filter 0.3s ease; }
-        .is-revealed .spoiler-overlay { opacity: 0; pointer-events: none; }
-        .is-revealed .spoiler-content { filter: none; }
-
-        /* Footer */
-        .footer { margin-top: 60px; border-top: 1px solid var(--border); padding-top: 20px; color: #8b949e; font-size: 0.85rem; text-align: center; display: flex; flex-direction: column; gap: 8px; }
-        .footer .disclaimer { font-size: 0.75rem; opacity: 0.8; max-width: 800px; margin: 0 auto; }
+        /* Stats & Cards Common */
+        .stats { background: var(--row); padding: 15px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 30px; display: flex; gap: 20px; font-size: 1.1em; }
+        .table-container { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
+        th { background: var(--row); padding: 12px 15px; border-bottom: 2px solid var(--border); color: var(--text); white-space: nowrap; cursor: pointer; }
+        td { padding: 12px 15px; border-bottom: 1px solid var(--border); }
+        tr:nth-child(even) { background-color: var(--row); }
+        tr:hover { background-color: var(--row-hover); }
         
-        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; }
-        @media (max-width: 800px) { .charts-grid { grid-template-columns: 1fr; } }
-    </style></head><body><div class=container><div class=top-bar><h1>📈 Data Trends</h1><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button></div><div class=nav><a href=index.html>🐕 Dashboard</a><a href=map.html>🗺️ Map</a><a href=trends.html class=active>📈 Trends</a><a href=rescues.html>🚑 Rescues</a><a href=breeds.html>🐶 Breeds</a></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-clock" style=color:#e3b341;></i> Historical Time to Outcome (12 Month Trend)</h2></div><div class=canvas-container><canvas id=losChart></canvas></div><p style="font-size:0.85rem; color:#8b949e; margin-top:10px;"> * Shows the <strong>Median Days</strong> dogs waited in the shelter before finding an outcome (Adopted, Rescued, or Returned). </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-balance-scale" style=color:#58a6ff;></i> Intake vs. Outcomes (6 Months)</h2></div><div class=canvas-container><canvas id=weeklyChart></canvas></div></div><div class=charts-grid><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-bar" style=color:#79c0ff;></i> Current Population: Days in Shelter</h2></div><div class=canvas-container style=height:300px;><canvas id=losDistChart></canvas></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-pie" style=color:#d29922;></i> Historical Outcomes</h2></div><div class=canvas-container style=height:300px;><canvas id=outcomePieChart></canvas></div></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-heart-broken" style=color:#ff7b72;></i> Other Outcomes (Last 7 Days)</h2></div><div class=spoiler-wrapper id=euthSpoiler onclick=revealSpoiler()><div class=spoiler-overlay><i class="fas fa-eye-slash spoiler-icon"></i><div class=spoiler-text>Sensitive Content</div><div class=spoiler-sub>Tap to reveal daily count of non-live outcomes</div></div><div class="canvas-container spoiler-content"><canvas id=euthChart></canvas></div></div></div><div class=footer><span>Last Updated: December 02, 2025 10:19 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
-    // Theme Toggle Logic
+        /* Footer */
+        .footer { margin-top: 60px; border-top: 1px solid var(--border); padding-top: 20px; color: var(--text-muted); font-size: 0.85rem; text-align: center; display: flex; flex-direction: column; gap: 8px; line-height: 1.4; }
+        .footer .disclaimer { font-size: 0.75rem; opacity: 0.8; max-width: 800px; margin: 0 auto; }
+
+        /* Page Specific Styles */
+        
+    .chart-card { background: var(--row); padding: 20px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 40px; }
+    .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    h2 { margin: 0; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; color: var(--text); }
+    .canvas-container { position: relative; height: 400px; width: 100%; }
+
+    /* Spoiler Styles */
+    .spoiler-wrapper { position: relative; border-radius: 8px; overflow: hidden; }
+    .spoiler-overlay {
+        position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+        backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+        background: rgba(13, 17, 23, 0.7);
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        z-index: 10; cursor: pointer; transition: opacity 0.3s ease;
+    }
+    .light-mode .spoiler-overlay { background: rgba(255, 255, 255, 0.6); }
+    .spoiler-icon { font-size: 2rem; color: #ff7b72; margin-bottom: 15px; }
+    .spoiler-text { font-size: 1.2rem; font-weight: bold; color: var(--text); margin-bottom: 5px; }
+    .spoiler-sub { font-size: 0.9rem; color: #8b949e; }
+    .spoiler-content { filter: blur(5px); transition: filter 0.3s ease; }
+    .is-revealed .spoiler-overlay { opacity: 0; pointer-events: none; }
+    .is-revealed .spoiler-content { filter: none; }
+    
+    .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; }
+    @media (max-width: 800px) { .charts-grid { grid-template-columns: 1fr; } }
+
+    </style></head><body><div class=container><div class=top-bar><h1>📈 Data Trends</h1><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button></div><div class=nav><a href=index.html class>🐕 Dashboard</a><a href=map.html class>🗺️ Map</a><a href=trends.html class=active>📈 Trends</a><a href=rescues.html class>🚑 Rescues</a><a href=breeds.html class>🐶 Breeds</a></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-clock" style=color:#e3b341;></i> Historical Time to Outcome (12 Month Trend)</h2></div><div class=canvas-container><canvas id=losChart></canvas></div><p style="font-size:0.85rem; color:#8b949e; margin-top:10px;"> * Shows the <strong>Median Days</strong> dogs waited in the shelter before finding an outcome (Adopted, Rescued, or Returned). </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-balance-scale" style=color:#58a6ff;></i> Intake vs. Outcomes (6 Months)</h2></div><div class=canvas-container><canvas id=weeklyChart></canvas></div></div><div class=charts-grid><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-bar" style=color:#79c0ff;></i> Current Population: Days in Shelter</h2></div><div class=canvas-container style=height:300px;><canvas id=losDistChart></canvas></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-pie" style=color:#d29922;></i> Historical Outcomes</h2></div><div class=canvas-container style=height:300px;><canvas id=outcomePieChart></canvas></div></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-heart-broken" style=color:#ff7b72;></i> Other Outcomes (Last 7 Days)</h2></div><div class=spoiler-wrapper id=euthSpoiler onclick=revealSpoiler()><div class=spoiler-overlay><i class="fas fa-eye-slash spoiler-icon"></i><div class=spoiler-text>Sensitive Content</div><div class=spoiler-sub>Tap to reveal daily count of non-live outcomes</div></div><div class="canvas-container spoiler-content"><canvas id=euthChart></canvas></div></div></div><div class=footer><span>Last Updated: December 02, 2025 10:28 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
         const icon = document.querySelector('.theme-toggle i');
@@ -52,7 +103,7 @@
         localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
     }
     if (localStorage.getItem('theme') === 'light') toggleTheme();
-
+    </script><script>
     const data = {"euth": {"count": [1, 2, 2, 0, 1, 1], "labels": ["2025-11-27", "2025-11-28", "2025-11-29", "2025-11-30", "2025-12-01", "2025-12-02"]}, "intake": {"count": [2, 2, 4, 4, 5, 3, 1, 7, 8, 9, 6, 7, 9, 2, 10, 9, 3, 7, 7, 9, 4, 6, 9, 6, 11, 12, 5, 18, 6], "labels": ["2025-11-04", "2025-11-05", "2025-11-06", "2025-11-07", "2025-11-08", "2025-11-09", "2025-11-10", "2025-11-11", "2025-11-12", "2025-11-13", "2025-11-14", "2025-11-15", "2025-11-16", "2025-11-17", "2025-11-18", "2025-11-19", "2025-11-20", "2025-11-21", "2025-11-22", "2025-11-23", "2025-11-24", "2025-11-25", "2025-11-26", "2025-11-27", "2025-11-28", "2025-11-29", "2025-11-30", "2025-12-01", "2025-12-02"]}, "los": {"adopted": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 26.0], "labels": ["Dec 2024", "Jan 2025", "Feb 2025", "Mar 2025", "Apr 2025", "May 2025", "Jun 2025", "Jul 2025", "Aug 2025", "Sep 2025", "Oct 2025", "Nov 2025", "Dec 2025"], "rescued": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 6.0], "rto": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.0]}, "los_dist": {"data": [49, 57, 36, 22, 8, 6, 5, 1, 0], "labels": ["0-9", "10-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80-89"]}, "outcomes_pie": {"data": [95, 40, 26], "labels": ["Transferred", "Adopted", "RTO"]}, "weekly": {"intakes": [4, 5, 7, 4, 10, 20, 21, 48, 49, 67, 6], "labels": ["Sep 29", "Oct 06", "Oct 13", "Oct 20", "Oct 27", "Nov 03", "Nov 10", "Nov 17", "Nov 24", "Dec 01", "Dec 08"], "outcomes": [0, 0, 0, 0, 0, 0, 0, 0, 52, 69, 40]}};
 
     const commonOptions = {
@@ -79,144 +130,69 @@
         }
     };
 
-    // 1. LOS Historical Trend Chart
     if (data.los && data.los.labels.length > 0) {
         new Chart(document.getElementById('losChart'), {
             type: 'line',
             data: {
                 labels: data.los.labels,
                 datasets: [
-                    {
-                        label: 'Adoption (Median Days)',
-                        data: data.los.adopted,
-                        borderColor: '#58a6ff',
-                        backgroundColor: 'rgba(88, 166, 255, 0.1)',
-                        tension: 0.3,
-                        pointRadius: 4
-                    },
-                    {
-                        label: 'Rescue (Median Days)',
-                        data: data.los.rescued,
-                        borderColor: '#238636',
-                        backgroundColor: 'rgba(35, 134, 54, 0.1)',
-                        tension: 0.3,
-                        pointRadius: 4
-                    },
-                    {
-                        label: 'RTO (Median Days)',
-                        data: data.los.rto,
-                        borderColor: '#d29922',
-                        backgroundColor: 'rgba(210, 153, 34, 0.1)',
-                        tension: 0.3,
-                        pointRadius: 4
-                    }
+                    { label: 'Adoption (Median)', data: data.los.adopted, borderColor: '#58a6ff', backgroundColor: 'rgba(88, 166, 255, 0.1)', tension: 0.3, pointRadius: 4 },
+                    { label: 'Rescue (Median)', data: data.los.rescued, borderColor: '#238636', backgroundColor: 'rgba(35, 134, 54, 0.1)', tension: 0.3, pointRadius: 4 },
+                    { label: 'RTO (Median)', data: data.los.rto, borderColor: '#d29922', backgroundColor: 'rgba(210, 153, 34, 0.1)', tension: 0.3, pointRadius: 4 }
                 ]
             },
             options: commonOptions
         });
     }
 
-    // 2. Weekly Intake vs Outcome Chart
     if (data.weekly && data.weekly.labels.length > 0) {
         new Chart(document.getElementById('weeklyChart'), {
             type: 'line',
             data: {
                 labels: data.weekly.labels,
                 datasets: [
-                    {
-                        label: 'Intakes',
-                        data: data.weekly.intakes,
-                        borderColor: '#58a6ff',
-                        backgroundColor: 'rgba(88, 166, 255, 0.1)',
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 3
-                    },
-                    {
-                        label: 'Outcomes',
-                        data: data.weekly.outcomes,
-                        borderColor: '#238636',
-                        backgroundColor: 'rgba(35, 134, 54, 0.1)',
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 3
-                    }
+                    { label: 'Intakes', data: data.weekly.intakes, borderColor: '#58a6ff', backgroundColor: 'rgba(88, 166, 255, 0.1)', fill: true, tension: 0.3, pointRadius: 3 },
+                    { label: 'Outcomes', data: data.weekly.outcomes, borderColor: '#238636', backgroundColor: 'rgba(35, 134, 54, 0.1)', fill: true, tension: 0.3, pointRadius: 3 }
                 ]
             },
             options: commonOptions
         });
     }
 
-    // 3. LOS Distribution Chart (Bar)
     if (data.los_dist && data.los_dist.labels.length > 0) {
-        const distColors = data.los_dist.labels.map(l => {
-            const val = parseInt(l.split('-')[0]);
-            return val >= 30 ? '#ff7b72' : '#58a6ff';
-        });
-
+        const distColors = data.los_dist.labels.map(l => parseInt(l.split('-')[0]) >= 30 ? '#ff7b72' : '#58a6ff');
         new Chart(document.getElementById('losDistChart'), {
             type: 'bar',
             data: {
                 labels: data.los_dist.labels,
-                datasets: [{
-                    label: 'Dogs',
-                    data: data.los_dist.data,
-                    backgroundColor: distColors,
-                    borderRadius: 4
-                }]
+                datasets: [{ label: 'Dogs', data: data.los_dist.data, backgroundColor: distColors, borderRadius: 4 }]
             },
-            options: {
-                ...commonOptions,
-                plugins: { legend: { display: false } }
-            }
+            options: { ...commonOptions, plugins: { legend: { display: false } } }
         });
     }
 
-    // 4. Outcomes Pie Chart
     if (data.outcomes_pie && data.outcomes_pie.labels.length > 0) {
-        const outcomeColors = {
-            'Adopted': '#58a6ff',
-            'Transferred': '#238636',
-            'RTO': '#d29922',
-            'Other': '#da3633'
-        };
+        const outcomeColors = { 'Adopted': '#58a6ff', 'Transferred': '#238636', 'RTO': '#d29922', 'Other': '#da3633' };
         const bgColors = data.outcomes_pie.labels.map(l => outcomeColors[l] || '#8b949e');
-
         new Chart(document.getElementById('outcomePieChart'), {
             type: 'doughnut',
             data: {
                 labels: data.outcomes_pie.labels,
-                datasets: [{
-                    data: data.outcomes_pie.data,
-                    backgroundColor: bgColors,
-                    borderWidth: 0
-                }]
+                datasets: [{ data: data.outcomes_pie.data, backgroundColor: bgColors, borderWidth: 0 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'right', labels: { color: '#8b949e', boxWidth: 12 } }
-                }
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { position: 'right', labels: { color: '#8b949e', boxWidth: 12 } } }
             }
         });
     }
 
-    // 5. Sensitive Outcomes Chart
     if (data.euth && data.euth.labels.length > 0) {
         new Chart(document.getElementById('euthChart'), {
             type: 'line',
             data: {
                 labels: data.euth.labels,
-                datasets: [{
-                    label: 'Other Outcomes',
-                    data: data.euth.count,
-                    borderColor: '#ff7b72',
-                    backgroundColor: 'rgba(255, 123, 114, 0.1)',
-                    fill: true,
-                    tension: 0.3,
-                    pointRadius: 4
-                }]
+                datasets: [{ label: 'Other Outcomes', data: data.euth.count, borderColor: '#ff7b72', backgroundColor: 'rgba(255, 123, 114, 0.1)', fill: true, tension: 0.3, pointRadius: 4 }]
             },
             options: commonOptions
         });
@@ -225,4 +201,4 @@
     function revealSpoiler() {
         document.getElementById('euthSpoiler').classList.add('is-revealed');
     }
-    </script></body></html>
+</script></body></html>
