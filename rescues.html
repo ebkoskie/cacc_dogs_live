@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>CACC - Rescue Stats</title><link rel=preconnect href=https://cdnjs.cloudflare.com><link rel=preconnect href=https://cdn.jsdelivr.net><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css><style>
-        /* Note: :root Variables are now in partials/navbar.html so map_overlay.html can share them */
+        /* Note: :root Variables are now in partials/navbar.html */
 
         /* Base styles that don't belong in the navbar partial */
         body { 
@@ -11,19 +11,14 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; }
         
-        /* --- Global Utility Classes (Badges, Tags, Counts) --- */
-        
-        /* Header Count Styling */
+        /* --- Global Utility Classes --- */
         .header-count { color: var(--text-muted); font-size: 0.8em; font-weight: 500; background: var(--nav-item-hover); padding: 2px 8px; border-radius: 12px; margin-left: 8px; vertical-align: middle; letter-spacing: 0.5px; }
 
-        /* Standard Badges */
         .tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; background: var(--border); transition: all 0.3s ease; }
-        
         .tag.male   { color: var(--gender-male-text); background: var(--gender-male-bg); border: 1px solid var(--gender-male-border); } 
         .tag.female { color: var(--gender-female-text); background: var(--gender-female-bg); border: 1px solid var(--gender-female-border); }
         .tag.stray  { color: var(--stray-text); background: var(--stray-bg); border: 1px solid var(--stray-border); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
         
-        /* Color Tags */
         .tag.color { border: 1px solid transparent; }
         .tag.color-black { background: rgba(100,100,100,0.15); color: #c9d1d9; border: 1px solid rgba(100,100,100,0.5); }
         .tag.color-white { background: rgba(255,255,255,0.1); color: #f0f6fc; border: 1px solid rgba(255,255,255,0.3); }
@@ -35,7 +30,6 @@
         .tag.color-tricolor { background: rgba(128, 128, 128, 0.15); color: #d0d0d0; border: 1px solid rgba(128, 128, 128, 0.4); }
         .tag.color-default { background: rgba(128, 128, 128, 0.1); color: #8b949e; border: 1px solid rgba(128,128,128,0.3); }
 
-        /* Light Mode Color Overrides */
         body.light-mode .tag.color-black { background: #f6f8fa; color: #24292f; border-color: #d0d7de; }
         body.light-mode .tag.color-white { background: #ffffff; color: #24292f; border-color: #d0d7de; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
         body.light-mode .tag.color-brown { background: #fff8f2; color: #8c5e2a; border-color: #e6ccb3; }
@@ -46,19 +40,14 @@
         body.light-mode .tag.color-tricolor { background: #f6f8fa; color: #57606a; border-color: #d0d7de; }
         body.light-mode .tag.color-default { background: #f6f8fa; color: #57606a; border-color: #d0d7de; }
 
-        /* Status Badges (LOS & Outcome) */
         .status-badge { font-weight: 600; padding: 4px 8px; border-radius: 6px; font-size: 12px; display: inline-block; min-width: 60px; text-align: center; border: 1px solid transparent; }
-        
         .los-green  { color: var(--success-text); background: var(--success-bg); border-color: var(--success-border); }
         .los-yellow { color: var(--warning-text); background: var(--warning-bg); border-color: var(--warning-border); }
         .los-red    { color: var(--danger-text);  background: var(--danger-bg);  border-color: var(--danger-border); }
-        
         .status-rto     { color: var(--warning-text); background: var(--warning-bg); border-color: var(--warning-border); }
         .status-rescue  { color: var(--info-text);    background: var(--info-bg);    border-color: var(--info-border); max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; cursor: pointer; }
         .status-adopted { color: var(--success-text); background: var(--success-bg); border-color: var(--success-border); }
 
-
-        /* Stats & Footer */
         .stats { background: var(--row); padding: 15px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 30px; display: flex; gap: 20px; font-size: 1.1em; }
         .table-container { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
         table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
@@ -232,9 +221,8 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=stats><div><strong>Updated:</strong> December 04, 2025 11:01 AM CST</div><div><strong>Top Partners:</strong> 15</div></div><input type=text id=globalSearch placeholder="Search specific dog (e.g. 'Rex')..."><div id=globalResults><h3>🔍 Search Result (Is this dog rescued?)</h3><div class=table-container><table><thead><tr><th>Name</th><th>Status</th><th>Partner/Info</th></tr></thead><tbody id=searchResultsBody></tbody></table></div></div><div class=chart-container><canvas id=rescueChart></canvas></div><div class=chart-hint>👆 Click any bar above to see the specific breeds pulled by that partner.</div><div id=drillDownSection><div class=details-header><h2 class=details-title id=selectedPartnerName>Partner Details</h2><button class=close-btn onclick=closeDrillDown()>Close Details <i class="fas fa-times"></i></button></div><div class=details-grid><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Composition</h3><div class=pie-container><canvas id=breedPieChart></canvas></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Recent Pulls</h3><div class=table-container><table id=drillDownTable><thead><tr><th>Date</th><th>Name</th><th>Breed</th></tr></thead><tbody id=drillDownBody></tbody></table></div></div></div></div><div id=recentRescuesSection><h2>Recent Rescues (Past 7 Days)</h2><input type=text id=searchRecent placeholder="Filter recent cards..."><div id=recentGrid class=dog-grid></div></div><div class=footer><span>Last Updated: December 04, 2025 11:01 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=stats><div><strong>Updated:</strong> December 04, 2025 11:20 AM CST</div><div><strong>Top Partners:</strong> 15</div></div><input type=text id=globalSearch placeholder="Search specific dog (e.g. 'Rex')..."><div id=globalResults><h3>🔍 Search Result (Is this dog rescued?)</h3><div class=table-container><table><thead><tr><th>Name</th><th>Status</th><th>Partner/Info</th></tr></thead><tbody id=searchResultsBody></tbody></table></div></div><div class=chart-container><canvas id=rescueChart></canvas></div><div class=chart-hint>👆 Click any bar above to see the specific breeds pulled by that partner.</div><div id=drillDownSection><div class=details-header><h2 class=details-title id=selectedPartnerName>Partner Details</h2><button class=close-btn onclick=closeDrillDown()>Close Details <i class="fas fa-times"></i></button></div><div class=details-grid><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Composition</h3><div class=pie-container><canvas id=breedPieChart></canvas></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Recent Pulls</h3><div class=table-container><table id=drillDownTable><thead><tr><th>Date</th><th>Name</th><th>Breed</th></tr></thead><tbody id=drillDownBody></tbody></table></div></div></div></div><div id=recentRescuesSection><h2>Recent Rescues (Past 7 Days)</h2><input type=text id=searchRecent placeholder="Filter recent cards..."><div id=recentGrid class=dog-grid></div></div><div class=footer><span>Last Updated: December 04, 2025 11:20 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
-        // Used by search inputs to prevent lag on rapid typing
         function debounce(func, wait) {
             let timeout;
             return function(...args) {
@@ -244,31 +232,35 @@
             };
         }
 
-        // Optimization: "Just-in-Time" Connection Warmer for Facebook
-        // Triggers TLS handshake on Hover (Desktop) or TouchStart (Mobile)
+        // Optimization: "Just-in-Time" Connection Warmer
+        // Triggers preconnect on Hover (Desktop) or TouchStart (Mobile)
+        // Works for both Facebook (needs crossorigin) and 24PetConnect (navigation only)
         (function() {
-            let facebookWarmed = false;
+            let warmed = { fb: false, pc: false };
 
-            function warmFacebookConnection() {
-                if (facebookWarmed) return;
-                
+            function warm(url, key, crossOrigin) {
+                if (warmed[key]) return;
                 const link = document.createElement('link');
                 link.rel = 'preconnect';
-                link.href = 'https://www.facebook.com';
-                link.crossOrigin = 'anonymous'; 
+                link.href = url;
+                if (crossOrigin) link.crossOrigin = 'anonymous';
                 document.head.appendChild(link);
-                
-                facebookWarmed = true;
+                warmed[key] = true;
             }
 
-            const checkAndWarm = (e) => {
-                if (!facebookWarmed && e.target.closest('a[href*="facebook.com"]')) {
-                    warmFacebookConnection();
+            const handleInteraction = (e) => {
+                const a = e.target.closest('a');
+                if (!a || !a.href) return;
+                
+                if (!warmed.fb && a.href.includes('facebook.com')) {
+                    warm('https://www.facebook.com', 'fb', true);
+                } else if (!warmed.pc && a.href.includes('24petconnect.com')) {
+                    warm('https://24petconnect.com', 'pc', false);
                 }
             };
 
-            document.addEventListener('mouseover', checkAndWarm, { passive: true });
-            document.addEventListener('touchstart', checkAndWarm, { passive: true });
+            document.addEventListener('mouseover', handleInteraction, { passive: true });
+            document.addEventListener('touchstart', handleInteraction, { passive: true });
         })();
     </script><script src=https://cdn.jsdelivr.net/npm/chart.js></script><script>
     // --- Global Chart.js Configuration ---
@@ -354,7 +346,7 @@
                  return;
             }
             results.forEach(d => {
-                tbody.innerHTML += `<tr><td>${d.name}</td><td>${d.status}</td><td><a href="${d.link}" target="_blank">View</a></td></tr>`;
+                tbody.innerHTML += `<tr><td>${d.name}</td><td>${d.status}</td><td><a href="${d.link}" rel="noopener noreferrer">View</a></td></tr>`;
             });
         } else {
             resultsDiv.style.display = 'none';

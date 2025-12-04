@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>CACC Dogs Dashboard</title><link rel=preconnect href=https://cdnjs.cloudflare.com><link rel=preconnect href=https://cdn.jsdelivr.net><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css><style>
-        /* Note: :root Variables are now in partials/navbar.html so map_overlay.html can share them */
+        /* Note: :root Variables are now in partials/navbar.html */
 
         /* Base styles that don't belong in the navbar partial */
         body { 
@@ -11,19 +11,14 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; }
         
-        /* --- Global Utility Classes (Badges, Tags, Counts) --- */
-        
-        /* Header Count Styling */
+        /* --- Global Utility Classes --- */
         .header-count { color: var(--text-muted); font-size: 0.8em; font-weight: 500; background: var(--nav-item-hover); padding: 2px 8px; border-radius: 12px; margin-left: 8px; vertical-align: middle; letter-spacing: 0.5px; }
 
-        /* Standard Badges */
         .tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; background: var(--border); transition: all 0.3s ease; }
-        
         .tag.male   { color: var(--gender-male-text); background: var(--gender-male-bg); border: 1px solid var(--gender-male-border); } 
         .tag.female { color: var(--gender-female-text); background: var(--gender-female-bg); border: 1px solid var(--gender-female-border); }
         .tag.stray  { color: var(--stray-text); background: var(--stray-bg); border: 1px solid var(--stray-border); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
         
-        /* Color Tags */
         .tag.color { border: 1px solid transparent; }
         .tag.color-black { background: rgba(100,100,100,0.15); color: #c9d1d9; border: 1px solid rgba(100,100,100,0.5); }
         .tag.color-white { background: rgba(255,255,255,0.1); color: #f0f6fc; border: 1px solid rgba(255,255,255,0.3); }
@@ -35,7 +30,6 @@
         .tag.color-tricolor { background: rgba(128, 128, 128, 0.15); color: #d0d0d0; border: 1px solid rgba(128, 128, 128, 0.4); }
         .tag.color-default { background: rgba(128, 128, 128, 0.1); color: #8b949e; border: 1px solid rgba(128,128,128,0.3); }
 
-        /* Light Mode Color Overrides */
         body.light-mode .tag.color-black { background: #f6f8fa; color: #24292f; border-color: #d0d7de; }
         body.light-mode .tag.color-white { background: #ffffff; color: #24292f; border-color: #d0d7de; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
         body.light-mode .tag.color-brown { background: #fff8f2; color: #8c5e2a; border-color: #e6ccb3; }
@@ -46,19 +40,14 @@
         body.light-mode .tag.color-tricolor { background: #f6f8fa; color: #57606a; border-color: #d0d7de; }
         body.light-mode .tag.color-default { background: #f6f8fa; color: #57606a; border-color: #d0d7de; }
 
-        /* Status Badges (LOS & Outcome) */
         .status-badge { font-weight: 600; padding: 4px 8px; border-radius: 6px; font-size: 12px; display: inline-block; min-width: 60px; text-align: center; border: 1px solid transparent; }
-        
         .los-green  { color: var(--success-text); background: var(--success-bg); border-color: var(--success-border); }
         .los-yellow { color: var(--warning-text); background: var(--warning-bg); border-color: var(--warning-border); }
         .los-red    { color: var(--danger-text);  background: var(--danger-bg);  border-color: var(--danger-border); }
-        
         .status-rto     { color: var(--warning-text); background: var(--warning-bg); border-color: var(--warning-border); }
         .status-rescue  { color: var(--info-text);    background: var(--info-bg);    border-color: var(--info-border); max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; cursor: pointer; }
         .status-adopted { color: var(--success-text); background: var(--success-bg); border-color: var(--success-border); }
 
-
-        /* Stats & Footer */
         .stats { background: var(--row); padding: 15px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 30px; display: flex; gap: 20px; font-size: 1.1em; }
         .table-container { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
         table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
@@ -284,9 +273,8 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: December 04, 2025 11:01 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: December 04, 2025 11:20 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
-        // Used by search inputs to prevent lag on rapid typing
         function debounce(func, wait) {
             let timeout;
             return function(...args) {
@@ -296,31 +284,35 @@
             };
         }
 
-        // Optimization: "Just-in-Time" Connection Warmer for Facebook
-        // Triggers TLS handshake on Hover (Desktop) or TouchStart (Mobile)
+        // Optimization: "Just-in-Time" Connection Warmer
+        // Triggers preconnect on Hover (Desktop) or TouchStart (Mobile)
+        // Works for both Facebook (needs crossorigin) and 24PetConnect (navigation only)
         (function() {
-            let facebookWarmed = false;
+            let warmed = { fb: false, pc: false };
 
-            function warmFacebookConnection() {
-                if (facebookWarmed) return;
-                
+            function warm(url, key, crossOrigin) {
+                if (warmed[key]) return;
                 const link = document.createElement('link');
                 link.rel = 'preconnect';
-                link.href = 'https://www.facebook.com';
-                link.crossOrigin = 'anonymous'; 
+                link.href = url;
+                if (crossOrigin) link.crossOrigin = 'anonymous';
                 document.head.appendChild(link);
-                
-                facebookWarmed = true;
+                warmed[key] = true;
             }
 
-            const checkAndWarm = (e) => {
-                if (!facebookWarmed && e.target.closest('a[href*="facebook.com"]')) {
-                    warmFacebookConnection();
+            const handleInteraction = (e) => {
+                const a = e.target.closest('a');
+                if (!a || !a.href) return;
+                
+                if (!warmed.fb && a.href.includes('facebook.com')) {
+                    warm('https://www.facebook.com', 'fb', true);
+                } else if (!warmed.pc && a.href.includes('24petconnect.com')) {
+                    warm('https://24petconnect.com', 'pc', false);
                 }
             };
 
-            document.addEventListener('mouseover', checkAndWarm, { passive: true });
-            document.addEventListener('touchstart', checkAndWarm, { passive: true });
+            document.addEventListener('mouseover', handleInteraction, { passive: true });
+            document.addEventListener('touchstart', handleInteraction, { passive: true });
         })();
     </script><script>
     // --- Global State ---
@@ -696,7 +688,7 @@
                     </div>
                     <div class="action-group">
                         ${fbBtn}
-                        <a href="${dog.link}" target="_blank" class="action-btn">View</a>
+                        <a href="${dog.link}" rel="noopener noreferrer" class="action-btn">View</a>
                         <button class="share-btn" onclick="shareDog('${dog.name}', '${dog.id}', '${dog.link}')"><i class="fas fa-share-alt"></i></button>
                     </div>
                 </div>
