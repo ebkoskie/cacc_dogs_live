@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>CACC - Data Trends</title><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css><script src=https://cdn.jsdelivr.net/npm/chart.js></script><style>
+<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>CACC - Data Trends</title><link rel=preconnect href=https://cdnjs.cloudflare.com><link rel=preconnect href=https://cdn.jsdelivr.net><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css><style>
         /* Note: :root Variables are now in partials/navbar.html so map_overlay.html can share them */
 
         /* Base styles that don't belong in the navbar partial */
@@ -223,13 +223,31 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=chart-card><div class=chart-header><h2><i class="fas fa-clock" style=color:var(--warning-text);></i> Historical Time to Outcome (12 Month Trend)</h2></div><div class=canvas-container><canvas id=losChart></canvas></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> * Shows the <strong>Median Days</strong> dogs waited in the shelter before finding an outcome (Adopted, Rescued, or Returned). </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-balance-scale" style=color:var(--accent);></i> Intake vs. Outcomes (6 Months)</h2></div><div class=canvas-container><canvas id=weeklyChart></canvas></div></div><div class=charts-grid><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-bar" style=color:var(--gender-male-text);></i> Current Population: Days in Shelter</h2></div><div class=canvas-container style=height:300px;><canvas id=losDistChart></canvas></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-pie" style=color:var(--warning-text);></i> Historical Outcomes</h2></div><div class=canvas-container style=height:300px;><canvas id=outcomePieChart></canvas></div></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-heart-broken" style=color:var(--danger-text);></i> Other Outcomes (Last 7 Days)</h2></div><div class=spoiler-wrapper id=euthSpoiler onclick=revealSpoiler()><div class=spoiler-overlay><i class="fas fa-eye-slash spoiler-icon"></i><div class=spoiler-text>Sensitive Content</div><div class=spoiler-sub>Tap to reveal daily count of non-live outcomes</div></div><div class="canvas-container spoiler-content"><canvas id=euthChart></canvas></div></div></div><div class=footer><span>Last Updated: December 04, 2025 09:30 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
-    const commonOptions = {
+</script><div class=container><div class=chart-card><div class=chart-header><h2><i class="fas fa-clock" style=color:var(--warning-text);></i> Historical Time to Outcome (12 Month Trend)</h2></div><div class=canvas-container><canvas id=losChart></canvas></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> * Shows the <strong>Median Days</strong> dogs waited in the shelter before finding an outcome (Adopted, Rescued, or Returned). </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-balance-scale" style=color:var(--accent);></i> Intake vs. Outcomes (6 Months)</h2></div><div class=canvas-container><canvas id=weeklyChart></canvas></div></div><div class=charts-grid><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-bar" style=color:var(--gender-male-text);></i> Current Population: Days in Shelter</h2></div><div class=canvas-container style=height:300px;><canvas id=losDistChart></canvas></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-pie" style=color:var(--warning-text);></i> Historical Outcomes</h2></div><div class=canvas-container style=height:300px;><canvas id=outcomePieChart></canvas></div></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-heart-broken" style=color:var(--danger-text);></i> Other Outcomes (Last 7 Days)</h2></div><div class=spoiler-wrapper id=euthSpoiler onclick=revealSpoiler()><div class=spoiler-overlay><i class="fas fa-eye-slash spoiler-icon"></i><div class=spoiler-text>Sensitive Content</div><div class=spoiler-sub>Tap to reveal daily count of non-live outcomes</div></div><div class="canvas-container spoiler-content"><canvas id=euthChart></canvas></div></div></div><div class=footer><span>Last Updated: December 04, 2025 10:24 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+        // Optimization: Global Debounce Utility
+        // Used by search inputs to prevent lag on rapid typing
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
+    </script><script src=https://cdn.jsdelivr.net/npm/chart.js></script><script>
+    // --- Global Chart.js Configuration ---
+    // matches your CSS variables for consistency
+    Chart.defaults.color = '#8b949e'; 
+    Chart.defaults.borderColor = '#30363d';
+    Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif';
+
+    // Shared Options Object (Reuse this in your individual templates)
+    const GLOBAL_CHART_OPTS = {
         responsive: true,
         maintainAspectRatio: false,
         interaction: { mode: 'index', intersect: false },
         plugins: {
-            legend: { labels: { color: '#8b949e' } },
+            legend: { labels: { color: '#c9d1d9' } },
             tooltip: { 
                 backgroundColor: 'rgba(22, 27, 34, 0.95)', 
                 titleColor: '#c9d1d9', 
@@ -239,15 +257,18 @@
             }
         },
         scales: {
-            x: { grid: { color: '#30363d' }, ticks: { color: '#8b949e' } },
+            x: { 
+                grid: { color: '#30363d', drawBorder: false }, 
+                ticks: { color: '#8b949e' } 
+            },
             y: { 
-                grid: { color: '#30363d' }, 
+                grid: { color: '#30363d', drawBorder: false }, 
                 ticks: { color: '#8b949e' }, 
                 beginAtZero: true 
             }
         }
     };
-
+</script><script>
     // PERFORMANCE: Fetch externalized JSON asynchronously
     fetch('trends.json')
         .then(response => response.json())
@@ -268,7 +289,7 @@
                         { label: 'RTO (Median)', data: data.los.rto, borderColor: '#d29922', backgroundColor: 'rgba(210, 153, 34, 0.1)', tension: 0.3, pointRadius: 4 }
                     ]
                 },
-                options: commonOptions
+                options: GLOBAL_CHART_OPTS
             });
         }
 
@@ -282,7 +303,7 @@
                         { label: 'Outcomes', data: data.weekly.outcomes, borderColor: '#238636', backgroundColor: 'rgba(35, 134, 54, 0.1)', fill: true, tension: 0.3, pointRadius: 3 }
                     ]
                 },
-                options: commonOptions
+                options: GLOBAL_CHART_OPTS
             });
         }
 
@@ -294,7 +315,13 @@
                     labels: data.los_dist.labels,
                     datasets: [{ label: 'Dogs', data: data.los_dist.data, backgroundColor: distColors, borderRadius: 4 }]
                 },
-                options: { ...commonOptions, plugins: { legend: { display: false } } }
+                options: { 
+                    ...GLOBAL_CHART_OPTS, 
+                    plugins: { 
+                        ...GLOBAL_CHART_OPTS.plugins,
+                        legend: { display: false } 
+                    } 
+                }
             });
         }
 
@@ -321,7 +348,7 @@
                     labels: data.euth.labels,
                     datasets: [{ label: 'Other Outcomes', data: data.euth.count, borderColor: '#ff7b72', backgroundColor: 'rgba(255, 123, 114, 0.1)', fill: true, tension: 0.3, pointRadius: 4 }]
                 },
-                options: commonOptions
+                options: GLOBAL_CHART_OPTS
             });
         }
     }

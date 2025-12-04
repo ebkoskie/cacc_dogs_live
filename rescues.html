@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>CACC - Rescue Stats</title><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css><script src=https://cdn.jsdelivr.net/npm/chart.js></script><style>
+<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>CACC - Rescue Stats</title><link rel=preconnect href=https://cdnjs.cloudflare.com><link rel=preconnect href=https://cdn.jsdelivr.net><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css><style>
         /* Note: :root Variables are now in partials/navbar.html so map_overlay.html can share them */
 
         /* Base styles that don't belong in the navbar partial */
@@ -232,7 +232,52 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=stats><div><strong>Updated:</strong> December 04, 2025 09:30 AM CST</div><div><strong>Top Partners:</strong> 15</div></div><input type=text id=globalSearch onkeyup=handleSearch() placeholder="Search specific dog (e.g. 'Rex')..."><div id=globalResults><h3>🔍 Search Result (Is this dog rescued?)</h3><div class=table-container><table><thead><tr><th>Name</th><th>Status</th><th>Partner/Info</th></tr></thead><tbody id=searchResultsBody></tbody></table></div></div><div class=chart-container><canvas id=rescueChart></canvas></div><div class=chart-hint>👆 Click any bar above to see the specific breeds pulled by that partner.</div><div id=drillDownSection><div class=details-header><h2 class=details-title id=selectedPartnerName>Partner Details</h2><button class=close-btn onclick=closeDrillDown()>Close Details <i class="fas fa-times"></i></button></div><div class=details-grid><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Composition</h3><div class=pie-container><canvas id=breedPieChart></canvas></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Recent Pulls</h3><div class=table-container><table id=drillDownTable><thead><tr><th>Date</th><th>Name</th><th>Breed</th></tr></thead><tbody id=drillDownBody></tbody></table></div></div></div></div><div id=recentRescuesSection><h2>Recent Rescues (Past 7 Days)</h2><input type=text id=searchRecent onkeyup=filterRecentTiles() placeholder="Filter recent cards..."><div id=recentGrid class=dog-grid></div></div><div class=footer><span>Last Updated: December 04, 2025 09:30 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=stats><div><strong>Updated:</strong> December 04, 2025 10:24 AM CST</div><div><strong>Top Partners:</strong> 15</div></div><input type=text id=globalSearch onkeyup=handleSearch() placeholder="Search specific dog (e.g. 'Rex')..."><div id=globalResults><h3>🔍 Search Result (Is this dog rescued?)</h3><div class=table-container><table><thead><tr><th>Name</th><th>Status</th><th>Partner/Info</th></tr></thead><tbody id=searchResultsBody></tbody></table></div></div><div class=chart-container><canvas id=rescueChart></canvas></div><div class=chart-hint>👆 Click any bar above to see the specific breeds pulled by that partner.</div><div id=drillDownSection><div class=details-header><h2 class=details-title id=selectedPartnerName>Partner Details</h2><button class=close-btn onclick=closeDrillDown()>Close Details <i class="fas fa-times"></i></button></div><div class=details-grid><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Composition</h3><div class=pie-container><canvas id=breedPieChart></canvas></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Recent Pulls</h3><div class=table-container><table id=drillDownTable><thead><tr><th>Date</th><th>Name</th><th>Breed</th></tr></thead><tbody id=drillDownBody></tbody></table></div></div></div></div><div id=recentRescuesSection><h2>Recent Rescues (Past 7 Days)</h2><input type=text id=searchRecent onkeyup=filterRecentTiles() placeholder="Filter recent cards..."><div id=recentGrid class=dog-grid></div></div><div class=footer><span>Last Updated: December 04, 2025 10:24 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+        // Optimization: Global Debounce Utility
+        // Used by search inputs to prevent lag on rapid typing
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
+    </script><script src=https://cdn.jsdelivr.net/npm/chart.js></script><script>
+    // --- Global Chart.js Configuration ---
+    // matches your CSS variables for consistency
+    Chart.defaults.color = '#8b949e'; 
+    Chart.defaults.borderColor = '#30363d';
+    Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif';
+
+    // Shared Options Object (Reuse this in your individual templates)
+    const GLOBAL_CHART_OPTS = {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+            legend: { labels: { color: '#c9d1d9' } },
+            tooltip: { 
+                backgroundColor: 'rgba(22, 27, 34, 0.95)', 
+                titleColor: '#c9d1d9', 
+                bodyColor: '#c9d1d9',
+                borderColor: '#30363d',
+                borderWidth: 1
+            }
+        },
+        scales: {
+            x: { 
+                grid: { color: '#30363d', drawBorder: false }, 
+                ticks: { color: '#8b949e' } 
+            },
+            y: { 
+                grid: { color: '#30363d', drawBorder: false }, 
+                ticks: { color: '#8b949e' }, 
+                beginAtZero: true 
+            }
+        }
+    };
+</script><script>
     let pieChart = null;
     let searchIndex = [];
     
@@ -303,11 +348,19 @@
                 datasets: [{ label: 'Dogs Pulled', data: sorted.map(i => i[1]), backgroundColor: '#58a6ff', borderColor: '#0d1117', borderWidth: 1 }]
             },
             options: {
-                indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                ...GLOBAL_CHART_OPTS,
+                indexAxis: 'y',
                 onHover: (event, chartElement) => { event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default'; },
                 onClick: (evt, elements) => { if (elements.length > 0) showDrillDown(sorted[elements[0].index][0], rawData); },
-                plugins: { title: { display: true, text: 'Top 15 Rescue Partners (Click to Drill Down)', color: '#c9d1d9', font: { size: 16 } }, legend: { display: false } },
-                scales: { x: { grid: { color: '#30363d' }, ticks: { color: '#8b949e' } }, y: { grid: { display: false }, ticks: { color: '#c9d1d9' } } }
+                plugins: { 
+                    ...GLOBAL_CHART_OPTS.plugins,
+                    title: { display: true, text: 'Top 15 Rescue Partners (Click to Drill Down)', color: '#c9d1d9', font: { size: 16 } }, 
+                    legend: { display: false } 
+                },
+                scales: { 
+                    x: { grid: { color: '#30363d' }, ticks: { color: '#8b949e' } }, 
+                    y: { grid: { display: false }, ticks: { color: '#c9d1d9' } } 
+                }
             }
         });
     }
@@ -387,7 +440,10 @@
         pieChart = new Chart(document.getElementById('breedPieChart').getContext('2d'), {
             type: 'doughnut',
             data: { labels: entries.map(e => e[0]), datasets: [{ data: entries.map(e => e[1]), backgroundColor: pieColors, borderWidth: 0 }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#c9d1d9', boxWidth: 12 } } } }
+            options: { 
+                ...GLOBAL_CHART_OPTS,
+                plugins: { legend: { position: 'right', labels: { color: '#c9d1d9', boxWidth: 12 } } } 
+            }
         });
 
         const drillBody = document.getElementById('drillDownBody');
