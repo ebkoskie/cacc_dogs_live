@@ -235,7 +235,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-balance-scale" style=color:var(--accent);></i> Intake vs. Outcomes</h2></div><div class=canvas-container><canvas id=weeklyChart></canvas></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-clock" style=color:var(--warning-text);></i> Historical Time to Outcome (Median Days)</h2></div><div class=canvas-container><canvas id=losChart></canvas></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> * Shows the median days dogs waited in the shelter before finding a specific outcome type. </p></div><div class=charts-grid><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-bar" style=color:var(--gender-male-text);></i> Current Population: Days in Shelter</h2></div><div class=canvas-container style=height:300px;><canvas id=losDistChart></canvas></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> * Snapshot of current dogs (Not affected by date filter). </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-pie" style=color:var(--warning-text);></i> Outcomes Distribution</h2></div><div class=canvas-container style=height:300px;><canvas id=outcomePieChart></canvas></div></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-heart-broken" style=color:var(--danger-text);></i> Other Outcomes</h2></div><div class=spoiler-wrapper id=euthSpoiler onclick=revealSpoiler()><div class=spoiler-overlay><i class="fas fa-eye-slash spoiler-icon"></i><div class=spoiler-text>Sensitive Content</div><div class=spoiler-sub>Tap to reveal daily count of non-live outcomes</div></div><div class="canvas-container spoiler-content"><canvas id=euthChart></canvas></div></div></div><div class=footer><span>Last Updated: December 04, 2025 01:25 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-balance-scale" style=color:var(--accent);></i> Intake vs. Outcomes</h2></div><div class=canvas-container><canvas id=weeklyChart></canvas></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-paw" style=color:var(--accent);></i> Outcomes by Type</h2></div><div class=canvas-container><canvas id=outcomesLineChart></canvas></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-clock" style=color:var(--warning-text);></i> Historical Time to Outcome (Median Days)</h2></div><div class=canvas-container><canvas id=losChart></canvas></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> * Shows the median days dogs waited in the shelter before finding a specific outcome type. </p></div><div class=charts-grid><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-bar" style=color:var(--gender-male-text);></i> Current Population: Days in Shelter</h2></div><div class=canvas-container style=height:300px;><canvas id=losDistChart></canvas></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> * Snapshot of current dogs (Not affected by date filter). </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-pie" style=color:var(--warning-text);></i> Outcomes Distribution</h2></div><div class=canvas-container style=height:300px;><canvas id=outcomePieChart></canvas></div></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-heart-broken" style=color:var(--danger-text);></i> Other Outcomes</h2></div><div class=spoiler-wrapper id=euthSpoiler onclick=revealSpoiler()><div class=spoiler-overlay><i class="fas fa-eye-slash spoiler-icon"></i><div class=spoiler-text>Sensitive Content</div><div class=spoiler-sub>Tap to reveal daily count of non-live outcomes</div></div><div class="canvas-container spoiler-content"><canvas id=euthChart></canvas></div></div></div><div class=footer><span>Last Updated: December 04, 2025 01:39 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -325,47 +325,50 @@
 
     // --- Chart Initialization ---
     function initCharts() {
+        const timeAxis = { type: 'time', time: { unit: 'day', tooltipFormat: 'MMM d, yyyy' } };
+
         // 1. Intake vs Outcome
         charts.weekly = new Chart(document.getElementById('weeklyChart'), {
             type: 'line',
             data: { labels: [], datasets: [] },
             options: {
                 ...GLOBAL_CHART_OPTS,
-                scales: {
-                    x: { ...GLOBAL_CHART_OPTS.scales.x, type: 'time', time: { unit: 'day', tooltipFormat: 'MMM d, yyyy' } },
-                    y: GLOBAL_CHART_OPTS.scales.y
-                }
+                scales: { x: { ...GLOBAL_CHART_OPTS.scales.x, ...timeAxis }, y: GLOBAL_CHART_OPTS.scales.y }
             }
         });
 
-        // 2. Time to Outcome (LOS)
+        // 2. Outcomes by Type (Line)
+        charts.outcomesLine = new Chart(document.getElementById('outcomesLineChart'), {
+            type: 'line',
+            data: { labels: [], datasets: [] },
+            options: {
+                ...GLOBAL_CHART_OPTS,
+                scales: { x: { ...GLOBAL_CHART_OPTS.scales.x, ...timeAxis }, y: GLOBAL_CHART_OPTS.scales.y }
+            }
+        });
+
+        // 3. Time to Outcome (LOS)
         charts.los = new Chart(document.getElementById('losChart'), {
             type: 'line',
             data: { labels: [], datasets: [] },
             options: {
                 ...GLOBAL_CHART_OPTS,
-                spanGaps: true, // Allow gaps for days with no specific outcomes
-                scales: {
-                    x: { ...GLOBAL_CHART_OPTS.scales.x, type: 'time', time: { unit: 'day' } },
-                    y: GLOBAL_CHART_OPTS.scales.y
-                }
+                spanGaps: true,
+                scales: { x: { ...GLOBAL_CHART_OPTS.scales.x, ...timeAxis }, y: GLOBAL_CHART_OPTS.scales.y }
             }
         });
 
-        // 3. Other Outcomes (Euth)
+        // 4. Other Outcomes (Euth)
         charts.euth = new Chart(document.getElementById('euthChart'), {
             type: 'line',
             data: { labels: [], datasets: [] },
             options: {
                 ...GLOBAL_CHART_OPTS,
-                scales: {
-                    x: { ...GLOBAL_CHART_OPTS.scales.x, type: 'time', time: { unit: 'day' } },
-                    y: { ...GLOBAL_CHART_OPTS.scales.y, suggestedMax: 5 }
-                }
+                scales: { x: { ...GLOBAL_CHART_OPTS.scales.x, ...timeAxis }, y: { ...GLOBAL_CHART_OPTS.scales.y, suggestedMax: 5 } }
             }
         });
 
-        // 4. Outcomes Pie (Reactive)
+        // 5. Outcomes Pie (Reactive)
         charts.pie = new Chart(document.getElementById('outcomePieChart'), {
             type: 'doughnut',
             data: { labels: ['Adopted', 'Transferred', 'RTO', 'Other'], datasets: [{ data: [], borderWidth: 0 }] },
@@ -375,7 +378,7 @@
             }
         });
 
-        // 5. Current Pop (Static Snapshot)
+        // 6. Current Pop (Static Snapshot)
         if (RAW_DATA.los_dist) {
             const distColors = RAW_DATA.los_dist.labels.map(l => parseInt(l) >= 30 || l.includes('90') ? '#ff7b72' : '#58a6ff');
             new Chart(document.getElementById('losDistChart'), {
@@ -396,20 +399,25 @@
     function updateCharts(startStr, endStr) {
         if (!charts.weekly) initCharts();
 
-        const start = new Date(startStr);
-        const end = new Date(endStr);
-        // Set end to end of day
-        end.setHours(23, 59, 59);
+        // Calculate Global Max Date from RAW_DATA to identify "Today" / Incomplete Day
+        // We assume weekly data is representative of the global timeline
+        const globalMaxDate = RAW_DATA.weekly && RAW_DATA.weekly.labels.length > 0 
+            ? RAW_DATA.weekly.labels[RAW_DATA.weekly.labels.length - 1] 
+            : null;
 
-        // Helper: Slice data arrays based on date strings in labels
+        // Styling for incomplete segments (Dashed Line)
+        const dashedSegment = {
+            borderDash: ctx => {
+                // Check if the segment ends on the global max date
+                const segmentEndDate = ctx.chart.data.labels[ctx.p1DataIndex];
+                return (segmentEndDate === globalMaxDate) ? [5, 5] : undefined;
+            }
+        };
+
+        // Standardize dates
         function getIndices(labels) {
             let indices = [];
             labels.forEach((dStr, i) => {
-                const d = new Date(dStr);
-                // Fix timezone offset issues by treating string as local or UTC consistently
-                // Here we rely on 'YYYY-MM-DD' parsing to UTC midnight usually, 
-                // so we compare timestamps or simple string comparison if format matches.
-                // Simple string comparison works for ISO 'YYYY-MM-DD'
                 if (dStr >= startStr && dStr <= endStr) indices.push(i);
             });
             return indices;
@@ -420,35 +428,92 @@
             const idxs = getIndices(RAW_DATA.weekly.labels);
             charts.weekly.data.labels = idxs.map(i => RAW_DATA.weekly.labels[i]);
             charts.weekly.data.datasets = [
-                { label: 'Intakes', data: idxs.map(i => RAW_DATA.weekly.intakes[i]), borderColor: '#58a6ff', backgroundColor: 'rgba(88, 166, 255, 0.1)', fill: true, tension: 0.3, pointRadius: 2 },
-                { label: 'Outcomes', data: idxs.map(i => RAW_DATA.weekly.outcomes[i]), borderColor: '#238636', backgroundColor: 'rgba(35, 134, 54, 0.1)', fill: true, tension: 0.3, pointRadius: 2 }
+                { 
+                    label: 'Intakes', 
+                    data: idxs.map(i => RAW_DATA.weekly.intakes[i]), 
+                    borderColor: '#58a6ff', backgroundColor: 'rgba(88, 166, 255, 0.1)', 
+                    fill: true, tension: 0.3, pointRadius: 2,
+                    segment: dashedSegment 
+                },
+                { 
+                    label: 'Outcomes', 
+                    data: idxs.map(i => RAW_DATA.weekly.outcomes[i]), 
+                    borderColor: '#238636', backgroundColor: 'rgba(35, 134, 54, 0.1)', 
+                    fill: true, tension: 0.3, pointRadius: 2,
+                    segment: dashedSegment 
+                }
             ];
             charts.weekly.update();
         }
 
-        // 2. Update LOS Trends
+        // 2. Update Outcomes by Type (Line)
+        if (RAW_DATA.outcomes_daily) {
+            const idxs = getIndices(RAW_DATA.outcomes_daily.labels);
+            charts.outcomesLine.data.labels = idxs.map(i => RAW_DATA.outcomes_daily.labels[i]);
+            
+            const getDS = (key) => idxs.map(i => RAW_DATA.outcomes_daily.datasets[key] ? RAW_DATA.outcomes_daily.datasets[key][i] : 0);
+            
+            charts.outcomesLine.data.datasets = [
+                { 
+                    label: 'Adopted', data: getDS('Adopted'), 
+                    borderColor: '#58a6ff', tension: 0.3, pointRadius: 2,
+                    segment: dashedSegment 
+                },
+                { 
+                    label: 'Rescues', data: getDS('Transferred'), 
+                    borderColor: '#238636', tension: 0.3, pointRadius: 2,
+                    segment: dashedSegment 
+                },
+                { 
+                    label: 'RTO', data: getDS('RTO'), 
+                    borderColor: '#d29922', tension: 0.3, pointRadius: 2,
+                    segment: dashedSegment 
+                }
+            ];
+            charts.outcomesLine.update();
+        }
+
+        // 3. Update LOS Trends
         if (RAW_DATA.los) {
             const idxs = getIndices(RAW_DATA.los.labels);
             charts.los.data.labels = idxs.map(i => RAW_DATA.los.labels[i]);
             charts.los.data.datasets = [
-                { label: 'Adoption', data: idxs.map(i => RAW_DATA.los.adopted[i]), borderColor: '#58a6ff', spanGaps: true, pointRadius: 2 },
-                { label: 'Rescue', data: idxs.map(i => RAW_DATA.los.rescued[i]), borderColor: '#238636', spanGaps: true, pointRadius: 2 },
-                { label: 'RTO', data: idxs.map(i => RAW_DATA.los.rto[i]), borderColor: '#d29922', spanGaps: true, pointRadius: 2 }
+                { 
+                    label: 'Adoption', data: idxs.map(i => RAW_DATA.los.adopted[i]), 
+                    borderColor: '#58a6ff', spanGaps: true, pointRadius: 2,
+                    segment: dashedSegment
+                },
+                { 
+                    label: 'Rescue', data: idxs.map(i => RAW_DATA.los.rescued[i]), 
+                    borderColor: '#238636', spanGaps: true, pointRadius: 2,
+                    segment: dashedSegment 
+                },
+                { 
+                    label: 'RTO', data: idxs.map(i => RAW_DATA.los.rto[i]), 
+                    borderColor: '#d29922', spanGaps: true, pointRadius: 2,
+                    segment: dashedSegment 
+                }
             ];
             charts.los.update();
         }
 
-        // 3. Update Other Outcomes
+        // 4. Update Other Outcomes
         if (RAW_DATA.euth) {
             const idxs = getIndices(RAW_DATA.euth.labels);
             charts.euth.data.labels = idxs.map(i => RAW_DATA.euth.labels[i]);
             charts.euth.data.datasets = [
-                { label: 'Other Outcomes', data: idxs.map(i => RAW_DATA.euth.count[i]), borderColor: '#ff7b72', backgroundColor: 'rgba(255, 123, 114, 0.1)', fill: true, tension: 0.1 }
+                { 
+                    label: 'Other Outcomes', 
+                    data: idxs.map(i => RAW_DATA.euth.count[i]), 
+                    borderColor: '#ff7b72', backgroundColor: 'rgba(255, 123, 114, 0.1)', 
+                    fill: true, tension: 0.1,
+                    segment: dashedSegment 
+                }
             ];
             charts.euth.update();
         }
 
-        // 4. Update Pie Chart (Aggregate visible data)
+        // 5. Update Pie Chart (Aggregate visible data)
         if (RAW_DATA.outcomes_daily) {
             const idxs = getIndices(RAW_DATA.outcomes_daily.labels);
             const sums = { 'Adopted': 0, 'Transferred': 0, 'RTO': 0, 'Other': 0 };
@@ -461,7 +526,7 @@
             });
 
             const pieData = [sums['Adopted'], sums['Transferred'], sums['RTO'], sums['Other']];
-            const pieColors = ['#58a6ff', '#238636', '#d29922', '#da3633']; // GitHub Dark Palette
+            const pieColors = ['#58a6ff', '#238636', '#d29922', '#da3633']; 
 
             charts.pie.data.datasets[0].data = pieData;
             charts.pie.data.datasets[0].backgroundColor = pieColors;
