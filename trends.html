@@ -235,7 +235,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (7 Days)</button></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-balance-scale" style=color:var(--accent);></i> Intake vs. Outcomes</h2></div><div class=canvas-container><canvas id=weeklyChart></canvas></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-paw" style=color:var(--accent);></i> Outcomes by Type</h2></div><div class=canvas-container><canvas id=outcomesLineChart></canvas></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-clock" style=color:var(--warning-text);></i> Historical Time to Outcome (Median Days)</h2></div><div class=canvas-container><canvas id=losChart></canvas></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> * Shows the median days dogs waited in the shelter before finding a specific outcome type. </p></div><div class=charts-grid><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-bar" style=color:var(--gender-male-text);></i> Current Population: Days in Shelter</h2></div><div class=canvas-container style=height:300px;><canvas id=losDistChart></canvas></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> * Snapshot of current dogs (Not affected by date filter). </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-pie" style=color:var(--warning-text);></i> Outcomes Distribution</h2></div><div class=canvas-container style=height:300px;><canvas id=outcomePieChart></canvas></div></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-heart-broken" style=color:var(--danger-text);></i> Other Outcomes</h2></div><div class=spoiler-wrapper id=euthSpoiler onclick=revealSpoiler()><div class=spoiler-overlay><i class="fas fa-eye-slash spoiler-icon"></i><div class=spoiler-text>Sensitive Content</div><div class=spoiler-sub>Tap to reveal daily count of non-live outcomes</div></div><div class="canvas-container spoiler-content"><canvas id=euthChart></canvas></div></div></div><div class=footer><span>Last Updated: December 04, 2025 03:19 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (7 Days)</button></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-users" style=color:var(--accent);></i> Daily Shelter Population</h2></div><div class=canvas-container><canvas id=populationChart></canvas></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-balance-scale" style=color:var(--accent);></i> Intake vs. Outcomes</h2></div><div class=canvas-container><canvas id=weeklyChart></canvas></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-paw" style=color:var(--accent);></i> Outcomes by Type</h2></div><div class=canvas-container><canvas id=outcomesLineChart></canvas></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-clock" style=color:var(--warning-text);></i> Historical Time to Outcome (Median Days)</h2></div><div class=canvas-container><canvas id=losChart></canvas></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> * Shows the median days dogs waited in the shelter before finding a specific outcome type. </p></div><div class=charts-grid><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-bar" style=color:var(--gender-male-text);></i> Current Population: Days in Shelter</h2></div><div class=canvas-container style=height:300px;><canvas id=losDistChart></canvas></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> * Snapshot of current dogs (Not affected by date filter). </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-pie" style=color:var(--warning-text);></i> Outcomes Distribution</h2></div><div class=canvas-container style=height:300px;><canvas id=outcomePieChart></canvas></div></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-heart-broken" style=color:var(--danger-text);></i> Other Outcomes</h2></div><div class=spoiler-wrapper id=euthSpoiler onclick=revealSpoiler()><div class=spoiler-overlay><i class="fas fa-eye-slash spoiler-icon"></i><div class=spoiler-text>Sensitive Content</div><div class=spoiler-sub>Tap to reveal daily count of non-live outcomes</div></div><div class="canvas-container spoiler-content"><canvas id=euthChart></canvas></div></div></div><div class=footer><span>Last Updated: December 04, 2025 03:28 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -327,7 +327,17 @@
     function initCharts() {
         const timeAxis = { type: 'time', time: { unit: 'day', tooltipFormat: 'MMM d, yyyy' } };
 
-        // 1. Intake vs Outcome
+        // 1. Population Chart
+        charts.population = new Chart(document.getElementById('populationChart'), {
+            type: 'line',
+            data: { labels: [], datasets: [] },
+            options: {
+                ...GLOBAL_CHART_OPTS,
+                scales: { x: { ...GLOBAL_CHART_OPTS.scales.x, ...timeAxis }, y: GLOBAL_CHART_OPTS.scales.y }
+            }
+        });
+
+        // 2. Intake vs Outcome
         charts.weekly = new Chart(document.getElementById('weeklyChart'), {
             type: 'line',
             data: { labels: [], datasets: [] },
@@ -337,7 +347,7 @@
             }
         });
 
-        // 2. Outcomes by Type (Line)
+        // 3. Outcomes by Type (Line)
         charts.outcomesLine = new Chart(document.getElementById('outcomesLineChart'), {
             type: 'line',
             data: { labels: [], datasets: [] },
@@ -347,7 +357,7 @@
             }
         });
 
-        // 3. Time to Outcome (LOS)
+        // 4. Time to Outcome (LOS)
         charts.los = new Chart(document.getElementById('losChart'), {
             type: 'line',
             data: { labels: [], datasets: [] },
@@ -358,7 +368,7 @@
             }
         });
 
-        // 4. Other Outcomes (Euth)
+        // 5. Other Outcomes (Euth)
         charts.euth = new Chart(document.getElementById('euthChart'), {
             type: 'line',
             data: { labels: [], datasets: [] },
@@ -368,7 +378,7 @@
             }
         });
 
-        // 5. Outcomes Pie (Reactive)
+        // 6. Outcomes Pie (Reactive)
         charts.pie = new Chart(document.getElementById('outcomePieChart'), {
             type: 'doughnut',
             data: { labels: ['Adopted', 'Transferred', 'RTO', 'Other'], datasets: [{ data: [], borderWidth: 0 }] },
@@ -378,7 +388,7 @@
             }
         });
 
-        // 6. Current Pop (Static Snapshot)
+        // 7. Current Pop (Static Snapshot)
         if (RAW_DATA.los_dist) {
             const distColors = RAW_DATA.los_dist.labels.map(l => parseInt(l) >= 30 || l.includes('90') ? '#ff7b72' : '#58a6ff');
             new Chart(document.getElementById('losDistChart'), {
@@ -422,7 +432,6 @@
         }
 
         // FORCE SCALE FUNCTION
-        // Ensures charts adhere to selected dates even if data is sparse
         const setScale = (c) => {
             if (c.options.scales.x) {
                 c.options.scales.x.min = startStr;
@@ -430,7 +439,24 @@
             }
         };
 
-        // 1. Update Intake/Outcome
+        // 1. Update Population (Moved to top)
+        if (RAW_DATA.population) {
+            setScale(charts.population);
+            const idxs = getIndices(RAW_DATA.population.labels);
+            charts.population.data.labels = idxs.map(i => RAW_DATA.population.labels[i]);
+            charts.population.data.datasets = [
+                { 
+                    label: 'Shelter Population', 
+                    data: idxs.map(i => RAW_DATA.population.data[i]), 
+                    borderColor: '#a371f7', backgroundColor: 'rgba(163, 113, 247, 0.1)', 
+                    fill: true, tension: 0.3, pointRadius: 2,
+                    segment: dashedSegment 
+                }
+            ];
+            charts.population.update();
+        }
+
+        // 2. Update Intake/Outcome
         if (RAW_DATA.weekly) {
             setScale(charts.weekly);
             const idxs = getIndices(RAW_DATA.weekly.labels);
@@ -454,7 +480,7 @@
             charts.weekly.update();
         }
 
-        // 2. Update Outcomes by Type (Line)
+        // 3. Update Outcomes by Type (Line)
         if (RAW_DATA.outcomes_daily) {
             setScale(charts.outcomesLine);
             const idxs = getIndices(RAW_DATA.outcomes_daily.labels);
@@ -482,7 +508,7 @@
             charts.outcomesLine.update();
         }
 
-        // 3. Update LOS Trends
+        // 4. Update LOS Trends
         if (RAW_DATA.los) {
             setScale(charts.los);
             const idxs = getIndices(RAW_DATA.los.labels);
@@ -507,7 +533,7 @@
             charts.los.update();
         }
 
-        // 4. Update Other Outcomes
+        // 5. Update Other Outcomes
         if (RAW_DATA.euth) {
             setScale(charts.euth);
             const idxs = getIndices(RAW_DATA.euth.labels);
@@ -524,7 +550,7 @@
             charts.euth.update();
         }
 
-        // 5. Update Pie Chart (Aggregate visible data)
+        // 6. Update Pie Chart
         if (RAW_DATA.outcomes_daily) {
             const idxs = getIndices(RAW_DATA.outcomes_daily.labels);
             const sums = { 'Adopted': 0, 'Transferred': 0, 'RTO': 0, 'Other': 0 };
