@@ -87,6 +87,17 @@
 
     .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
     .dog-name { font-size: 1.3rem; font-weight: 700; color: var(--text); margin: 0; line-height: 1.2; }
+    
+    /* Interactive Name Style */
+    .dog-name.has-aka { 
+        cursor: pointer; 
+        text-decoration-line: underline; 
+        text-decoration-style: dotted; 
+        text-decoration-color: var(--text-muted); 
+        text-underline-offset: 4px;
+    }
+    .dog-name.has-aka:hover { text-decoration-color: var(--accent); }
+
     .date-badge { font-size: 0.8rem; color: var(--text-muted); background: rgba(128,128,128,0.1); padding: 2px 8px; border-radius: 10px; border: 1px solid var(--border); }
     .breed-info { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 5px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
     .card-footer { margin-top: auto; padding-top: 5px; }
@@ -279,7 +290,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button></div><div class=stats-banner><div class="stat-card clickable" onclick=showTodayRescues() title="Click to see today's heroes!"><i class="fas fa-calendar-day stat-icon"></i><div class=stat-info><span class=stat-value id=countToday>0</span><span class=stat-label>Rescues Today</span></div></div><div class=stat-card><i class="fas fa-history stat-icon" style="color: var(--success-text);"></i><div class=stat-info><span class=stat-value id=countTotal>0</span><span class=stat-label id=labelTotal>Total in Range</span></div></div></div><div class=chart-container><canvas id=rescueChart></canvas></div><div class=chart-hint>👆 Click any bar above to see the specific breeds pulled by that partner (within selected range).</div><div id=drillDownSection><div class=details-header><h2 class=details-title id=selectedPartnerName>Partner Details</h2><button class=close-btn onclick=closeDrillDown()>Close Details <i class="fas fa-times"></i></button></div><div class=details-grid><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Composition</h3><div class=pie-container><canvas id=breedPieChart></canvas></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Recent Pulls (In Range)</h3><div class=table-container><table id=drillDownTable><thead><tr><th>Date</th><th>Name</th><th>Breed</th></tr></thead><tbody id=drillDownBody></tbody></table></div></div></div></div><div id=recentRescuesSection><div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px; flex-wrap: wrap;"><h2 id=gridTitle style="margin: 0;">Rescues in Range</h2><button id=clearFilterBtn onclick=resetDates() class=btn-clear-filter style="display: none;"><i class="fas fa-undo"></i> Show Default View </button></div><input type=text id=searchRecent placeholder="Filter visible cards (e.g. 'Paws', 'Bulldog')..."><div id=recentGrid class=dog-grid></div></div><div class=footer><span>Last Updated: December 05, 2025 03:23 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button></div><div class=stats-banner><div class="stat-card clickable" onclick=showTodayRescues() title="Click to see today's heroes!"><i class="fas fa-calendar-day stat-icon"></i><div class=stat-info><span class=stat-value id=countToday>0</span><span class=stat-label>Rescues Today</span></div></div><div class=stat-card><i class="fas fa-history stat-icon" style="color: var(--success-text);"></i><div class=stat-info><span class=stat-value id=countTotal>0</span><span class=stat-label id=labelTotal>Total in Range</span></div></div></div><div class=chart-container><canvas id=rescueChart></canvas></div><div class=chart-hint>👆 Click any bar above to see the specific breeds pulled by that partner (within selected range).</div><div id=drillDownSection><div class=details-header><h2 class=details-title id=selectedPartnerName>Partner Details</h2><button class=close-btn onclick=closeDrillDown()>Close Details <i class="fas fa-times"></i></button></div><div class=details-grid><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Composition</h3><div class=pie-container><canvas id=breedPieChart></canvas></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Recent Pulls (In Range)</h3><div class=table-container><table id=drillDownTable><thead><tr><th>Date</th><th>Name</th><th>Breed</th></tr></thead><tbody id=drillDownBody></tbody></table></div></div></div></div><div id=recentRescuesSection><div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px; flex-wrap: wrap;"><h2 id=gridTitle style="margin: 0;">Rescues in Range</h2><button id=clearFilterBtn onclick=resetDates() class=btn-clear-filter style="display: none;"><i class="fas fa-undo"></i> Show Default View </button></div><input type=text id=searchRecent placeholder="Filter visible cards (e.g. 'Paws', 'Bulldog')..."><div id=recentGrid class=dog-grid></div></div><div class=footer><span>Last Updated: December 05, 2025 03:28 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -373,7 +384,8 @@
             partner: partners[row[0]],
             breed: breeds[row[1]],
             date: row[2],
-            name: row[3]
+            name: row[3],
+            aka: row[4] || "" // <--- Hydrate AKA
         }));
         
         resetDates(); // Start with default 30 days
@@ -426,6 +438,19 @@
         document.getElementById('gridTitle').innerText = `Rescues (${startStr} to ${endStr})`;
 
         updateDashboard();
+    }
+    
+    // --- Toggle Name Logic ---
+    function toggleName(el, currentName, aka) {
+        if (el.getAttribute('data-showing') === 'aka') {
+            el.innerText = currentName;
+            el.setAttribute('data-showing', 'current');
+            el.title = "Tap to see previous names";
+        } else {
+            el.innerHTML = `<span style="font-size:0.8em; color:var(--text-muted); font-weight:normal;">FKA:</span> ${aka}`;
+            el.setAttribute('data-showing', 'aka');
+            el.title = "Tap to show current name";
+        }
     }
 
     // --- Warm Fuzzies Interaction ---
@@ -507,11 +532,6 @@
         const grid = document.getElementById('recentGrid');
         grid.innerHTML = '';
         
-        if (sorted.length === 1 && sorted[0].date === new Date().toLocaleDateString("en-CA", {timeZone: "America/Chicago"})) {
-             // If only today's data is shown (e.g. from click), we can add a specific message if needed, 
-             // but standard rendering is fine.
-        }
-        
         if (sorted.length === 0) {
             grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#8b949e;">No rescues in this range.</div>';
             return;
@@ -522,8 +542,23 @@
             const card = document.createElement('div');
             card.className = 'dog-card';
             card.setAttribute('data-search', (row.name + ' ' + row.partner + ' ' + row.breed).toLowerCase());
+            
+            // --- Name Logic (AKA) ---
+            let nameHtml = `<h3 class="dog-name">${row.name}</h3>`;
+            if (row.aka) {
+                const safeName = row.name.replace(/'/g, "\\'");
+                const safeAka = row.aka.replace(/'/g, "\\'");
+                nameHtml = `
+                    <h3 class="dog-name has-aka" 
+                        title="Tap to see previous names" 
+                        onclick="toggleName(this, '${safeName}', '${safeAka}')">
+                        ${row.name}
+                    </h3>
+                `;
+            }
+            
             card.innerHTML = `
-                <div class="card-header"><h3 class="dog-name">${row.name}</h3><span class="date-badge">${row.date}</span></div>
+                <div class="card-header">${nameHtml}<span class="date-badge">${row.date}</span></div>
                 <div class="breed-info">${row.breed}</div>
                 <div class="card-footer"><span class="status-rescue" title="${row.partner}"><i class="fas fa-ambulance"></i> ${row.partner}</span></div>
             `;
@@ -609,7 +644,20 @@
         drillBody.innerHTML = '';
         partnerRecords.sort((a,b) => new Date(b.date) - new Date(a.date));
         partnerRecords.forEach(row => {
-            drillBody.innerHTML += `<tr><td>${row.date}</td><td style="font-weight:600; color:#58a6ff;">${row.name}</td><td>${row.breed}</td></tr>`;
+            // Updated Drilldown Table Row to include AKA if present
+            let nameCell = `<td style="font-weight:600; color:#58a6ff;">${row.name}</td>`;
+            if (row.aka) {
+                const safeName = row.name.replace(/'/g, "\\'");
+                const safeAka = row.aka.replace(/'/g, "\\'");
+                nameCell = `
+                    <td style="font-weight:600; color:#58a6ff; cursor:pointer;" 
+                        title="Tap to see previous names"
+                        onclick="toggleName(this, '${safeName}', '${safeAka}')">
+                        ${row.name}
+                    </td>`;
+            }
+            
+            drillBody.innerHTML += `<tr><td>${row.date}</td>${nameCell}<td>${row.breed}</td></tr>`;
         });
     }
 
