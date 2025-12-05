@@ -5,10 +5,13 @@
   "payload": null,
   "headers": {},
   "user_data": {
+    "__crawlee": {
+      "state": 3
+    },
     "original_url": "https://www.facebook.com/photo/?fbid=1147922290832263&set=a.493666772924488"
   },
   "retry_count": 0,
   "no_retry": false,
-  "loaded_url": null,
-  "handled_at": null
+  "loaded_url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/photo/%3Ffbid%3D1147922290832263%26set%3Da.493666772924488&show_text=true&width=500",
+  "handled_at": "2025-12-05 14:26:03.126142+00:00"
 }
