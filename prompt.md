@@ -10,12 +10,12 @@ I am building `cacc_dogs`, a Python-based static site generator that scrapes, tr
     * **Phase 2 (Details):** `aiohttp` for high-speed async data fetching of animal details (cookies inherited from Phase 1).
     * **Phase 3 (Enrichment):**
         * **Facebook:** **Crawlee + Playwright** using an **Embed Proxy Strategy** to bypass login walls and aggregate media.
-        * **YouTube:** **YouTube Data API v3** via `aiohttp`. Features **Time-Aware Smart Matching** (Regex ID + Name/Intake Date validation) to link videos (including Shorts) to dogs.
+        * **YouTube:** **YouTube Data API v3** via `aiohttp`. Features **Time-Aware Smart Matching** (Regex ID + **Robust Case-Insensitive** Name/Intake Date validation) to link videos (including Shorts) to dogs. Also implements **Video Label Detection** to categorize content (e.g., "Leash Test", "Playgroup").
 * **Data Persistence:** **Hybrid DuckDB + CSV**. Uses DuckDB for high-performance in-memory SQL merging (`UPSERT` logic) and distinct record processing, while outputting optimized CSVs (`dogs_active.csv`, `dogs_historic.csv`) for the frontend.
 * **Visualization:**
     * **Interactive:** `Chart.js` for all client-side charts (Trends, Rescues, Population).
     * **Mapping:** Leaflet.js with client-side clustering and spatial indexing.
-* **Frontend:** Jinja2 templating with a **Global CSS Variable Design System**. Features a responsive "Frosted Glass" sticky header, seamless Light/Dark Mode switching, centralized badge styling, and integrated **Social Media Buttons** (YouTube/Facebook).
+* **Frontend:** Jinja2 templating with a **Global CSS Variable Design System**. Features a responsive "Frosted Glass" sticky header, seamless Light/Dark Mode switching, centralized badge styling, and integrated **Smart Social Media Buttons** (YouTube/Facebook with label support).
 * **Search & Logic:** Client-side logic powered by **Dictionary Compressed JSON Assets** (`search_index.json`, `rescues.json`, `trends.json`) to minimize payload size. Features include **Infinite Scroll (Intersection Observer)**, **DOM Batching**, **Mutually Exclusive Filters**, and client-side data hydration.
 * **CI/CD:** GitHub Actions optimized with **`uv`** caching. Scrapers run inside **Official Playwright Docker Containers** (e.g., `v1.57.0-noble`) to eliminate system dependency installation time.
 
@@ -29,10 +29,10 @@ I am building `cacc_dogs`, a Python-based static site generator that scrapes, tr
 2.  **Scraping & Data Logic (`src/`):**
     * `src/scraper.py`: **Playwright (Crawlee)** scraper for primary CACC portal discovery. Features robust iframe extraction logic, hydration waits, and session cookie capture.
     * `src/fb_crawler.py`: **Crawlee/Playwright** scraper implementing the "Embed Proxy" strategy for Facebook.
-    * `src/youtube.py`: **Async API Fetcher** for the channel's "Uploads" playlist. Implements dual-strategy matching: Explicit ID match vs. Temporal Name match (Intake Date validation).
+    * `src/youtube.py`: **Async API Fetcher** for the channel's "Uploads" playlist. Implements dual-strategy matching: Explicit ID match vs. **Case-Insensitive** Temporal Name match. Features **Video Label Detection** (scanning titles/descriptions) to auto-label "Leash Tests" and "Playgroups".
     * `src/parser.py`: Regex logic to parse dog descriptions and extract attributes.
     * `src/storage.py`: **DuckDB-backed** storage engine. Handles complex merge logic via SQL `ON CONFLICT` clauses.
-    * `src/models.py`: Defines the `Dog` dataclass (includes `youtube_urls` and `facebook_url`).
+    * `src/models.py`: Defines the `Dog` dataclass (includes `youtube_urls`, `facebook_url`, and **`aka`** for previous names).
     * `src/geo.py`: Geocoding service using `geopy` with persistent JSON caching.
 
 3.  **Analytics & Visualization (`src/analytics/`):**
@@ -41,11 +41,11 @@ I am building `cacc_dogs`, a Python-based static site generator that scrapes, tr
     * `src/analytics/population.py`: Manages `population_history.csv` to track the ground-truth count of active dogs daily.
 
 4.  **Reporting & Templates (`src/report.py` & `templates/`):**
-    * `src/report.py`: Logic for status normalization and report generation. Exports `youtube_urls` to the compressed search index (key `"y"`).
+    * `src/report.py`: Logic for status normalization and report generation. Exports `youtube_urls` (key `"y"`) and `aka` (key `"k"`) to the compressed search index.
     * `templates/base.html`: **Master Layout** with global utility classes.
     * `templates/partials/navbar.html`: **Theme Source & Nav.** Defines Global CSS Variables.
     * `templates/partials/chart_setup.html`: **Chart Configuration.** Centralized Chart.js defaults.
-    * `templates/index.html`: **Main Dashboard.** Features Infinite Scroll, client-side hydration, and **Social Media Dropdowns**.
+    * `templates/index.html`: **Main Dashboard.** Features Infinite Scroll, client-side hydration, **AKA Name Toggling**, and **Labeled Media Dropdowns**.
     * `templates/trends.html`: **Analytics Dashboard.** Features a **Global Date Range Selector**.
     * `templates/rescues.html`: **Partner Analytics.** Interactive bar chart with drill-down.
     * `templates/removed.html`: "Lost/Unaccounted" report, filtered against "Ghost" duplicates.
