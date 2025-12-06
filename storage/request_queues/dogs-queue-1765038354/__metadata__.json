@@ -1,0 +1,11 @@
+{
+  "id": "DjiICnlmlyB4kBTza",
+  "name": "dogs-queue-1765038354",
+  "accessed_at": "2025-12-06 16:26:29.548367+00:00",
+  "created_at": "2025-12-06 16:25:54.879767+00:00",
+  "modified_at": "2025-12-06 16:26:29.547431+00:00",
+  "had_multiple_clients": false,
+  "handled_request_count": 10,
+  "pending_request_count": 0,
+  "total_request_count": 10
+}
