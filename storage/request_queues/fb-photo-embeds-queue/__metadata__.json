@@ -1,11 +1,11 @@
 {
-  "id": "FxwBG8UtNCTuMCQ2Q",
+  "id": "TOb3PoZ2dAhI5P1LX",
   "name": "fb-photo-embeds-queue",
-  "accessed_at": "2025-12-07 03:40:15.051393+00:00",
-  "created_at": "2025-12-07 03:39:29.257895+00:00",
-  "modified_at": "2025-12-07 03:40:15.050756+00:00",
+  "accessed_at": "2025-12-07 04:36:15.668329+00:00",
+  "created_at": "2025-12-07 04:35:38.834680+00:00",
+  "modified_at": "2025-12-07 04:36:15.667749+00:00",
   "had_multiple_clients": false,
-  "handled_request_count": 97,
+  "handled_request_count": 73,
   "pending_request_count": 0,
-  "total_request_count": 97
+  "total_request_count": 73
 }
