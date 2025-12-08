@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta http-equiv=content-type content="text/html; charset=UTF-8"><script src=https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js></script><script src=https://code.jquery.com/jquery-3.7.1.min.js></script><script src=https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css><link rel=stylesheet href=https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css><link rel=stylesheet href=https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css><meta name=viewport content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><style>
-                #map_09fc25b270e7c132974bfc8585d1b93e {
+                #map_f1c063f3432e9d8698c927942af046d1 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -24,332 +24,107 @@
             </style><script>
                 L_NO_TOUCH = false;
                 L_DISABLE_3D = false;
-            </script><script src=https://cdn.jsdelivr.net/gh/python-visualization/folium@main/folium/templates/leaflet_heat.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js></script><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css></head><body><div class=folium-map id=map_09fc25b270e7c132974bfc8585d1b93e></div><style>
-    /* --- Global Theme Variables (Moved here to support Map Overlay) --- */
-    :root {
-        /* Core Colors */
-        --header-bg: rgba(13, 17, 23, 0.85);
-        --nav-item-hover: rgba(177, 186, 196, 0.12);
-        --accent: #58a6ff;
-        --text: #c9d1d9;
-        --text-muted: #8b949e;
-        --border: #30363d;
-        --row: #161b22;
-        --bg: #0d1117;
-        --input-bg: #0d1117;
-        --card-shadow: rgba(0,0,0,0.3);
-
-        /* Badge & Status Colors (Dark Mode) */
-        --gender-male-text: #79c0ff; --gender-male-bg: rgba(56, 139, 253, 0.15); --gender-male-border: rgba(56, 139, 253, 0.4);
-        --gender-female-text: #ff7b72; --gender-female-bg: rgba(235, 87, 87, 0.15); --gender-female-border: rgba(235, 87, 87, 0.4);
-        --stray-text: #d2a8ff; --stray-bg: rgba(187, 128, 255, 0.15); --stray-border: rgba(187, 128, 255, 0.4);
-
-        --success-text: #7ee787; --success-bg: rgba(46, 160, 67, 0.15); --success-border: rgba(46, 160, 67, 0.4);
-        --warning-text: #d29922; --warning-bg: rgba(187, 128, 9, 0.15);  --warning-border: rgba(187, 128, 9, 0.4);
-        --danger-text: #ffa198;  --danger-bg: rgba(248, 81, 73, 0.15);  --danger-border: rgba(248, 81, 73, 0.4);
-        --info-text: #a5d6ff;    --info-bg: rgba(56, 139, 253, 0.15);   --info-border: rgba(56, 139, 253, 0.4);
-        
-        --rto-text: var(--warning-text); --rto-bg: var(--warning-bg); --rto-border: var(--warning-border);
-        --rescue-text: var(--info-text); --rescue-bg: var(--info-bg); --rescue-border: var(--info-border);
-        --adopted-text: var(--success-text); --adopted-bg: var(--success-bg); --adopted-border: var(--success-border);
-        
-        --row-hover: #21262d;
-    }
-    
-    body.light-mode {
-        --header-bg: rgba(255, 255, 255, 0.85);
-        --nav-item-hover: rgba(0, 0, 0, 0.08);
-        --accent: #0969da;
-        --text: #24292f;
-        --text-muted: #57606a;
-        --border: #d0d7de;
-        --row: #f6f8fa;
-        --bg: #ffffff;
-        --input-bg: #ffffff;
-        --card-shadow: rgba(0,0,0,0.1);
-
-        --gender-male-text: #0969da; --gender-male-bg: #ddf4ff; --gender-male-border: #54aeff;
-        --gender-female-text: #bf3989; --gender-female-bg: #ffeff7; --gender-female-border: #ff80c8;
-        --stray-text: #8250df; --stray-bg: #fbefff; --stray-border: #d4a7ff;
-        
-        --success-text: #1a7f37; --success-bg: #dafbe1; --success-border: #4ac26b;
-        --warning-text: #9a6700; --warning-bg: #fff8c5; --warning-border: #d4a72c;
-        --danger-text: #cf222e; --danger-bg: #ffebe9; --danger-border: #ff8182;
-        --info-text: #0969da;    --info-bg: #ddf4ff;    --info-border: #54aeff;
-        
-        --row-hover: #eaeef2;
-    }
-
-    .site-header {
-        position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
-        background: var(--header-bg);
-        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-        border-bottom: 1px solid var(--border);
-        height: 64px;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    }
-
-    .header-content {
-        max-width: 1200px; margin: 0 auto; height: 100%;
-        display: flex; align-items: center; justify-content: space-between;
-        padding: 0 20px;
-    }
-
-    .brand-section h1 { 
-        color: var(--accent); margin: 0; font-size: 1.25rem; 
-        display: flex; align-items: center; gap: 8px; white-space: nowrap; 
-    }
-
-    /* Desktop Navigation */
-    .nav-links { display: flex; gap: 8px; align-items: center; }
-    .nav-link {
-        color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.95rem;
-        padding: 6px 12px; border-radius: 6px; transition: all 0.2s;
-    }
-    .nav-link:hover { color: var(--text); background: var(--nav-item-hover); }
-    .nav-link.active { color: var(--accent); background: var(--nav-item-hover); font-weight: 600; }
-
-    .actions { display: flex; align-items: center; gap: 10px; }
-    .theme-toggle, .mobile-menu-btn { 
-        background: transparent; border: 1px solid var(--border); color: var(--text-muted); 
-        width: 36px; height: 36px; border-radius: 50%; 
-        cursor: pointer; display: flex; align-items: center; justify-content: center; 
-        font-size: 1rem; transition: all 0.2s;
-    }
-    .theme-toggle:hover, .mobile-menu-btn:hover { color: var(--text); border-color: var(--text-muted); }
-    .mobile-menu-btn { display: none; border-radius: 6px; }
-
-    /* Mobile Drawer */
-    .mobile-nav-drawer {
-        display: none; position: fixed; top: 64px; left: 0; right: 0; z-index: 9998;
-        background: var(--bg); border-bottom: 1px solid var(--border);
-        padding: 15px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    .mobile-nav-drawer.open { display: flex; flex-direction: column; gap: 10px; }
-    
-    .mobile-link {
-        padding: 12px; border-radius: 8px; color: var(--text); text-decoration: none; font-weight: 600;
-        border: 1px solid transparent; display: flex; align-items: center; gap: 10px;
-    }
-    .mobile-link:hover { background: var(--row); }
-    .mobile-link.active { background: var(--nav-item-hover); border-color: var(--border); color: var(--accent); }
-
-    @media (max-width: 850px) {
-        .nav-links { display: none; }
-        .mobile-menu-btn { display: flex; }
-    }
-</style><header class=site-header><div class=header-content><div class=brand-section><h1> 🗺️ CACC Map </h1></div><nav class=nav-links><a href=index.html class="nav-link ">Dashboard</a><a href=map.html class="nav-link active">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link ">Breeds</a></nav><div class=actions><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button><button class=mobile-menu-btn onclick=toggleMobileMenu()><i class="fas fa-bars"></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=index.html class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=map.html class="mobile-link active"><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link "><i class="fas fa-paw" style=width:20px></i> Breeds</a></div></header><script>
-    function toggleTheme() {
-        document.body.classList.toggle('light-mode');
-        const icon = document.querySelector('.theme-toggle i');
-        if(icon) icon.className = document.body.classList.contains('light-mode') ? 'fas fa-sun' : 'fas fa-moon';
-        localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
-    }
-    // Auto-init theme if localstorage is set
-    if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
-
-    function toggleMobileMenu() {
-        document.getElementById('mobileDrawer').classList.toggle('open');
-    }
-</script><style>
-    /* FIX: Push Leaflet controls (Zoom + Layers) down below the fixed header */
-    .leaflet-top {
-        top: 70px !important; /* 64px Header + 6px buffer */
-    }
-
-    .map-search-container {
-        position: fixed;
-        top: 80px; /* Below the 64px header + spacing */
-        left: 50px; /* Shift right to avoid overlapping the moved zoom controls */
-        z-index: 1000;
-        width: 300px;
-        max-width: 70vw; /* Prevent overflow on small screens */
-    }
-
-    /* Mobile Adjustment: Move search bar below zoom controls on very small screens if needed */
-    @media (max-width: 480px) {
-        .map-search-container {
-            left: 10px;
-            top: 140px; /* Move below the zoom controls completely on mobile */
-            width: auto;
-            right: 10px;
-            max-width: none;
-        }
-    }
-
-    .map-search-box {
-        width: 100%;
-        background: var(--header-bg); /* Use shared theme variable */
-        backdrop-filter: blur(5px);
-        border: 1px solid var(--border);
-        color: var(--text);
-        padding: 12px 15px;
-        border-radius: 8px;
-        font-size: 0.95rem;
-        outline: none;
-        box-shadow: 0 4px 12px var(--card-shadow);
-        transition: border-color 0.2s, background 0.2s;
-        font-family: inherit;
-    }
-
-    .map-search-box:focus {
-        border-color: var(--accent);
-        background: var(--bg);
-    }
-    
-    .map-search-results {
-        display: none;
-        position: absolute;
-        top: 100%; left: 0; right: 0;
-        margin-top: 5px;
-        background: var(--row);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        max-height: 250px;
-        overflow-y: auto;
-        box-shadow: 0 4px 12px var(--card-shadow);
-    }
-    
-    .search-result-item {
-        padding: 10px 15px;
-        cursor: pointer;
-        border-bottom: 1px solid var(--border);
-        color: var(--text);
-        font-size: 0.9rem;
-    }
-    
-    .search-result-item:last-child { border-bottom: none; }
-    .search-result-item:hover { background: var(--row-hover); }
-
-    /* Map Footer */
-    .map-footer {
-        position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
-        background: var(--header-bg);
-        color: var(--text-muted);
-        text-align: center;
-        padding: 5px;
-        font-family: sans-serif;
-        font-size: 0.7rem;
-        border-top: 1px solid var(--border);
-        backdrop-filter: blur(3px);
-    }
-</style><div class=map-search-container><input type=text id=mapSearch class=map-search-box placeholder="🔍 Find by Name or ID..." disabled><div id=mapSearchResults class=map-search-results></div></div><div class=map-footer> © 2025 CACC Dog Bot. Independent volunteer project. Not affiliated with CACC. Data "as is". </div><script>
-    // Optimization: Debounce Utility (Local scope since we don't extend base.html)
-    function debounce(func, wait) {
-        let timeout;
-        return function(...args) {
-            const context = this;
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(context, args), wait);
-        };
-    }
-
-    // Optimization: "Just-in-Time" Connection Warmer
-    // Adapted for Map: Triggers preconnect to 24PetConnect on pin hover/tap
-    (function() {
-        let pcWarmed = false;
-
-        function warmConnection() {
-            if (pcWarmed) return;
-            const link = document.createElement('link');
-            link.rel = 'preconnect';
-            link.href = 'https://24petconnect.com';
-            // No crossorigin needed for simple navigation
-            document.head.appendChild(link);
-            pcWarmed = true;
-        }
-
-        const handleInteraction = (e) => {
-            // Check if we are hovering/touching a link inside a Leaflet popup
-            const link = e.target.closest('a[href*="24petconnect.com"]');
-            if (!pcWarmed && link) {
-                warmConnection();
-            }
-        };
-
-        document.addEventListener('mouseover', handleInteraction, { passive: true });
-        document.addEventListener('touchstart', handleInteraction, { passive: true });
-    })();
-
+            </script><script src=https://cdn.jsdelivr.net/gh/python-visualization/folium@main/folium/templates/leaflet_heat.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js></script><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css></head><body><div class=folium-map id=map_f1c063f3432e9d8698c927942af046d1></div><div style="position: fixed; 
+            top: 10px; 
+            left: 50px; 
+            z-index: 9999; 
+            background: rgba(13, 17, 23, 0.9); 
+            padding: 10px 15px; 
+            border-radius: 8px; 
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+            font-family: sans-serif;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);"><div style="margin-bottom: 8px;"><strong>CACC Dog Map</strong> | <a href=index.html style="color: #58a6ff; text-decoration: none;">🏠 Dashboard</a> | <a href=trends.html style="color: #58a6ff; text-decoration: none;">📈 Trends</a> | <span style="font-size: 0.9em; color: #8b949e;">2025-11-30 09:16</span></div><div style="position: relative;"><input type=text id=mapSearch placeholder="Loading dogs..." disabled style="background: #0d1117; border: 1px solid #30363d; color: #c9d1d9; padding: 6px 10px; border-radius: 4px; width: 250px;"><div id=mapSearchResults style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: #161b22; border: 1px solid #30363d; border-radius: 0 0 4px 4px; max-height: 200px; overflow-y: auto;"></div></div></div><div style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999; background: rgba(13, 17, 23, 0.85); color: #8b949e; text-align: center; padding: 5px; font-family: sans-serif; font-size: 0.7rem; border-top: 1px solid #30363d;"> © 2025 CACC Dog Bot. Independent volunteer project. Not affiliated with CACC or City of Chicago. Data "as is". </div><script>
     // Global State
     let mapObj = null;
     let dogCluster = null;
-    let markerIndex = {}; 
-    let mapDogData = [];
+    let markerIndex = {}; // FAST Lookup: { "A123": MarkerObject }
+    let mapDogData = [];  // Raw Data
 
-    // 1. Load Compressed Data
+    // 1. Load Data
     fetch('map_data.json')
         .then(response => response.json())
-        .then(payload => {
-            const breeds = payload.breeds;
-            
-            // HYDRATION: Convert Array-of-Arrays back to Objects for the map logic
-            // Schema: [id, name, breed_idx, gender_short, lat, lon, found_at]
-            mapDogData = payload.data.map(row => ({
-                id: row[0],
-                name: row[1],
-                breed: breeds[row[2]] || "Unknown",
-                gender: row[3], // "Male", "Female", "Neutered Male", etc. (Shortened in backend)
-                coords: [row[4], row[5]],
-                found_at: row[6],
-                url: `https://24petconnect.com/chgoall/Details/CHGO/${row[0]}`
-            }));
-            
-            console.log(`✅ Data: Loaded ${mapDogData.length} records.`);
-            // No initMapLayer call here; we rely on the interval below to detect when Folium is ready
+        .then(data => {
+            console.log(`✅ Data: Loaded ${data.length} records.`);
+            mapDogData = data;
+            initMapLayer();
         })
         .catch(err => console.error("Failed to load map data:", err));
 
-    // 2. Wait for Folium Map
+    // 2. Wait for Folium Map to Initialize
     const initInterval = setInterval(() => {
+        // Find the Leaflet Map instance
         for(let key in window) {
             if (window[key] instanceof L.Map) {
                 mapObj = window[key];
                 break;
             }
         }
-        // Only render if map exists AND data is loaded
+        
         if (mapObj && mapDogData.length > 0) {
             clearInterval(initInterval);
             renderPins();
         }
     }, 100);
 
-    // 3. Render Pins
+    // 3. Render Pins (Client-Side)
     function renderPins() {
         console.time("RenderPins");
-        dogCluster = L.markerClusterGroup({ maxClusterRadius: 50, spiderfyOnMaxZoom: true, showCoverageOnHover: false });
+        
+        // Create a new Cluster Group for our dogs
+        // Note: L.markerClusterGroup is available because we forced Folium to load it
+        dogCluster = L.markerClusterGroup({
+            maxClusterRadius: 50,
+            spiderfyOnMaxZoom: true,
+            showCoverageOnHover: false
+        });
 
         mapDogData.forEach(dog => {
+            // Build Popup HTML
             const popupHtml = `
-                <div style="width:200px; font-family: sans-serif;">
-                    <b style="font-size:1.1em">
-                        <a href="${dog.url}" rel="noopener noreferrer" style="text-decoration:none; color:#0969da;">${dog.name}</a>
-                    </b>
-                    <span style="color:#666; font-size:0.9em">(${dog.id})</span><br>
-                    <div style="margin-top:4px; font-size:0.9em; color:#333;">
-                        ${dog.breed}<br>
-                        ${dog.gender}<br>
-                        <i style="color:#555; display:block; margin-top:4px; font-size:0.85em">${dog.found_at}</i>
-                    </div>
-                </div>`;
+                <div style="width:200px">
+                    <b><a href="${dog.url}" target="_blank">${dog.name}</a></b><br>
+                    ${dog.breed}<br>
+                    ${dog.gender}<br>
+                    <i style="font-size:0.8em">${dog.found_at}</i>
+                </div>
+            `;
 
-            const icon = L.AwesomeMarkers.icon({ icon: 'paw', prefix: 'fa', markerColor: 'blue', iconColor: 'white' });
-            const marker = L.marker(dog.coords, { icon: icon }).bindPopup(popupHtml);
+            // Create Marker
+            // We use the AwesomeMarkers plugin loaded by Folium
+            const icon = L.AwesomeMarkers.icon({
+                icon: 'paw',
+                prefix: 'fa',
+                markerColor: 'blue',
+                iconColor: 'white'
+            });
 
+            const marker = L.marker(dog.coords, { icon: icon })
+                .bindPopup(popupHtml);
+
+            // Add to Cluster & Index
             dogCluster.addLayer(marker);
+            
+            // Store reference for instant search lookup (O(1))
             markerIndex[dog.id] = marker;
         });
 
+        // Add Cluster to Map
         mapObj.addLayer(dogCluster);
+        
         console.timeEnd("RenderPins");
+        console.log(`✅ Rendered ${Object.keys(markerIndex).length} markers.`);
+        
         enableUI();
     }
 
     function enableUI() {
+        // Enable Search Box
         const searchBox = document.getElementById('mapSearch');
         searchBox.disabled = false;
+        searchBox.placeholder = "Find by Name or ID...";
         
+        // Execute Deep Link if present
         const urlParams = new URLSearchParams(window.location.search);
         const dogId = urlParams.get('id');
         if (dogId) focusDog(dogId);
@@ -357,15 +132,27 @@
 
     // 4. Action Logic
     function focusDog(dogId) {
+        // A. Find Data
         const dogInfo = mapDogData.find(d => String(d.id) === String(dogId));
-        if (!dogInfo) { alert(`⚠️ Could not locate Dog ${dogId}.`); return; }
+        if (!dogInfo) {
+            alert(`⚠️ Could not locate Dog ${dogId} on the map.\n\nAddress could not be geocoded.`);
+            return;
+        }
 
         document.getElementById('mapSearch').value = `${dogInfo.name} (${dogInfo.id})`;
+
+        // B. Instant Lookup
         const marker = markerIndex[dogId];
         
         if (marker) {
-            dogCluster.zoomToShowLayer(marker, function() { marker.openPopup(); });
+            console.log("📍 Zooming to marker.");
+            // This handles unclustering automatically
+            dogCluster.zoomToShowLayer(marker, function() {
+                marker.openPopup();
+            });
         } else {
+            // Fallback (Rare edge case)
+            console.log("✈️ Marker not in index. Flying to coordinates.");
             mapObj.flyTo(dogInfo.coords, 18);
         }
     }
@@ -374,37 +161,47 @@
     const searchInput = document.getElementById('mapSearch');
     const resultsDiv = document.getElementById('mapSearchResults');
 
-    // Debounced Search Handler
-    const handleMapSearch = debounce(function(e) {
+    searchInput.addEventListener('keyup', function(e) {
         let filter = e.target.value.trim().toUpperCase();
         resultsDiv.innerHTML = '';
         
-        if (filter.length < 2) { resultsDiv.style.display = 'none'; return; }
+        if (filter.length < 2) {
+            resultsDiv.style.display = 'none';
+            return;
+        }
 
         let matches = mapDogData.filter(dog => 
-            dog.name.toUpperCase().includes(filter) || String(dog.id).includes(filter)
+            dog.name.toUpperCase().includes(filter) || 
+            String(dog.id).includes(filter)
         );
         
         if (matches.length > 0) {
             resultsDiv.style.display = 'block';
             matches.slice(0, 8).forEach(dog => {
                 let div = document.createElement('div');
-                div.className = 'search-result-item';
+                div.style.padding = '8px';
+                div.style.cursor = 'pointer';
+                div.style.borderBottom = '1px solid #30363d';
                 div.innerText = `${dog.name} (${dog.id})`;
-                div.onclick = () => { focusDog(dog.id); resultsDiv.style.display = 'none'; };
+                
+                div.onmouseover = () => div.style.background = '#21262d';
+                div.onmouseout = () => div.style.background = 'transparent';
+                
+                div.onclick = () => {
+                    focusDog(dog.id);
+                    resultsDiv.style.display = 'none';
+                };
                 resultsDiv.appendChild(div);
             });
         } else {
             resultsDiv.style.display = 'none';
         }
-    }, 300);
-
-    searchInput.addEventListener('keyup', handleMapSearch);
+    });
 </script></body><script>
     
     
-            var map_09fc25b270e7c132974bfc8585d1b93e = L.map(
-                "map_09fc25b270e7c132974bfc8585d1b93e",
+            var map_f1c063f3432e9d8698c927942af046d1 = L.map(
+                "map_f1c063f3432e9d8698c927942af046d1",
                 {
                     center: [41.8781, -87.6298],
                     crs: L.CRS.EPSG3857,
@@ -421,7 +218,7 @@
 
         
     
-            var tile_layer_3e189e99ca78f2264d9e1f4645022b07 = L.tileLayer(
+            var tile_layer_9d15f338d5e06550fca2d861498259da = L.tileLayer(
                 "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
                 {
   "minZoom": 0,
@@ -438,11 +235,11 @@
             );
         
     
-            tile_layer_3e189e99ca78f2264d9e1f4645022b07.addTo(map_09fc25b270e7c132974bfc8585d1b93e);
+            tile_layer_9d15f338d5e06550fca2d861498259da.addTo(map_f1c063f3432e9d8698c927942af046d1);
         
     
-            var heat_map_aa8f22c088a4d1a694a6693c1888df32 = L.heatLayer(
-                [[41.73739, -87.60495], [41.81867, -87.66775], [41.79574, -87.66353], [41.89507, -87.75449], [41.68991, -87.62591], [41.78273, -87.70097], [41.90589, -87.76485], [41.7088, -87.62625], [41.77069, -87.64321], [41.72932, -87.63206], [41.85681, -87.70925], [41.77763, -87.63747], [41.80658, -87.67367], [41.83048, -87.65136], [41.79312, -87.65739], [41.91506, -87.74873], [41.77725, -87.68755], [41.90291, -87.72403], [41.87765, -87.75513], [41.84439, -87.70515], [41.72472, -87.66287], [41.72298, -87.57469], [41.78272, -87.68534], [41.8103, -87.59022], [41.77897, -87.70816], [41.75599, -87.64185], [41.85681, -87.70925], [41.72131, -87.63005], [41.77897, -87.70816], [41.7489, -87.62722], [41.70274, -87.6671], [41.71382, -87.65544], [41.78481, -87.66466], [41.70337, -87.62367], [41.73396, -87.65815], [41.86156, -87.71832], [41.82364, -87.7095], [41.72797, -87.66754], [41.85698, -87.68588], [41.87438, -87.73787], [41.81382, -87.66562], [41.8833, -87.67196], [41.92221, -87.77623], [41.80734, -87.62289], [41.79799, -87.60372], [41.85602, -87.67857], [41.84351, -87.62053], [41.83912, -87.6317], [41.7861, -87.70467], [41.77763, -87.63747], [41.74268, -87.55426], [41.7117, -87.6316], [41.74719, -87.62325], [41.84372, -87.68675], [41.77839, -87.59674], [41.77897, -87.70816], [41.77763, -87.63747], [41.76022, -87.6092], [41.7779, -87.6388], [41.81281, -87.62005], [41.74754, -87.60155], [41.85887, -87.62742], [41.87298, -87.68407], [41.78865, -87.64999], [41.82579, -87.61424], [41.74754, -87.60155], [41.79982, -87.62137], [41.64722, -87.61473], [41.79184, -87.68776], [41.91838, -87.76332], [41.77593, -87.64844], [41.77354, -87.57608], [41.65863, -87.59981], [41.76152, -87.63236], [41.87797, -87.73318], [41.73577, -87.65588], [41.81121, -87.60796], [41.7514, -87.583], [41.79006, -87.67663], [41.87379, -87.70364], [41.77703, -87.58567], [41.80836, -87.6656], [41.80806, -87.66263], [41.87519, -87.7379], [41.77897, -87.70816], [41.8762, -87.73059], [41.75122, -87.56149], [41.76133, -87.6517], [41.79624, -87.64355], [41.84226, -87.72718], [41.7609, -87.68464], [41.87808, -87.70493], [41.81791, -87.63348], [41.663, -87.61821], [41.88311, -87.63241], [41.86318, -87.65676], [41.86791, -87.65687], [41.87808, -87.70493], [41.84735, -87.62379], [41.69213, -87.67899], [41.86678, -87.66737], [41.70444, -87.53565], [41.83912, -87.6317], [41.71827, -87.56932], [41.75872, -87.56016], [41.75322, -87.67742], [41.7342, -87.64016], [41.75753, -87.65058], [41.67078, -87.62621], [41.80463, -87.66497], [41.88798, -87.7519], [41.76111, -87.66747], [41.77571, -87.66423], [41.76048, -87.57762], [41.97817, -87.8367], [41.84634, -87.68586], [41.76353, -87.56187], [41.74248, -87.69565], [41.75233, -87.6442], [41.70812, -87.56857]],
+            var heat_map_c012effde7b7bf7908c2a4100a33924e = L.heatLayer(
+                [[41.84439, -87.70515], [41.77435, -87.64603], [41.67589, -87.63366], [41.79476, -87.61922], [41.74991, -87.55567], [41.70274, -87.6671], [41.78468, -87.67416], [41.91506, -87.74873], [41.86441, -87.70938], [41.75017, -87.6684], [41.79165, -87.69663], [41.91838, -87.76332], [41.73508, -87.57715], [41.78621, -87.66085], [41.67079, -87.61883], [41.88615, -87.6625], [41.80947, -87.60181], [41.75065, -87.62455], [41.74268, -87.55426], [41.83912, -87.6317], [41.78631, -87.65478], [41.75599, -87.64185], [41.77903, -87.61737], [41.87765, -87.75513], [41.78272, -87.68534], [41.76785, -87.60552], [41.68991, -87.62591], [41.74248, -87.69565], [41.75322, -87.67742], [41.77571, -87.66423], [41.76133, -87.6517], [41.77593, -87.64844], [41.76152, -87.63236], [41.85887, -87.73062], [41.84372, -87.68675], [41.72896, -87.62117], [41.7489, -87.62722], [41.7489, -87.62722], [41.73396, -87.65815], [41.72797, -87.66754], [41.87379, -87.70364], [41.88852, -87.63621], [41.85889, -87.71166], [41.75065, -87.62455], [41.72932, -87.63206], [41.83912, -87.6317], [41.70812, -87.56857], [41.70812, -87.56857], [41.80836, -87.6656], [41.8762, -87.73059], [41.766, -87.56285], [41.79184, -87.68776], [41.81382, -87.66562], [41.84351, -87.62053], [41.7779, -87.6388], [41.80658, -87.67367], [41.79312, -87.65739], [41.87519, -87.7379], [41.82913, -87.62669], [41.87808, -87.70493], [41.87808, -87.70493], [41.7342, -87.64016], [41.88798, -87.7519], [41.76353, -87.56187], [41.73739, -87.60495], [41.77839, -87.59674], [41.87298, -87.68407], [41.87379, -87.70364], [41.72131, -87.63005], [41.70337, -87.62367], [41.85184, -87.69065], [41.73541, -87.68969], [41.97817, -87.8367], [41.878, -87.74063], [41.83838, -87.63437], [41.83048, -87.65136], [41.70444, -87.53565], [41.76022, -87.6092], [41.82579, -87.61424], [41.64722, -87.61473], [41.77354, -87.57608], [41.84099, -87.6355], [41.84226, -87.72718], [41.90291, -87.72403], [41.87438, -87.73787], [41.7088, -87.62625], [41.75872, -87.56016], [41.80463, -87.66497], [41.78612, -87.66934], [41.77324, -87.57018], [41.79982, -87.62137], [41.91838, -87.76332], [41.65863, -87.59981], [41.84372, -87.68675], [41.75122, -87.56149], [41.75498, -87.57651], [41.80734, -87.62289], [41.85887, -87.62742], [41.87677, -87.76597], [41.7177, -87.53176], [41.79574, -87.66353], [41.78273, -87.70097], [41.77069, -87.64321], [41.84372, -87.68675], [41.75403, -87.65296], [41.88311, -87.63241], [41.68467, -87.62898], [41.87585, -87.75355], [41.76785, -87.60552], [41.71827, -87.56932], [41.75586, -87.724], [41.75753, -87.65058], [41.73311, -87.61185], [41.77703, -87.58567], [41.73495, -87.607], [41.88048, -87.76835], [41.82509, -87.66613], [41.82815, -87.69487], [41.74931, -87.60651], [41.87797, -87.73318], [41.89917, -87.72387], [41.85902, -87.71844], [41.85602, -87.67857], [41.79341, -87.6416], [41.75803, -87.60672], [41.72118, -87.66994], [41.80593, -87.60381], [41.91139, -87.76214], [41.71549, -87.61887], [41.71549, -87.61887], [41.89507, -87.75449], [41.7882, -87.68556], [41.76777, -87.57168], [41.78682, -87.68386], [41.78682, -87.68386], [41.77725, -87.68755], [41.72498, -87.66293], [41.74805, -87.56022]],
                 {
   "minOpacity": 0.5,
   "maxZoom": 18,
@@ -452,23 +249,23 @@
             );
         
     
-            heat_map_aa8f22c088a4d1a694a6693c1888df32.addTo(map_09fc25b270e7c132974bfc8585d1b93e);
+            heat_map_c012effde7b7bf7908c2a4100a33924e.addTo(map_f1c063f3432e9d8698c927942af046d1);
         
     
-            var marker_cluster_ebcf1fb4e16572adc82a516708183750 = L.markerClusterGroup(
+            var marker_cluster_6d52b5075bad534e5a54285a85beb7be = L.markerClusterGroup(
                 {
 }
             );
         
     
-            var marker_c2e21cbc7d0eb6b142578969c040b94e = L.marker(
+            var marker_0de830b4940a786c4be03551272e7606 = L.marker(
                 [41.8415, -87.6859],
                 {
 }
-            ).addTo(marker_cluster_ebcf1fb4e16572adc82a516708183750);
+            ).addTo(marker_cluster_6d52b5075bad534e5a54285a85beb7be);
         
     
-            var icon_65aca445365c7dddc7013fd91cdef340 = L.AwesomeMarkers.icon(
+            var icon_70e7438b1b35f7f967623e90115a6506 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "red",
   "iconColor": "white",
@@ -479,26 +276,26 @@
             );
         
     
-        var popup_5714abd93d6382f3a27e1eec96204989 = L.popup({
+        var popup_f31dadc74face6489c9a7388273ec43e = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_34e37d1e24325ba91809619a5411375a = $(`<div id="html_34e37d1e24325ba91809619a5411375a" style="width: 100.0%; height: 100.0%;"><b>CACC Headquarters</b><br>2741 S Western Ave</div>`)[0];
-                popup_5714abd93d6382f3a27e1eec96204989.setContent(html_34e37d1e24325ba91809619a5411375a);
+                var html_6512a1a2f2c22898c8da538101d3dde5 = $(`<div id="html_6512a1a2f2c22898c8da538101d3dde5" style="width: 100.0%; height: 100.0%;"><b>CACC Headquarters</b><br>2741 S Western Ave</div>`)[0];
+                popup_f31dadc74face6489c9a7388273ec43e.setContent(html_6512a1a2f2c22898c8da538101d3dde5);
             
         
 
-        marker_c2e21cbc7d0eb6b142578969c040b94e.bindPopup(popup_5714abd93d6382f3a27e1eec96204989)
+        marker_0de830b4940a786c4be03551272e7606.bindPopup(popup_f31dadc74face6489c9a7388273ec43e)
         ;
 
         
     
     
-                marker_c2e21cbc7d0eb6b142578969c040b94e.setIcon(icon_65aca445365c7dddc7013fd91cdef340);
+                marker_0de830b4940a786c4be03551272e7606.setIcon(icon_70e7438b1b35f7f967623e90115a6506);
             
     
-            marker_cluster_ebcf1fb4e16572adc82a516708183750.addTo(map_09fc25b270e7c132974bfc8585d1b93e);
+            marker_cluster_6d52b5075bad534e5a54285a85beb7be.addTo(map_f1c063f3432e9d8698c927942af046d1);
         
 </script></html>
