@@ -1,0 +1,17 @@
+{
+  "unique_key": "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/photo.php?fbid%3d1154512963506529%26set%3dpb.100068435081347.-2207520000&show_text=true&width=500",
+  "url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/photo.php%3Ffbid%3D1154512963506529%26set%3Dpb.100068435081347.-2207520000&show_text=true&width=500",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    },
+    "original_url": "https://www.facebook.com/photo.php?fbid=1154512963506529&set=pb.100068435081347.-2207520000"
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/photo.php%3Ffbid%3D1154512963506529%26set%3Dpb.100068435081347.-2207520000&show_text=true&width=500",
+  "handled_at": "2025-12-09 06:48:46.776309+00:00"
+}
