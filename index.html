@@ -326,7 +326,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: December 10, 2025 05:10 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: December 10, 2025 05:19 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -373,10 +373,8 @@
     let activeFilters = new Set();
     let currentDisplayList = [];
     let displayedCount = 0;
-    const BATCH_SIZE = 48; // Multiples of 2, 3, 4 for nice grids
+    const BATCH_SIZE = 48;
     let observer = null;
-    
-    // Cached "Today" string (Calculated once for performance & consistency)
     let TODAY_STR = ""; 
 
     // --- Init ---
@@ -386,14 +384,13 @@
         }
     });
 
-    // Optimization: Add Debounced Event Listener
     document.getElementById('mainSearch').addEventListener('keyup', debounce(handleGlobalSearch, 300));
 
     // --- Data Loading ---
     fetch('search_index.json').then(r => r.json()).then(payload => {
         const { meta, data } = payload;
         
-        // 1. Calculate Today's Date (Chicago Time) ONCE
+        // 1. Calculate Today's Date (Chicago Time) with SLASHES to match Python backend
         TODAY_STR = getChicagoDateStr();
         console.log("System Date (Chicago):", TODAY_STR);
 
@@ -430,15 +427,12 @@
         activeFilters.clear();
         setupObserver();
         
-        // 3. UI Ready State
         document.getElementById('loading-state').style.display = 'none';
         document.getElementById('main-view').style.display = 'block';
 
-        // 4. Handle URL Query Params (e.g. from Trends dashboard)
-        // Moved inside the .then() to ensure data is ready before filtering
+        // 3. Handle Filters (Now robust)
         const params = new URLSearchParams(window.location.search);
         if (params.get('filter') === 'adopted') {
-            // Explicitly trigger the filter to run the celebration check
             filterByChip('adopted'); 
         } else {
             applyFiltersAndSort(); 
@@ -461,16 +455,13 @@
         if (sentinel) observer.observe(sentinel);
     }
 
-    // --- Robust Date Helper (Modern & Strict) ---
+    // --- CRITICAL FIX: Use Slashes (YYYY/MM/DD) ---
     function getChicagoDateStr() {
         const now = new Date();
-        
-        // Use Intl.DateTimeFormat with formatToParts for maximum robustness.
-        // We strictly request 'America/Chicago'.
         const formatter = new Intl.DateTimeFormat('en-US', {
             timeZone: 'America/Chicago',
             year: 'numeric',
-            month: 'numeric', // Request numeric to avoid "Dec" vs "December" issues
+            month: 'numeric',
             day: 'numeric'
         });
         
@@ -478,11 +469,11 @@
         const getPart = (type) => parts.find(p => p.type === type).value;
         
         const y = getPart('year');
-        // Strip non-digits (safeguard against invisible mobile chars) and strictly PAD
         const m = getPart('month').replace(/\D/g, '').padStart(2, '0');
         const d = getPart('day').replace(/\D/g, '').padStart(2, '0');
         
-        return `${y}-${m}-${d}`;
+        // Changed from - to / to match src/parser.py
+        return `${y}/${m}/${d}`; 
     }
 
     function filterByChip(type) {
@@ -499,11 +490,9 @@
                 exclusiveAges.forEach(t => { if (t !== type) activeFilters.delete(t); });
             }
 
-            // Trigger Celebration if enabling Adopted and count > 0 today
             if (type === 'adopted' && !activeFilters.has('adopted')) {
-                // Use the cached TODAY_STR for consistency
+                // Now compares "2023/12/10" === "2023/12/10" (Matches!)
                 const countToday = fullDataset.filter(d => d.status === 'Adopted' && d.outcome_date === TODAY_STR).length;
-                
                 if (countToday > 0) {
                     triggerAdoptionCelebration();
                 }
@@ -581,7 +570,6 @@
         const countEl = document.getElementById('headerCount');
         if (countEl) countEl.innerText = filtered.length;
 
-        // Reset Infinite Scroll State
         currentDisplayList = sortDogs(filtered, sortMode);
         resetGrid();
     }
@@ -636,8 +624,6 @@
         handleGlobalSearch(); 
     }
 
-    // --- Infinite Scroll Rendering ---
-
     function resetGrid() {
         displayedCount = 0;
         document.getElementById('dog-grid').innerHTML = '';
@@ -679,7 +665,7 @@
                 const safePartner = partner.replace(/'/g, "\\'");
                 statusBadge = `<span class="status-badge status-rescue" onclick="toggleRescueDate(this, '${displayDate}', '${safePartner}')" title="Tap to see date"><i class="fas fa-ambulance"></i> ${partner}</span>`;
             } else if (dog.status === 'Adopted') {
-                // Efficient check using cached global string
+                // Efficient check using global SLASHES format
                 if (displayDate === TODAY_STR) {
                     isToday = true;
                     statusBadge = `<span class="status-badge status-adopted"><i class="fas fa-heart"></i> Adopted: Today</span>`;
@@ -707,8 +693,7 @@
             }
         }
 
-        // --- Facebook ---
-        let fbBtn = '';
+        let fbBtn = ''; 
         if (dog.facebook_url) {
             const links = dog.facebook_url.split(' | ').filter(l => l.trim() !== '');
             if (links.length === 1) {
@@ -720,31 +705,20 @@
                     const typeLabel = link.includes('/video') ? 'Video' : 'Photo';
                     menuItems += `<a href="${link}" rel="noopener noreferrer" class="media-item">${icon} ${typeLabel} ${idx+1}</a>`;
                 });
-                fbBtn = `
-                    <div class="media-wrapper">
-                        <button class="action-btn" onclick="toggleMediaMenu(this, event)">
-                            <i class="fab fa-facebook"></i> <i class="fas fa-caret-down" style="font-size: 0.8em; margin-left: 2px;"></i>
-                        </button>
-                        <div class="media-menu">
-                            ${menuItems}
-                        </div>
-                    </div>
-                `;
+                fbBtn = `<div class="media-wrapper"><button class="action-btn" onclick="toggleMediaMenu(this, event)"><i class="fab fa-facebook"></i> <i class="fas fa-caret-down" style="font-size: 0.8em; margin-left: 2px;"></i></button><div class="media-menu">${menuItems}</div></div>`;
             }
         }
 
-        // --- YouTube ---
-        let ytBtn = '';
+        let ytBtn = ''; 
         if (dog.youtube_urls) {
-            const ytRawItems = dog.youtube_urls.split(' | ').filter(l => l.trim() !== '');
-            const ytItems = ytRawItems.map((raw, idx) => {
+             const ytRawItems = dog.youtube_urls.split(' | ').filter(l => l.trim() !== '');
+             const ytItems = ytRawItems.map((raw, idx) => {
                 const parts = raw.split('~');
                 const url = parts[0];
                 let label = parts.length > 1 ? parts[1] : 'Video';
                 if (label === 'Video') label = `Video ${idx + 1}`;
                 return { url, label };
             });
-
             if (ytItems.length === 1) {
                 ytBtn = `<a href="${ytItems[0].url}" rel="noopener noreferrer" class="action-btn btn-youtube" title="Watch on YouTube"><i class="fab fa-youtube"></i></a>`;
             } else if (ytItems.length > 1) {
@@ -752,16 +726,7 @@
                 ytItems.forEach(item => {
                     ytMenuContent += `<a href="${item.url}" rel="noopener noreferrer" class="media-item"><i class="fas fa-play"></i> ${item.label}</a>`;
                 });
-                ytBtn = `
-                    <div class="media-wrapper">
-                        <button class="action-btn btn-youtube" onclick="toggleMediaMenu(this, event)">
-                            <i class="fab fa-youtube"></i> <i class="fas fa-caret-down" style="font-size: 0.8em; margin-left: 2px;"></i>
-                        </button>
-                        <div class="media-menu">
-                            ${ytMenuContent}
-                        </div>
-                    </div>
-                `;
+                ytBtn = `<div class="media-wrapper"><button class="action-btn btn-youtube" onclick="toggleMediaMenu(this, event)"><i class="fab fa-youtube"></i> <i class="fas fa-caret-down" style="font-size: 0.8em; margin-left: 2px;"></i></button><div class="media-menu">${ytMenuContent}</div></div>`;
             }
         }
 
@@ -782,18 +747,11 @@
         const genderClass = (dog.gender && dog.gender.includes('Female')) ? 'female' : 'male';
         const genderIcon = genderClass === 'female' ? '♀️' : '♂️';
         
-        // --- Name Logic (AKA) ---
         let nameHtml = `<h3 class="dog-name">${dog.name}</h3>`;
         if (dog.aka) {
             const safeName = dog.name.replace(/'/g, "\\'");
             const safeAka = dog.aka.replace(/'/g, "\\'");
-            nameHtml = `
-                <h3 class="dog-name has-aka" 
-                    title="Tap to see previous names" 
-                    onclick="toggleName(this, '${safeName}', '${safeAka}')">
-                    ${dog.name}
-                </h3>
-            `;
+            nameHtml = `<h3 class="dog-name has-aka" title="Tap to see previous names" onclick="toggleName(this, '${safeName}', '${safeAka}')">${dog.name}</h3>`;
         }
 
         const extraClass = isToday ? ' highlight-today' : '';
@@ -829,8 +787,6 @@
             </div>
         `;
     }
-
-    // --- Helpers ---
 
     function sortDogs(list, mode) {
         return list.sort((a, b) => {
@@ -891,16 +847,13 @@
             el.className = 'heart-particle';
             el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
             
-            // Randomize
             el.style.left = Math.random() * 100 + 'vw';
-            el.style.animationDuration = (Math.random() * 3 + 2) + 's'; // 2-5s
+            el.style.animationDuration = (Math.random() * 3 + 2) + 's';
             el.style.fontSize = (Math.random() * 20 + 20) + 'px';
-            el.style.animationDelay = Math.random() * 2 + 's'; // Stagger start
+            el.style.animationDelay = Math.random() * 2 + 's';
             
             container.appendChild(el);
         }
-
-        // Cleanup
         setTimeout(() => { container.remove(); }, 6000);
     }
 
@@ -946,7 +899,6 @@
         return months === 0 ? 999 : months;
     }
 
-    // Explicitly define debounce to prevent reference errors if missing from base/other includes
     function debounce(func, wait) {
         let timeout;
         return function(...args) {
