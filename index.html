@@ -326,7 +326,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: December 10, 2025 04:57 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: December 10, 2025 05:10 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -375,6 +375,9 @@
     let displayedCount = 0;
     const BATCH_SIZE = 48; // Multiples of 2, 3, 4 for nice grids
     let observer = null;
+    
+    // Cached "Today" string (Calculated once for performance & consistency)
+    let TODAY_STR = ""; 
 
     // --- Init ---
     document.addEventListener('click', function(event) {
@@ -390,6 +393,11 @@
     fetch('search_index.json').then(r => r.json()).then(payload => {
         const { meta, data } = payload;
         
+        // 1. Calculate Today's Date (Chicago Time) ONCE
+        TODAY_STR = getChicagoDateStr();
+        console.log("System Date (Chicago):", TODAY_STR);
+
+        // 2. Process Data
         fullDataset = data.map(item => {
             const breedName = meta.b[item.b] || "Unknown";
             const partnerName = item.p !== undefined ? meta.p[item.p] : null;
@@ -407,7 +415,7 @@
                 is_stray: !!item.st,
                 facebook_url: item.l,
                 youtube_urls: item.y, 
-                aka: item.k, // <-- Mapped from 'k'
+                aka: item.k, 
                 link: `https://24petconnect.com/chgoall/Details/CHGO/${item.id}`,
                 rescue_partner: partnerName,
                 is_active: statusName === "Available",
@@ -422,16 +430,20 @@
         activeFilters.clear();
         setupObserver();
         
-        // Check for URL Query Params (e.g. from Trends dashboard)
+        // 3. UI Ready State
+        document.getElementById('loading-state').style.display = 'none';
+        document.getElementById('main-view').style.display = 'block';
+
+        // 4. Handle URL Query Params (e.g. from Trends dashboard)
+        // Moved inside the .then() to ensure data is ready before filtering
         const params = new URLSearchParams(window.location.search);
         if (params.get('filter') === 'adopted') {
-            filterByChip('adopted'); // This will trigger the celebration logic if valid
+            // Explicitly trigger the filter to run the celebration check
+            filterByChip('adopted'); 
         } else {
             applyFiltersAndSort(); 
         }
 
-        document.getElementById('loading-state').style.display = 'none';
-        document.getElementById('main-view').style.display = 'block';
     }).catch(err => { 
         console.error("Data Load Error:", err); 
         document.getElementById('loading-state').innerHTML = `<p style="color:#ff7b72"><i class="fas fa-exclamation-triangle"></i> Failed to load data.<br><small>${err.message}</small></p>`; 
@@ -449,62 +461,27 @@
         if (sentinel) observer.observe(sentinel);
     }
 
-    function toggleMediaMenu(btn, event) {
-        event.stopPropagation();
-        const wrapper = btn.closest('.media-wrapper');
-        const menu = wrapper.querySelector('.media-menu');
-        document.querySelectorAll('.media-menu').forEach(m => {
-            if (m !== menu) m.classList.remove('show');
-        });
-        menu.classList.toggle('show');
-    }
-    
-    // Toggle Name Function
-    function toggleName(el, currentName, aka) {
-        if (el.getAttribute('data-showing') === 'aka') {
-            el.innerText = currentName;
-            el.setAttribute('data-showing', 'current');
-            el.title = "Tap to see previous names";
-        } else {
-            el.innerHTML = `<span style="font-size:0.8em; color:var(--text-muted); font-weight:normal;">FKA:</span> ${aka}`;
-            el.setAttribute('data-showing', 'aka');
-            el.title = "Tap to show current name";
-        }
-    }
-
-    function toggleRescueDate(el, date, partner) {
-        if (el.getAttribute('data-showing') === 'date') {
-            el.innerHTML = `<i class="fas fa-ambulance"></i> ${partner}`;
-            el.setAttribute('data-showing', 'partner');
-        } else {
-            el.innerHTML = `<i class="fas fa-calendar-alt"></i> ${date}`;
-            el.setAttribute('data-showing', 'date');
-        }
-    }
-
-    function parseAgeToMonths(ageStr) {
-        if (!ageStr) return 999;
-        let months = 0;
-        ageStr = ageStr.toLowerCase();
-        const y = ageStr.match(/(\d+)\s*y/); if (y) months += parseInt(y[1]) * 12;
-        const m = ageStr.match(/(\d+)\s*m/); if (m) months += parseInt(m[1]);
-        if (months === 0 && ageStr.includes('week')) months = 1;
-        return months === 0 ? 999 : months;
-    }
-
-    // --- Robust Date Helper ---
+    // --- Robust Date Helper (Modern & Strict) ---
     function getChicagoDateStr() {
         const now = new Date();
+        
+        // Use Intl.DateTimeFormat with formatToParts for maximum robustness.
+        // We strictly request 'America/Chicago'.
         const formatter = new Intl.DateTimeFormat('en-US', {
             timeZone: 'America/Chicago',
             year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
+            month: 'numeric', // Request numeric to avoid "Dec" vs "December" issues
+            day: 'numeric'
         });
+        
         const parts = formatter.formatToParts(now);
-        const y = parts.find(p => p.type === 'year').value;
-        const m = parts.find(p => p.type === 'month').value;
-        const d = parts.find(p => p.type === 'day').value;
+        const getPart = (type) => parts.find(p => p.type === type).value;
+        
+        const y = getPart('year');
+        // Strip non-digits (safeguard against invisible mobile chars) and strictly PAD
+        const m = getPart('month').replace(/\D/g, '').padStart(2, '0');
+        const d = getPart('day').replace(/\D/g, '').padStart(2, '0');
+        
         return `${y}-${m}-${d}`;
     }
 
@@ -524,8 +501,8 @@
 
             // Trigger Celebration if enabling Adopted and count > 0 today
             if (type === 'adopted' && !activeFilters.has('adopted')) {
-                const todayStr = getChicagoDateStr();
-                const countToday = fullDataset.filter(d => d.status === 'Adopted' && d.outcome_date === todayStr).length;
+                // Use the cached TODAY_STR for consistency
+                const countToday = fullDataset.filter(d => d.status === 'Adopted' && d.outcome_date === TODAY_STR).length;
                 
                 if (countToday > 0) {
                     triggerAdoptionCelebration();
@@ -621,7 +598,6 @@
             if (mode === 'longest') mode = 'outcome_oldest';
         }
 
-        // Just re-sort the existing filtered list
         currentDisplayList = sortDogs(currentDisplayList, mode);
         resetGrid();
     }
@@ -691,8 +667,6 @@
         const intake = new Date(dog.date);
         const days = Math.floor((today - intake) / (1000 * 60 * 60 * 24));
         
-        // "Today" check logic for Adoption (Robust)
-        const todayStr = getChicagoDateStr();
         let isToday = false;
 
         let statusBadge = '';
@@ -705,7 +679,8 @@
                 const safePartner = partner.replace(/'/g, "\\'");
                 statusBadge = `<span class="status-badge status-rescue" onclick="toggleRescueDate(this, '${displayDate}', '${safePartner}')" title="Tap to see date"><i class="fas fa-ambulance"></i> ${partner}</span>`;
             } else if (dog.status === 'Adopted') {
-                if (displayDate === todayStr) {
+                // Efficient check using cached global string
+                if (displayDate === TODAY_STR) {
                     isToday = true;
                     statusBadge = `<span class="status-badge status-adopted"><i class="fas fa-heart"></i> Adopted: Today</span>`;
                 } else {
@@ -762,29 +737,21 @@
         let ytBtn = '';
         if (dog.youtube_urls) {
             const ytRawItems = dog.youtube_urls.split(' | ').filter(l => l.trim() !== '');
-            
-            // Parse URL and Label (Format: "URL~Label")
             const ytItems = ytRawItems.map((raw, idx) => {
                 const parts = raw.split('~');
                 const url = parts[0];
                 let label = parts.length > 1 ? parts[1] : 'Video';
-                
-                // If label is the default "Video", append index
-                if (label === 'Video') {
-                    label = `Video ${idx + 1}`;
-                }
+                if (label === 'Video') label = `Video ${idx + 1}`;
                 return { url, label };
             });
 
             if (ytItems.length === 1) {
-                // Single video: just the icon button
                 ytBtn = `<a href="${ytItems[0].url}" rel="noopener noreferrer" class="action-btn btn-youtube" title="Watch on YouTube"><i class="fab fa-youtube"></i></a>`;
             } else if (ytItems.length > 1) {
                 let ytMenuContent = '';
                 ytItems.forEach(item => {
                     ytMenuContent += `<a href="${item.url}" rel="noopener noreferrer" class="media-item"><i class="fas fa-play"></i> ${item.label}</a>`;
                 });
-                
                 ytBtn = `
                     <div class="media-wrapper">
                         <button class="action-btn btn-youtube" onclick="toggleMediaMenu(this, event)">
@@ -935,6 +902,48 @@
 
         // Cleanup
         setTimeout(() => { container.remove(); }, 6000);
+    }
+
+    function toggleMediaMenu(btn, event) {
+        event.stopPropagation();
+        const wrapper = btn.closest('.media-wrapper');
+        const menu = wrapper.querySelector('.media-menu');
+        document.querySelectorAll('.media-menu').forEach(m => {
+            if (m !== menu) m.classList.remove('show');
+        });
+        menu.classList.toggle('show');
+    }
+    
+    function toggleName(el, currentName, aka) {
+        if (el.getAttribute('data-showing') === 'aka') {
+            el.innerText = currentName;
+            el.setAttribute('data-showing', 'current');
+            el.title = "Tap to see previous names";
+        } else {
+            el.innerHTML = `<span style="font-size:0.8em; color:var(--text-muted); font-weight:normal;">FKA:</span> ${aka}`;
+            el.setAttribute('data-showing', 'aka');
+            el.title = "Tap to show current name";
+        }
+    }
+
+    function toggleRescueDate(el, date, partner) {
+        if (el.getAttribute('data-showing') === 'date') {
+            el.innerHTML = `<i class="fas fa-ambulance"></i> ${partner}`;
+            el.setAttribute('data-showing', 'partner');
+        } else {
+            el.innerHTML = `<i class="fas fa-calendar-alt"></i> ${date}`;
+            el.setAttribute('data-showing', 'date');
+        }
+    }
+
+    function parseAgeToMonths(ageStr) {
+        if (!ageStr) return 999;
+        let months = 0;
+        ageStr = ageStr.toLowerCase();
+        const y = ageStr.match(/(\d+)\s*y/); if (y) months += parseInt(y[1]) * 12;
+        const m = ageStr.match(/(\d+)\s*m/); if (m) months += parseInt(m[1]);
+        if (months === 0 && ageStr.includes('week')) months = 1;
+        return months === 0 ? 999 : months;
     }
 
     // Explicitly define debounce to prevent reference errors if missing from base/other includes
