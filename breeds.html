@@ -60,18 +60,141 @@
         .footer .disclaimer { font-size: 0.75rem; opacity: 0.8; max-width: 800px; margin: 0 auto; }
 
         
-    /* Use Global Theme Variables for Consistency */
-    .val-rescued { color: var(--info-text); font-weight: bold; }
-    .val-rto { color: var(--warning-text); font-weight: bold; }
-    .val-adopted { color: var(--success-text); font-weight: bold; }
-    .val-other { color: var(--danger-text); font-weight: bold; }
+    /* --- Sticky Header & Controls --- */
+    .sticky-header { 
+        position: sticky; 
+        top: 64px; 
+        z-index: 90; 
+        background: var(--header-bg); 
+        padding: 15px 20px; 
+        margin: 0 -20px 20px -20px; 
+        backdrop-filter: blur(5px); 
+        border-bottom: 1px solid var(--border); 
+        transition: top 0.2s;
+    }
+    
+    @media (max-width: 600px) {
+        .sticky-header { top: 56px; padding: 10px 15px; }
+    }
 
-    .chart-container { background: var(--row); padding: 20px; border-radius: 6px; border: 1px solid var(--border); height: 500px; position: relative; margin-bottom: 30px; }
+    .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; max-width: 1000px; margin: 0 auto; }
+    @media (max-width: 600px) { .controls-grid { grid-template-columns: 1fr; gap: 10px; } }
+
+    .search-container { position: relative; }
+    .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
     
-    .search-container { position: relative; margin-bottom: 20px; max-width: 400px; }
-    input.search-input { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 10px; width: 100%; border-radius: 6px; }
+    input.search-input { 
+        background: var(--input-bg); 
+        border: 1px solid var(--border); 
+        color: var(--text); 
+        padding: 12px 35px 12px 40px; 
+        width: 100%; 
+        border-radius: 8px; 
+        font-size: 15px; 
+        box-sizing: border-box; 
+        transition: border-color 0.2s;
+    }
+    input.search-input:focus { border-color: var(--accent); outline: none; }
+
+    /* --- Charts & Content --- */
+    .chart-container { 
+        background: var(--row); 
+        padding: 20px; 
+        border-radius: 12px; 
+        border: 1px solid var(--border); 
+        min-height: 400px; 
+        height: 50vh; 
+        max-height: 600px;
+        position: relative; 
+        margin-bottom: 30px; 
+        box-shadow: 0 2px 5px var(--card-shadow);
+    }
     
-    #globalResults { display: none; margin-top: 20px; }
+    h2 { color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-top: 30px; margin-bottom: 20px; font-size: 1.4rem; }
+
+    /* --- Table Styles (Desktop Default) --- */
+    .table-container { 
+        border: 1px solid var(--border); 
+        border-radius: 12px; 
+        background: var(--row);
+        overflow: hidden; /* Contains corners */
+    }
+    
+    table { width: 100%; border-collapse: collapse; }
+    th { background: var(--bg); color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; padding: 15px; border-bottom: 2px solid var(--border); text-align: left; }
+    td { padding: 12px 15px; border-bottom: 1px solid var(--border); color: var(--text); font-size: 0.95rem; }
+    tr:last-child td { border-bottom: none; }
+    
+    .val-rescued { color: var(--info-text); font-weight: 600; }
+    .val-rto { color: var(--warning-text); font-weight: 600; }
+    .val-adopted { color: var(--success-text); font-weight: 600; }
+    .val-other { color: var(--danger-text); font-weight: 600; }
+
+    /* --- Mobile Card Transformation --- */
+    @media (max-width: 768px) {
+        .table-container { background: transparent; border: none; overflow: visible; }
+        table, thead, tbody, th, td, tr { display: block; }
+        
+        thead { display: none; } /* Hide headers */
+
+        tr { 
+            background: var(--row); 
+            border: 1px solid var(--border); 
+            border-radius: 12px; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            box-shadow: 0 2px 5px var(--card-shadow);
+            position: relative;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        /* Rank Badge */
+        td:nth-child(1) {
+            position: absolute;
+            top: 15px; right: 15px;
+            padding: 0; border: none;
+            font-size: 0.85rem; color: var(--text-muted);
+            font-family: monospace;
+        }
+        td:nth-child(1)::before { content: "#"; }
+
+        /* Breed Name (Header) */
+        td:nth-child(2) { 
+            padding: 0 0 12px 0; 
+            border: none; 
+            border-bottom: 1px solid var(--border); 
+            margin-bottom: 10px;
+            font-size: 1.3rem; 
+            font-weight: 700; 
+            color: var(--accent);
+            padding-right: 40px; /* Space for rank */
+            line-height: 1.2;
+        }
+
+        /* Stats Grid */
+        td:nth-child(n+3) {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border: none;
+            font-size: 0.95rem;
+        }
+        
+        td:nth-child(n+3)::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Subtle striping for stats rows in card */
+        td:nth-child(n+3):nth-child(even) { background: rgba(128,128,128, 0.03); margin: 0 -15px; padding: 6px 15px; }
+    }
+
+    #globalResults { margin-top: 20px; display: none; }
+    .animate-fade { animation: fadeIn 0.3s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
     </style></head><body><style>
     /* --- Global Theme Variables (Moved here to support Map Overlay) --- */
@@ -200,7 +323,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=stats><div><strong>Updated:</strong> December 10, 2025 06:36 PM CST</div><div><strong>Unique Breeds Tracked:</strong> </div></div><div class=search-container><input type=text id=globalSearch class=search-input placeholder='Search for a specific dog (e.g. "Husky")...'></div><div id=globalResults><h2>🔍 Search Results</h2><div class=table-container><table><thead><tr><th>Name</th><th>Breed</th><th>Status</th><th>Link</th></tr></thead><tbody id=searchResultsBody></tbody></table></div></div><div id=mainContent><div class=chart-container><canvas id=breedChart></canvas></div><h2>📋 Detailed Breed Statistics</h2><input type=text id=searchBreed class=search-input placeholder="Filter list below..."><div class=table-container><table id=breed_tbl><thead><tr><th>Rank</th><th>Breed</th><th>Total Tracked</th><th>Rescued</th><th>Adopted</th><th>Returned</th><th>Other</th></tr></thead><tbody><tr><td>1</td><td style="font-weight:bold; color: var(--text);">American Pitbull / Mix</td><td>283</td><td class=val-rescued>68</td><td class=val-adopted>47</td><td class=val-rto>15</td><td class=val-other>12</td></tr><tr><td>2</td><td style="font-weight:bold; color: var(--text);">Husky / Mix</td><td>32</td><td class=val-rescued>7</td><td class=val-adopted>8</td><td class=val-rto>5</td><td class=val-other>1</td></tr><tr><td>3</td><td style="font-weight:bold; color: var(--text);">German Shepherd Dog</td><td>25</td><td class=val-rescued>10</td><td class=val-adopted>1</td><td class=val-rto>2</td><td class=val-other>6</td></tr><tr><td>4</td><td style="font-weight:bold; color: var(--text);">Labrador Retriever</td><td>18</td><td class=val-rescued>6</td><td class=val-adopted>2</td><td class=val-rto>1</td><td class=val-other>1</td></tr><tr><td>5</td><td style="font-weight:bold; color: var(--text);">Chihuahua - Smooth Coated</td><td>9</td><td class=val-rescued>7</td><td class=val-adopted>0</td><td class=val-rto>2</td><td class=val-other>0</td></tr><tr><td>6</td><td style="font-weight:bold; color: var(--text);">Shih Tzu</td><td>8</td><td class=val-rescued>5</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>7</td><td style="font-weight:bold; color: var(--text);">Boxer</td><td>6</td><td class=val-rescued>3</td><td class=val-adopted>3</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>8</td><td style="font-weight:bold; color: var(--text);">American Bulldog</td><td>6</td><td class=val-rescued>0</td><td class=val-adopted>1</td><td class=val-rto>1</td><td class=val-other>1</td></tr><tr><td>9</td><td style="font-weight:bold; color: var(--text);">Yorkshire Terrier</td><td>6</td><td class=val-rescued>3</td><td class=val-adopted>0</td><td class=val-rto>2</td><td class=val-other>1</td></tr><tr><td>10</td><td style="font-weight:bold; color: var(--text);">Poodle - Miniature</td><td>6</td><td class=val-rescued>3</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>11</td><td style="font-weight:bold; color: var(--text);">Doberman Pinscher</td><td>6</td><td class=val-rescued>2</td><td class=val-adopted>0</td><td class=val-rto>2</td><td class=val-other>2</td></tr><tr><td>12</td><td style="font-weight:bold; color: var(--text);">American Staffordshire Terrier</td><td>5</td><td class=val-rescued>1</td><td class=val-adopted>1</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>13</td><td style="font-weight:bold; color: var(--text);">Bulldog</td><td>5</td><td class=val-rescued>3</td><td class=val-adopted>1</td><td class=val-rto>0</td><td class=val-other>1</td></tr><tr><td>14</td><td style="font-weight:bold; color: var(--text);">Cane Corso</td><td>5</td><td class=val-rescued>0</td><td class=val-adopted>1</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>15</td><td style="font-weight:bold; color: var(--text);">Maltese</td><td>5</td><td class=val-rescued>2</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>16</td><td style="font-weight:bold; color: var(--text);">Rottweiler</td><td>5</td><td class=val-rescued>1</td><td class=val-adopted>1</td><td class=val-rto>3</td><td class=val-other>0</td></tr><tr><td>17</td><td style="font-weight:bold; color: var(--text);">Border Terrier</td><td>4</td><td class=val-rescued>4</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>18</td><td style="font-weight:bold; color: var(--text);">Poodle - Toy</td><td>4</td><td class=val-rescued>4</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>19</td><td style="font-weight:bold; color: var(--text);">Mastiff</td><td>3</td><td class=val-rescued>1</td><td class=val-adopted>1</td><td class=val-rto>0</td><td class=val-other>1</td></tr><tr><td>20</td><td style="font-weight:bold; color: var(--text);">Alaskan Malamute</td><td>3</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>21</td><td style="font-weight:bold; color: var(--text);">French Bulldog</td><td>3</td><td class=val-rescued>3</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>22</td><td style="font-weight:bold; color: var(--text);">Pomeranian</td><td>2</td><td class=val-rescued>2</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>23</td><td style="font-weight:bold; color: var(--text);">Chihuahua - Long Haired</td><td>2</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>24</td><td style="font-weight:bold; color: var(--text);">Great Dane</td><td>2</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>25</td><td style="font-weight:bold; color: var(--text);">Dachshund</td><td>2</td><td class=val-rescued>2</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>26</td><td style="font-weight:bold; color: var(--text);">Australian Shepherd</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>27</td><td style="font-weight:bold; color: var(--text);">Brussels Griffon</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>28</td><td style="font-weight:bold; color: var(--text);">Boxer and Cane Corso</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>29</td><td style="font-weight:bold; color: var(--text);">Border Collie</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>30</td><td style="font-weight:bold; color: var(--text);">Basenji</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>31</td><td style="font-weight:bold; color: var(--text);">Belgian Malinois</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>32</td><td style="font-weight:bold; color: var(--text);">Belgian Sheepdog</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>33</td><td style="font-weight:bold; color: var(--text);">Bullmastiff</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>34</td><td style="font-weight:bold; color: var(--text);">Bull Terrier</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>1</td></tr><tr><td>35</td><td style="font-weight:bold; color: var(--text);">Doberman Pinscher and Rottweiler</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>36</td><td style="font-weight:bold; color: var(--text);">Cocker Spaniel</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>37</td><td style="font-weight:bold; color: var(--text);">Chinese Sharpei</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>38</td><td style="font-weight:bold; color: var(--text);">Golden Retriever</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>39</td><td style="font-weight:bold; color: var(--text);">Collie - Smooth</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>40</td><td style="font-weight:bold; color: var(--text);">Old English Sheepdog</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>41</td><td style="font-weight:bold; color: var(--text);">Pug</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>42</td><td style="font-weight:bold; color: var(--text);">Poodle - Standard</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>43</td><td style="font-weight:bold; color: var(--text);">Miniature Pinscher</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>44</td><td style="font-weight:bold; color: var(--text);">Schnauzer - Giant</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>45</td><td style="font-weight:bold; color: var(--text);">Shiba Inu</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>1</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>46</td><td style="font-weight:bold; color: var(--text);">Shih Tzu and Chihuahua - Smooth Coated</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>1</td><td class=val-other>0</td></tr><tr><td>47</td><td style="font-weight:bold; color: var(--text);">Toy Fox Terrier</td><td>1</td><td class=val-rescued>0</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr><tr><td>48</td><td style="font-weight:bold; color: var(--text);">West Highland White Terrier</td><td>1</td><td class=val-rescued>1</td><td class=val-adopted>0</td><td class=val-rto>0</td><td class=val-other>0</td></tr></tbody></table></div></div><div class=footer><span>Last Updated: December 10, 2025 06:36 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=sticky-header><div class=controls-grid><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=globalSearch class=search-input placeholder='Search Global Database (e.g. "Husky")...'></div><div class=search-container><i class="fas fa-filter search-icon"></i><input type=text id=searchBreed class=search-input placeholder="Filter Table Below..."></div></div></div><div id=globalResults><h2>🔍 Global Search Results</h2><div class=table-container><table id=searchResultsTable><thead><tr><th>Name</th><th>Breed</th><th>Status</th><th>Link</th></tr></thead><tbody id=searchResultsBody></tbody></table></div></div><div id=mainContent class=animate-fade><div class=chart-container><canvas id=breedChart></canvas></div><h2>📋 Detailed Breed Statistics</h2><div class=table-container><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody><tr><td data-label=Rank>1</td><td data-label=Breed style="font-weight:bold; color: var(--text);">American Pitbull / Mix</td><td data-label="Total Tracked"><strong>283</strong></td><td data-label=Rescued class=val-rescued>68</td><td data-label=Adopted class=val-adopted>47</td><td data-label=Returned class=val-rto>15</td><td data-label=Other class=val-other>12</td></tr><tr><td data-label=Rank>2</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Husky / Mix</td><td data-label="Total Tracked"><strong>32</strong></td><td data-label=Rescued class=val-rescued>7</td><td data-label=Adopted class=val-adopted>8</td><td data-label=Returned class=val-rto>5</td><td data-label=Other class=val-other>1</td></tr><tr><td data-label=Rank>3</td><td data-label=Breed style="font-weight:bold; color: var(--text);">German Shepherd Dog</td><td data-label="Total Tracked"><strong>25</strong></td><td data-label=Rescued class=val-rescued>10</td><td data-label=Adopted class=val-adopted>1</td><td data-label=Returned class=val-rto>2</td><td data-label=Other class=val-other>6</td></tr><tr><td data-label=Rank>4</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Labrador Retriever</td><td data-label="Total Tracked"><strong>18</strong></td><td data-label=Rescued class=val-rescued>6</td><td data-label=Adopted class=val-adopted>2</td><td data-label=Returned class=val-rto>1</td><td data-label=Other class=val-other>1</td></tr><tr><td data-label=Rank>5</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Chihuahua - Smooth Coated</td><td data-label="Total Tracked"><strong>9</strong></td><td data-label=Rescued class=val-rescued>7</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>2</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>6</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Shih Tzu</td><td data-label="Total Tracked"><strong>8</strong></td><td data-label=Rescued class=val-rescued>5</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>1</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>7</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Boxer</td><td data-label="Total Tracked"><strong>6</strong></td><td data-label=Rescued class=val-rescued>3</td><td data-label=Adopted class=val-adopted>3</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>8</td><td data-label=Breed style="font-weight:bold; color: var(--text);">American Bulldog</td><td data-label="Total Tracked"><strong>6</strong></td><td data-label=Rescued class=val-rescued>0</td><td data-label=Adopted class=val-adopted>1</td><td data-label=Returned class=val-rto>1</td><td data-label=Other class=val-other>1</td></tr><tr><td data-label=Rank>9</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Yorkshire Terrier</td><td data-label="Total Tracked"><strong>6</strong></td><td data-label=Rescued class=val-rescued>3</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>2</td><td data-label=Other class=val-other>1</td></tr><tr><td data-label=Rank>10</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Poodle - Miniature</td><td data-label="Total Tracked"><strong>6</strong></td><td data-label=Rescued class=val-rescued>3</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>1</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>11</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Doberman Pinscher</td><td data-label="Total Tracked"><strong>6</strong></td><td data-label=Rescued class=val-rescued>2</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>2</td><td data-label=Other class=val-other>2</td></tr><tr><td data-label=Rank>12</td><td data-label=Breed style="font-weight:bold; color: var(--text);">American Staffordshire Terrier</td><td data-label="Total Tracked"><strong>5</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>1</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>13</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Bulldog</td><td data-label="Total Tracked"><strong>5</strong></td><td data-label=Rescued class=val-rescued>3</td><td data-label=Adopted class=val-adopted>1</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>1</td></tr><tr><td data-label=Rank>14</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Cane Corso</td><td data-label="Total Tracked"><strong>5</strong></td><td data-label=Rescued class=val-rescued>0</td><td data-label=Adopted class=val-adopted>1</td><td data-label=Returned class=val-rto>1</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>15</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Maltese</td><td data-label="Total Tracked"><strong>5</strong></td><td data-label=Rescued class=val-rescued>2</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>1</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>16</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Rottweiler</td><td data-label="Total Tracked"><strong>5</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>1</td><td data-label=Returned class=val-rto>3</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>17</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Border Terrier</td><td data-label="Total Tracked"><strong>4</strong></td><td data-label=Rescued class=val-rescued>4</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>18</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Poodle - Toy</td><td data-label="Total Tracked"><strong>4</strong></td><td data-label=Rescued class=val-rescued>4</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>19</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Mastiff</td><td data-label="Total Tracked"><strong>3</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>1</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>1</td></tr><tr><td data-label=Rank>20</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Alaskan Malamute</td><td data-label="Total Tracked"><strong>3</strong></td><td data-label=Rescued class=val-rescued>0</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>1</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>21</td><td data-label=Breed style="font-weight:bold; color: var(--text);">French Bulldog</td><td data-label="Total Tracked"><strong>3</strong></td><td data-label=Rescued class=val-rescued>3</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>22</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Pomeranian</td><td data-label="Total Tracked"><strong>2</strong></td><td data-label=Rescued class=val-rescued>2</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>23</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Chihuahua - Long Haired</td><td data-label="Total Tracked"><strong>2</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>24</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Great Dane</td><td data-label="Total Tracked"><strong>2</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>25</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Dachshund</td><td data-label="Total Tracked"><strong>2</strong></td><td data-label=Rescued class=val-rescued>2</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>26</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Australian Shepherd</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>0</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>1</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>27</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Brussels Griffon</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>28</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Boxer and Cane Corso</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>0</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>29</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Border Collie</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>30</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Basenji</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>0</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>1</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>31</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Belgian Malinois</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>32</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Belgian Sheepdog</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>33</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Bullmastiff</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>34</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Bull Terrier</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>0</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>1</td></tr><tr><td data-label=Rank>35</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Doberman Pinscher and Rottweiler</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>36</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Cocker Spaniel</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>37</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Chinese Sharpei</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>38</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Golden Retriever</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>39</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Collie - Smooth</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>40</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Old English Sheepdog</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>41</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Pug</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>42</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Poodle - Standard</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>43</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Miniature Pinscher</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>44</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Schnauzer - Giant</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>0</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>1</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>45</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Shiba Inu</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>0</td><td data-label=Adopted class=val-adopted>1</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>46</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Shih Tzu and Chihuahua - Smooth Coated</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>0</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>1</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>47</td><td data-label=Breed style="font-weight:bold; color: var(--text);">Toy Fox Terrier</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>0</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr><tr><td data-label=Rank>48</td><td data-label=Breed style="font-weight:bold; color: var(--text);">West Highland White Terrier</td><td data-label="Total Tracked"><strong>1</strong></td><td data-label=Rescued class=val-rescued>1</td><td data-label=Adopted class=val-adopted>0</td><td data-label=Returned class=val-rto>0</td><td data-label=Other class=val-other>0</td></tr></tbody></table></div></div><div class=footer><span>Last Updated: December 10, 2025 06:48 PM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -276,23 +399,29 @@
         }
     };
 </script><script>
-    // Bind Debounced Listeners
+    // Debounce Utility
+    function debounce(func, wait) {
+        let timeout;
+        return function(...args) {
+            const context = this;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), wait);
+        };
+    }
+
+    // Bind Listeners
     document.getElementById('globalSearch').addEventListener('keyup', debounce(handleSearch, 300));
     document.getElementById('searchBreed').addEventListener('keyup', debounce(() => filterTable("searchBreed", "breed_tbl"), 300));
 
     let searchIndex = [];
 
-    // PERFORMANCE: Fetch compressed index and hydrate for search
+    // Fetch Index
     fetch('search_index.json').then(r => r.json()).then(payload => {
         const { meta, data } = payload;
-        
         searchIndex = data.map(item => ({
             name: item.n,
             breed: meta.b[item.b] || "Unknown",
             status: meta.s[item.s] || "Other",
-            // Hydrate other fields to match index.html logic (future proofing)
-            age: item.a !== undefined ? (meta.a[item.a] || "Unknown") : "Unknown",
-            color: item.c !== undefined ? (meta.c[item.c] || "") : "",
             link: `https://24petconnect.com/chgoall/Details/CHGO/${item.id}`
         }));
     });
@@ -312,10 +441,16 @@
                 (d.breed && d.breed.toUpperCase().includes(val)) || (d.name && d.name.toUpperCase().includes(val))
             ).slice(0, 50);
 
-            if (results.length === 0) { tbody.innerHTML = "<tr><td colspan='4'>No matches found.</td></tr>"; return; }
+            if (results.length === 0) { tbody.innerHTML = "<tr><td colspan='4' style='text-align:center'>No matches found.</td></tr>"; return; }
 
             results.forEach(d => {
-                tbody.innerHTML += `<tr><td>${d.name}</td><td>${d.breed}</td><td>${d.status}</td><td><a href="${d.link}" rel="noopener noreferrer">View</a></td></tr>`;
+                // Note: We use simple <td> here, could also apply data-label for consistency if this table needs mobile transformation too
+                tbody.innerHTML += `<tr>
+                    <td data-label="Name"><strong>${d.name}</strong></td>
+                    <td data-label="Breed">${d.breed}</td>
+                    <td data-label="Status">${d.status}</td>
+                    <td data-label="Link"><a href="${d.link}" rel="noopener noreferrer" class="action-btn" style="display:inline-block; padding:2px 8px; font-size:0.8em;">View</a></td>
+                </tr>`;
             });
         } else {
             mainContent.style.display = 'block';
@@ -327,7 +462,10 @@
         var input = document.getElementById(inputId);
         var filter = input.value.toUpperCase();
         var tr = document.getElementById(tableId).getElementsByTagName("tr");
+        
+        // Start loop at 1 to skip header
         for (var i = 1; i < tr.length; i++) { 
+            // The Breed Name is in the 2nd column (index 1)
             var td = tr[i].getElementsByTagName("td")[1]; 
             if (td) {
                 var txtValue = td.textContent || td.innerText;
@@ -343,6 +481,7 @@
             data: { labels: chartData.labels, datasets: chartData.datasets },
             options: {
                 ...GLOBAL_CHART_OPTS,
+                maintainAspectRatio: false, // Allows height to respond to CSS
                 indexAxis: 'y',
                 plugins: {
                     ...GLOBAL_CHART_OPTS.plugins,
