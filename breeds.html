@@ -60,21 +60,36 @@
         .footer .disclaimer { font-size: 0.75rem; opacity: 0.8; max-width: 800px; margin: 0 auto; }
 
         
-    /* --- Controls Bar (Matched to Trends.html) --- */
+    /* --- Controls Bar (Fixed for Mobile & Sticky Positioning) --- */
     .controls-bar {
-        position: sticky; top: 0; z-index: 100;
-        background: var(--bg); border-bottom: 1px solid var(--border);
-        padding: 15px 0; margin-bottom: 30px;
-        display: flex; flex-wrap: wrap; gap: 15px; align-items: center;
-        backdrop-filter: blur(8px);
+        position: sticky; 
+        /* Adjusted top to sit BELOW the fixed navbar (approx 70-80px based on base.html padding) */
+        top: 74px; 
+        z-index: 99;
+        background: rgba(13, 17, 23, 0.85); /* Matches trends.html glass effect */
+        border-bottom: 1px solid var(--border);
+        padding: 15px 0; 
+        margin-bottom: 30px;
+        display: flex; 
+        flex-wrap: wrap; 
+        gap: 15px; 
+        align-items: center;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
     }
     
     .control-group { display: flex; align-items: center; gap: 8px; }
-    .control-group label { font-weight: 600; color: var(--text-muted); font-size: 0.9rem; }
+    .control-group label { font-weight: 600; color: var(--text-muted); font-size: 0.9rem; white-space: nowrap; }
     
     .date-input {
-        background: var(--input-bg); color: var(--text); border: 1px solid var(--border);
-        padding: 6px 10px; border-radius: 6px; font-family: inherit; font-size: 0.9rem;
+        background: var(--row); /* Matched to trends.html */
+        color: var(--text); 
+        border: 1px solid var(--border);
+        padding: 6px 10px; 
+        border-radius: 6px; 
+        font-family: inherit; 
+        font-size: 0.9rem;
+        max-width: 130px; /* Prevent explosion on mobile */
     }
     
     .btn-apply {
@@ -90,6 +105,14 @@
         font-size: 0.9rem;
     }
     .btn-reset:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Mobile Controls Tweak */
+    @media (max-width: 600px) {
+        .controls-bar { padding: 10px 0; gap: 10px; top: 60px; } /* Adjust for smaller mobile nav headers if needed */
+        .control-group { flex: 1 1 40%; }
+        .date-input { width: 100%; max-width: none; }
+        .btn-apply, .btn-reset { flex: 1 1 100%; justify-content: center; }
+    }
 
     /* --- Dashboard Grid Layout --- */
     .dashboard-grid {
@@ -116,10 +139,10 @@
     }
 
     .pie-container { height: 400px; }
-    .bar-container { min-height: 400px; height: 100%; max-height: 800px; }
+    .bar-container { min-height: 500px; height: 100%; } /* Increased height for better mobile touch targets */
     
     @media (max-width: 1000px) {
-        .bar-container { height: 60vh; }
+        .bar-container { height: 65vh; max-height: 800px; }
     }
     
     .chart-title {
@@ -147,7 +170,7 @@
     .val-adopted { color: var(--success-text); font-weight: 600; }
     .val-other { color: var(--danger-text); font-weight: 600; }
 
-    /* --- Mobile Card Transformation --- */
+    /* --- Mobile Table Card Transformation --- */
     @media (max-width: 768px) {
         .table-container { background: transparent; border: none; overflow: visible; }
         table, thead, tbody, th, td, tr { display: block; }
@@ -299,7 +322,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Top 10)</div><div style="flex-grow:1; position:relative;"><canvas id=breedPieChart></canvas></div></div><div class="chart-card bar-container"><div class=chart-title>Outcomes by Breed</div><div style="flex-grow:1; position:relative;"><canvas id=breedChart></canvas></div></div></div><h2 style="margin-top: 10px;">📋 Detailed Statistics</h2><div class=table-container><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div></div><div class=footer><span>Last Updated: December 11, 2025 08:11 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div style="flex-grow:1; position:relative;"><canvas id=breedPieChart></canvas></div></div><div class="chart-card bar-container"><div class=chart-title>Outcomes by Breed</div><div style="flex-grow:1; position:relative;"><canvas id=breedChart></canvas></div></div></div><h2 style="margin-top: 10px;">📋 Detailed Statistics</h2><div class=table-container><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div></div><div class=footer><span>Last Updated: December 11, 2025 08:23 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -384,7 +407,7 @@
         '#58a6ff', '#3fb950', '#d29922', '#f85149', '#a371f7', 
         '#db6d28', '#1f6feb', '#238636', '#9e6a03', '#8b949e', '#30363d'
     ];
-    // Define explicit colors for bar chart segments
+    // Explicit colors for bar chart segments
     const BAR_COLORS = { 
         Rescued: '#238636', 
         Adopted: '#58a6ff', 
@@ -398,19 +421,20 @@
     });
 
     function initChartInstances() {
-        // Pie Chart
+        // 1. Pie Chart
         charts.pie = new Chart(document.getElementById('breedPieChart').getContext('2d'), {
             type: 'doughnut', 
             data: { labels: [], datasets: [{ data: [], backgroundColor: PIE_COLORS, borderWidth: 0, hoverOffset: 10 }] },
             options: {
-                ...GLOBAL_CHART_OPTS, maintainAspectRatio: false, cutout: '60%', 
+                ...GLOBAL_CHART_OPTS, 
+                maintainAspectRatio: false, 
+                cutout: '60%', 
                 scales: { x: { display: false }, y: { display: false } },
                 plugins: {
                     ...GLOBAL_CHART_OPTS.plugins,
                     legend: { display: true, position: 'right', labels: { color: '#8b949e', font: { size: 11 }, boxWidth: 12, padding: 10 } },
                     title: { display: false },
                     tooltip: {
-                        ...GLOBAL_CHART_OPTS.plugins.tooltip,
                         callbacks: {
                             label: function(context) {
                                 const value = context.raw || 0;
@@ -424,14 +448,22 @@
             }
         });
 
-        // Bar Chart (Stacked)
+        // 2. Bar Chart (Stacked) - Mobile Optimized Interactions
         charts.bar = new Chart(document.getElementById('breedChart').getContext('2d'), {
             type: 'bar',
             data: { labels: [], datasets: [] },
             options: {
-                ...GLOBAL_CHART_OPTS, maintainAspectRatio: false, indexAxis: 'y', 
-                barPercentage: 0.95, categoryPercentage: 0.9, 
-                interaction: { mode: 'point', intersect: true },
+                ...GLOBAL_CHART_OPTS, 
+                maintainAspectRatio: false, 
+                indexAxis: 'y', 
+                barPercentage: 0.95, 
+                categoryPercentage: 0.9,
+                // Critical Touch Optimization
+                interaction: {
+                    mode: 'index', // Highlights entire row (all stacks)
+                    axis: 'y',     // Detects based on Y axis position (easier to tap rows)
+                    intersect: false // Don't need to tap exact pixels
+                },
                 plugins: { ...GLOBAL_CHART_OPTS.plugins, title: { display: false } },
                 scales: {
                     x: { stacked: true, grid: { color: '#30363d' }, ticks: { color: '#8b949e' } },
@@ -458,14 +490,17 @@
     }
 
     function processData(startStr, endStr) {
-        const start = new Date(startStr);
-        const end = new Date(endStr);
+        // Normalize Dates to midnight for inclusive comparison
+        const start = new Date(startStr); start.setHours(0,0,0,0);
+        const end = new Date(endStr); end.setHours(23,59,59,999);
         
         // Helper: Resolve Status/Breed Strings
         const getBreed = (idx) => {
             const b = metaData.b[idx] || "Unknown";
+            // Normalization logic
             if (b.includes("Pit Bull") || b.includes("Pitbull") || b.includes("American Pit Bull")) return "American Pitbull / Mix";
             if (b.includes("Husky")) return "Husky / Mix";
+            if (b.includes("Shepherd")) return "German Shepherd / Mix";
             return b;
         };
         const getStatus = (idx) => metaData.s[idx] || "Other";
@@ -524,29 +559,35 @@
 
         // --- Update Charts ---
         
-        // 1. Pie (Top 10 Population)
+        // 1. Pie (Top 10 Population - Reactive)
+        // Explicitly clear previous data
+        charts.pie.data.labels = [];
+        charts.pie.data.datasets[0].data = [];
+
         const top10 = rows.slice(0, 10);
         const otherTotal = rows.slice(10).reduce((sum, r) => sum + r.Total, 0);
         
-        const pieLabels = top10.map(r => r.breed);
-        const pieData = top10.map(r => r.Total);
-        if (otherTotal > 0) {
-            pieLabels.push("All Others");
-            pieData.push(otherTotal);
-        }
+        charts.pie.data.labels = top10.map(r => r.breed);
+        charts.pie.data.datasets[0].data = top10.map(r => r.Total);
         
-        charts.pie.data.labels = pieLabels;
-        charts.pie.data.datasets[0].data = pieData;
+        if (otherTotal > 0) {
+            charts.pie.data.labels.push("All Others");
+            charts.pie.data.datasets[0].data.push(otherTotal);
+        }
         charts.pie.update();
 
         // 2. Bar (Top 20 Outcomes)
         const top20 = rows.slice(0, 20);
         charts.bar.data.labels = top20.map(r => r.breed);
+        
+        // Ensure "Other" is stacked correctly using the same stack ID
+        const STACK_ID = 'Stack 0';
+        
         charts.bar.data.datasets = [
-            { label: 'Rescued', data: top20.map(r => r.Rescued), backgroundColor: BAR_COLORS.Rescued, stack: 'Stack 0' },
-            { label: 'Adopted', data: top20.map(r => r.Adopted), backgroundColor: BAR_COLORS.Adopted, stack: 'Stack 0' },
-            { label: 'RTO', data: top20.map(r => r.RTO), backgroundColor: BAR_COLORS.RTO, stack: 'Stack 0' },
-            { label: 'Other', data: top20.map(r => r.Other), backgroundColor: BAR_COLORS.Other, stack: 'Stack 0' }
+            { label: 'Rescued', data: top20.map(r => r.Rescued), backgroundColor: BAR_COLORS.Rescued, stack: STACK_ID },
+            { label: 'Adopted', data: top20.map(r => r.Adopted), backgroundColor: BAR_COLORS.Adopted, stack: STACK_ID },
+            { label: 'RTO', data: top20.map(r => r.RTO), backgroundColor: BAR_COLORS.RTO, stack: STACK_ID },
+            { label: 'Other', data: top20.map(r => r.Other || 0), backgroundColor: BAR_COLORS.Other, stack: STACK_ID }
         ];
         charts.bar.update();
     }
