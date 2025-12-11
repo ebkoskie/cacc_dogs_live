@@ -60,29 +60,25 @@
         .footer .disclaimer { font-size: 0.75rem; opacity: 0.8; max-width: 800px; margin: 0 auto; }
 
         
-    /* --- Controls Bar (Matches Trends.html) --- */
+    /* --- Controls Bar (Matched to Trends.html) --- */
     .controls-bar {
-        position: sticky; top: 64px; z-index: 100;
-        background: var(--header-bg); border-bottom: 1px solid var(--border);
-        padding: 15px 20px; margin: 0 -20px 30px -20px;
+        position: sticky; top: 0; z-index: 100;
+        background: var(--bg); border-bottom: 1px solid var(--border);
+        padding: 15px 0; margin-bottom: 30px;
         display: flex; flex-wrap: wrap; gap: 15px; align-items: center;
-        backdrop-filter: blur(8px); /* Modern frosted glass */
+        backdrop-filter: blur(8px);
     }
     
-    @media (max-width: 600px) {
-        .controls-bar { top: 56px; padding: 10px 15px; }
-    }
-
     .control-group { display: flex; align-items: center; gap: 8px; }
     .control-group label { font-weight: 600; color: var(--text-muted); font-size: 0.9rem; }
     
     .date-input {
         background: var(--input-bg); color: var(--text); border: 1px solid var(--border);
-        padding: 8px 12px; border-radius: 6px; font-family: inherit; font-size: 0.9rem;
+        padding: 6px 10px; border-radius: 6px; font-family: inherit; font-size: 0.9rem;
     }
     
     .btn-apply {
-        background: var(--accent); color: white; border: none; padding: 8px 16px;
+        background: var(--accent); color: white; border: none; padding: 6px 15px;
         border-radius: 6px; cursor: pointer; font-weight: 600; transition: opacity 0.2s;
         font-size: 0.9rem; display: flex; align-items: center; gap: 6px;
     }
@@ -90,7 +86,7 @@
     
     .btn-reset {
         background: transparent; color: var(--text-muted); border: 1px solid var(--border);
-        padding: 8px 16px; border-radius: 6px; cursor: pointer; transition: all 0.2s;
+        padding: 6px 15px; border-radius: 6px; cursor: pointer; transition: all 0.2s;
         font-size: 0.9rem;
     }
     .btn-reset:hover { border-color: var(--accent); color: var(--accent); }
@@ -303,7 +299,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Top 10)</div><div style="flex-grow:1; position:relative;"><canvas id=breedPieChart></canvas></div></div><div class="chart-card bar-container"><div class=chart-title>Outcomes by Breed</div><div style="flex-grow:1; position:relative;"><canvas id=breedChart></canvas></div></div></div><h2 style="margin-top: 10px;">📋 Detailed Statistics</h2><div class=table-container><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div></div><div class=footer><span>Last Updated: December 11, 2025 07:59 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Top 10)</div><div style="flex-grow:1; position:relative;"><canvas id=breedPieChart></canvas></div></div><div class="chart-card bar-container"><div class=chart-title>Outcomes by Breed</div><div style="flex-grow:1; position:relative;"><canvas id=breedChart></canvas></div></div></div><h2 style="margin-top: 10px;">📋 Detailed Statistics</h2><div class=table-container><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div></div><div class=footer><span>Last Updated: December 11, 2025 08:11 AM CST</span><div class=disclaimer> © 2025 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -384,21 +380,25 @@
     let metaData = {};
     let charts = { pie: null, bar: null };
     
-    // Default Colors
     const PIE_COLORS = [
         '#58a6ff', '#3fb950', '#d29922', '#f85149', '#a371f7', 
         '#db6d28', '#1f6feb', '#238636', '#9e6a03', '#8b949e', '#30363d'
     ];
-    const BAR_COLORS = { Rescued: '#238636', Adopted: '#58a6ff', RTO: '#d29922', Other: '#da3633' };
+    // Define explicit colors for bar chart segments
+    const BAR_COLORS = { 
+        Rescued: '#238636', 
+        Adopted: '#58a6ff', 
+        RTO: '#d29922', 
+        Other: '#da3633' 
+    };
 
-    // --- Init ---
     document.addEventListener('DOMContentLoaded', () => {
         initChartInstances();
         fetchData();
     });
 
     function initChartInstances() {
-        // Pie
+        // Pie Chart
         charts.pie = new Chart(document.getElementById('breedPieChart').getContext('2d'), {
             type: 'doughnut', 
             data: { labels: [], datasets: [{ data: [], backgroundColor: PIE_COLORS, borderWidth: 0, hoverOffset: 10 }] },
@@ -424,7 +424,7 @@
             }
         });
 
-        // Bar
+        // Bar Chart (Stacked)
         charts.bar = new Chart(document.getElementById('breedChart').getContext('2d'), {
             type: 'bar',
             data: { labels: [], datasets: [] },
@@ -447,8 +447,7 @@
             .then(payload => {
                 metaData = payload.meta;
                 fullIndex = payload.data;
-                resetDates(); // Default to 30 days and Trigger Process
-                
+                resetDates(); 
                 document.getElementById('loading-overlay').style.display = 'none';
                 document.getElementById('mainContent').style.display = 'block';
             })
@@ -459,7 +458,6 @@
     }
 
     function processData(startStr, endStr) {
-        // 1. Filter
         const start = new Date(startStr);
         const end = new Date(endStr);
         
@@ -472,11 +470,10 @@
         };
         const getStatus = (idx) => metaData.s[idx] || "Other";
 
-        const stats = {}; // { BreedName: { Total: 0, Rescued: 0, Adopted: 0, RTO: 0, Other: 0 } }
+        const stats = {}; 
 
         fullIndex.forEach(item => {
-            // Check Dates (Outcome Date or Intake if no outcome?)
-            // For outcomes, we rely on 'od'. If 'od' is null, it's active.
+            // Must have outcome date to be in "Outcomes" chart
             if (!item.od) return; 
             
             const d = new Date(item.od);
@@ -492,14 +489,13 @@
             if (status.includes('Adopt')) stats[breed].Adopted++;
             else if (status.includes('Transfer') || status.includes('Rescue')) stats[breed].Rescued++;
             else if (status.includes('Return') || status === 'RTO') stats[breed].RTO++;
-            else stats[breed].Other++;
+            else stats[breed].Other++; // Fallback for Euth, Died, Lost, etc.
         });
 
         updateView(stats);
     }
 
     function updateView(stats) {
-        // Convert to Array & Sort
         const rows = Object.keys(stats).map(breed => ({
             breed, ...stats[breed]
         })).sort((a, b) => b.Total - a.Total);
@@ -528,7 +524,7 @@
 
         // --- Update Charts ---
         
-        // 1. Pie (Top 10)
+        // 1. Pie (Top 10 Population)
         const top10 = rows.slice(0, 10);
         const otherTotal = rows.slice(10).reduce((sum, r) => sum + r.Total, 0);
         
@@ -543,14 +539,14 @@
         charts.pie.data.datasets[0].data = pieData;
         charts.pie.update();
 
-        // 2. Bar (Top 20)
+        // 2. Bar (Top 20 Outcomes)
         const top20 = rows.slice(0, 20);
         charts.bar.data.labels = top20.map(r => r.breed);
         charts.bar.data.datasets = [
-            { label: 'Rescued', data: top20.map(r => r.Rescued), backgroundColor: BAR_COLORS.Rescued },
-            { label: 'Adopted', data: top20.map(r => r.Adopted), backgroundColor: BAR_COLORS.Adopted },
-            { label: 'RTO', data: top20.map(r => r.RTO), backgroundColor: BAR_COLORS.RTO },
-            { label: 'Other', data: top20.map(r => r.Other), backgroundColor: BAR_COLORS.Other }
+            { label: 'Rescued', data: top20.map(r => r.Rescued), backgroundColor: BAR_COLORS.Rescued, stack: 'Stack 0' },
+            { label: 'Adopted', data: top20.map(r => r.Adopted), backgroundColor: BAR_COLORS.Adopted, stack: 'Stack 0' },
+            { label: 'RTO', data: top20.map(r => r.RTO), backgroundColor: BAR_COLORS.RTO, stack: 'Stack 0' },
+            { label: 'Other', data: top20.map(r => r.Other), backgroundColor: BAR_COLORS.Other, stack: 'Stack 0' }
         ];
         charts.bar.update();
     }
@@ -567,7 +563,7 @@
     function resetDates() {
         const end = new Date();
         const start = new Date();
-        start.setDate(end.getDate() - 30); // Default 30 Days
+        start.setDate(end.getDate() - 30); 
 
         const fmt = d => d.toISOString().split('T')[0];
         document.getElementById('startDate').value = fmt(start);
