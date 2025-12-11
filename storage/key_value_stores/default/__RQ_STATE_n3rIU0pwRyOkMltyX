@@ -1,0 +1,30 @@
+{
+  "sequence_counter": 10,
+  "forefront_sequence_counter": 0,
+  "forefront_requests": {},
+  "regular_requests": {
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/cornbread/716010161568090/&show_text=true&width=500": 0,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/doughnut/1394144815393470/&show_text=true&width=500": 1,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/messina/2327748514339167/&show_text=true&width=500": 2,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/one-day-youll-hear-cacc-has-the-best-dogs-and-when-you-do-take-it-as-your-sign-y/872627175253655/&show_text=true&width=500": 3,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/1181693770146480&show_text=true&width=500": 4,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/fredo/1948169156044485/&show_text=true&width=500": 5,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/townes/3270619643096078/&show_text=true&width=500": 6,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/sweet-sad-tassel-her-skin-especially-on-her-backside-is-like-a-rhino-with-fur-sh/1646742096693231/&show_text=true&width=500": 7,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/big-puppy-energylangston-might-be-pony-sized-but-he-might-still-have-a-little-gr/1197936081664244/&show_text=true&width=500": 8,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/pumba-is-a-gorgeous-boy-with-the-shiniest-black-coat-and-handsome-block-head-loo/1095183175917750/&show_text=true&width=500": 9
+  },
+  "in_progress_requests": [],
+  "handled_requests": [
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/1181693770146480&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/fredo/1948169156044485/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/sweet-sad-tassel-her-skin-especially-on-her-backside-is-like-a-rhino-with-fur-sh/1646742096693231/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/one-day-youll-hear-cacc-has-the-best-dogs-and-when-you-do-take-it-as-your-sign-y/872627175253655/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/big-puppy-energylangston-might-be-pony-sized-but-he-might-still-have-a-little-gr/1197936081664244/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/messina/2327748514339167/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/townes/3270619643096078/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/cornbread/716010161568090/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/pumba-is-a-gorgeous-boy-with-the-shiniest-black-coat-and-handsome-block-head-loo/1095183175917750/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/doughnut/1394144815393470/&show_text=true&width=500"
+  ]
+}
