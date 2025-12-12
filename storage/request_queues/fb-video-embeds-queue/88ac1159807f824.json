@@ -1,0 +1,17 @@
+{
+  "unique_key": "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/squishy-and-warmjust-the-qualities-we-love-in-a-girl-that-likes-to-cuddle-girlin/1950073549056763/&show_text=true&width=500",
+  "url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/caccdogs/videos/squishy-and-warmjust-the-qualities-we-love-in-a-girl-that-likes-to-cuddle-girlin/1950073549056763/&show_text=true&width=500",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    },
+    "original_url": "https://www.facebook.com/caccdogs/videos/squishy-and-warmjust-the-qualities-we-love-in-a-girl-that-likes-to-cuddle-girlin/1950073549056763/"
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fcaccdogs%2Fvideos%2Fsquishy-and-warmjust-the-qualities-we-love-in-a-girl-that-likes-to-cuddle-girlin%2F1950073549056763%2F&show_text=true&width=500",
+  "handled_at": "2025-12-12 02:32:49.616500+00:00"
+}
