@@ -1,0 +1,30 @@
+{
+  "sequence_counter": 10,
+  "forefront_sequence_counter": 0,
+  "forefront_requests": {},
+  "regular_requests": {
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/didi-did-not-handle-her-loss-well-at-firstdogs-are-emotional-and-didi-was-both-s/1983568485544621/&show_text=true&width=500": 0,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/piston/859959683185098/&show_text=true&width=500": 1,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/%25ef%25b8%258furgent-needs-rescue-by-tomorrow-1213-at-7pm%25ef%25b8%258fberkley-has-quite-the-honk-he-has-a/1938109463413280/&show_text=true&width=500": 2,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/the-bold-and-the-beautifulemerald-sure-is-a-looker-even-when-her-face-had-that-n/1159829926307004/&show_text=true&width=500": 3,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/squishy-and-warmjust-the-qualities-we-love-in-a-girl-that-likes-to-cuddle-girlin/1950073549056763/&show_text=true&width=500": 4,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/big-dog-lovers-we-have-lots-of-options-waiting-to-meet-their-special-someonerock/1348404913128082/&show_text=true&width=500": 5,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/big-puppy-energylangston-might-be-pony-sized-but-he-might-still-have-a-little-gr/1197936081664244/&show_text=true&width=500": 6,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/1181693770146480&show_text=true&width=500": 7,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/brandy/774589725653140/&show_text=true&width=500": 8,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/sweet-sad-tassel-her-skin-especially-on-her-backside-is-like-a-rhino-with-fur-sh/1646742096693231/&show_text=true&width=500": 9
+  },
+  "in_progress_requests": [],
+  "handled_requests": [
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/didi-did-not-handle-her-loss-well-at-firstdogs-are-emotional-and-didi-was-both-s/1983568485544621/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/the-bold-and-the-beautifulemerald-sure-is-a-looker-even-when-her-face-had-that-n/1159829926307004/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/big-puppy-energylangston-might-be-pony-sized-but-he-might-still-have-a-little-gr/1197936081664244/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/brandy/774589725653140/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/sweet-sad-tassel-her-skin-especially-on-her-backside-is-like-a-rhino-with-fur-sh/1646742096693231/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/big-dog-lovers-we-have-lots-of-options-waiting-to-meet-their-special-someonerock/1348404913128082/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/squishy-and-warmjust-the-qualities-we-love-in-a-girl-that-likes-to-cuddle-girlin/1950073549056763/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/1181693770146480&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/%25ef%25b8%258furgent-needs-rescue-by-tomorrow-1213-at-7pm%25ef%25b8%258fberkley-has-quite-the-honk-he-has-a/1938109463413280/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/piston/859959683185098/&show_text=true&width=500"
+  ]
+}
