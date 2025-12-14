@@ -1,0 +1,30 @@
+{
+  "sequence_counter": 10,
+  "forefront_sequence_counter": 0,
+  "forefront_requests": {},
+  "regular_requests": {
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/872627175253655&show_text=true&width=500": 0,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/adoptions-thank-you-all/854073494151041/&show_text=true&width=500": 1,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rugby-is-both-a-party-boy-and-a-gentlemanhis-leash-antics-are-his-party-side-the/1289739543189106/&show_text=true&width=500": 2,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/panettone-is-a-sweet-little-thingshe-came-to-us-drastically-underweight-and-with/1553134685724716/&show_text=true&width=500": 3,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/urgent-needs-rescue-by-tomorrow-1214-at-7pmlittle-patsy-needs-to-get-out-of-a-ke/1358176645988938/&show_text=true&width=500": 4,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rescued-by-dark-horse-dogs-nfp%25ef%25b8%258furgent-needs-rescue-by-tomorrow-1213-at-7pm%25ef%25b8%258fberkl/1938109463413280/&show_text=true&width=500": 5,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/big-dog-lovers-we-have-lots-of-options-waiting-to-meet-their-special-someonerock/1348404913128082/&show_text=true&width=500": 6,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/umberto-the-bowling-ballhes-round-low-and-comes-in-hot-umberto-loves-love-squeak/1223995706607551/&show_text=true&width=500": 7,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/piston/859959683185098/&show_text=true&width=500": 8,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/the-bold-and-the-beautifulemerald-sure-is-a-looker-even-when-her-face-had-that-n/1159829926307004/&show_text=true&width=500": 9
+  },
+  "in_progress_requests": [],
+  "handled_requests": [
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/872627175253655&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/big-dog-lovers-we-have-lots-of-options-waiting-to-meet-their-special-someonerock/1348404913128082/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/umberto-the-bowling-ballhes-round-low-and-comes-in-hot-umberto-loves-love-squeak/1223995706607551/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rugby-is-both-a-party-boy-and-a-gentlemanhis-leash-antics-are-his-party-side-the/1289739543189106/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rescued-by-dark-horse-dogs-nfp%25ef%25b8%258furgent-needs-rescue-by-tomorrow-1213-at-7pm%25ef%25b8%258fberkl/1938109463413280/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/adoptions-thank-you-all/854073494151041/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/the-bold-and-the-beautifulemerald-sure-is-a-looker-even-when-her-face-had-that-n/1159829926307004/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/panettone-is-a-sweet-little-thingshe-came-to-us-drastically-underweight-and-with/1553134685724716/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/piston/859959683185098/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/urgent-needs-rescue-by-tomorrow-1214-at-7pmlittle-patsy-needs-to-get-out-of-a-ke/1358176645988938/&show_text=true&width=500"
+  ]
+}
