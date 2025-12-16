@@ -1,0 +1,11 @@
+{
+  "id": "EcauFUXryMSNHDh98",
+  "name": "dogs-queue-1765910855",
+  "accessed_at": "2025-12-16 18:48:11.806257+00:00",
+  "created_at": "2025-12-16 18:47:35.362751+00:00",
+  "modified_at": "2025-12-16 18:48:11.805436+00:00",
+  "had_multiple_clients": false,
+  "handled_request_count": 10,
+  "pending_request_count": 0,
+  "total_request_count": 10
+}
