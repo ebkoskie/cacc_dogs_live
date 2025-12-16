@@ -1,0 +1,17 @@
+{
+  "unique_key": "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/brent-believes-he-can-flyhe-has-come-a-long-way-from-the-timid-wallflower-we-met/1211036504215048/&show_text=true&width=500",
+  "url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/caccdogs/videos/brent-believes-he-can-flyhe-has-come-a-long-way-from-the-timid-wallflower-we-met/1211036504215048/&show_text=true&width=500",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    },
+    "original_url": "https://www.facebook.com/caccdogs/videos/brent-believes-he-can-flyhe-has-come-a-long-way-from-the-timid-wallflower-we-met/1211036504215048/"
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fcaccdogs%2Fvideos%2Fbrent-believes-he-can-flyhe-has-come-a-long-way-from-the-timid-wallflower-we-met%2F1211036504215048%2F&show_text=true&width=500",
+  "handled_at": "2025-12-16 07:03:08.554238+00:00"
+}
