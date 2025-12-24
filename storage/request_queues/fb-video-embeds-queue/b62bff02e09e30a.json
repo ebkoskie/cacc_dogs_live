@@ -1,0 +1,17 @@
+{
+  "unique_key": "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rook-is-one-tall-drink-of-water-he-finds-shelter-life-distracting-there-are-so-m/1894937141097348/&show_text=true&width=500",
+  "url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/caccdogs/videos/rook-is-one-tall-drink-of-water-he-finds-shelter-life-distracting-there-are-so-m/1894937141097348/&show_text=true&width=500",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    },
+    "original_url": "https://www.facebook.com/caccdogs/videos/rook-is-one-tall-drink-of-water-he-finds-shelter-life-distracting-there-are-so-m/1894937141097348/"
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fcaccdogs%2Fvideos%2Frook-is-one-tall-drink-of-water-he-finds-shelter-life-distracting-there-are-so-m%2F1894937141097348%2F&show_text=true&width=500",
+  "handled_at": "2025-12-24 02:32:28.277502+00:00"
+}
