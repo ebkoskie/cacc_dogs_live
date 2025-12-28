@@ -1,0 +1,16 @@
+{
+  "unique_key": "https://24petconnect.com/chgoall?at=dog&index=150",
+  "url": "https://24petconnect.com/chgoall?index=150&at=DOG",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    }
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://24petconnect.com/chgoall?index=150&at=DOG",
+  "handled_at": "2025-12-28 21:29:03.445726+00:00"
+}
