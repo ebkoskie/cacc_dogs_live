@@ -1,0 +1,17 @@
+{
+  "unique_key": "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/calm-and-beautifuljovanna-is-such-a-pretty-girl-she-is-always-so-quiet-in-her-ke/1579820489821000/&show_text=true&width=500",
+  "url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/caccdogs/videos/calm-and-beautifuljovanna-is-such-a-pretty-girl-she-is-always-so-quiet-in-her-ke/1579820489821000/&show_text=true&width=500",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    },
+    "original_url": "https://www.facebook.com/caccdogs/videos/calm-and-beautifuljovanna-is-such-a-pretty-girl-she-is-always-so-quiet-in-her-ke/1579820489821000/"
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fcaccdogs%2Fvideos%2Fcalm-and-beautifuljovanna-is-such-a-pretty-girl-she-is-always-so-quiet-in-her-ke%2F1579820489821000%2F&show_text=true&width=500",
+  "handled_at": "2025-12-31 02:34:57.992301+00:00"
+}
