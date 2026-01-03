@@ -6,11 +6,11 @@
   "headers": {},
   "user_data": {
     "__crawlee": {
-      "state": 5
+      "state": 3
     }
   },
-  "retry_count": 1,
+  "retry_count": 0,
   "no_retry": false,
   "loaded_url": "https://www.facebook.com/caccdogs/videos/",
-  "handled_at": "2026-01-02 18:59:52.257290+00:00"
+  "handled_at": "2026-01-03 02:30:04.662997+00:00"
 }
