@@ -1,0 +1,17 @@
+{
+  "unique_key": "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/left-behind-but-still-smilingwe-actually-saw-cecelia-as-she-arrived-walking-down/1197599585913586/&show_text=true&width=500",
+  "url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/caccdogs/videos/left-behind-but-still-smilingwe-actually-saw-cecelia-as-she-arrived-walking-down/1197599585913586/&show_text=true&width=500",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    },
+    "original_url": "https://www.facebook.com/caccdogs/videos/left-behind-but-still-smilingwe-actually-saw-cecelia-as-she-arrived-walking-down/1197599585913586/"
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fcaccdogs%2Fvideos%2Fleft-behind-but-still-smilingwe-actually-saw-cecelia-as-she-arrived-walking-down%2F1197599585913586%2F&show_text=true&width=500",
+  "handled_at": "2026-01-04 18:57:47.158971+00:00"
+}
