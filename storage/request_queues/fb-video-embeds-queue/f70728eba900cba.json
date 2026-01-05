@@ -1,0 +1,17 @@
+{
+  "unique_key": "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/urgent-needs-rescue-by-tomorrow-7pmrockafella-our-resident-love-muffin-needs-a-f/2011071949461536/&show_text=true&width=500",
+  "url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/caccdogs/videos/urgent-needs-rescue-by-tomorrow-7pmrockafella-our-resident-love-muffin-needs-a-f/2011071949461536/&show_text=true&width=500",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    },
+    "original_url": "https://www.facebook.com/caccdogs/videos/urgent-needs-rescue-by-tomorrow-7pmrockafella-our-resident-love-muffin-needs-a-f/2011071949461536/"
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fcaccdogs%2Fvideos%2Furgent-needs-rescue-by-tomorrow-7pmrockafella-our-resident-love-muffin-needs-a-f%2F2011071949461536%2F&show_text=true&width=500",
+  "handled_at": "2026-01-05 03:03:25.497077+00:00"
+}
