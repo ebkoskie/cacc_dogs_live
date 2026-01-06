@@ -1,0 +1,11 @@
+{
+  "id": "TLZTpS938Psvkm93o",
+  "name": "dogs-queue-1767735106",
+  "accessed_at": "2026-01-06 21:32:18.662168+00:00",
+  "created_at": "2026-01-06 21:31:46.677737+00:00",
+  "modified_at": "2026-01-06 21:32:18.661247+00:00",
+  "had_multiple_clients": false,
+  "handled_request_count": 9,
+  "pending_request_count": 0,
+  "total_request_count": 9
+}
