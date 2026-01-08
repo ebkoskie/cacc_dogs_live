@@ -1,0 +1,17 @@
+{
+  "unique_key": "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/maybe-shes-partially-deaf-maybe-its-just-selective-hearingone-thing-for-sure-is-/715165971426690/&show_text=true&width=500",
+  "url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/caccdogs/videos/maybe-shes-partially-deaf-maybe-its-just-selective-hearingone-thing-for-sure-is-/715165971426690/&show_text=true&width=500",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    },
+    "original_url": "https://www.facebook.com/caccdogs/videos/maybe-shes-partially-deaf-maybe-its-just-selective-hearingone-thing-for-sure-is-/715165971426690/"
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fcaccdogs%2Fvideos%2Fmaybe-shes-partially-deaf-maybe-its-just-selective-hearingone-thing-for-sure-is-%2F715165971426690%2F&show_text=true&width=500",
+  "handled_at": "2026-01-08 19:01:18.647785+00:00"
+}
