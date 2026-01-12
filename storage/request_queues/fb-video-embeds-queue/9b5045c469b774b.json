@@ -1,0 +1,17 @@
+{
+  "unique_key": "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/stretch-and-wigglethat-is-the-corinne-version-of-the-bend-and-snap-she-is-so-ado/1446248337098490/&show_text=true&width=500",
+  "url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/caccdogs/videos/stretch-and-wigglethat-is-the-corinne-version-of-the-bend-and-snap-she-is-so-ado/1446248337098490/&show_text=true&width=500",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    },
+    "original_url": "https://www.facebook.com/caccdogs/videos/stretch-and-wigglethat-is-the-corinne-version-of-the-bend-and-snap-she-is-so-ado/1446248337098490/"
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fcaccdogs%2Fvideos%2Fstretch-and-wigglethat-is-the-corinne-version-of-the-bend-and-snap-she-is-so-ado%2F1446248337098490%2F&show_text=true&width=500",
+  "handled_at": "2026-01-12 19:03:42.899827+00:00"
+}
