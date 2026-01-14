@@ -1,0 +1,17 @@
+{
+  "unique_key": "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rescued-by-mcp-rescue-and-outreach%25ef%25b8%258furgent-%25ef%25b8%258f-pedro-needs-to-leave-with-a-rescue-p/1938254360401801/&show_text=true&width=500",
+  "url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/caccdogs/videos/rescued-by-mcp-rescue-and-outreach%25EF%25B8%258Furgent-%25EF%25B8%258F-pedro-needs-to-leave-with-a-rescue-p/1938254360401801/&show_text=true&width=500",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    },
+    "original_url": "https://www.facebook.com/caccdogs/videos/rescued-by-mcp-rescue-and-outreach%EF%B8%8Furgent-%EF%B8%8F-pedro-needs-to-leave-with-a-rescue-p/1938254360401801/"
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fcaccdogs%2Fvideos%2Frescued-by-mcp-rescue-and-outreach%25EF%25B8%258Furgent-%25EF%25B8%258F-pedro-needs-to-leave-with-a-rescue-p%2F1938254360401801%2F&show_text=true&width=500",
+  "handled_at": "2026-01-14 02:56:35.983934+00:00"
+}
