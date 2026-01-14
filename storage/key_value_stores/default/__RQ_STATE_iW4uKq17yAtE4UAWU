@@ -1,0 +1,30 @@
+{
+  "sequence_counter": 10,
+  "forefront_sequence_counter": 0,
+  "forefront_requests": {},
+  "regular_requests": {
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/logan-is-a-multitaskerhe-can-scratch-his-itchies-and-get-his-full-body-cuddle-on/2592973664416746/&show_text=true&width=500": 0,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/still-as-handsome-as-evergentry-is-a-familiar-face-he-was-adopted-in-2024-and-th/1434707204919230/&show_text=true&width=500": 1,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/love-me-love-me-love-me-hold-me-love-me-hold-meif-cuv%25c3%25a9e-could-talk-these-would-b/1177233297894394/&show_text=true&width=500": 2,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/he-has-happy-feet-that-do-the-best-happy-dancezest-was-full-of-enthusiasm-even-b/2725360974476207/&show_text=true&width=500": 3,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/december-rescues/1651686609541129/&show_text=true&width=500": 4,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rescued-by-mcp-rescue-and-outreach%25ef%25b8%258furgent-%25ef%25b8%258f-pedro-needs-to-leave-with-a-rescue-p/1938254360401801/&show_text=true&width=500": 5,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/stretch-and-wigglethat-is-the-corinne-version-of-the-bend-and-snap-she-is-so-ado/1446248337098490/&show_text=true&width=500": 6,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/little-lacie-is-a-bundle-of-joyshe-is-always-happy-to-see-a-friendly-face-too-la/1184901790519313/&show_text=true&width=500": 7,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/1938254360401801&show_text=true&width=500": 8,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/guilty-of-having-a-type/2134023647135176/&show_text=true&width=500": 9
+  },
+  "in_progress_requests": [],
+  "handled_requests": [
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/he-has-happy-feet-that-do-the-best-happy-dancezest-was-full-of-enthusiasm-even-b/2725360974476207/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/little-lacie-is-a-bundle-of-joyshe-is-always-happy-to-see-a-friendly-face-too-la/1184901790519313/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/stretch-and-wigglethat-is-the-corinne-version-of-the-bend-and-snap-she-is-so-ado/1446248337098490/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/still-as-handsome-as-evergentry-is-a-familiar-face-he-was-adopted-in-2024-and-th/1434707204919230/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/logan-is-a-multitaskerhe-can-scratch-his-itchies-and-get-his-full-body-cuddle-on/2592973664416746/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/1938254360401801&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/guilty-of-having-a-type/2134023647135176/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/december-rescues/1651686609541129/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rescued-by-mcp-rescue-and-outreach%25ef%25b8%258furgent-%25ef%25b8%258f-pedro-needs-to-leave-with-a-rescue-p/1938254360401801/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/love-me-love-me-love-me-hold-me-love-me-hold-meif-cuv%25c3%25a9e-could-talk-these-would-b/1177233297894394/&show_text=true&width=500"
+  ]
+}
