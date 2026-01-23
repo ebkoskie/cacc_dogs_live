@@ -1,0 +1,17 @@
+{
+  "unique_key": "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/charades-is-all-about-the-funsqueakers-or-bust-charades-is-toys-over-treats-ever/4388353361446924/&show_text=true&width=500",
+  "url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/caccdogs/videos/charades-is-all-about-the-funsqueakers-or-bust-charades-is-toys-over-treats-ever/4388353361446924/&show_text=true&width=500",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    },
+    "original_url": "https://www.facebook.com/caccdogs/videos/charades-is-all-about-the-funsqueakers-or-bust-charades-is-toys-over-treats-ever/4388353361446924/"
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fcaccdogs%2Fvideos%2Fcharades-is-all-about-the-funsqueakers-or-bust-charades-is-toys-over-treats-ever%2F4388353361446924%2F&show_text=true&width=500",
+  "handled_at": "2026-01-23 07:05:06.701571+00:00"
+}
