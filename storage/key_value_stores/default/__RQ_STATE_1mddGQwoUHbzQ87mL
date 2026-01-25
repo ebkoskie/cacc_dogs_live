@@ -1,0 +1,30 @@
+{
+  "sequence_counter": 10,
+  "forefront_sequence_counter": 0,
+  "forefront_requests": {},
+  "regular_requests": {
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/jackeroo-is-hug-first-kind-of-friendhe-was-found-as-a-stray-and-kept-but-finders/25543647395316855/&show_text=true&width=500": 0,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/winterfell/2378662695900087/&show_text=true&width=500": 1,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/1804978436877561&show_text=true&width=500": 2,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/just-as-fancy-as-her-name-soundsgrand-marnier-is-actually-very-down-to-earth-wit/1449392746537057/&show_text=true&width=500": 3,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/they-did-nothing-wrong/2203437720462300/&show_text=true&width=500": 4,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/sylvia-thinks-age-aint-nothing-but-a-number-its-actually-a-number-we-dont-know-e/1305277644766328/&show_text=true&width=500": 5,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/nerida-is-a-little-sausage-torpedowhen-we-first-met-her-she-played-coy-in-her-ke/1574098690532901/&show_text=true&width=500": 6,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/a-little-bit-of-this-a-little-bit-of-thatthe-this-is-niceness-and-the-that-is-be/2314606768980922/&show_text=true&width=500": 7,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/periscope/1554010335814523/&show_text=true&width=500": 8,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/looking-for-a-snuggle-buddychyla-will-gladly-volunteer-for-that-permanent-positi/1623443528655981/&show_text=true&width=500": 9
+  },
+  "in_progress_requests": [],
+  "handled_requests": [
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/sylvia-thinks-age-aint-nothing-but-a-number-its-actually-a-number-we-dont-know-e/1305277644766328/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/nerida-is-a-little-sausage-torpedowhen-we-first-met-her-she-played-coy-in-her-ke/1574098690532901/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/a-little-bit-of-this-a-little-bit-of-thatthe-this-is-niceness-and-the-that-is-be/2314606768980922/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/they-did-nothing-wrong/2203437720462300/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/looking-for-a-snuggle-buddychyla-will-gladly-volunteer-for-that-permanent-positi/1623443528655981/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/1804978436877561&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/periscope/1554010335814523/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/just-as-fancy-as-her-name-soundsgrand-marnier-is-actually-very-down-to-earth-wit/1449392746537057/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/winterfell/2378662695900087/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/jackeroo-is-hug-first-kind-of-friendhe-was-found-as-a-stray-and-kept-but-finders/25543647395316855/&show_text=true&width=500"
+  ]
+}
