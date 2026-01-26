@@ -1,0 +1,17 @@
+{
+  "unique_key": "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/shot-through-the-heart-and-dipper-is-to-blamehe-gives-love-a-great-name-dipper-i/1198058355820369/&show_text=true&width=500",
+  "url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/caccdogs/videos/shot-through-the-heart-and-dipper-is-to-blamehe-gives-love-a-great-name-dipper-i/1198058355820369/&show_text=true&width=500",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    },
+    "original_url": "https://www.facebook.com/caccdogs/videos/shot-through-the-heart-and-dipper-is-to-blamehe-gives-love-a-great-name-dipper-i/1198058355820369/"
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fcaccdogs%2Fvideos%2Fshot-through-the-heart-and-dipper-is-to-blamehe-gives-love-a-great-name-dipper-i%2F1198058355820369%2F&show_text=true&width=500",
+  "handled_at": "2026-01-26 19:05:57.263477+00:00"
+}
