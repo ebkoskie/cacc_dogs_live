@@ -1,11 +1,11 @@
 {
-  "id": "hsWll5PgnRFzoWzUo",
+  "id": "RM95mJgjlErUJQ2yl",
   "name": "fb-video-embeds-queue",
-  "accessed_at": "2026-01-29 19:22:12.865872+00:00",
-  "created_at": "2026-01-29 19:21:04.797503+00:00",
-  "modified_at": "2026-01-29 19:22:12.865027+00:00",
+  "accessed_at": "2026-01-30 03:17:46.648406+00:00",
+  "created_at": "2026-01-30 03:17:24.277357+00:00",
+  "modified_at": "2026-01-30 03:17:46.638647+00:00",
   "had_multiple_clients": false,
-  "handled_request_count": 22,
+  "handled_request_count": 10,
   "pending_request_count": 0,
-  "total_request_count": 22
+  "total_request_count": 10
 }
