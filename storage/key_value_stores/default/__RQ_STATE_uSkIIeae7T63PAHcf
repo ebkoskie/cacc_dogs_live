@@ -1,0 +1,28 @@
+{
+  "sequence_counter": 12,
+  "forefront_sequence_counter": 0,
+  "forefront_requests": {},
+  "regular_requests": {
+    "https://24petconnect.com/chgoall?at=dog": 0,
+    "https://24petconnect.com/chgoall?at=dog&index=30": 1,
+    "https://24petconnect.com/chgoall?at=dog&index=60": 2,
+    "https://24petconnect.com/chgoall?at=dog&index=90": 3,
+    "https://24petconnect.com/chgoall?at=dog&index=120": 4,
+    "https://24petconnect.com/chgoall?at=dog&index=150": 5,
+    "https://24petconnect.com/chgoall?at=dog&index=180": 6,
+    "https://24petconnect.com/chgoall?at=dog&index=210": 7,
+    "https://24petconnect.com/chgoall?at=dog&index=240": 11
+  },
+  "in_progress_requests": [],
+  "handled_requests": [
+    "https://24petconnect.com/chgoall?at=dog&index=180",
+    "https://24petconnect.com/chgoall?at=dog&index=30",
+    "https://24petconnect.com/chgoall?at=dog&index=150",
+    "https://24petconnect.com/chgoall?at=dog&index=240",
+    "https://24petconnect.com/chgoall?at=dog",
+    "https://24petconnect.com/chgoall?at=dog&index=120",
+    "https://24petconnect.com/chgoall?at=dog&index=210",
+    "https://24petconnect.com/chgoall?at=dog&index=60",
+    "https://24petconnect.com/chgoall?at=dog&index=90"
+  ]
+}
