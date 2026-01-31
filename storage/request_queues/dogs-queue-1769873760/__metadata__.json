@@ -1,0 +1,11 @@
+{
+  "id": "y57TtpHD01SXPCcad",
+  "name": "dogs-queue-1769873760",
+  "accessed_at": "2026-01-31 15:36:27.110436+00:00",
+  "created_at": "2026-01-31 15:36:00.413562+00:00",
+  "modified_at": "2026-01-31 15:36:27.109631+00:00",
+  "had_multiple_clients": false,
+  "handled_request_count": 8,
+  "pending_request_count": 0,
+  "total_request_count": 8
+}
