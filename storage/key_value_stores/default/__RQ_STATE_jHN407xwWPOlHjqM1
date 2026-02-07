@@ -1,0 +1,30 @@
+{
+  "sequence_counter": 10,
+  "forefront_sequence_counter": 0,
+  "forefront_requests": {},
+  "regular_requests": {
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/if-you-aint-first-youre-lastthe-way-animals-get-left-behind-hurts-the-soul-ricky/2125201848228770/&show_text=true&width=500": 0,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/khloe-is-one-unhappy-potatokhloe-had-this-quiet-sadness-surrounding-her-she-has-/2832960230376824/&show_text=true&width=500": 1,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/seeing-a-sad-dog-start-to-regularly-wag-their-tail-never-gets-oldfrancine-was-pr/1125046132961268/&show_text=true&width=500": 2,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/raleigh/2022404945010132/&show_text=true&width=500": 3,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/hanson/2152829158587364/&show_text=true&width=500": 4,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/2832960230376824&show_text=true&width=500": 5,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/help-us-show-drury-nice-guys-dont-always-finish-lasthe-craves-love-and-attention/2095183607925725/&show_text=true&width=500": 6,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rescued-by-dark-horse-dogs-nfpurgent-needs-rescue-by-tomorrow-25-at-7-pmduncan-j/830151660030099/&show_text=true&width=500": 7,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/sylvester-is-readyready-to-be-somebodys-he-even-wore-a-headband-to-showcase-his-/1264641592537747/&show_text=true&width=500": 8,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/satchel/1264534842187245/&show_text=true&width=500": 9
+  },
+  "in_progress_requests": [],
+  "handled_requests": [
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/khloe-is-one-unhappy-potatokhloe-had-this-quiet-sadness-surrounding-her-she-has-/2832960230376824/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rescued-by-dark-horse-dogs-nfpurgent-needs-rescue-by-tomorrow-25-at-7-pmduncan-j/830151660030099/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/help-us-show-drury-nice-guys-dont-always-finish-lasthe-craves-love-and-attention/2095183607925725/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/2832960230376824&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/raleigh/2022404945010132/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/hanson/2152829158587364/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/if-you-aint-first-youre-lastthe-way-animals-get-left-behind-hurts-the-soul-ricky/2125201848228770/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/sylvester-is-readyready-to-be-somebodys-he-even-wore-a-headband-to-showcase-his-/1264641592537747/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/satchel/1264534842187245/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/seeing-a-sad-dog-start-to-regularly-wag-their-tail-never-gets-oldfrancine-was-pr/1125046132961268/&show_text=true&width=500"
+  ]
+}
