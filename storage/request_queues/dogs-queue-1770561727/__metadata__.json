@@ -1,0 +1,11 @@
+{
+  "id": "kLckLNY7ppnoaDNpp",
+  "name": "dogs-queue-1770561727",
+  "accessed_at": "2026-02-08 14:42:37.975600+00:00",
+  "created_at": "2026-02-08 14:42:07.991728+00:00",
+  "modified_at": "2026-02-08 14:42:37.974733+00:00",
+  "had_multiple_clients": false,
+  "handled_request_count": 9,
+  "pending_request_count": 0,
+  "total_request_count": 9
+}
