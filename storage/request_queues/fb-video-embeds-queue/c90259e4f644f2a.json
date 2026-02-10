@@ -1,0 +1,17 @@
+{
+  "unique_key": "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/little-lick-a-saurusbongo-has-a-lot-of-love-to-give-he-has-simple-requests-to-be/1420821582834558/&show_text=true&width=500",
+  "url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/caccdogs/videos/little-lick-a-saurusbongo-has-a-lot-of-love-to-give-he-has-simple-requests-to-be/1420821582834558/&show_text=true&width=500",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    },
+    "original_url": "https://www.facebook.com/caccdogs/videos/little-lick-a-saurusbongo-has-a-lot-of-love-to-give-he-has-simple-requests-to-be/1420821582834558/"
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fcaccdogs%2Fvideos%2Flittle-lick-a-saurusbongo-has-a-lot-of-love-to-give-he-has-simple-requests-to-be%2F1420821582834558%2F&show_text=true&width=500",
+  "handled_at": "2026-02-10 19:46:22.083451+00:00"
+}
