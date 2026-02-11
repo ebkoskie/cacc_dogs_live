@@ -139,12 +139,17 @@
     }
 
     .pie-container { height: 400px; }
-    .bar-container { min-height: 500px; height: 100%; } /* Increased height for better mobile touch targets */
-    
+    .bar-container { min-height: 400px; }
+
     @media (max-width: 1000px) {
-        .bar-container { height: 65vh; max-height: 800px; }
+        .bar-container { min-height: 350px; }
     }
     
+    .chart-canvas-wrapper {
+        flex-grow: 1;
+        position: relative;
+    }
+
     .chart-title {
         font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: 15px;
         text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 10px;
@@ -192,7 +197,12 @@
 
     .animate-fade { animation: fadeIn 0.3s ease-out forwards; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-    
+
+    @media (prefers-reduced-motion: reduce) {
+        .animate-fade { animation: none !important; }
+        tr { animation: none !important; }
+    }
+
     #loading-overlay { text-align: center; padding: 40px; color: var(--text-muted); }
 
     </style></head><body><style>
@@ -322,7 +332,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div style="flex-grow:1; position:relative;"><canvas id=breedPieChart></canvas></div></div><div class="chart-card bar-container"><div class=chart-title>Outcomes by Breed</div><div style="flex-grow:1; position:relative;"><canvas id=breedChart></canvas></div></div></div><h2 style="margin-top: 10px;">📋 Detailed Statistics</h2><div class=table-container><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div></div><div class=footer><span>Last Updated: February 11, 2026 08:05 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart></canvas></div></div><div class="chart-card bar-container"><div class=chart-title>Outcomes by Breed</div><div class=chart-canvas-wrapper><canvas id=breedChart></canvas></div></div></div><h2 style="margin-top: 10px;">📋 Detailed Statistics</h2><div class=table-container><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div></div><div class=footer><span>Last Updated: February 11, 2026 08:06 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -574,10 +584,16 @@
             charts.pie.data.labels.push("All Others");
             charts.pie.data.datasets[0].data.push(otherTotal);
         }
-        charts.pie.update();
+        charts.pie.update('none');
 
-        // 2. Bar (Top 20 Outcomes)
+        // 2. Bar (Top 20 Outcomes) - Dynamic height based on breed count
         const top20 = rows.slice(0, 20);
+        const BAR_HEIGHT = 28;
+        const CHART_PADDING = 80;
+        const MIN_CHART_HEIGHT = 300;
+        const calculatedHeight = Math.max(MIN_CHART_HEIGHT, (top20.length * BAR_HEIGHT) + CHART_PADDING);
+        document.querySelector('.bar-container').style.height = calculatedHeight + 'px';
+
         charts.bar.data.labels = top20.map(r => r.breed);
         
         // Ensure "Other" is stacked correctly using the same stack ID
@@ -589,7 +605,7 @@
             { label: 'RTO', data: top20.map(r => r.RTO), backgroundColor: BAR_COLORS.RTO, stack: STACK_ID },
             { label: 'Other', data: top20.map(r => r.Other || 0), backgroundColor: BAR_COLORS.Other, stack: STACK_ID }
         ];
-        charts.bar.update();
+        charts.bar.update('none');
     }
 
     // --- Controls ---
