@@ -1,0 +1,30 @@
+{
+  "sequence_counter": 10,
+  "forefront_sequence_counter": 0,
+  "forefront_requests": {},
+  "regular_requests": {
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/daria/3553034288161579/&show_text=true&width=500": 0,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rex/1413630837152336/&show_text=true&width=500": 1,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/%25ef%25b8%258frescue-only-medical%25ef%25b8%258fgood-gal-gabby-needs-a-foster-homeshe-has-a-rectal-mass-tha/1447661960349178/&show_text=true&width=500": 2,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/uriel-is-an-angelhe-was-someones-dog-at-some-point-but-he-came-in-as-a-nameless-/2146587502813384/&show_text=true&width=500": 3,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/892040630235976&show_text=true&width=500": 4,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/literal-day-brightenercharades-is-a-splash-of-color-even-without-the-pjs-they-su/892543113518843/&show_text=true&width=500": 5,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/our-strays/1451754436740358/&show_text=true&width=500": 6,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/mystery-comes-with-some-questionsfirst-is-how-did-she-end-up-back-with-us-the-la/1968242604106284/&show_text=true&width=500": 7,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rail-thin-but-still-manages-to-have-delicious-wrinkles-on-her-headfrangelica-is-/893279353411037/&show_text=true&width=500": 8,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/slow-down-construction-zone-aheadhardhat-isnt-really-in-need-of-any-repairs-but-/2338203253273690/&show_text=true&width=500": 9
+  },
+  "in_progress_requests": [],
+  "handled_requests": [
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/slow-down-construction-zone-aheadhardhat-isnt-really-in-need-of-any-repairs-but-/2338203253273690/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rex/1413630837152336/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rail-thin-but-still-manages-to-have-delicious-wrinkles-on-her-headfrangelica-is-/893279353411037/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/our-strays/1451754436740358/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/892040630235976&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/literal-day-brightenercharades-is-a-splash-of-color-even-without-the-pjs-they-su/892543113518843/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/mystery-comes-with-some-questionsfirst-is-how-did-she-end-up-back-with-us-the-la/1968242604106284/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/uriel-is-an-angelhe-was-someones-dog-at-some-point-but-he-came-in-as-a-nameless-/2146587502813384/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/%25ef%25b8%258frescue-only-medical%25ef%25b8%258fgood-gal-gabby-needs-a-foster-homeshe-has-a-rectal-mass-tha/1447661960349178/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/daria/3553034288161579/&show_text=true&width=500"
+  ]
+}

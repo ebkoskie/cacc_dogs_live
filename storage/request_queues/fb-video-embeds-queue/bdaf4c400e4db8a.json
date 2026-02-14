@@ -1,0 +1,17 @@
+{
+  "unique_key": "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/%25ef%25b8%258frescue-only-medical%25ef%25b8%258fgood-gal-gabby-needs-a-foster-homeshe-has-a-rectal-mass-tha/1447661960349178/&show_text=true&width=500",
+  "url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/caccdogs/videos/%25EF%25B8%258Frescue-only-medical%25EF%25B8%258Fgood-gal-gabby-needs-a-foster-homeshe-has-a-rectal-mass-tha/1447661960349178/&show_text=true&width=500",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    },
+    "original_url": "https://www.facebook.com/caccdogs/videos/%EF%B8%8Frescue-only-medical%EF%B8%8Fgood-gal-gabby-needs-a-foster-homeshe-has-a-rectal-mass-tha/1447661960349178/"
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fcaccdogs%2Fvideos%2F%25EF%25B8%258Frescue-only-medical%25EF%25B8%258Fgood-gal-gabby-needs-a-foster-homeshe-has-a-rectal-mass-tha%2F1447661960349178%2F&show_text=true&width=500",
+  "handled_at": "2026-02-14 07:25:01.231764+00:00"
+}
