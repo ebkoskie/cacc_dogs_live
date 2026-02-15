@@ -134,6 +134,68 @@
 
     #loading-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
 
+    /* Stats Grid */
+    .stats-container {
+        margin: 0 -20px 20px -20px; padding: 0 20px;
+        overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+        mask-image: linear-gradient(90deg, black 90%, transparent 100%);
+        -webkit-mask-image: linear-gradient(90deg, black 90%, transparent 100%);
+    }
+    .stats-container::-webkit-scrollbar { display: none; }
+    .stats-grid { display: flex; gap: 15px; padding-right: 20px; }
+    @media (min-width: 900px) {
+        .stats-container { margin: 0 0 20px 0; padding: 0; overflow: visible; mask-image: none; -webkit-mask-image: none; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); padding-right: 0; }
+    }
+
+    .stat-card {
+        background: var(--row); border: 1px solid var(--border);
+        border-radius: 12px; padding: 16px 20px;
+        display: flex; flex-direction: column; align-items: flex-start;
+        position: relative; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;
+        min-width: 160px; flex-shrink: 0;
+    }
+    .stat-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent); }
+    .stat-card.removed::before { background: #da3633; }
+    .stat-card.los::before { background: #a371f7; }
+
+    .stat-value { font-size: 2rem; font-weight: 700; color: var(--text); line-height: 1.1; margin-bottom: 4px; display: flex; align-items: baseline; gap: 8px; }
+    .stat-label { color: var(--text-muted); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+    .stat-sub { font-size: 0.8rem; color: var(--text-muted); font-weight: 400; margin-top: 2px; }
+    .stat-date { position: absolute; top: 12px; right: 12px; font-size: 0.65rem; font-weight: 700; color: var(--text-muted); opacity: 0.6; text-transform: uppercase; }
+
+    .trend-indicator { font-size: 0.9rem; cursor: help; position: relative; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); }
+    .trend-good { color: #238636; border-color: rgba(35, 134, 54, 0.3); }
+    .trend-bad { color: #da3633; border-color: rgba(218, 54, 51, 0.3); }
+    .trend-neutral { color: var(--text-muted); }
+    .trend-indicator::after {
+        content: attr(data-tooltip); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+        background: #1f2428; color: #f0f6fc; padding: 6px 10px; border-radius: 6px;
+        font-size: 0.75rem; white-space: nowrap; pointer-events: none; opacity: 0;
+        transition: opacity 0.2s, transform 0.2s; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 20; font-weight: normal;
+    }
+    .trend-indicator:hover::after { opacity: 1; transform: translateX(-50%) translateY(-2px); }
+
+    /* LOS Badge & Card Meta */
+    .card-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 0.82rem; color: var(--text-muted); }
+    .los-badge { display: inline-flex; align-items: center; gap: 4px; }
+    .los-badge i { font-size: 0.75rem; }
+    .los-badge.los-long { color: var(--warning-text); }
+    .los-badge.los-vlong { color: var(--danger-text); }
+
+    /* Social Link Buttons */
+    .card-links { display: inline-flex; gap: 6px; margin-left: auto; }
+    .card-icon-btn {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 30px; height: 30px; border-radius: 6px;
+        background: var(--row); border: 1px solid var(--border); color: var(--accent);
+        text-decoration: none; font-size: 0.85rem; transition: all 0.15s;
+    }
+    .card-icon-btn:hover { border-color: var(--accent); background: var(--row-hover); }
+    .card-icon-btn:active { transform: scale(0.9); }
+    .card-icon-btn.btn-youtube .fa-youtube { color: #cc0000; }
+
     </style></head><body><style>
     /* --- Global Theme Variables (Moved here to support Map Overlay) --- */
     :root {
@@ -261,7 +323,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=info-banner><i class="fas fa-info-circle"></i> These dogs were removed from the public listing without a confirmed Adoption, Rescue, or RTO event. <br><small>They may have been euthanized, died in care, or were lost. Data is limited to what is publicly available.</small></div><div class=controls-bar><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Removed Dogs..."></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=recent>Date Removed (Recent First)</option><option value=oldest>Date Removed (Oldest First)</option><option value=name>Name (A ➝ Z)</option></select></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Loading historical records...</p></div><div id=main-view style=display:none;><h2 style="margin: 30px 0 10px 0; font-size:1.2rem; color:var(--text-muted);"><span id=count>0</span> Records Found </h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel style="height: 50px; margin-top: 20px;"></div></div><div class=footer><span>Last Updated: February 15, 2026 11:39 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=info-banner><i class="fas fa-info-circle"></i> These dogs were removed from the public listing without a confirmed Adoption, Rescue, or RTO event. <br><small>They may have been euthanized, died in care, or were lost. Data is limited to what is publicly available.</small></div><div class=stats-container><div class=stats-grid><div class="stat-card removed"><span class=stat-date>Today</span><div class=stat-value><span id=todayRemoved>--</span> <span id=removedIndicator></span></div><div class=stat-label><i class="fas fa-times-circle"></i> Removed</div><div class=stat-sub id=removedSub></div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=medianLOS>--</span></div><div class=stat-label><i class="fas fa-hourglass-half"></i> Median Stay</div><div class=stat-sub>days until removal</div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=avgLOS>--</span></div><div class=stat-label><i class="fas fa-clock"></i> Average Stay</div><div class=stat-sub>days until removal</div></div></div></div><div class=controls-bar><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Removed Dogs..."></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=recent>Date Removed (Recent First)</option><option value=oldest>Date Removed (Oldest First)</option><option value=name>Name (A ➝ Z)</option><option value=los>Length of Stay (Longest First)</option></select></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Loading historical records...</p></div><div id=main-view style=display:none;><h2 style="margin: 30px 0 10px 0; font-size:1.2rem; color:var(--text-muted);"><span id=count>0</span> Records Found </h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel style="height: 50px; margin-top: 20px;"></div></div><div class=footer><span>Last Updated: February 15, 2026 12:15 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -303,18 +365,33 @@
             document.addEventListener('touchstart', handleInteraction, { passive: true });
         })();
     </script><script>
-    let fullDataset = []; 
+    let fullDataset = [];
     let currentDisplayList = [];
     let displayedCount = 0;
-    const BATCH_SIZE = 48; 
+    const BATCH_SIZE = 48;
     let observer = null;
+    let META = null;
+
+    // Helper: Decompress URL using prefix index
+    function decompressUrl(str) {
+        if (!str) return null;
+        if (str.includes('~')) {
+            const parts = str.split('~');
+            const idx = parseInt(parts[0]);
+            if (!isNaN(idx) && META && META.u && META.u[idx]) {
+                return META.u[idx] + parts.slice(1).join('~');
+            }
+        }
+        return str;
+    }
 
     document.getElementById('mainSearch').addEventListener('keyup', debounce(handleSearch, 300));
 
     // Load Data
     fetch('search_index.json').then(r => r.json()).then(payload => {
         const { meta, data } = payload;
-        
+        META = meta;
+
         // 1. Filter AND Hydrate only "Other" status dogs
         // Status Index 4 corresponds to "Other" (Removed) based on report.py
         const OTHER_STATUS_IDX = 4;
@@ -323,27 +400,47 @@
             .filter(item => item.s === OTHER_STATUS_IDX)
             .map(item => {
                 const breedName = meta.b[item.b] || "Unknown";
-                const dateVal = item.od || item.d; // Prefer Outcome Date, fallback to Intake/Scrape
-                
-                // Hydrate minimal fields needed for this view
+                const intakeDate = item.d || null;
+                const outcomeDate = item.od || null;
+                const dateVal = outcomeDate || intakeDate;
+
+                // Calculate Length of Stay
+                let los = -1;
+                if (intakeDate && outcomeDate) {
+                    los = Math.floor((new Date(outcomeDate) - new Date(intakeDate)) / 86400000);
+                    if (los < 0) los = -1;
+                }
+
+                // Decompress URLs
+                const fbUrl = decompressUrl(item.l);
+                let ytUrl = null;
+                if (item.y) {
+                    ytUrl = item.y.split(' | ').map(u => decompressUrl(u)).join(' | ');
+                }
+
                 return {
                     id: item.id,
                     name: item.n,
                     breed: breedName,
                     date: dateVal,
+                    los: los,
                     gender: item.g === 1 ? "Female" : (item.g === 0 ? "Male" : "Unknown"),
-                    link: `https://24petconnect.com/chgoall/Details/CHGO/${item.id}`
+                    link: `https://24petconnect.com/chgoall/Details/CHGO/${item.id}`,
+                    fb: fbUrl,
+                    yt: ytUrl,
+                    aka: item.k || ""
                 };
             });
-            
+
         // Initial Sort (Recent First)
         fullDataset.sort((a, b) => new Date(b.date) - new Date(a.date));
-        
+
         currentDisplayList = fullDataset;
-        
+
         document.getElementById('loading-state').style.display = 'none';
         document.getElementById('main-view').style.display = 'block';
-        
+
+        updateStatsCards();
         setupObserver();
         resetGrid();
 
@@ -351,6 +448,54 @@
         console.error(err);
         document.getElementById('loading-state').innerHTML = "Failed to load records.";
     });
+
+    function updateStatsCards() {
+        // Card 1: Today's removed count with trend indicator
+        const todayStr = new Date().toLocaleDateString("en-CA", {timeZone: "America/Chicago"});
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toLocaleDateString("en-CA", {timeZone: "America/Chicago"});
+
+        const todayCount = fullDataset.filter(d => d.date === todayStr).length;
+        const yesterdayCount = fullDataset.filter(d => d.date === yesterdayStr).length;
+
+        document.getElementById('todayRemoved').textContent = todayCount;
+        setTrendIndicator('removedIndicator', todayCount, yesterdayCount, true);
+        document.getElementById('removedSub').textContent = 'Yesterday: ' + yesterdayCount;
+
+        // Cards 2 & 3: Median and Average LOS
+        const losValues = fullDataset.filter(d => d.los >= 0).map(d => d.los);
+
+        if (losValues.length > 0) {
+            const avg = Math.round(losValues.reduce((a, b) => a + b, 0) / losValues.length);
+            document.getElementById('avgLOS').textContent = avg + 'd';
+
+            const sorted = [...losValues].sort((a, b) => a - b);
+            const mid = Math.floor(sorted.length / 2);
+            const median = sorted.length % 2 !== 0
+                ? sorted[mid]
+                : Math.round((sorted[mid - 1] + sorted[mid]) / 2);
+            document.getElementById('medianLOS').textContent = median + 'd';
+        }
+    }
+
+    function setTrendIndicator(elId, today, yesterday, lowerIsBetter) {
+        const el = document.getElementById(elId);
+        if (!el || yesterday === null || yesterday === undefined) return;
+        if (today < yesterday) {
+            el.innerHTML = '<i class="fas fa-arrow-down"></i>';
+            el.className = 'trend-indicator ' + (lowerIsBetter ? 'trend-good' : 'trend-bad');
+            el.setAttribute('data-tooltip', 'Was ' + yesterday + ' yesterday');
+        } else if (today > yesterday) {
+            el.innerHTML = '<i class="fas fa-arrow-up"></i>';
+            el.className = 'trend-indicator ' + (lowerIsBetter ? 'trend-bad' : 'trend-good');
+            el.setAttribute('data-tooltip', 'Was ' + yesterday + ' yesterday');
+        } else {
+            el.innerHTML = '<i class="fas fa-minus" style="font-size:0.7em;"></i>';
+            el.className = 'trend-indicator trend-neutral';
+            el.setAttribute('data-tooltip', 'No change from yesterday');
+        }
+    }
 
     function handleSearch() {
         const q = document.getElementById('mainSearch').value.toLowerCase();
@@ -375,6 +520,7 @@
             if (mode === 'recent') return new Date(b.date) - new Date(a.date);
             if (mode === 'oldest') return new Date(a.date) - new Date(b.date);
             if (mode === 'name') return a.name.localeCompare(b.name);
+            if (mode === 'los') return (b.los >= 0 ? b.los : -1) - (a.los >= 0 ? a.los : -1);
             return 0;
         });
         
@@ -403,7 +549,38 @@
     }
 
     function buildCard(dog) {
-        const genderIcon = dog.gender.includes('Female') ? '♀️' : '♂️';
+        const genderIcon = dog.gender.includes('Female') ? '&#9792;&#65039;' : '&#9794;&#65039;';
+
+        // LOS badge
+        let losHtml = '';
+        if (dog.los >= 0) {
+            let losCls = 'los-badge';
+            if (dog.los >= 60) losCls += ' los-vlong';
+            else if (dog.los >= 30) losCls += ' los-long';
+            losHtml = '<span class="' + losCls + '"><i class="fas fa-hourglass-half"></i> ' + dog.los + 'd in shelter</span>';
+        }
+
+        // Social link buttons
+        let linksHtml = '';
+        if (dog.fb || dog.yt) {
+            let btns = '';
+            if (dog.fb) {
+                const fbUrl = dog.fb.split(' | ')[0].trim();
+                btns += '<a class="card-icon-btn" href="' + fbUrl.replace(/"/g, '&quot;') + '" target="_blank" rel="noopener" title="View on Facebook"><i class="fab fa-facebook"></i></a>';
+            }
+            if (dog.yt) {
+                const ytUrl = dog.yt.split(' | ')[0].split('~')[0].trim();
+                btns += '<a class="card-icon-btn btn-youtube" href="' + ytUrl.replace(/"/g, '&quot;') + '" target="_blank" rel="noopener" title="Watch on YouTube"><i class="fab fa-youtube"></i></a>';
+            }
+            linksHtml = '<div class="card-links">' + btns + '</div>';
+        }
+
+        // Card meta row (LOS + social links)
+        let metaHtml = '';
+        if (losHtml || linksHtml) {
+            metaHtml = '<div class="card-meta">' + losHtml + linksHtml + '</div>';
+        }
+
         return `
             <div class="dog-card">
                 <div class="card-header">
@@ -414,6 +591,7 @@
                 <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:10px;">
                     ${genderIcon} ${dog.gender}
                 </div>
+                ${metaHtml}
                 <div class="card-footer">
                     <span class="status-badge">
                         <i class="fas fa-times-circle"></i> Removed: ${dog.date}
