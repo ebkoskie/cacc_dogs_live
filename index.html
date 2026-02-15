@@ -112,7 +112,7 @@
     .dog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; opacity: 0; animation: fadeIn 0.5s ease-in forwards; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    .dog-card { background: var(--row); border: 1px solid var(--border); border-radius: 12px; padding: 16px; box-shadow: 0 2px 5px var(--card-shadow); display: flex; flex-direction: column; gap: 12px; transition: transform 0.2s, box-shadow 0.2s; }
+    .dog-card { background: var(--row); border: 1px solid var(--border); border-radius: 12px; padding: 16px; box-shadow: 0 2px 5px var(--card-shadow); display: flex; flex-direction: column; gap: 12px; transition: transform 0.2s, box-shadow 0.2s; content-visibility: auto; contain-intrinsic-size: auto 280px; }
     .dog-card:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); border-color: var(--accent); }
 
     /* Highlight Today Logic */
@@ -335,7 +335,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: February 15, 2026 04:40 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: February 15, 2026 04:50 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -378,18 +378,29 @@
         })();
     </script><script>
     // --- Global State ---
-    let fullDataset = []; 
+    let fullDataset = [];
     let activeFilters = new Set();
     let currentDisplayList = [];
     let displayedCount = 0;
-    const BATCH_SIZE = 48; 
+    const BATCH_SIZE = 48;
+    const FIRST_BATCH_SIZE = 12;
     let observer = null;
-    let TODAY_STR = ""; 
+    let TODAY_STR = "";
+    let openMenuCount = 0;
+
+    // Yield helper: lets the browser paint between interaction feedback and heavy work
+    function yieldToMain() {
+        if (typeof scheduler !== 'undefined' && typeof scheduler.yield === 'function') {
+            return scheduler.yield();
+        }
+        return new Promise(resolve => setTimeout(resolve, 0));
+    }
 
     // --- Init ---
     document.addEventListener('click', function(event) {
-        if (!event.target.closest('.media-wrapper')) {
-            document.querySelectorAll('.media-menu').forEach(menu => menu.classList.remove('show'));
+        if (openMenuCount > 0 && !event.target.closest('.media-wrapper')) {
+            document.querySelectorAll('.media-menu.show').forEach(menu => menu.classList.remove('show'));
+            openMenuCount = 0;
         }
     });
 
@@ -402,6 +413,8 @@
         // 1. Calculate Today's Date (Chicago Time) using en-CA locale (YYYY-MM-DD)
         // This is the most robust way to ensure ISO format across all browsers/locales.
         TODAY_STR = new Date().toLocaleDateString("en-CA", {timeZone: "America/Chicago"});
+        const TODAY_TS = new Date(TODAY_STR).getTime();
+        const MS_PER_DAY = 86400000;
         console.log("System Date (Chicago):", TODAY_STR);
 
         // Helper: Decompress URL using prefix index
@@ -460,6 +473,9 @@
             };
             
             dog.ageMonths = parseAgeToMonths(dog.age);
+            dog._intakeTs = new Date(dog.date).getTime();
+            dog._outcomeTs = dog.outcome_date ? new Date(dog.outcome_date).getTime() : dog._intakeTs;
+            dog._daysSinceIntake = Math.floor((TODAY_TS - dog._intakeTs) / MS_PER_DAY);
             return dog;
         });
         
@@ -501,10 +517,10 @@
         return d.replace(/\//g, '-');
     }
 
-    function filterByChip(type) {
-        if (type === 'all') { 
-            activeFilters.clear(); 
-        } else { 
+    async function filterByChip(type) {
+        if (type === 'all') {
+            activeFilters.clear();
+        } else {
             const exclusiveOutcomes = ['adopted', 'rto', 'rescued'];
             const exclusiveAges = ['puppy', 'senior'];
 
@@ -516,19 +532,22 @@
             }
 
             if (type === 'adopted' && !activeFilters.has('adopted')) {
-                // FIXED: Robust comparison using normalization
-                const countToday = fullDataset.filter(d => 
+                const countToday = fullDataset.filter(d =>
                     d.status === 'Adopted' && normalizeDate(d.outcome_date) === TODAY_STR
                 ).length;
-                
+
                 if (countToday > 0) {
-                    triggerAdoptionCelebration();
+                    requestAnimationFrame(() => triggerAdoptionCelebration());
                 }
             }
 
-            activeFilters.has(type) ? activeFilters.delete(type) : activeFilters.add(type); 
+            activeFilters.has(type) ? activeFilters.delete(type) : activeFilters.add(type);
         }
+        // Phase 1: Lightweight UI feedback (paints immediately)
         updateChipUI();
+        // Yield: let the browser paint the chip state change
+        await yieldToMain();
+        // Phase 2: Heavy filtering, sorting, rendering
         applyFiltersAndSort();
     }
 
@@ -552,7 +571,6 @@
     }
 
     function applyFiltersAndSort() {
-        const today = new Date();
         const showRTO = activeFilters.has('rto');
         const showRescued = activeFilters.has('rescued');
         const showAdopted = activeFilters.has('adopted');
@@ -564,9 +582,8 @@
             if (showAdopted && dog.status !== 'Adopted') return false;
             if (!isArchiveMode && !dog.is_active) return false;
 
-            const intake = new Date(dog.date);
-            const days = (today - intake) / (1000 * 60 * 60 * 24);
-            
+            const days = dog._daysSinceIntake;
+
             for (let type of activeFilters) {
                 if (type === 'rto' || type === 'rescued' || type === 'adopted') continue;
                 if (type === 'long_stay' && days < 30) return false;
@@ -599,23 +616,23 @@
         resetGrid();
     }
 
-    function handleSortChange() {
+    async function handleSortChange() {
         let mode = document.getElementById('sortSelect').value;
-        const showRTO = activeFilters.has('rto');
-        const showRescued = activeFilters.has('rescued');
-        const showAdopted = activeFilters.has('adopted');
-        const isArchiveMode = showRTO || showRescued || showAdopted;
+        const isArchiveMode = activeFilters.has('rto') || activeFilters.has('rescued') || activeFilters.has('adopted');
 
         if (isArchiveMode) {
             if (mode === 'newest') mode = 'outcome_newest';
             if (mode === 'longest') mode = 'outcome_oldest';
         }
 
+        // Yield so the select dropdown can close/paint
+        await yieldToMain();
+
         currentDisplayList = sortDogs(currentDisplayList, mode);
         resetGrid();
     }
 
-    function handleGlobalSearch() {
+    async function handleGlobalSearch() {
         const query = document.getElementById('mainSearch').value.toLowerCase();
         const clearBtn = document.getElementById('searchClear');
 
@@ -631,15 +648,18 @@
             return;
         }
 
-        const results = fullDataset.filter(dog => 
+        // Yield so the search input can echo the typed character
+        await yieldToMain();
+
+        const results = fullDataset.filter(dog =>
             (dog.name && dog.name.toLowerCase().includes(query)) ||
             (dog.id && dog.id.toLowerCase().includes(query)) ||
             (dog.breed && dog.breed.toLowerCase().includes(query))
         );
-        
+
         const countEl = document.getElementById('headerCount');
         if (countEl) countEl.innerText = results.length;
-        
+
         currentDisplayList = results;
         resetGrid();
     }
@@ -651,6 +671,7 @@
 
     function resetGrid() {
         displayedCount = 0;
+        openMenuCount = 0;
         document.getElementById('dog-grid').innerHTML = '';
         if (currentDisplayList.length === 0) {
             document.getElementById('dog-grid').innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#8b949e;">No dogs found matching this criteria.</div>';
@@ -662,7 +683,8 @@
     function renderNextBatch() {
         if (displayedCount >= currentDisplayList.length) return;
 
-        const batch = currentDisplayList.slice(displayedCount, displayedCount + BATCH_SIZE);
+        const batchSize = displayedCount === 0 ? FIRST_BATCH_SIZE : BATCH_SIZE;
+        const batch = currentDisplayList.slice(displayedCount, displayedCount + batchSize);
         let htmlBuffer = '';
 
         batch.forEach(dog => {
@@ -670,13 +692,11 @@
         });
 
         document.getElementById('dog-grid').insertAdjacentHTML('beforeend', htmlBuffer);
-        displayedCount += BATCH_SIZE;
+        displayedCount += batch.length;
     }
 
     function buildDogCard(dog) {
-        const today = new Date();
-        const intake = new Date(dog.date);
-        const days = Math.floor((today - intake) / (1000 * 60 * 60 * 24));
+        const days = dog._daysSinceIntake;
         
         let isToday = false;
 
@@ -815,14 +835,10 @@
 
     function sortDogs(list, mode) {
         return list.sort((a, b) => {
-            const getD = (d, m) => {
-                if (m.includes('outcome')) return new Date(d.outcome_date || d.date);
-                return new Date(d.date);
-            };
-
-            if (mode === 'longest' || mode === 'outcome_oldest') return getD(a, mode) - getD(b, mode);
-            if (mode === 'newest' || mode === 'outcome_newest') return getD(b, mode) - getD(a, mode);
-            
+            if (mode === 'longest') return a._intakeTs - b._intakeTs;
+            if (mode === 'newest') return b._intakeTs - a._intakeTs;
+            if (mode === 'outcome_oldest') return a._outcomeTs - b._outcomeTs;
+            if (mode === 'outcome_newest') return b._outcomeTs - a._outcomeTs;
             if (mode === 'age_young') return a.ageMonths - b.ageMonths;
             if (mode === 'age_old') return b.ageMonths - a.ageMonths;
             if (mode === 'name_asc') return a.name.localeCompare(b.name);
@@ -863,22 +879,20 @@
     function triggerAdoptionCelebration() {
         const container = document.createElement('div');
         container.className = 'celebration-container';
-        document.body.appendChild(container);
 
         const emojis = ['🏠', '💖', '🐶', '🎉', '🐾', '💞'];
-        
+        const fragment = document.createDocumentFragment();
+
         for (let i = 0; i < 50; i++) {
             const el = document.createElement('div');
             el.className = 'heart-particle';
-            el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-            
-            el.style.left = Math.random() * 100 + 'vw';
-            el.style.animationDuration = (Math.random() * 3 + 2) + 's';
-            el.style.fontSize = (Math.random() * 20 + 20) + 'px';
-            el.style.animationDelay = Math.random() * 2 + 's';
-            
-            container.appendChild(el);
+            el.textContent = emojis[i % emojis.length];
+            el.style.cssText = `left:${Math.random() * 100}vw;animation-duration:${(Math.random() * 3 + 2)}s;font-size:${(Math.random() * 20 + 20)}px;animation-delay:${Math.random() * 2}s;`;
+            fragment.appendChild(el);
         }
+
+        container.appendChild(fragment);
+        document.body.appendChild(container);
         setTimeout(() => { container.remove(); }, 6000);
     }
 
@@ -886,10 +900,12 @@
         event.stopPropagation();
         const wrapper = btn.closest('.media-wrapper');
         const menu = wrapper.querySelector('.media-menu');
-        document.querySelectorAll('.media-menu').forEach(m => {
+        document.querySelectorAll('.media-menu.show').forEach(m => {
             if (m !== menu) m.classList.remove('show');
         });
+        const wasOpen = menu.classList.contains('show');
         menu.classList.toggle('show');
+        openMenuCount = wasOpen ? 0 : 1;
     }
     
     function toggleName(el, currentName, aka) {
@@ -924,12 +940,4 @@
         return months === 0 ? 999 : months;
     }
 
-    function debounce(func, wait) {
-        let timeout;
-        return function(...args) {
-            const context = this;
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(context, args), wait);
-        };
-    }
 </script></body></html>
