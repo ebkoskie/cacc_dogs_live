@@ -171,8 +171,9 @@
     .share-btn:hover { color: var(--text); border-color: var(--text-muted); }
 
     .media-wrapper { position: relative; display: inline-block; }
-    .media-menu { display: none; position: absolute; bottom: 100%; right: 0; background: var(--row); border: 1px solid var(--border); border-radius: 6px; padding: 5px 0; min-width: 160px; box-shadow: 0 5px 15px var(--card-shadow); z-index: 50; margin-bottom: 5px; animation: slideUp 0.15s ease-out; }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    .media-menu { display: none; position: fixed; background: var(--row); border: 1px solid var(--border); border-radius: 6px; padding: 5px 0; min-width: 160px; box-shadow: 0 5px 15px var(--card-shadow); z-index: 100; }
+    @keyframes menuSlideUp { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes menuSlideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
     .media-menu.show { display: block; }
     .media-item { display: flex; align-items: center; gap: 10px; padding: 8px 15px; color: var(--text); text-decoration: none; font-size: 0.85rem; transition: background 0.2s; }
     .media-item:hover { background: var(--row-hover); color: var(--accent); }
@@ -335,7 +336,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: February 16, 2026 08:22 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: February 16, 2026 08:35 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -388,6 +389,17 @@
     let TODAY_STR = "";
     let openMenuCount = 0;
 
+    function closeAllMediaMenus() {
+        if (openMenuCount === 0) return;
+        document.querySelectorAll('.media-menu.show').forEach(menu => {
+            menu.classList.remove('show');
+            menu.style.top = '';
+            menu.style.left = '';
+            menu.style.animation = '';
+        });
+        openMenuCount = 0;
+    }
+
     // Yield helper: lets the browser paint between interaction feedback and heavy work
     function yieldToMain() {
         if (typeof scheduler !== 'undefined' && typeof scheduler.yield === 'function') {
@@ -399,10 +411,11 @@
     // --- Init ---
     document.addEventListener('click', function(event) {
         if (openMenuCount > 0 && !event.target.closest('.media-wrapper')) {
-            document.querySelectorAll('.media-menu.show').forEach(menu => menu.classList.remove('show'));
-            openMenuCount = 0;
+            closeAllMediaMenus();
         }
     });
+    window.addEventListener('scroll', closeAllMediaMenus, { passive: true });
+    window.addEventListener('resize', closeAllMediaMenus);
 
     document.getElementById('mainSearch').addEventListener('keyup', debounce(handleGlobalSearch, 300));
 
@@ -896,16 +909,81 @@
         setTimeout(() => { container.remove(); }, 6000);
     }
 
+    function positionMenu(btn, menu) {
+        const btnRect = btn.getBoundingClientRect();
+        const GAP = 5;
+
+        // Measure menu dimensions while hidden
+        menu.style.visibility = 'hidden';
+        menu.style.display = 'block';
+        const menuHeight = menu.offsetHeight;
+        const menuWidth = menu.offsetWidth;
+        menu.style.display = '';
+        menu.style.visibility = '';
+
+        const viewportW = window.innerWidth;
+        const viewportH = window.innerHeight;
+        const navbarH = viewportW <= 600 ? 56 : 64;
+
+        // Vertical: prefer above, flip below if needed
+        const spaceAbove = btnRect.top - navbarH;
+        const spaceBelow = viewportH - btnRect.bottom;
+        let top, openDir;
+
+        if (spaceAbove >= menuHeight + GAP) {
+            top = btnRect.top - menuHeight - GAP;
+            openDir = 'up';
+        } else if (spaceBelow >= menuHeight + GAP) {
+            top = btnRect.bottom + GAP;
+            openDir = 'down';
+        } else if (spaceAbove >= spaceBelow) {
+            top = navbarH + GAP;
+            openDir = 'up';
+        } else {
+            top = btnRect.bottom + GAP;
+            openDir = 'down';
+        }
+
+        // Horizontal: right-align to button, clamped to viewport
+        let left = btnRect.right - menuWidth;
+        if (left < 8) left = 8;
+        if (left + menuWidth > viewportW - 8) left = viewportW - menuWidth - 8;
+
+        menu.style.top = top + 'px';
+        menu.style.left = left + 'px';
+        menu.style.animation = openDir === 'up'
+            ? 'menuSlideUp 0.15s ease-out'
+            : 'menuSlideDown 0.15s ease-out';
+    }
+
     function toggleMediaMenu(btn, event) {
         event.stopPropagation();
         const wrapper = btn.closest('.media-wrapper');
         const menu = wrapper.querySelector('.media-menu');
+
+        // Close any other open menus
         document.querySelectorAll('.media-menu.show').forEach(m => {
-            if (m !== menu) m.classList.remove('show');
+            if (m !== menu) {
+                m.classList.remove('show');
+                m.style.top = '';
+                m.style.left = '';
+                m.style.animation = '';
+            }
         });
+
         const wasOpen = menu.classList.contains('show');
-        menu.classList.toggle('show');
-        openMenuCount = wasOpen ? 0 : 1;
+        if (wasOpen) {
+            menu.classList.remove('show');
+            menu.style.top = '';
+            menu.style.left = '';
+            menu.style.animation = '';
+            openMenuCount = 0;
+            return;
+        }
+
+        positionMenu(btn, menu);
+        menu.classList.add('show');
+        openMenuCount = 1;
     }
     
     function toggleName(el, currentName, aka) {
