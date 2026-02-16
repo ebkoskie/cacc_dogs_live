@@ -1,0 +1,30 @@
+{
+  "sequence_counter": 10,
+  "forefront_sequence_counter": 0,
+  "forefront_requests": {},
+  "regular_requests": {
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/lollipop-is-sweeter-than-candy-on-a-stick-she-was-left-behind-but-still-smiles-s/1818390316215096/&show_text=true&width=500": 0,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/2681697295533659&show_text=true&width=500": 1,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/all-the-dogs/911228934931228/&show_text=true&width=500": 2,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/sometimes-the-sweetest-dogs-have-experienced-the-hardest-of-livesmennas-body-tel/811945911910147/&show_text=true&width=500": 3,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/we-could-see-the-wheels-turning-in-axels-mind-to-sit-or-not-to-sit-he-chose-no-t/1595721634906473/&show_text=true&width=500": 4,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/strays-part-2/1206712974964550/&show_text=true&width=500": 5,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/happy-valentines-day-every-single-day-we-have-lots-of-good-boys-and-girls-waitin/3345885258896588/&show_text=true&width=500": 6,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/wilmot-has-been-some-placesand-he-has-the-layers-of-dirt-to-prove-it-wilmot-is-a/943727254998724/&show_text=true&width=500": 7,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/chunk-is-an-antiphrasis-hes-skinny-and-not-even-that-food-focused-chunk-would-ra/778486791972065/&show_text=true&width=500": 8,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/playgroup/884745594320686/&show_text=true&width=500": 9
+  },
+  "in_progress_requests": [],
+  "handled_requests": [
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/happy-valentines-day-every-single-day-we-have-lots-of-good-boys-and-girls-waitin/3345885258896588/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/all-the-dogs/911228934931228/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/we-could-see-the-wheels-turning-in-axels-mind-to-sit-or-not-to-sit-he-chose-no-t/1595721634906473/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/sometimes-the-sweetest-dogs-have-experienced-the-hardest-of-livesmennas-body-tel/811945911910147/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/chunk-is-an-antiphrasis-hes-skinny-and-not-even-that-food-focused-chunk-would-ra/778486791972065/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/2681697295533659&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/lollipop-is-sweeter-than-candy-on-a-stick-she-was-left-behind-but-still-smiles-s/1818390316215096/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/strays-part-2/1206712974964550/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/playgroup/884745594320686/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/wilmot-has-been-some-placesand-he-has-the-layers-of-dirt-to-prove-it-wilmot-is-a/943727254998724/&show_text=true&width=500"
+  ]
+}
