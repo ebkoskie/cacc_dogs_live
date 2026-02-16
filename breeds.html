@@ -341,7 +341,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart></canvas></div></div><div class="chart-card bar-container"><div class=chart-title>Outcomes by Breed</div><div class=chart-canvas-wrapper><canvas id=breedChart></canvas></div></div></div><h2 style="margin-top: 10px;">📋 Detailed Statistics</h2><div class=table-container><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div></div><div class=footer><span>Last Updated: February 15, 2026 07:20 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart></canvas></div></div><div class="chart-card bar-container"><div class=chart-title>Outcomes by Breed</div><div class=chart-canvas-wrapper><canvas id=breedChart></canvas></div></div></div><h2 style="margin-top: 10px;">📋 Detailed Statistics</h2><div class=table-container><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div></div><div class=footer><span>Last Updated: February 15, 2026 08:50 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -390,32 +390,75 @@
     Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif';
 
     // Shared Options Object (Reuse this in your individual templates)
+    const CHART_THEMES = {
+        dark: {
+            text: '#c9d1d9', muted: '#8b949e', grid: '#30363d',
+            tooltipBg: 'rgba(22, 27, 34, 0.95)', tooltipBorder: '#30363d'
+        },
+        light: {
+            text: '#24292f', muted: '#57606a', grid: '#d0d7de',
+            tooltipBg: 'rgba(255, 255, 255, 0.95)', tooltipBorder: '#d0d7de'
+        }
+    };
+
     const GLOBAL_CHART_OPTS = {
         responsive: true,
         maintainAspectRatio: false,
         interaction: { mode: 'index', intersect: false },
         plugins: {
             legend: { labels: { color: '#c9d1d9' } },
-            tooltip: { 
-                backgroundColor: 'rgba(22, 27, 34, 0.95)', 
-                titleColor: '#c9d1d9', 
+            tooltip: {
+                backgroundColor: 'rgba(22, 27, 34, 0.95)',
+                titleColor: '#c9d1d9',
                 bodyColor: '#c9d1d9',
                 borderColor: '#30363d',
                 borderWidth: 1
             }
         },
         scales: {
-            x: { 
-                grid: { color: '#30363d', drawBorder: false }, 
-                ticks: { color: '#8b949e' } 
+            x: {
+                grid: { color: '#30363d', drawBorder: false },
+                ticks: { color: '#8b949e' }
             },
-            y: { 
-                grid: { color: '#30363d', drawBorder: false }, 
-                ticks: { color: '#8b949e' }, 
-                beginAtZero: true 
+            y: {
+                grid: { color: '#30363d', drawBorder: false },
+                ticks: { color: '#8b949e' },
+                beginAtZero: true
             }
         }
     };
+
+    // Light/dark mode observer — updates Chart.js defaults when theme toggles
+    (function() {
+        function applyChartTheme() {
+            const isLight = document.body.classList.contains('light-mode');
+            const t = isLight ? CHART_THEMES.light : CHART_THEMES.dark;
+            Chart.defaults.color = t.muted;
+            Chart.defaults.borderColor = t.grid;
+            // Update all existing chart instances
+            Chart.instances && Object.values(Chart.instances).forEach(c => {
+                if (!c || !c.options) return;
+                if (c.options.plugins && c.options.plugins.legend && c.options.plugins.legend.labels) {
+                    c.options.plugins.legend.labels.color = t.text;
+                }
+                if (c.options.plugins && c.options.plugins.tooltip) {
+                    c.options.plugins.tooltip.backgroundColor = t.tooltipBg;
+                    c.options.plugins.tooltip.titleColor = t.text;
+                    c.options.plugins.tooltip.bodyColor = t.text;
+                    c.options.plugins.tooltip.borderColor = t.tooltipBorder;
+                }
+                ['x', 'y', 'y1'].forEach(axis => {
+                    if (c.options.scales && c.options.scales[axis]) {
+                        if (c.options.scales[axis].grid) c.options.scales[axis].grid.color = t.grid;
+                        if (c.options.scales[axis].ticks) c.options.scales[axis].ticks.color = t.muted;
+                    }
+                });
+                c.update('none');
+            });
+        }
+        const observer = new MutationObserver(applyChartTheme);
+        observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    })();
 </script><script>
     // --- Global State ---
     let fullIndex = [];

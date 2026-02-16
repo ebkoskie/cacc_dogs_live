@@ -72,7 +72,9 @@
     .chart-card { background: var(--row); padding: 20px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px; }
     .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
     h2 { margin: 0; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; color: var(--text); }
-    .canvas-container { position: relative; height: 350px; width: 100%; }
+    .canvas-container { position: relative; height: 300px; width: 100%; }
+    @media (min-width: 768px) { .canvas-container { height: 350px; } }
+    @media (min-width: 1200px) { .canvas-container { height: 380px; } }
 
     /* Section Divider */
     .section-divider {
@@ -86,7 +88,7 @@
 
     /* Controls Bar */
     .controls-bar {
-        position: sticky; top: 0; z-index: 100;
+        position: sticky; top: 64px; z-index: 100;
         background: var(--bg); border-bottom: 1px solid var(--border);
         padding: 15px 0; margin-bottom: 30px;
         display: flex; flex-wrap: wrap; gap: 15px; align-items: center;
@@ -171,7 +173,7 @@
     .is-revealed .spoiler-overlay { opacity: 0; pointer-events: none; }
     .is-revealed .spoiler-content { filter: none; }
     
-    .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; }
+    .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: 20px; }
 
     /* Quick-select buttons */
     .quick-btns { display: flex; gap: 4px; }
@@ -196,6 +198,17 @@
         display: none; align-items: center; gap: 10px;
         background: var(--danger-bg); color: var(--danger-text); border: 1px solid var(--danger-border);
         padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem;
+    }
+
+    /* Mobile-specific responsive fixes */
+    @media (max-width: 600px) {
+        .controls-bar { padding: 10px 0; gap: 10px; }
+        .date-input { padding: 8px 6px; font-size: 0.85rem; min-width: 0; width: 120px; }
+        .control-group label { font-size: 0.8rem; }
+        .quick-btns { width: 100%; }
+        .quick-btn { flex: 1; text-align: center; }
+        .chart-card { padding: 15px; }
+        .chart-card h2 { font-size: 1rem; }
     }
 
     </style></head><body><style>
@@ -325,7 +338,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=stats-container><div class=stats-grid><div class="stat-card intake"><span class=stat-date>Today</span><div class=stat-value><span id=todayIntake>--</span> <span id=intakeIndicator></span></div><div class=stat-label><i class="fas fa-arrow-right-to-bracket"></i> Intakes</div><div class=stat-sub id=intakeSub></div></div><div class="stat-card adopt" id=adoptCard><span class=stat-date>Today</span><div class=stat-value><span id=todayAdopt>--</span> <span id=adoptIndicator></span></div><div class=stat-label><i class="fas fa-home"></i> Adoptions</div><div class=stat-sub id=adoptSub></div></div><div class="stat-card rescue" id=rescueCard><span class=stat-date>Today</span><div class=stat-value><span id=todayRescue>--</span> <span id=rescueIndicator></span></div><div class=stat-label><i class="fas fa-ambulance"></i> Rescues</div><div class=stat-sub id=rescueSub></div></div><div class="stat-card rto"><span class=stat-date>Today</span><div class=stat-value><span id=todayRTO>--</span> <span id=rtoIndicator></span></div><div class=stat-label><i class="fas fa-user-friends"></i> RTO</div><div class=stat-sub id=rtoSub></div></div><div class="stat-card los"><span class=stat-date>Population</span><div class=stat-value><span id=todayMedianLOS>--</span> <span id=losIndicator></span></div><div class=stat-label><i class="fas fa-hourglass-half"></i> Median Stay</div><div class=stat-sub>Avg: <span id=todayAvgLOS>--</span> days</div></div></div></div><div class=trends-error id=trendsError><i class="fas fa-exclamation-triangle"></i><span>Failed to load trends data. Please try refreshing the page.</span></div><h3 class=section-divider>Historical Analysis</h3><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class="quick-btn active" onclick="quickSelect(7, this)">7d</button><button class=quick-btn onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-users" style=color:var(--accent);></i> Daily Shelter Population</h2></div><div class=canvas-container><canvas id=populationChart></canvas><div class=no-data-overlay id=populationNoData>No data available for this date range</div></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-heartbeat" style=color:var(--accent);></i> Population Health: Length of Stay Trends</h2></div><div class=canvas-container><canvas id=losHistoryChart></canvas><div class=no-data-overlay id=losHistoryNoData>No data available for this date range</div></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> * Shows the Average and Median days that dogs in the shelter had been waiting on any given day. <strong style="color: #d29922;">Median</strong> is usually the best indicator of overall flow. </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-balance-scale" style=color:var(--accent);></i> Intake vs. Outcomes</h2></div><div class=canvas-container><canvas id=weeklyChart></canvas><div class=no-data-overlay id=weeklyNoData>No data available for this date range</div></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"><i class="fas fa-square" style="color:rgba(255, 123, 114, 0.3);"></i> Red zones indicate days where Intakes exceeded Outcomes. <i class="fas fa-square" style="color:rgba(35, 134, 54, 0.3); margin-left:10px;"></i> Green zones indicate net population reduction. </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-paw" style=color:var(--accent);></i> Outcomes by Type</h2></div><div class=canvas-container><canvas id=outcomesLineChart></canvas><div class=no-data-overlay id=outcomesLineNoData>No data available for this date range</div></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-clock" style=color:var(--warning-text);></i> Historical Time to Outcome (Median vs Average)</h2></div><div class=canvas-container><canvas id=losChart></canvas><div class=no-data-overlay id=losNoData>No data available for this date range</div></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> * <strong>Solid lines</strong> represent the Median days (typical wait). <span style="border-bottom: 2px dashed var(--text-muted);">Dashed lines</span> represent the Average days. </p></div><div class=charts-grid><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-bar" style=color:var(--gender-male-text);></i> Current Population: Days in Shelter</h2></div><div class=canvas-container style=height:300px;><canvas id=losDistChart></canvas></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;">* Snapshot of current dogs (Not affected by date filter).</p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-pie" style=color:var(--warning-text);></i> Outcomes Distribution</h2></div><div class=canvas-container style=height:300px;><canvas id=outcomePieChart></canvas><div class=no-data-overlay id=pieNoData>No data available for this date range</div></div></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-heart-broken" style=color:var(--danger-text);></i> Other Outcomes</h2></div><div class=spoiler-wrapper id=euthSpoiler onclick=revealSpoiler()><div class=spoiler-overlay><i class="fas fa-eye-slash spoiler-icon"></i><div class=spoiler-text>Sensitive Content</div><div class=spoiler-sub>Tap to reveal daily count of non-live outcomes</div></div><div class="canvas-container spoiler-content"><canvas id=euthChart></canvas><div class=no-data-overlay id=euthNoData>No data available for this date range</div></div></div></div><div class=footer><span>Last Updated: February 15, 2026 07:20 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=stats-container><div class=stats-grid><div class="stat-card intake"><span class=stat-date>Today</span><div class=stat-value><span id=todayIntake>--</span> <span id=intakeIndicator></span></div><div class=stat-label><i class="fas fa-arrow-right-to-bracket"></i> Intakes</div><div class=stat-sub id=intakeSub></div></div><div class="stat-card adopt" id=adoptCard><span class=stat-date>Today</span><div class=stat-value><span id=todayAdopt>--</span> <span id=adoptIndicator></span></div><div class=stat-label><i class="fas fa-home"></i> Adoptions</div><div class=stat-sub id=adoptSub></div></div><div class="stat-card rescue" id=rescueCard><span class=stat-date>Today</span><div class=stat-value><span id=todayRescue>--</span> <span id=rescueIndicator></span></div><div class=stat-label><i class="fas fa-ambulance"></i> Rescues</div><div class=stat-sub id=rescueSub></div></div><div class="stat-card rto"><span class=stat-date>Today</span><div class=stat-value><span id=todayRTO>--</span> <span id=rtoIndicator></span></div><div class=stat-label><i class="fas fa-user-friends"></i> RTO</div><div class=stat-sub id=rtoSub></div></div><div class="stat-card los"><span class=stat-date>Current</span><div class=stat-value><span id=todayMedianLOS>--</span> <span id=losIndicator></span></div><div class=stat-label><i class="fas fa-hourglass-half"></i> Median Stay</div><div class=stat-sub>Avg: <span id=todayAvgLOS>--</span> days</div></div></div></div><div class=trends-error id=trendsError><i class="fas fa-exclamation-triangle"></i><span>Failed to load trends data. Please try refreshing the page.</span></div><h3 class=section-divider>Historical Analysis</h3><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class="quick-btn active" onclick="quickSelect(7, this)">7d</button><button class=quick-btn onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-users" style=color:var(--accent);></i> Daily Shelter Population</h2></div><div class=canvas-container><canvas id=populationChart></canvas><div class=no-data-overlay id=populationNoData>No data available for this date range</div></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> * Total dogs in the shelter on each day. <span style="border-bottom: 2px dashed #d29922;">Dashed gold line</span> shows the 7-day moving average. </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-heartbeat" style=color:var(--accent);></i> Population Health: Length of Stay Trends</h2></div><div class=canvas-container><canvas id=losHistoryChart></canvas><div class=no-data-overlay id=losHistoryNoData>No data available for this date range</div></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> * Shows the Average and Median days that dogs in the shelter had been waiting on any given day. <strong style="color: #d29922;">Median</strong> is usually the best indicator of overall flow. </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-balance-scale" style=color:var(--accent);></i> Intake vs. Outcomes</h2></div><div class=canvas-container><canvas id=weeklyChart></canvas><div class=no-data-overlay id=weeklyNoData>No data available for this date range</div></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"><i class="fas fa-square" style="color:rgba(255, 123, 114, 0.3);"></i> Red zones indicate days where Intakes exceeded Outcomes. <i class="fas fa-square" style="color:rgba(35, 134, 54, 0.3); margin-left:10px;"></i> Green zones indicate net population reduction. </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-exchange-alt" style=color:var(--accent);></i> Net Population Flow</h2></div><div class=canvas-container><canvas id=netFlowChart></canvas><div class=no-data-overlay id=netFlowNoData>No data available for this date range</div></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> Daily net change (Intakes minus Outcomes). <i class="fas fa-square" style="color:rgba(255, 123, 114, 0.5);"></i> Red bars = shelter gaining dogs. <i class="fas fa-square" style="color:rgba(35, 134, 54, 0.5); margin-left:5px;"></i> Green bars = shelter losing dogs. <span style="border-bottom: 2px solid #d29922; margin-left:5px;">Gold line</span> = 7-day moving average. </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-map-marker-alt" style=color:var(--stray-text);></i> Intake Source: Stray vs. Non-Stray</h2></div><div class=canvas-container><canvas id=intakeSourceChart></canvas><div class=no-data-overlay id=intakeSourceNoData>No data available for this date range</div></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"><strong>Stray</strong> = dogs found at a specific location. <strong>Non-Stray</strong> = owner surrenders, confiscations, and other intake types. <span style="border-bottom: 2px solid #d29922; margin-left:5px;">Gold line</span> = stray percentage (7-day avg). </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-paw" style=color:var(--accent);></i> Live Outcome Breakdown</h2></div><div class=canvas-container><canvas id=outcomesLineChart></canvas><div class=no-data-overlay id=outcomesLineNoData>No data available for this date range</div></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> * Daily counts of live outcomes by type. <span style="border-bottom: 2px dashed var(--text-muted);">Dashed lines</span> show 7-day moving averages. </p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-clock" style=color:var(--warning-text);></i> Historical Time to Outcome (Median vs Average)</h2></div><div class=canvas-container><canvas id=losChart></canvas><div class=no-data-overlay id=losNoData>No data available for this date range</div></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> * <strong>Solid lines</strong> represent the Median days (typical wait). <span style="border-bottom: 2px dashed var(--text-muted);">Dashed lines</span> represent the Average days. </p></div><div class=charts-grid><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-bar" style=color:var(--gender-male-text);></i> Current Population: Days in Shelter</h2></div><div class=canvas-container style=height:300px;><canvas id=losDistChart></canvas></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;">* Snapshot of current dogs (Not affected by date filter).</p></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-chart-pie" style=color:var(--warning-text);></i> Outcomes Distribution</h2></div><div class=canvas-container style=height:300px;><canvas id=outcomePieChart></canvas><div class=no-data-overlay id=pieNoData>No data available for this date range</div></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-calendar-week" style=color:var(--accent);></i> Day-of-Week Patterns</h2></div><div class=canvas-container style=height:300px;><canvas id=dowChart></canvas></div><p style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"> * Average daily intakes and outcomes by weekday (affected by date filter). </p></div></div><div class=chart-card><div class=chart-header><h2><i class="fas fa-heart-broken" style=color:var(--danger-text);></i> Other Outcomes</h2></div><div class=spoiler-wrapper id=euthSpoiler onclick=revealSpoiler()><div class=spoiler-overlay><i class="fas fa-eye-slash spoiler-icon"></i><div class=spoiler-text>Sensitive Content</div><div class=spoiler-sub>Tap to reveal daily count of non-live outcomes</div></div><div class="canvas-container spoiler-content"><canvas id=euthChart></canvas><div class=no-data-overlay id=euthNoData>No data available for this date range</div></div></div></div><div class=footer><span>Last Updated: February 15, 2026 08:50 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -374,32 +387,75 @@
     Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif';
 
     // Shared Options Object (Reuse this in your individual templates)
+    const CHART_THEMES = {
+        dark: {
+            text: '#c9d1d9', muted: '#8b949e', grid: '#30363d',
+            tooltipBg: 'rgba(22, 27, 34, 0.95)', tooltipBorder: '#30363d'
+        },
+        light: {
+            text: '#24292f', muted: '#57606a', grid: '#d0d7de',
+            tooltipBg: 'rgba(255, 255, 255, 0.95)', tooltipBorder: '#d0d7de'
+        }
+    };
+
     const GLOBAL_CHART_OPTS = {
         responsive: true,
         maintainAspectRatio: false,
         interaction: { mode: 'index', intersect: false },
         plugins: {
             legend: { labels: { color: '#c9d1d9' } },
-            tooltip: { 
-                backgroundColor: 'rgba(22, 27, 34, 0.95)', 
-                titleColor: '#c9d1d9', 
+            tooltip: {
+                backgroundColor: 'rgba(22, 27, 34, 0.95)',
+                titleColor: '#c9d1d9',
                 bodyColor: '#c9d1d9',
                 borderColor: '#30363d',
                 borderWidth: 1
             }
         },
         scales: {
-            x: { 
-                grid: { color: '#30363d', drawBorder: false }, 
-                ticks: { color: '#8b949e' } 
+            x: {
+                grid: { color: '#30363d', drawBorder: false },
+                ticks: { color: '#8b949e' }
             },
-            y: { 
-                grid: { color: '#30363d', drawBorder: false }, 
-                ticks: { color: '#8b949e' }, 
-                beginAtZero: true 
+            y: {
+                grid: { color: '#30363d', drawBorder: false },
+                ticks: { color: '#8b949e' },
+                beginAtZero: true
             }
         }
     };
+
+    // Light/dark mode observer — updates Chart.js defaults when theme toggles
+    (function() {
+        function applyChartTheme() {
+            const isLight = document.body.classList.contains('light-mode');
+            const t = isLight ? CHART_THEMES.light : CHART_THEMES.dark;
+            Chart.defaults.color = t.muted;
+            Chart.defaults.borderColor = t.grid;
+            // Update all existing chart instances
+            Chart.instances && Object.values(Chart.instances).forEach(c => {
+                if (!c || !c.options) return;
+                if (c.options.plugins && c.options.plugins.legend && c.options.plugins.legend.labels) {
+                    c.options.plugins.legend.labels.color = t.text;
+                }
+                if (c.options.plugins && c.options.plugins.tooltip) {
+                    c.options.plugins.tooltip.backgroundColor = t.tooltipBg;
+                    c.options.plugins.tooltip.titleColor = t.text;
+                    c.options.plugins.tooltip.bodyColor = t.text;
+                    c.options.plugins.tooltip.borderColor = t.tooltipBorder;
+                }
+                ['x', 'y', 'y1'].forEach(axis => {
+                    if (c.options.scales && c.options.scales[axis]) {
+                        if (c.options.scales[axis].grid) c.options.scales[axis].grid.color = t.grid;
+                        if (c.options.scales[axis].ticks) c.options.scales[axis].ticks.color = t.muted;
+                    }
+                });
+                c.update('none');
+            });
+        }
+        const observer = new MutationObserver(applyChartTheme);
+        observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    })();
 </script><script>
     let RAW_DATA = {};
     let charts = {};
@@ -448,14 +504,44 @@
         }
     }
 
+    function movingAvg(arr, window = 7) {
+        return arr.map((_, i) => {
+            const start = Math.max(0, i - window + 1);
+            const slice = arr.slice(start, i + 1).filter(v => v != null);
+            return slice.length > 0 ? Math.round(slice.reduce((a, b) => a + b, 0) / slice.length * 10) / 10 : null;
+        });
+    }
+
     function toggleNoData(overlayId, hasData) {
         const el = document.getElementById(overlayId);
         if (el) el.style.display = hasData ? 'none' : 'flex';
     }
 
     // --- Stat Cards ---
+    function formatDateLabel(dateStr) {
+        if (!dateStr) return 'Today';
+        const d = new Date(dateStr + 'T12:00:00');
+        const today = new Date();
+        if (dateStr === today.toISOString().split('T')[0]) return 'Today';
+        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
     function updateTodayStats() {
         if (!RAW_DATA) return;
+
+        // Determine actual date of latest data point
+        const latestDate = RAW_DATA.weekly && RAW_DATA.weekly.labels.length > 0
+            ? RAW_DATA.weekly.labels[RAW_DATA.weekly.labels.length - 1] : null;
+        const priorDate = RAW_DATA.weekly && RAW_DATA.weekly.labels.length > 1
+            ? RAW_DATA.weekly.labels[RAW_DATA.weekly.labels.length - 2] : null;
+
+        const dateLabel = formatDateLabel(latestDate);
+        const priorLabel = priorDate ? formatDateLabel(priorDate) : 'Prior';
+
+        // Update stat-date labels to reflect actual data date
+        document.querySelectorAll('.stat-card:not(.los) .stat-date').forEach(el => {
+            el.textContent = dateLabel;
+        });
 
         const intakeVal = RAW_DATA.weekly ? getLast(RAW_DATA.weekly.intakes) : 0;
         const adoptVal = RAW_DATA.outcomes_daily && RAW_DATA.outcomes_daily.datasets['Adopted'] ? getLast(RAW_DATA.outcomes_daily.datasets['Adopted']) : 0;
@@ -478,10 +564,10 @@
         setTrendIndicator('rescueIndicator', rescueVal, rescueYest, false);
         setTrendIndicator('rtoIndicator', rtoVal, rtoYest, false);
 
-        if (intakeYest !== null) document.getElementById('intakeSub').textContent = 'Yesterday: ' + intakeYest;
-        if (adoptYest !== null) document.getElementById('adoptSub').textContent = 'Yesterday: ' + adoptYest;
-        if (rescueYest !== null) document.getElementById('rescueSub').textContent = 'Yesterday: ' + rescueYest;
-        if (rtoYest !== null) document.getElementById('rtoSub').textContent = 'Yesterday: ' + rtoYest;
+        if (intakeYest !== null) document.getElementById('intakeSub').textContent = priorLabel + ': ' + intakeYest;
+        if (adoptYest !== null) document.getElementById('adoptSub').textContent = priorLabel + ': ' + adoptYest;
+        if (rescueYest !== null) document.getElementById('rescueSub').textContent = priorLabel + ': ' + rescueYest;
+        if (rtoYest !== null) document.getElementById('rtoSub').textContent = priorLabel + ': ' + rtoYest;
 
         // Clickable cards
         if (adoptVal > 0) {
@@ -510,6 +596,30 @@
             setTrendIndicator('losIndicator', todayMed, yestMed, true);
         }
     }
+
+    // --- Doughnut Center Plugin ---
+    const doughnutCenterPlugin = {
+        id: 'doughnutCenter',
+        afterDraw(chart) {
+            if (chart.config.type !== 'doughnut') return;
+            const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+            if (total === 0) return;
+            const { ctx, chartArea } = chart;
+            const cx = (chartArea.left + chartArea.right) / 2;
+            const cy = (chartArea.top + chartArea.bottom) / 2;
+            ctx.save();
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = chart.options.color || '#c9d1d9';
+            ctx.font = 'bold 1.6rem -apple-system, BlinkMacSystemFont, sans-serif';
+            ctx.fillText(total.toLocaleString(), cx, cy - 8);
+            ctx.font = '0.75rem -apple-system, BlinkMacSystemFont, sans-serif';
+            ctx.fillStyle = '#8b949e';
+            ctx.fillText('Total', cx, cy + 14);
+            ctx.restore();
+        }
+    };
+    Chart.register(doughnutCenterPlugin);
 
     // --- Chart Initialization ---
     function initCharts() {
@@ -545,6 +655,25 @@
             options: { ...GLOBAL_CHART_OPTS, spanGaps: true, scales: { x: { ...GLOBAL_CHART_OPTS.scales.x, ...timeAxis }, y: GLOBAL_CHART_OPTS.scales.y } }
         });
 
+        charts.netFlow = new Chart(document.getElementById('netFlowChart'), {
+            type: 'bar',
+            data: { labels: [], datasets: [] },
+            options: { ...GLOBAL_CHART_OPTS, scales: { x: { ...GLOBAL_CHART_OPTS.scales.x, ...timeAxis }, y: { ...GLOBAL_CHART_OPTS.scales.y } } }
+        });
+
+        charts.intakeSource = new Chart(document.getElementById('intakeSourceChart'), {
+            type: 'line',
+            data: { labels: [], datasets: [] },
+            options: {
+                ...GLOBAL_CHART_OPTS,
+                scales: {
+                    x: { ...GLOBAL_CHART_OPTS.scales.x, ...timeAxis },
+                    y: { ...GLOBAL_CHART_OPTS.scales.y, stacked: true, title: { display: true, text: 'Dogs', color: '#8b949e' } },
+                    y1: { position: 'right', grid: { display: false }, ticks: { color: '#d29922', callback: v => v + '%' }, min: 0, max: 100, title: { display: true, text: 'Stray %', color: '#d29922' } }
+                }
+            }
+        });
+
         charts.euth = new Chart(document.getElementById('euthChart'), {
             type: 'line',
             data: { labels: [], datasets: [] },
@@ -554,17 +683,52 @@
         charts.pie = new Chart(document.getElementById('outcomePieChart'), {
             type: 'doughnut',
             data: { labels: ['Adopted', 'Transferred', 'RTO', 'Other'], datasets: [{ data: [], borderWidth: 0 }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#8b949e', boxWidth: 12 } } } }
+            options: {
+                responsive: true, maintainAspectRatio: false, cutout: '55%',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            color: '#8b949e', boxWidth: 12,
+                            generateLabels: function(chart) {
+                                const data = chart.data;
+                                const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                return data.labels.map((label, i) => {
+                                    const value = data.datasets[0].data[i] || 0;
+                                    const pct = total > 0 ? Math.round(value / total * 100) : 0;
+                                    return { text: label + ': ' + pct + '%', fillStyle: data.datasets[0].backgroundColor ? data.datasets[0].backgroundColor[i] : '#8b949e', hidden: false, index: i, lineWidth: 0 };
+                                });
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) {
+                                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                const pct = total > 0 ? Math.round(ctx.raw / total * 100) : 0;
+                                return ctx.label + ': ' + ctx.raw + ' (' + pct + '%)';
+                            }
+                        }
+                    }
+                }
+            }
         });
 
         if (RAW_DATA.los_dist && RAW_DATA.los_dist.labels.length > 0) {
-            const distColors = RAW_DATA.los_dist.labels.map(l => parseInt(l) >= 30 || l.includes('90') ? '#ff7b72' : '#58a6ff');
+            const losGradient = { '0-7': '#3fb950', '8-14': '#58a6ff', '15-30': '#d29922', '31-60': '#e3833e', '61-90': '#f47067', '90+': '#da3633' };
+            const distColors = RAW_DATA.los_dist.labels.map(l => losGradient[l] || '#8b949e');
             new Chart(document.getElementById('losDistChart'), {
                 type: 'bar',
                 data: { labels: RAW_DATA.los_dist.labels, datasets: [{ label: 'Dogs', data: RAW_DATA.los_dist.data, backgroundColor: distColors, borderRadius: 4 }] },
                 options: { ...GLOBAL_CHART_OPTS, plugins: { ...GLOBAL_CHART_OPTS.plugins, legend: { display: false } } }
             });
         }
+
+        charts.dow = new Chart(document.getElementById('dowChart'), {
+            type: 'bar',
+            data: { labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], datasets: [] },
+            options: { ...GLOBAL_CHART_OPTS, plugins: { ...GLOBAL_CHART_OPTS.plugins, legend: { labels: { color: '#8b949e' } } }, scales: { x: GLOBAL_CHART_OPTS.scales.x, y: { ...GLOBAL_CHART_OPTS.scales.y, beginAtZero: true } } }
+        });
     }
 
     // --- Chart Update with empty-data handling ---
@@ -592,7 +756,11 @@
             const idxs = getIndices(RAW_DATA.population.labels);
             toggleNoData('populationNoData', idxs.length > 0);
             charts.population.data.labels = idxs.map(i => RAW_DATA.population.labels[i]);
-            charts.population.data.datasets = [{ label: 'Shelter Population', data: idxs.map(i => RAW_DATA.population.data[i]), borderColor: '#a371f7', backgroundColor: 'rgba(163, 113, 247, 0.1)', fill: true, tension: 0.3, pointRadius: 2, segment: dashedSegment }];
+            const popData = idxs.map(i => RAW_DATA.population.data[i]);
+            charts.population.data.datasets = [
+                { label: 'Shelter Population', data: popData, borderColor: '#a371f7', backgroundColor: 'rgba(163, 113, 247, 0.1)', fill: true, tension: 0.3, pointRadius: 2, segment: dashedSegment },
+                { label: '7-Day Avg', data: movingAvg(popData), borderColor: '#d29922', borderWidth: 2, borderDash: [4, 4], pointRadius: 0, tension: 0.3, fill: false }
+            ];
             charts.population.update();
         }
 
@@ -618,6 +786,41 @@
                 { label: 'Outcomes', data: idxs.map(i => RAW_DATA.weekly.outcomes[i]), borderColor: '#238636', fill: false, tension: 0.3, pointRadius: 2, segment: dashedSegment }
             ];
             charts.weekly.update();
+
+            // --- Net Population Flow (derived from same weekly data) ---
+            setScale(charts.netFlow);
+            toggleNoData('netFlowNoData', idxs.length > 0);
+            charts.netFlow.data.labels = idxs.map(i => RAW_DATA.weekly.labels[i]);
+            const netData = idxs.map(i => RAW_DATA.weekly.intakes[i] - RAW_DATA.weekly.outcomes[i]);
+            const barColors = netData.map(v => v > 0 ? 'rgba(255, 123, 114, 0.6)' : 'rgba(35, 134, 54, 0.6)');
+            const borderColors = netData.map(v => v > 0 ? '#ff7b72' : '#238636');
+            charts.netFlow.data.datasets = [
+                { type: 'bar', label: 'Daily Net Flow', data: netData, backgroundColor: barColors, borderColor: borderColors, borderWidth: 1, borderRadius: 2, order: 1 },
+                { type: 'line', label: '7-Day Avg', data: movingAvg(netData), borderColor: '#d29922', borderWidth: 2, pointRadius: 0, tension: 0.3, order: 0 }
+            ];
+            charts.netFlow.update();
+        }
+
+        // --- Intake Source: Stray vs. Owner Surrender ---
+        if (RAW_DATA.intake_source && RAW_DATA.intake_source.labels.length > 0) {
+            setScale(charts.intakeSource);
+            const idxs = getIndices(RAW_DATA.intake_source.labels);
+            toggleNoData('intakeSourceNoData', idxs.length > 0);
+            charts.intakeSource.data.labels = idxs.map(i => RAW_DATA.intake_source.labels[i]);
+            const strayData = idxs.map(i => RAW_DATA.intake_source.stray[i]);
+            const surrData = idxs.map(i => RAW_DATA.intake_source.surrender[i]);
+            const strayPct = strayData.map((s, i) => {
+                const total = s + surrData[i];
+                return total > 0 ? Math.round(s / total * 1000) / 10 : null;
+            });
+            charts.intakeSource.data.datasets = [
+                { label: 'Stray', data: strayData, borderColor: '#d2a8ff', backgroundColor: 'rgba(210, 168, 255, 0.3)', fill: true, tension: 0.3, pointRadius: 1, yAxisID: 'y' },
+                { label: 'Non-Stray', data: surrData, borderColor: '#58a6ff', backgroundColor: 'rgba(88, 166, 255, 0.3)', fill: true, tension: 0.3, pointRadius: 1, yAxisID: 'y' },
+                { label: 'Stray % (7d avg)', data: movingAvg(strayPct), borderColor: '#d29922', borderWidth: 2, pointRadius: 0, tension: 0.3, fill: false, yAxisID: 'y1' }
+            ];
+            charts.intakeSource.update();
+        } else {
+            toggleNoData('intakeSourceNoData', false);
         }
 
         if (RAW_DATA.outcomes_daily) {
@@ -626,10 +829,14 @@
             toggleNoData('outcomesLineNoData', idxs.length > 0);
             charts.outcomesLine.data.labels = idxs.map(i => RAW_DATA.outcomes_daily.labels[i]);
             const getDS = (key) => idxs.map(i => RAW_DATA.outcomes_daily.datasets[key] ? RAW_DATA.outcomes_daily.datasets[key][i] : 0);
+            const adoptedData = getDS('Adopted'), rescuedData = getDS('Transferred'), rtoData = getDS('RTO');
             charts.outcomesLine.data.datasets = [
-                { label: 'Adopted', data: getDS('Adopted'), borderColor: '#58a6ff', tension: 0.3, pointRadius: 2, segment: dashedSegment },
-                { label: 'Rescues', data: getDS('Transferred'), borderColor: '#238636', tension: 0.3, pointRadius: 2, segment: dashedSegment },
-                { label: 'RTO', data: getDS('RTO'), borderColor: '#d29922', tension: 0.3, pointRadius: 2, segment: dashedSegment }
+                { label: 'Adopted', data: adoptedData, borderColor: '#58a6ff', tension: 0.3, pointRadius: 2, segment: dashedSegment },
+                { label: 'Rescues', data: rescuedData, borderColor: '#238636', tension: 0.3, pointRadius: 2, segment: dashedSegment },
+                { label: 'RTO', data: rtoData, borderColor: '#d29922', tension: 0.3, pointRadius: 2, segment: dashedSegment },
+                { label: 'Adopted (7d)', data: movingAvg(adoptedData), borderColor: '#58a6ff', borderDash: [4, 4], borderWidth: 1, pointRadius: 0, tension: 0.3 },
+                { label: 'Rescues (7d)', data: movingAvg(rescuedData), borderColor: '#238636', borderDash: [4, 4], borderWidth: 1, pointRadius: 0, tension: 0.3 },
+                { label: 'RTO (7d)', data: movingAvg(rtoData), borderColor: '#d29922', borderDash: [4, 4], borderWidth: 1, pointRadius: 0, tension: 0.3 }
             ];
             charts.outcomesLine.update();
         }
@@ -657,6 +864,23 @@
             charts.euth.data.labels = idxs.map(i => RAW_DATA.euth.labels[i]);
             charts.euth.data.datasets = [{ label: 'Other Outcomes', data: idxs.map(i => RAW_DATA.euth.count[i]), borderColor: '#ff7b72', backgroundColor: 'rgba(255, 123, 114, 0.1)', fill: true, tension: 0.1, segment: dashedSegment }];
             charts.euth.update();
+        }
+
+        // --- Day-of-Week Pattern (derived from weekly data) ---
+        if (RAW_DATA.weekly) {
+            const wIdxs = getIndices(RAW_DATA.weekly.labels);
+            const dowIntakes = Array(7).fill(0), dowOutcomes = Array(7).fill(0), dowCounts = Array(7).fill(0);
+            wIdxs.forEach(i => {
+                const dow = new Date(RAW_DATA.weekly.labels[i] + 'T12:00:00').getDay();
+                dowIntakes[dow] += RAW_DATA.weekly.intakes[i];
+                dowOutcomes[dow] += RAW_DATA.weekly.outcomes[i];
+                dowCounts[dow]++;
+            });
+            charts.dow.data.datasets = [
+                { label: 'Avg Intakes', data: dowIntakes.map((s, i) => dowCounts[i] > 0 ? Math.round(s / dowCounts[i] * 10) / 10 : 0), backgroundColor: 'rgba(88, 166, 255, 0.7)', borderRadius: 4 },
+                { label: 'Avg Outcomes', data: dowOutcomes.map((s, i) => dowCounts[i] > 0 ? Math.round(s / dowCounts[i] * 10) / 10 : 0), backgroundColor: 'rgba(35, 134, 54, 0.7)', borderRadius: 4 }
+            ];
+            charts.dow.update();
         }
 
         if (RAW_DATA.outcomes_daily) {
