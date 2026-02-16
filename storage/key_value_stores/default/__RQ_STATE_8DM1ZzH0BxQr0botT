@@ -1,0 +1,42 @@
+{
+  "sequence_counter": 16,
+  "forefront_sequence_counter": 0,
+  "forefront_requests": {},
+  "regular_requests": {
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/%25ef%25b8%258frescue-only-medical%25ef%25b8%258fgood-gal-gabby-needs-a-foster-homeshe-has-a-rectal-mass-tha/1447661960349178/&show_text=true&width=500": 0,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/daria/3553034288161579/&show_text=true&width=500": 1,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rex/1413630837152336/&show_text=true&width=500": 2,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/we-could-see-the-wheels-turning-in-axels-mind-to-sit-or-not-to-sit-he-chose-no-t/1595721634906473/&show_text=true&width=500": 3,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/sometimes-the-sweetest-dogs-have-experienced-the-hardest-of-livesmennas-body-tel/811945911910147/&show_text=true&width=500": 4,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/lollipop-is-sweeter-than-candy-on-a-stick-she-was-left-behind-but-still-smiles-s/1818390316215096/&show_text=true&width=500": 5,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/all-the-dogs/911228934931228/&show_text=true&width=500": 6,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/chunk-is-an-antiphrasis-hes-skinny-and-not-even-that-food-focused-chunk-would-ra/778486791972065/&show_text=true&width=500": 7,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/slow-down-construction-zone-aheadhardhat-isnt-really-in-need-of-any-repairs-but-/2338203253273690/&show_text=true&width=500": 8,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rail-thin-but-still-manages-to-have-delicious-wrinkles-on-her-headfrangelica-is-/893279353411037/&show_text=true&width=500": 9,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/2681697295533659&show_text=true&width=500": 10,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/strays-part-2/1206712974964550/&show_text=true&width=500": 11,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/happy-valentines-day-every-single-day-we-have-lots-of-good-boys-and-girls-waitin/3345885258896588/&show_text=true&width=500": 12,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/esmelda-is-a-go-gettershe-knows-valentines-day-is-here-but-has-already-moved-on-/2104821426933973/&show_text=true&width=500": 13,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/our-strays/1451754436740358/&show_text=true&width=500": 14,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/literal-day-brightenercharades-is-a-splash-of-color-even-without-the-pjs-they-su/892543113518843/&show_text=true&width=500": 15
+  },
+  "in_progress_requests": [],
+  "handled_requests": [
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/literal-day-brightenercharades-is-a-splash-of-color-even-without-the-pjs-they-su/892543113518843/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/sometimes-the-sweetest-dogs-have-experienced-the-hardest-of-livesmennas-body-tel/811945911910147/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rail-thin-but-still-manages-to-have-delicious-wrinkles-on-her-headfrangelica-is-/893279353411037/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/our-strays/1451754436740358/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/we-could-see-the-wheels-turning-in-axels-mind-to-sit-or-not-to-sit-he-chose-no-t/1595721634906473/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rex/1413630837152336/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/%25ef%25b8%258frescue-only-medical%25ef%25b8%258fgood-gal-gabby-needs-a-foster-homeshe-has-a-rectal-mass-tha/1447661960349178/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/all-the-dogs/911228934931228/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/esmelda-is-a-go-gettershe-knows-valentines-day-is-here-but-has-already-moved-on-/2104821426933973/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/chunk-is-an-antiphrasis-hes-skinny-and-not-even-that-food-focused-chunk-would-ra/778486791972065/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/2681697295533659&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/strays-part-2/1206712974964550/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/happy-valentines-day-every-single-day-we-have-lots-of-good-boys-and-girls-waitin/3345885258896588/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/slow-down-construction-zone-aheadhardhat-isnt-really-in-need-of-any-repairs-but-/2338203253273690/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/daria/3553034288161579/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/lollipop-is-sweeter-than-candy-on-a-stick-she-was-left-behind-but-still-smiles-s/1818390316215096/&show_text=true&width=500"
+  ]
+}
