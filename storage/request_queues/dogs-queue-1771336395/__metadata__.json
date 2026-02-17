@@ -1,0 +1,11 @@
+{
+  "id": "2u5zN7rpe6oJZUxjh",
+  "name": "dogs-queue-1771336395",
+  "accessed_at": "2026-02-17 13:53:50.838475+00:00",
+  "created_at": "2026-02-17 13:53:15.480098+00:00",
+  "modified_at": "2026-02-17 13:53:50.837468+00:00",
+  "had_multiple_clients": false,
+  "handled_request_count": 10,
+  "pending_request_count": 0,
+  "total_request_count": 10
+}
