@@ -243,6 +243,53 @@
         margin-top: 8px; font-style: italic;
     }
 
+    /* --- Collapsible Table --- */
+    .table-collapse-wrapper {
+        position: relative;
+    }
+    .table-collapse-wrapper .table-container {
+        max-height: 520px; /* ~10 rows visible */
+        overflow: hidden;
+        transition: max-height 0.4s ease;
+    }
+    .table-collapse-wrapper .table-container.expanded {
+        max-height: none;
+    }
+    .table-collapse-wrapper:has(.table-container:not(.expanded))::before {
+        content: '';
+        position: absolute;
+        bottom: 44px; /* above the toggle button */
+        left: 0; right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--bg));
+        pointer-events: none;
+        z-index: 1;
+    }
+    .table-toggle-btn {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        width: 100%; padding: 10px;
+        background: var(--row); color: var(--text-muted);
+        border: 1px solid var(--border); border-top: none;
+        border-radius: 0 0 12px 12px;
+        cursor: pointer; font-size: 0.9rem; font-weight: 600;
+        transition: color 0.2s, background 0.2s;
+    }
+    .table-toggle-btn:hover {
+        color: var(--accent); background: var(--bg);
+    }
+    .table-toggle-btn i {
+        transition: transform 0.3s ease;
+    }
+    .table-toggle-btn.expanded i {
+        transform: rotate(180deg);
+    }
+
+    @media (max-width: 768px) {
+        /* On mobile, cards layout doesn't clip well — start collapsed shorter */
+        .table-collapse-wrapper .table-container { max-height: 480px; }
+        .table-collapse-wrapper:has(.table-container:not(.expanded))::before { bottom: 42px; }
+    }
+
     </style></head><body><style>
     /* --- Global Theme Variables (Moved here to support Map Overlay) --- */
     :root {
@@ -370,7 +417,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart></canvas></div></div><div class="chart-card bar-container"><div class=chart-title>Outcomes by Breed</div><div class=chart-canvas-wrapper><canvas id=breedChart></canvas></div></div></div><h2 style="margin-top: 10px;">📋 Detailed Statistics</h2><div class=table-container><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><div class=section-divider>Breed Analysis</div><div class="chart-card analysis-container" style="margin-bottom: 20px;"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Surrender</div><div class=chart-canvas-wrapper><canvas id=strayChart></canvas></div><div class=chart-footnote>Filtered by intake date, not outcome date.</div></div></div><div class="chart-card analysis-container" style="margin-bottom: 20px;"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=footer><span>Last Updated: February 17, 2026 01:26 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart></canvas></div></div><div class="chart-card bar-container"><div class=chart-title>Outcomes by Breed</div><div class=chart-canvas-wrapper><canvas id=breedChart></canvas></div></div></div><div class=section-divider>Breed Analysis</div><div class="chart-card analysis-container" style="margin-bottom: 20px;"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Surrender</div><div class=chart-canvas-wrapper><canvas id=strayChart></canvas></div><div class=chart-footnote>Filtered by intake date, not outcome date.</div></div></div><div class="chart-card analysis-container" style="margin-bottom: 20px;"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart></canvas></div><div class=chart-footnote id=ageFootnote></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable()><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: February 17, 2026 01:37 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -867,6 +914,16 @@
             tbody.innerHTML = html;
         }
 
+        // Reset table to collapsed state on data change
+        tableExpanded = false;
+        const tableContainer = document.getElementById('tableContainer');
+        const toggleBtn = document.getElementById('tableToggle');
+        tableContainer.classList.remove('expanded');
+        toggleBtn.classList.remove('expanded');
+        document.getElementById('toggleText').textContent = `Show all ${rows.length} breeds`;
+        // Hide toggle if table is short enough to not need it
+        toggleBtn.style.display = rows.length > 10 ? '' : 'none';
+
         // --- Update Charts ---
         
         // 1. Pie (Top 10 Population - Reactive)
@@ -1008,6 +1065,19 @@
             ? `Dogs with unknown age excluded (${totalUnknownAge} total). Breeds with fewer than ${MIN_BREED_THRESHOLD} known ages excluded.`
             : `Breeds with fewer than ${MIN_BREED_THRESHOLD} known ages excluded.`;
         document.getElementById('ageFootnote').textContent = ageNote;
+    }
+
+    // --- Table Toggle ---
+    let tableExpanded = false;
+    function toggleTable() {
+        tableExpanded = !tableExpanded;
+        const container = document.getElementById('tableContainer');
+        const btn = document.getElementById('tableToggle');
+        const text = document.getElementById('toggleText');
+        container.classList.toggle('expanded', tableExpanded);
+        btn.classList.toggle('expanded', tableExpanded);
+        const count = document.querySelectorAll('#tableBody tr').length;
+        text.textContent = tableExpanded ? 'Collapse table' : `Show all ${count} breeds`;
     }
 
     // --- Controls ---
