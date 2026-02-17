@@ -214,6 +214,35 @@
 
     #loading-overlay { text-align: center; padding: 40px; color: var(--text-muted); }
 
+    /* --- Section Divider --- */
+    .section-divider {
+        display: flex; align-items: center; gap: 15px;
+        margin: 35px 0 25px 0; color: var(--text-muted);
+        font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700;
+    }
+    .section-divider::before, .section-divider::after {
+        content: ""; flex: 1; height: 1px; background: var(--border); opacity: 0.5;
+    }
+
+    /* --- Analysis Grid (2-col for gender + stray) --- */
+    .analysis-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+    @media (max-width: 1000px) {
+        .analysis-grid { grid-template-columns: 1fr; }
+    }
+
+    .analysis-container { min-height: 420px; }
+
+    /* --- Chart Footnotes --- */
+    .chart-footnote {
+        font-size: 0.8rem; color: var(--text-muted); text-align: center;
+        margin-top: 8px; font-style: italic;
+    }
+
     </style></head><body><style>
     /* --- Global Theme Variables (Moved here to support Map Overlay) --- */
     :root {
@@ -341,7 +370,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart></canvas></div></div><div class="chart-card bar-container"><div class=chart-title>Outcomes by Breed</div><div class=chart-canvas-wrapper><canvas id=breedChart></canvas></div></div></div><h2 style="margin-top: 10px;">📋 Detailed Statistics</h2><div class=table-container><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div></div><div class=footer><span>Last Updated: February 17, 2026 01:14 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart></canvas></div></div><div class="chart-card bar-container"><div class=chart-title>Outcomes by Breed</div><div class=chart-canvas-wrapper><canvas id=breedChart></canvas></div></div></div><h2 style="margin-top: 10px;">📋 Detailed Statistics</h2><div class=table-container><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><div class=section-divider>Breed Analysis</div><div class="chart-card analysis-container" style="margin-bottom: 20px;"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Surrender</div><div class=chart-canvas-wrapper><canvas id=strayChart></canvas></div><div class=chart-footnote>Filtered by intake date, not outcome date.</div></div></div><div class="chart-card analysis-container" style="margin-bottom: 20px;"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=footer><span>Last Updated: February 17, 2026 01:26 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -471,19 +500,60 @@
     // --- Global State ---
     let fullIndex = [];
     let metaData = {};
-    let charts = { pie: null, bar: null };
+    let charts = { pie: null, bar: null, outcomeRate: null, gender: null, stray: null, age: null };
     
     const PIE_COLORS = [
         '#58a6ff', '#3fb950', '#d29922', '#f85149', '#a371f7', 
         '#db6d28', '#1f6feb', '#238636', '#9e6a03', '#8b949e', '#30363d'
     ];
     // Explicit colors for bar chart segments
-    const BAR_COLORS = { 
-        Rescued: '#238636', 
-        Adopted: '#58a6ff', 
-        RTO: '#d29922', 
-        Other: '#da3633' 
+    const BAR_COLORS = {
+        Rescued: '#238636',
+        Adopted: '#58a6ff',
+        RTO: '#d29922',
+        Other: '#da3633'
     };
+
+    const GENDER_COLORS = { Male: '#79c0ff', Female: '#ff7b72' };
+    const STRAY_COLORS = { Stray: '#d2a8ff', NonStray: '#8b949e' };
+    const MIN_BREED_THRESHOLD = 5;
+
+    function parseAgeToMonths(ageStr) {
+        if (!ageStr || ageStr.toLowerCase().includes('unknown')) return null;
+        let months = 0;
+        const yearMatch = ageStr.match(/(\d+)\s*year/i);
+        const monthMatch = ageStr.match(/(\d+)\s*month/i);
+        const weekMatch = ageStr.match(/(\d+)\s*week/i);
+        if (yearMatch) months += parseInt(yearMatch[1]) * 12;
+        if (monthMatch) months += parseInt(monthMatch[1]);
+        if (weekMatch) months += Math.round(parseInt(weekMatch[1]) / 4.33);
+        return months > 0 ? months : null;
+    }
+
+    function ageColor(months, minM, maxM) {
+        const t = maxM > minM ? (months - minM) / (maxM - minM) : 0.5;
+        // Green (#3fb950) -> Yellow (#d29922) -> Red (#f85149)
+        if (t < 0.5) {
+            const p = t * 2;
+            const r = Math.round(0x3f + (0xd2 - 0x3f) * p);
+            const g = Math.round(0xb9 + (0x99 - 0xb9) * p);
+            const b = Math.round(0x50 + (0x22 - 0x50) * p);
+            return `rgb(${r},${g},${b})`;
+        } else {
+            const p = (t - 0.5) * 2;
+            const r = Math.round(0xd2 + (0xf8 - 0xd2) * p);
+            const g = Math.round(0x99 + (0x51 - 0x99) * p);
+            const b = Math.round(0x22 + (0x49 - 0x22) * p);
+            return `rgb(${r},${g},${b})`;
+        }
+    }
+
+    function median(arr) {
+        if (!arr.length) return 0;
+        const s = [...arr].sort((a, b) => a - b);
+        const mid = Math.floor(s.length / 2);
+        return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
         initChartInstances();
@@ -541,6 +611,143 @@
                 }
             }
         });
+
+        // 3. Outcome Rate Chart (Normalized 100% Stacked Bar)
+        charts.outcomeRate = new Chart(document.getElementById('outcomeRateChart').getContext('2d'), {
+            type: 'bar',
+            data: { labels: [], datasets: [] },
+            options: {
+                ...GLOBAL_CHART_OPTS,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                barPercentage: 0.85,
+                categoryPercentage: 0.9,
+                interaction: { mode: 'index', axis: 'y', intersect: false },
+                plugins: {
+                    ...GLOBAL_CHART_OPTS.plugins,
+                    title: { display: false },
+                    tooltip: {
+                        ...GLOBAL_CHART_OPTS.plugins.tooltip,
+                        callbacks: {
+                            label: function(ctx) {
+                                const pct = ctx.raw || 0;
+                                const rawCounts = ctx.dataset.rawCounts;
+                                const count = rawCounts ? rawCounts[ctx.dataIndex] : 0;
+                                return `${ctx.dataset.label}: ${Math.round(pct)}% (${count} dogs)`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { stacked: true, max: 100, grid: { color: '#30363d' }, ticks: { color: '#8b949e', callback: v => v + '%' } },
+                    y: { stacked: true, grid: { display: false }, ticks: { color: '#c9d1d9', autoSkip: false } }
+                }
+            }
+        });
+
+        // 4. Gender Distribution Chart (Butterfly / Diverging Bar)
+        charts.gender = new Chart(document.getElementById('genderChart').getContext('2d'), {
+            type: 'bar',
+            data: { labels: [], datasets: [] },
+            options: {
+                ...GLOBAL_CHART_OPTS,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                barPercentage: 0.85,
+                categoryPercentage: 0.9,
+                interaction: { mode: 'index', axis: 'y', intersect: false },
+                plugins: {
+                    ...GLOBAL_CHART_OPTS.plugins,
+                    title: { display: false },
+                    tooltip: {
+                        ...GLOBAL_CHART_OPTS.plugins.tooltip,
+                        callbacks: {
+                            label: function(ctx) {
+                                return `${ctx.dataset.label}: ${Math.abs(ctx.raw)}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                        grid: { color: '#30363d' },
+                        ticks: { color: '#8b949e', callback: v => Math.abs(v) }
+                    },
+                    y: { stacked: true, grid: { display: false }, ticks: { color: '#c9d1d9', autoSkip: false } }
+                }
+            }
+        });
+
+        // 5. Stray vs. Surrender Chart (Stacked Bar)
+        charts.stray = new Chart(document.getElementById('strayChart').getContext('2d'), {
+            type: 'bar',
+            data: { labels: [], datasets: [] },
+            options: {
+                ...GLOBAL_CHART_OPTS,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                barPercentage: 0.85,
+                categoryPercentage: 0.9,
+                interaction: { mode: 'index', axis: 'y', intersect: false },
+                plugins: {
+                    ...GLOBAL_CHART_OPTS.plugins,
+                    title: { display: false },
+                    tooltip: {
+                        ...GLOBAL_CHART_OPTS.plugins.tooltip,
+                        callbacks: {
+                            label: function(ctx) {
+                                const rawCounts = ctx.dataset.rawCounts;
+                                const count = rawCounts ? rawCounts[ctx.dataIndex] : Math.abs(ctx.raw);
+                                const totals = ctx.dataset.totals;
+                                const total = totals ? totals[ctx.dataIndex] : 0;
+                                const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+                                return `${ctx.dataset.label}: ${pct}% (${count} dogs)`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { stacked: true, grid: { color: '#30363d' }, ticks: { color: '#8b949e' } },
+                    y: { stacked: true, grid: { display: false }, ticks: { color: '#c9d1d9', autoSkip: false } }
+                }
+            }
+        });
+
+        // 6. Median Age Chart (Simple Horizontal Bar)
+        charts.age = new Chart(document.getElementById('ageChart').getContext('2d'), {
+            type: 'bar',
+            data: { labels: [], datasets: [] },
+            options: {
+                ...GLOBAL_CHART_OPTS,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                barPercentage: 0.85,
+                categoryPercentage: 0.9,
+                interaction: { mode: 'index', axis: 'y', intersect: false },
+                plugins: {
+                    ...GLOBAL_CHART_OPTS.plugins,
+                    title: { display: false },
+                    legend: { display: false },
+                    tooltip: {
+                        ...GLOBAL_CHART_OPTS.plugins.tooltip,
+                        callbacks: {
+                            label: function(ctx) {
+                                const months = ctx.raw || 0;
+                                const years = (months / 12).toFixed(1);
+                                const meta = ctx.dataset.breedMeta;
+                                const m = meta ? meta[ctx.dataIndex] : {};
+                                return `Median: ${years} yrs (N=${m.count || 0}, ${m.excluded || 0} unknown excluded)`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { grid: { color: '#30363d' }, ticks: { color: '#8b949e', callback: v => (v / 12).toFixed(1) + ' yrs' } },
+                    y: { grid: { display: false }, ticks: { color: '#c9d1d9', autoSkip: false } }
+                }
+            }
+        });
     }
 
     function fetchData() {
@@ -563,44 +770,77 @@
         // Normalize Dates to midnight for inclusive comparison
         const start = new Date(startStr); start.setHours(0,0,0,0);
         const end = new Date(endStr); end.setHours(23,59,59,999);
-        
+
         // Helper: Resolve Status/Breed Strings
         const getBreed = (idx) => {
             const b = metaData.b[idx] || "Unknown";
-            // Normalization logic
             if (b.includes("Pit Bull") || b.includes("Pitbull") || b.includes("American Pit Bull")) return "American Pitbull / Mix";
             if (b.includes("Husky")) return "Husky / Mix";
             if (b.includes("Shepherd")) return "German Shepherd / Mix";
             return b;
         };
         const getStatus = (idx) => metaData.s[idx] || "Other";
+        const getAge = (idx) => (metaData.a && metaData.a[idx]) ? metaData.a[idx] : null;
 
-        const stats = {}; 
+        const stats = {};
+        const genderStats = {};
+        const strayStats = {};
+        const ageData = {};
+        let totalUnknownAge = 0;
 
         fullIndex.forEach(item => {
-            // Must have outcome date to be in "Outcomes" chart
-            if (!item.od) return; 
-            
+            const breed = getBreed(item.b);
+
+            // --- Stray stats (filtered by INTAKE date) ---
+            if (item.d) {
+                const intakeDate = new Date(item.d);
+                if (intakeDate >= start && intakeDate <= end) {
+                    if (!strayStats[breed]) strayStats[breed] = { Stray: 0, NonStray: 0, Total: 0 };
+                    strayStats[breed].Total++;
+                    if (item.st) strayStats[breed].Stray++;
+                    else strayStats[breed].NonStray++;
+                }
+            }
+
+            // --- Outcome-date-filtered stats (existing + gender + age) ---
+            if (!item.od) return;
             const d = new Date(item.od);
             if (d < start || d > end) return;
 
-            const breed = getBreed(item.b);
             const status = getStatus(item.s);
 
+            // Outcome stats (existing)
             if (!stats[breed]) stats[breed] = { Total: 0, Rescued: 0, Adopted: 0, RTO: 0, Other: 0 };
-            
             stats[breed].Total++;
-
             if (status.includes('Adopt')) stats[breed].Adopted++;
             else if (status.includes('Transfer') || status.includes('Rescue')) stats[breed].Rescued++;
             else if (status.includes('Return') || status === 'RTO') stats[breed].RTO++;
-            else stats[breed].Other++; // Fallback for Euth, Died, Lost, etc.
+            else stats[breed].Other++;
+
+            // Gender stats
+            if (!genderStats[breed]) genderStats[breed] = { Male: 0, Female: 0, Unknown: 0, Total: 0 };
+            genderStats[breed].Total++;
+            if (item.g === 0) genderStats[breed].Male++;
+            else if (item.g === 1) genderStats[breed].Female++;
+            else genderStats[breed].Unknown++;
+
+            // Age stats
+            const ageStr = getAge(item.a);
+            const ageMonths = parseAgeToMonths(ageStr);
+            if (ageMonths !== null) {
+                if (!ageData[breed]) ageData[breed] = { ages: [], unknownCount: 0 };
+                ageData[breed].ages.push(ageMonths);
+            } else {
+                if (!ageData[breed]) ageData[breed] = { ages: [], unknownCount: 0 };
+                ageData[breed].unknownCount++;
+                totalUnknownAge++;
+            }
         });
 
-        updateView(stats);
+        updateView(stats, genderStats, strayStats, ageData, totalUnknownAge);
     }
 
-    function updateView(stats) {
+    function updateView(stats, genderStats, strayStats, ageData, totalUnknownAge) {
         const rows = Object.keys(stats).map(breed => ({
             breed, ...stats[breed]
         })).sort((a, b) => b.Total - a.Total);
@@ -666,6 +906,108 @@
             { label: 'Other', data: top20.map(r => r.Other || 0), backgroundColor: BAR_COLORS.Other, stack: STACK_ID }
         ];
         charts.bar.update('none');
+
+        // --- 3. Outcome Rate Chart (Normalized 100%) ---
+        const rateRows = rows.filter(r => r.Total >= MIN_BREED_THRESHOLD);
+        // Sort by adoption rate descending
+        const rateSorted = [...rateRows].sort((a, b) => (b.Adopted / b.Total) - (a.Adopted / a.Total)).slice(0, 15);
+        const rateExcluded = rows.filter(r => r.Total < MIN_BREED_THRESHOLD).length;
+
+        const rateBarHeight = Math.max(300, (rateSorted.length * 28) + 80);
+        document.getElementById('outcomeRateChart').parentElement.parentElement.style.height = rateBarHeight + 'px';
+
+        charts.outcomeRate.data.labels = rateSorted.map(r => r.breed);
+        const RATE_STACK = 'RateStack';
+        charts.outcomeRate.data.datasets = ['Rescued', 'Adopted', 'RTO', 'Other'].map(key => ({
+            label: key,
+            data: rateSorted.map(r => r.Total > 0 ? Math.round((r[key] / r.Total) * 1000) / 10 : 0),
+            rawCounts: rateSorted.map(r => r[key]),
+            backgroundColor: BAR_COLORS[key],
+            stack: RATE_STACK
+        }));
+        charts.outcomeRate.update('none');
+
+        const rateNote = rateExcluded > 0 ? `Breeds with fewer than ${MIN_BREED_THRESHOLD} outcomes excluded (${rateExcluded} breeds). Sorted by adoption rate.` : 'Sorted by adoption rate.';
+        document.getElementById('outcomeRateFootnote').textContent = rateNote;
+
+        // --- 4. Gender Distribution (Butterfly) ---
+        const genderRows = Object.entries(genderStats)
+            .map(([breed, g]) => ({ breed, ...g }))
+            .filter(r => r.Total >= MIN_BREED_THRESHOLD)
+            .sort((a, b) => b.Total - a.Total)
+            .slice(0, 15);
+
+        const genderBarHeight = Math.max(300, (genderRows.length * 28) + 80);
+        document.getElementById('genderChart').parentElement.parentElement.style.height = genderBarHeight + 'px';
+
+        charts.gender.data.labels = genderRows.map(r => r.breed);
+        charts.gender.data.datasets = [
+            { label: 'Male', data: genderRows.map(r => -r.Male), backgroundColor: GENDER_COLORS.Male, stack: 'GenderStack' },
+            { label: 'Female', data: genderRows.map(r => r.Female), backgroundColor: GENDER_COLORS.Female, stack: 'GenderStack' }
+        ];
+        charts.gender.update('none');
+
+        const unknownGender = genderRows.reduce((sum, r) => sum + r.Unknown, 0);
+        document.getElementById('genderFootnote').textContent = unknownGender > 0
+            ? `${unknownGender} dogs with unknown gender not shown. Male extends left, female extends right.`
+            : 'Male extends left, female extends right.';
+
+        // --- 5. Stray vs. Surrender ---
+        const strayRows = Object.entries(strayStats)
+            .map(([breed, s]) => ({ breed, ...s }))
+            .filter(r => r.Total >= MIN_BREED_THRESHOLD)
+            .sort((a, b) => (b.Stray / b.Total) - (a.Stray / a.Total))
+            .slice(0, 15);
+
+        const strayBarHeight = Math.max(300, (strayRows.length * 28) + 80);
+        document.getElementById('strayChart').parentElement.parentElement.style.height = strayBarHeight + 'px';
+
+        charts.stray.data.labels = strayRows.map(r => r.breed);
+        const STRAY_STACK = 'StrayStack';
+        charts.stray.data.datasets = [
+            {
+                label: 'Stray', data: strayRows.map(r => r.Stray), rawCounts: strayRows.map(r => r.Stray),
+                totals: strayRows.map(r => r.Total), backgroundColor: STRAY_COLORS.Stray, stack: STRAY_STACK
+            },
+            {
+                label: 'Non-Stray', data: strayRows.map(r => r.NonStray), rawCounts: strayRows.map(r => r.NonStray),
+                totals: strayRows.map(r => r.Total), backgroundColor: STRAY_COLORS.NonStray, stack: STRAY_STACK
+            }
+        ];
+        charts.stray.update('none');
+
+        // --- 6. Median Age ---
+        const ageRows = Object.entries(ageData)
+            .filter(([, d]) => d.ages.length >= MIN_BREED_THRESHOLD)
+            .map(([breed, d]) => ({
+                breed,
+                medianAge: median(d.ages),
+                count: d.ages.length,
+                excluded: d.unknownCount
+            }))
+            .sort((a, b) => b.medianAge - a.medianAge)
+            .slice(0, 15);
+
+        const ageBarHeight = Math.max(300, (ageRows.length * 28) + 80);
+        document.getElementById('ageChart').parentElement.parentElement.style.height = ageBarHeight + 'px';
+
+        const ageValues = ageRows.map(r => r.medianAge);
+        const minAge = ageValues.length ? Math.min(...ageValues) : 0;
+        const maxAge = ageValues.length ? Math.max(...ageValues) : 1;
+
+        charts.age.data.labels = ageRows.map(r => r.breed);
+        charts.age.data.datasets = [{
+            label: 'Median Age',
+            data: ageValues,
+            backgroundColor: ageValues.map(v => ageColor(v, minAge, maxAge)),
+            breedMeta: ageRows.map(r => ({ count: r.count, excluded: r.excluded }))
+        }];
+        charts.age.update('none');
+
+        const ageNote = totalUnknownAge > 0
+            ? `Dogs with unknown age excluded (${totalUnknownAge} total). Breeds with fewer than ${MIN_BREED_THRESHOLD} known ages excluded.`
+            : `Breeds with fewer than ${MIN_BREED_THRESHOLD} known ages excluded.`;
+        document.getElementById('ageFootnote').textContent = ageNote;
     }
 
     // --- Controls ---
