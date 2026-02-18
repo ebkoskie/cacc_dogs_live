@@ -108,19 +108,25 @@
     }
     .btn-apply:hover { opacity: 0.9; }
     
-    .btn-reset {
+    .quick-btns { display: flex; gap: 4px; }
+    .quick-btn {
         background: transparent; color: var(--text-muted); border: 1px solid var(--border);
-        padding: 6px 15px; border-radius: 6px; cursor: pointer; transition: all 0.2s;
-        font-size: 0.9rem;
+        padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;
+        font-weight: 600; transition: all 0.2s; font-family: inherit;
     }
-    .btn-reset:hover { border-color: var(--accent); color: var(--accent); }
+    .quick-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .quick-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+    .quick-btn .dismiss { margin-left: 4px; font-size: 0.7rem; opacity: 0.8; }
+    .quick-btn .dismiss:hover { opacity: 1; }
 
     /* Mobile Controls Tweak */
     @media (max-width: 600px) {
         .controls-bar { padding: 10px 0; gap: 10px; top: 60px; } /* Adjust for smaller mobile nav headers if needed */
         .control-group { flex: 1 1 40%; }
         .date-input { width: 100%; max-width: none; }
-        .btn-apply, .btn-reset { flex: 1 1 100%; justify-content: center; }
+        .btn-apply { flex: 1 1 100%; justify-content: center; }
+        .quick-btns { width: 100%; }
+        .quick-btn { flex: 1; text-align: center; }
     }
 
     /* --- Dashboard Grid Layout --- */
@@ -410,7 +416,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable()><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: February 17, 2026 08:04 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class="quick-btn active" onclick="quickSelect(7, this)">7d</button><button class=quick-btn onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable()><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: February 17, 2026 08:21 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -771,7 +777,7 @@
             .then(payload => {
                 metaData = payload.meta;
                 fullIndex = payload.data;
-                resetDates(); 
+                quickSelect(7, document.querySelector('.quick-btn.active'));
                 document.getElementById('loading-overlay').style.display = 'none';
                 document.getElementById('mainContent').style.display = 'block';
             })
@@ -1038,20 +1044,66 @@
     function applyDateFilter() {
         const start = document.getElementById('startDate').value;
         const end = document.getElementById('endDate').value;
-        if (start && end) {
+        if (!start || !end) return;
+        if (start > end) {
+            document.getElementById('startDate').value = end;
+            document.getElementById('endDate').value = start;
+            processData(end, start);
+        } else {
             processData(start, end);
         }
     }
 
-    function resetDates() {
-        const end = new Date();
-        const start = new Date();
-        start.setDate(end.getDate() - 30); 
+    function applyCustomRange() {
+        const start = document.getElementById('startDate').value;
+        const end = document.getElementById('endDate').value;
+        if (!start || !end) return;
+        document.querySelectorAll('.quick-btn:not(.custom-btn)').forEach(b => b.classList.remove('active'));
+        showCustomIndicator();
+        applyDateFilter();
+    }
+
+    function showCustomIndicator() {
+        let customBtn = document.querySelector('.custom-btn');
+        if (customBtn) { customBtn.classList.add('active'); return; }
+        customBtn = document.createElement('button');
+        customBtn.type = 'button';
+        customBtn.className = 'quick-btn custom-btn active';
+        customBtn.innerHTML = 'Custom <span class="dismiss">\u00d7</span>';
+        customBtn.onclick = function() {
+            removeCustomIndicator();
+            quickSelect(7, document.querySelector('.quick-btn'));
+        };
+        document.querySelector('.quick-btns').appendChild(customBtn);
+    }
+
+    function removeCustomIndicator() {
+        const el = document.querySelector('.custom-btn');
+        if (el) el.remove();
+    }
+
+    function quickSelect(days, btnEl) {
+        removeCustomIndicator();
+        document.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('active'));
+        if (btnEl) btnEl.classList.add('active');
 
         const fmt = d => d.toISOString().split('T')[0];
+        const end = new Date();
+        let start;
+        if (days === 0) {
+            // "All" — find earliest date from fullIndex items
+            let earliest = null;
+            fullIndex.forEach(item => {
+                if (item.d && (!earliest || item.d < earliest)) earliest = item.d;
+                if (item.od && (!earliest || item.od < earliest)) earliest = item.od;
+            });
+            start = earliest ? new Date(earliest) : new Date(end.getTime() - 365 * 86400000);
+        } else {
+            start = new Date();
+            start.setDate(end.getDate() - days);
+        }
         document.getElementById('startDate').value = fmt(start);
         document.getElementById('endDate').value = fmt(end);
-        
         applyDateFilter();
     }
 </script></body></html>
