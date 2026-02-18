@@ -1,0 +1,17 @@
+{
+  "unique_key": "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/scarf-is-used-to-making-herself-smallshe-came-in-pretty-timid-even-a-few-weeks-l/2087172622101517/&show_text=true&width=500",
+  "url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/caccdogs/videos/scarf-is-used-to-making-herself-smallshe-came-in-pretty-timid-even-a-few-weeks-l/2087172622101517/&show_text=true&width=500",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    },
+    "original_url": "https://www.facebook.com/caccdogs/videos/scarf-is-used-to-making-herself-smallshe-came-in-pretty-timid-even-a-few-weeks-l/2087172622101517/"
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fcaccdogs%2Fvideos%2Fscarf-is-used-to-making-herself-smallshe-came-in-pretty-timid-even-a-few-weeks-l%2F2087172622101517%2F&show_text=true&width=500",
+  "handled_at": "2026-02-18 03:32:19.520428+00:00"
+}
