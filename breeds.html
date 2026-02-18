@@ -410,7 +410,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Surrender</div><div class=chart-canvas-wrapper><canvas id=strayChart></canvas></div><div class=chart-footnote>Filtered by intake date, not outcome date.</div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable()><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: February 17, 2026 07:41 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Surrender</div><div class=chart-canvas-wrapper><canvas id=strayChart></canvas></div><div class=chart-footnote>Filtered by intake date, not outcome date.</div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable()><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: February 17, 2026 07:49 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -679,16 +679,18 @@
                         ...GLOBAL_CHART_OPTS.plugins.tooltip,
                         callbacks: {
                             label: function(ctx) {
-                                return `${ctx.dataset.label}: ${Math.abs(ctx.raw)}`;
+                                const pct = Math.abs(ctx.raw);
+                                const count = ctx.dataset.rawCounts ? ctx.dataset.rawCounts[ctx.dataIndex] : 0;
+                                return `${ctx.dataset.label}: ${Math.round(pct)}% (${count} dogs)`;
                             }
                         }
                     }
                 },
                 scales: {
                     x: {
-                        stacked: true,
+                        stacked: true, min: -100, max: 100,
                         grid: { color: '#30363d' },
-                        ticks: { color: '#8b949e', callback: v => Math.abs(v) }
+                        ticks: { color: '#8b949e', callback: v => Math.abs(v) + '%' }
                     },
                     y: { stacked: true, grid: { display: false }, ticks: { color: '#c9d1d9', autoSkip: false } }
                 }
@@ -947,8 +949,8 @@
 
         charts.gender.data.labels = genderRows.map(r => r.breed);
         charts.gender.data.datasets = [
-            { label: 'Male', data: genderRows.map(r => -r.Male), backgroundColor: GENDER_COLORS.Male, stack: 'GenderStack' },
-            { label: 'Female', data: genderRows.map(r => r.Female), backgroundColor: GENDER_COLORS.Female, stack: 'GenderStack' }
+            { label: 'Male', data: genderRows.map(r => r.Total > 0 ? -Math.round((r.Male / r.Total) * 1000) / 10 : 0), rawCounts: genderRows.map(r => r.Male), backgroundColor: GENDER_COLORS.Male, stack: 'GenderStack' },
+            { label: 'Female', data: genderRows.map(r => r.Total > 0 ? Math.round((r.Female / r.Total) * 1000) / 10 : 0), rawCounts: genderRows.map(r => r.Female), backgroundColor: GENDER_COLORS.Female, stack: 'GenderStack' }
         ];
         charts.gender.update('none');
 
