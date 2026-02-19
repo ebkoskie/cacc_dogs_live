@@ -27,6 +27,8 @@
         .tag.male   { color: var(--gender-male-text); background: var(--gender-male-bg); border: 1px solid var(--gender-male-border); } 
         .tag.female { color: var(--gender-female-text); background: var(--gender-female-bg); border: 1px solid var(--gender-female-border); }
         .tag.stray  { color: var(--stray-text); background: var(--stray-bg); border: 1px solid var(--stray-border); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+        .tag.stray.chipped { border-style: dashed; }
+        .tag.altered { border-style: dashed; }
         
         .tag.color { border: 1px solid transparent; }
         .tag.color-black { background: rgba(100,100,100,0.15); color: #c9d1d9; border: 1px solid rgba(100,100,100,0.5); }
@@ -350,7 +352,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-return_guest onclick="filterByChip('return_guest')">🔄 Returns <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: February 19, 2026 07:59 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-return_guest onclick="filterByChip('return_guest')">🔄 Returns <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: February 19, 2026 08:54 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -488,6 +490,8 @@
                 age: ageVal,
                 color: colorVal,
                 is_stray: !!item.st,
+                is_chipped: !!item.ch,
+                is_altered: !!item.fx,
                 is_small: !!item.sm,
                 facebook_url: fbUrl,
                 youtube_urls: ytUrls, 
@@ -825,10 +829,12 @@
         
         let strayBadge = '';
         if (dog.is_stray) {
+            const chipIcon = dog.is_chipped ? '<i class="fas fa-microchip"></i> ' : '';
+            const strayClass = dog.is_chipped ? 'tag stray chipped' : 'tag stray';
             if (dog.is_mappable) {
-                strayBadge = `<a href="map.html?id=${dog.id}" title="View Map" style="text-decoration:none;"><span class="tag stray"><i class="fas fa-map-marker-alt"></i> Stray</span></a>`;
+                strayBadge = `<a href="map.html?id=${dog.id}" title="${dog.is_chipped ? 'Found with a chip or tag' : 'View Map'}" style="text-decoration:none;"><span class="${strayClass}">${chipIcon}<i class="fas fa-map-marker-alt"></i> Stray</span></a>`;
             } else {
-                strayBadge = `<span class="tag stray" style="cursor:help" title="Location unknown"><i class="fas fa-question-circle"></i> Stray</span>`;
+                strayBadge = `<span class="${strayClass}" style="cursor:help" title="${dog.is_chipped ? 'Found with a chip or tag' : 'Location unknown'}">${chipIcon}<i class="fas fa-question-circle"></i> Stray</span>`;
             }
         }
 
@@ -890,6 +896,9 @@
 
         const genderClass = (dog.gender && dog.gender.includes('Female')) ? 'female' : 'male';
         const genderIcon = genderClass === 'female' ? '♀️' : '♂️';
+        const alteredIcon = dog.is_altered ? '<i class="fas fa-scissors" style="font-size:0.9em"></i> ' : '';
+        const alteredClass = dog.is_altered ? ' altered' : '';
+        const alteredTitle = dog.is_altered ? ` title="${genderClass === 'female' ? 'Spayed' : 'Neutered'}"` : '';
         
         let nameHtml = `<h3 class="dog-name">${dog.name}</h3>`;
         if (dog.aka) {
@@ -909,7 +918,7 @@
                 <div class="breed-info">${dog.breed}</div>
                 <div class="card-attrs">
                     <div class="left-attr">
-                        <span class="tag ${genderClass}">${genderIcon} ${dog.gender}</span>
+                        <span class="tag ${genderClass}${alteredClass}"${alteredTitle}>${alteredIcon}${genderIcon} ${dog.gender}</span>
                         ${ageHtml}
                     </div>
                     <div class="right-attr" style="text-align:right;">
