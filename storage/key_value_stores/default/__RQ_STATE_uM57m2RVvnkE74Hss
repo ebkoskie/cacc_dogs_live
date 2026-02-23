@@ -1,0 +1,30 @@
+{
+  "sequence_counter": 10,
+  "forefront_sequence_counter": 0,
+  "forefront_requests": {},
+  "regular_requests": {
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/ham-is-a-ball-excitementhe-is-either-going-to-give-110-of-his-energy-or-complete/898772069750613/&show_text=true&width=500": 0,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/2370703273393033/&show_text=true&width=500": 1,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/898772069750613&show_text=true&width=500": 2,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/dont-let-these-double-digits-fool-youlucia-is-all-spunk-she-also-has-the-appetit/788684817047685/&show_text=true&width=500": 3,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/being-left-behind-can-really-have-lasting-effectsnici-was-one-scared-girl-when-s/765295519990874/&show_text=true&width=500": 4,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/1970038490556651/&show_text=true&width=500": 5,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/kilroy-is-pure-joyhe-will-use-any-advantage-he-can-find-to-maneuver-his-body-int/904280612350604/&show_text=true&width=500": 6,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/lucetta-is-our-little-lightshe-was-pretty-timid-when-she-arrived-her-curiosity-w/1698311834484813/&show_text=true&width=500": 7,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/attention-slater-blossoms-in-it-hes-pretty-awesome-even-when-no-one-is-looking-h/2443104999441669/&show_text=true&width=500": 8,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/we-dont-know-why-toledo-came-to-us-but-we-do-know-he-was-lovedwe-can-see-the-sad/1149916490450674/&show_text=true&width=500": 9
+  },
+  "in_progress_requests": [],
+  "handled_requests": [
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/we-dont-know-why-toledo-came-to-us-but-we-do-know-he-was-lovedwe-can-see-the-sad/1149916490450674/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/898772069750613&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/being-left-behind-can-really-have-lasting-effectsnici-was-one-scared-girl-when-s/765295519990874/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/lucetta-is-our-little-lightshe-was-pretty-timid-when-she-arrived-her-curiosity-w/1698311834484813/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/2370703273393033/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/attention-slater-blossoms-in-it-hes-pretty-awesome-even-when-no-one-is-looking-h/2443104999441669/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/dont-let-these-double-digits-fool-youlucia-is-all-spunk-she-also-has-the-appetit/788684817047685/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/kilroy-is-pure-joyhe-will-use-any-advantage-he-can-find-to-maneuver-his-body-int/904280612350604/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/1970038490556651/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/ham-is-a-ball-excitementhe-is-either-going-to-give-110-of-his-energy-or-complete/898772069750613/&show_text=true&width=500"
+  ]
+}
