@@ -1,0 +1,17 @@
+{
+  "unique_key": "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/being-left-behind-can-really-have-lasting-effectsnici-was-one-scared-girl-when-s/765295519990874/&show_text=true&width=500",
+  "url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/caccdogs/videos/being-left-behind-can-really-have-lasting-effectsnici-was-one-scared-girl-when-s/765295519990874/&show_text=true&width=500",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    },
+    "original_url": "https://www.facebook.com/caccdogs/videos/being-left-behind-can-really-have-lasting-effectsnici-was-one-scared-girl-when-s/765295519990874/"
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fcaccdogs%2Fvideos%2Fbeing-left-behind-can-really-have-lasting-effectsnici-was-one-scared-girl-when-s%2F765295519990874%2F&show_text=true&width=500",
+  "handled_at": "2026-02-23 03:34:28.951911+00:00"
+}
