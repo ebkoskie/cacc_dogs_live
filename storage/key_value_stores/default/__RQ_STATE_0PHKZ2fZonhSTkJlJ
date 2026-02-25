@@ -1,0 +1,30 @@
+{
+  "sequence_counter": 10,
+  "forefront_sequence_counter": 0,
+  "forefront_requests": {},
+  "regular_requests": {
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/hes-crying-for-a-homethat-is-what-pierre-had-twenty-days-ago-before-his-world-wa/26085668844419490/&show_text=true&width=500": 0,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/not-every-surrender-is-a-true-owner-situationseven-was-found-and-kept-for-a-few-/1726264335405911/&show_text=true&width=500": 1,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/1448351607303609/&show_text=true&width=500": 2,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/emory-is-the-result-of-the-dog-in-his-previous-home-not-being-fixeda-litter-of-p/891005277160474/&show_text=true&width=500": 3,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rook-is-so-darn-sad-in-his-kennelhe-hides-in-the-corner-with-his-head-down-we-ca/786861367249621/&show_text=true&width=500": 4,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/being-left-behind-can-really-have-lasting-effectsnici-was-one-scared-girl-when-s/765295519990874/&show_text=true&width=500": 5,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/2370703273393033/&show_text=true&width=500": 6,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/we-dont-know-why-toledo-came-to-us-but-we-do-know-he-was-lovedwe-can-see-the-sad/1149916490450674/&show_text=true&width=500": 7,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/898772069750613&show_text=true&width=500": 8,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/4374346242710686/&show_text=true&width=500": 9
+  },
+  "in_progress_requests": [],
+  "handled_requests": [
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/emory-is-the-result-of-the-dog-in-his-previous-home-not-being-fixeda-litter-of-p/891005277160474/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/4374346242710686/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/rook-is-so-darn-sad-in-his-kennelhe-hides-in-the-corner-with-his-head-down-we-ca/786861367249621/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/2370703273393033/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/we-dont-know-why-toledo-came-to-us-but-we-do-know-he-was-lovedwe-can-see-the-sad/1149916490450674/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/not-every-surrender-is-a-true-owner-situationseven-was-found-and-kept-for-a-few-/1726264335405911/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/being-left-behind-can-really-have-lasting-effectsnici-was-one-scared-girl-when-s/765295519990874/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/1448351607303609/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/898772069750613&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/hes-crying-for-a-homethat-is-what-pierre-had-twenty-days-ago-before-his-world-wa/26085668844419490/&show_text=true&width=500"
+  ]
+}
