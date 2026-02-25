@@ -1,0 +1,17 @@
+{
+  "unique_key": "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/princy-is-suffering-from-rsf-resting-shocked-face-no-matter-what-she-is-doing-wh/792829289919263/&show_text=true&width=500",
+  "url": "https://www.facebook.com/plugins/post.php?href=https%3A//www.facebook.com/caccdogs/videos/princy-is-suffering-from-rsf-resting-shocked-face-no-matter-what-she-is-doing-wh/792829289919263/&show_text=true&width=500",
+  "method": "GET",
+  "payload": null,
+  "headers": {},
+  "user_data": {
+    "__crawlee": {
+      "state": 3
+    },
+    "original_url": "https://www.facebook.com/caccdogs/videos/princy-is-suffering-from-rsf-resting-shocked-face-no-matter-what-she-is-doing-wh/792829289919263/"
+  },
+  "retry_count": 0,
+  "no_retry": false,
+  "loaded_url": "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fcaccdogs%2Fvideos%2Fprincy-is-suffering-from-rsf-resting-shocked-face-no-matter-what-she-is-doing-wh%2F792829289919263%2F&show_text=true&width=500",
+  "handled_at": "2026-02-25 19:41:38.812296+00:00"
+}
