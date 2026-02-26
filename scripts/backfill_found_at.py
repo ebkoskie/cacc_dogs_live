@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """
 One-time backfill: recover lost 'Found At', 'is_chipped', and 'Stray Hold Date'
-values for rescued/transferred dogs by mining git history of dogs_active.csv.
+values for outcome dogs (Adopted, RTO, Transferred) by mining git history
+of dogs_active.csv.
 
-When a dog is rescued the shelter website clears the "Found At" field.
+When a dog leaves the shelter the website clears the "Found At" field.
 The scraper then returns an empty value which was overwriting the stored
 value during the DuckDB merge (fixed in PR #82). This script recovers
 the data from old snapshots of dogs_active.csv preserved in git history.
@@ -28,14 +29,14 @@ ACTIVE_CSV = "dogs_active.csv"
 FIELDS_TO_RECOVER = ["Found At", "is_chipped", "Stray Hold Date"]
 
 
-def get_rescued_ids(historic_path: Path) -> dict[str, dict[str, str]]:
-    """Return {dog_id: {field: current_value}} for dogs needing backfill."""
+def get_outcome_ids(historic_path: Path) -> dict[str, dict[str, str]]:
+    """Return {dog_id: {field: current_value}} for outcome dogs needing backfill."""
     targets = {}
     with open(historic_path, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             status = row.get("Status", "")
-            if "Transferred" not in status and "Rescued" not in status:
+            if status in ("Available", "Pending", ""):
                 continue
             # Check if any recoverable field is empty
             missing = {
@@ -118,8 +119,8 @@ def main():
         sys.exit(1)
 
     # 1. Find target IDs
-    targets = get_rescued_ids(HISTORIC_CSV)
-    print(f"Rescued/transferred dogs with missing data: {len(targets)}")
+    targets = get_outcome_ids(HISTORIC_CSV)
+    print(f"Outcome dogs with missing data: {len(targets)}")
     if not targets:
         print("Nothing to backfill.")
         return
