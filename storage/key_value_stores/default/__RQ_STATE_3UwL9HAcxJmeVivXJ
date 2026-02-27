@@ -1,0 +1,30 @@
+{
+  "sequence_counter": 10,
+  "forefront_sequence_counter": 0,
+  "forefront_requests": {},
+  "regular_requests": {
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/hartlynn-is-a-little-hoppershe-is-young-and-fun-from-her-ears-down-to-her-toes-h/1603281200956433/&show_text=true&width=500": 0,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/1430685581847108/&show_text=true&width=500": 1,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/pennsylvania-is-a-man-on-a-missionthere-are-so-many-toys-and-so-little-time-to-p/2057260241484524/&show_text=true&width=500": 2,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/1448351607303609/&show_text=true&width=500": 3,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/princy-is-suffering-from-rsf-resting-shocked-face-no-matter-what-she-is-doing-wh/792829289919263/&show_text=true&width=500": 4,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/898772069750613&show_text=true&width=500": 5,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/the-sweetest-dogs-have-some-of-the-hardest-adjustments-to-shelter-lifeafter-two-/764164039746371/&show_text=true&width=500": 6,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/2203450670463394/&show_text=true&width=500": 7,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/bama-is-the-best-sporthe-went-full-operation-lucky-charm-outfit-and-it-looked-go/889027840841895/&show_text=true&width=500": 8,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/urgent-needs-rescue-by-tomorrow226-at-7pmskylnn-needs-a-foster-home-she-has-uri-/1564512531320030/&show_text=true&width=500": 9
+  },
+  "in_progress_requests": [],
+  "handled_requests": [
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/1448351607303609/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/1430685581847108/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/2203450670463394/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/898772069750613&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/hartlynn-is-a-little-hoppershe-is-young-and-fun-from-her-ears-down-to-her-toes-h/1603281200956433/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/pennsylvania-is-a-man-on-a-missionthere-are-so-many-toys-and-so-little-time-to-p/2057260241484524/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/the-sweetest-dogs-have-some-of-the-hardest-adjustments-to-shelter-lifeafter-two-/764164039746371/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/princy-is-suffering-from-rsf-resting-shocked-face-no-matter-what-she-is-doing-wh/792829289919263/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/urgent-needs-rescue-by-tomorrow226-at-7pmskylnn-needs-a-foster-home-she-has-uri-/1564512531320030/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/bama-is-the-best-sporthe-went-full-operation-lucky-charm-outfit-and-it-looked-go/889027840841895/&show_text=true&width=500"
+  ]
+}
