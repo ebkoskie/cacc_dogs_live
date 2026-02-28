@@ -1,0 +1,30 @@
+{
+  "sequence_counter": 10,
+  "forefront_sequence_counter": 0,
+  "forefront_requests": {},
+  "regular_requests": {
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/hartlynn-is-a-little-hoppershe-is-young-and-fun-from-her-ears-down-to-her-toes-h/1603281200956433/&show_text=true&width=500": 0,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/pennsylvania-is-a-man-on-a-missionthere-are-so-many-toys-and-so-little-time-to-p/2057260241484524/&show_text=true&width=500": 1,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/all-these-surrenders-sometimes-it-feels-like-no-one-is-keeping-their-dogthen-we-/942393738321667/&show_text=true&width=500": 2,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/only-a-year-old-but-has-a-mommy-bodylife-really-isnt-fair-most-of-the-time-henri/800997885705305/&show_text=true&width=500": 3,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/898772069750613&show_text=true&width=500": 4,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/1483993049952748/&show_text=true&width=500": 5,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/bama-is-the-best-sporthe-went-full-operation-lucky-charm-outfit-and-it-looked-go/889027840841895/&show_text=true&width=500": 6,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/2203450670463394/&show_text=true&width=500": 7,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/so-skinny-and-still-so-cuteluba-is-true-beauty-she-might-have-missed-meals-but-s/688719884268339/&show_text=true&width=500": 8,
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/1410525470756110/&show_text=true&width=500": 9
+  },
+  "in_progress_requests": [],
+  "handled_requests": [
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/1483993049952748/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/hartlynn-is-a-little-hoppershe-is-young-and-fun-from-her-ears-down-to-her-toes-h/1603281200956433/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/pennsylvania-is-a-man-on-a-missionthere-are-so-many-toys-and-so-little-time-to-p/2057260241484524/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/2203450670463394/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/100068435081347/videos/898772069750613&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/all-these-surrenders-sometimes-it-feels-like-no-one-is-keeping-their-dogthen-we-/942393738321667/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/so-skinny-and-still-so-cuteluba-is-true-beauty-she-might-have-missed-meals-but-s/688719884268339/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/your-reel/1410525470756110/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/bama-is-the-best-sporthe-went-full-operation-lucky-charm-outfit-and-it-looked-go/889027840841895/&show_text=true&width=500",
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/videos/only-a-year-old-but-has-a-mommy-bodylife-really-isnt-fair-most-of-the-time-henri/800997885705305/&show_text=true&width=500"
+  ]
+}
