@@ -1,0 +1,12 @@
+{
+  "sequence_counter": 1,
+  "forefront_sequence_counter": 0,
+  "forefront_requests": {},
+  "regular_requests": {
+    "https://www.facebook.com/caccdogs": 0
+  },
+  "in_progress_requests": [
+    "https://www.facebook.com/caccdogs"
+  ],
+  "handled_requests": []
+}

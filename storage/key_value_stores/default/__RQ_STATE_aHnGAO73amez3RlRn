@@ -1,0 +1,12 @@
+{
+  "sequence_counter": 1,
+  "forefront_sequence_counter": 0,
+  "forefront_requests": {},
+  "regular_requests": {
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/posts/pfbid02bxeyxojzzfqzgrz8o8nyv3amzdtlxd1okboer1tkt4kciasnnluz3fwtqmhdn2t8l&show_text=true&width=500": 0
+  },
+  "in_progress_requests": [],
+  "handled_requests": [
+    "https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/caccdogs/posts/pfbid02bxeyxojzzfqzgrz8o8nyv3amzdtlxd1okboer1tkt4kciasnnluz3fwtqmhdn2t8l&show_text=true&width=500"
+  ]
+}
