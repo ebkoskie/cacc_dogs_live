@@ -78,223 +78,241 @@
         .footer .disclaimer { font-size: 0.75rem; opacity: 0.8; max-width: 800px; margin: 0 auto; }
 
         
-    /* Inputs & Controls */
-    input { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 10px; width: 100%; max-width: 300px; border-radius: 6px; margin-bottom: 10px; }
+/* Inputs & Controls */
+input { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 10px; width: 100%;
+max-width: 300px; border-radius: 6px; margin-bottom: 10px; }
 
-    .chart-container { background: var(--row); padding: 20px; border-radius: 6px; border: 1px solid var(--border); height: 600px; position: relative; margin-bottom: 10px; }
-    .chart-legend {
-        display: flex; align-items: center; justify-content: center; gap: 8px;
-        font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;
-    }
-    .chart-legend-gradient {
-        width: 120px; height: 10px; border-radius: 5px;
-        background: linear-gradient(to right, #3fb950, #d29922, #f85149);
-    }
-    .chart-hint { text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-top: 5px; font-style: italic; margin-bottom: 30px; }
+.chart-container { background: var(--row); padding: 20px; border-radius: 6px; border: 1px solid var(--border); height:
+600px; position: relative; margin-bottom: 10px; }
+.chart-legend {
+display: flex; align-items: center; justify-content: center; gap: 8px;
+font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;
+}
+.chart-legend-gradient {
+width: 120px; height: 10px; border-radius: 5px;
+background: linear-gradient(to right, #3fb950, #d29922, #f85149);
+}
+.chart-hint { text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-top: 5px; font-style: italic;
+margin-bottom: 30px; }
 
-    /* Tile Grid */
-    .dog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; animation: fadeIn 0.5s ease-in forwards; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* Tile Grid */
+.dog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;
+animation: fadeIn 0.5s ease-in forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    .dog-card { background: var(--row); border: 1px solid var(--border); border-radius: 12px; padding: 16px; box-shadow: 0 2px 5px var(--card-shadow); display: flex; flex-direction: column; gap: 10px; transition: transform 0.2s, box-shadow 0.2s; }
-    .dog-card:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); border-color: var(--accent); }
-    .dog-card:active { transform: scale(0.98); }
+.dog-card { background: var(--row); border: 1px solid var(--border); border-radius: 12px; padding: 16px; box-shadow: 0
+2px 5px var(--card-shadow); display: flex; flex-direction: column; gap: 10px; transition: transform 0.2s, box-shadow
+0.2s; }
+.dog-card:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); border-color: var(--accent); }
+.dog-card:active { transform: scale(0.98); }
 
-    /* Warm Fuzzies Animation */
-    @keyframes warmFuzzyPop {
-        0% { opacity: 0; transform: scale(0.8) translateY(20px); }
-        60% { transform: scale(1.05) translateY(-5px); }
-        100% { opacity: 1; transform: scale(1) translateY(0); }
-    }
+/* Warm Fuzzies Animation */
+@keyframes warmFuzzyPop {
+0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+60% { transform: scale(1.05) translateY(-5px); }
+100% { opacity: 1; transform: scale(1) translateY(0); }
+}
 
-    .dog-card.highlight-today {
-        border-color: #e3b341;
-        box-shadow: 0 0 20px rgba(227, 179, 65, 0.25);
-    }
+.dog-card.highlight-today {
+border-color: #e3b341;
+box-shadow: 0 0 20px rgba(227, 179, 65, 0.25);
+}
 
-    .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
-    /* Make entire card header row tappable for AKA toggle */
-    .card-header.has-aka { cursor: pointer; min-height: 44px; padding: 4px; margin: -4px; border-radius: 6px; transition: background 0.15s; }
-    .card-header.has-aka:active { background: rgba(128,128,128,0.1); }
-    .dog-name { font-size: 1.3rem; font-weight: 700; color: var(--text); margin: 0; line-height: 1.2; }
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; }
+/* Make entire card header row tappable for AKA toggle */
+.card-header.has-aka { cursor: pointer; min-height: 44px; padding: 4px; margin: -4px; border-radius: 6px; transition:
+background 0.15s; }
+.card-header.has-aka:active { background: rgba(128,128,128,0.1); }
+.dog-name { font-size: 1.3rem; font-weight: 700; color: var(--text); margin: 0; line-height: 1.2; }
 
-    /* Interactive Name Style */
-    .dog-name.has-aka {
-        cursor: pointer;
-        text-decoration-line: underline;
-        text-decoration-style: dotted;
-        text-decoration-color: var(--text-muted);
-        text-underline-offset: 4px;
-    }
-    .dog-name.has-aka:hover { text-decoration-color: var(--accent); }
+/* Interactive Name Style */
+.dog-name.has-aka {
+cursor: pointer;
+text-decoration-line: underline;
+text-decoration-style: dotted;
+text-decoration-color: var(--text-muted);
+text-underline-offset: 4px;
+}
+.dog-name.has-aka:hover { text-decoration-color: var(--accent); }
 
-    /* FKA badge for AKA-capable names */
-    .fka-badge {
-        font-size: 0.65rem; font-weight: 600; color: var(--text-muted);
-        background: rgba(128,128,128,0.15); padding: 1px 6px; border-radius: 4px;
-        margin-left: 6px; vertical-align: middle; letter-spacing: 0.5px;
-    }
+/* FKA badge for AKA-capable names */
+.fka-badge {
+font-size: 0.65rem; font-weight: 600; color: var(--text-muted);
+background: rgba(128,128,128,0.15); padding: 1px 6px; border-radius: 4px;
+margin-left: 6px; vertical-align: middle; letter-spacing: 0.5px;
+}
 
-    .date-badge { font-size: 0.8rem; color: var(--text-muted); background: rgba(128,128,128,0.1); padding: 2px 8px; border-radius: 10px; border: 1px solid var(--border); white-space: nowrap; }
-    .date-badge.today-badge { color: #e3b341; border-color: rgba(227, 179, 65, 0.4); }
-    .date-badge.today-badge::before { content: "\f005"; font-family: "Font Awesome 5 Free"; font-weight: 900; margin-right: 4px; font-size: 0.7rem; }
-    .breed-info { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 5px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-    .card-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 0.82rem; color: var(--text-muted); }
-    .los-badge { display: inline-flex; align-items: center; gap: 4px; }
-    .los-badge i { font-size: 0.75rem; }
-    .los-badge.los-long { color: var(--warning-text); }
-    .los-badge.los-vlong { color: var(--danger-text); }
-    .card-links { display: inline-flex; gap: 6px; margin-left: auto; }
-    .card-icon-btn {
-        display: inline-flex; align-items: center; justify-content: center;
-        width: 30px; height: 30px; border-radius: 6px;
-        background: var(--row); border: 1px solid var(--border); color: var(--accent);
-        text-decoration: none; font-size: 0.85rem; transition: all 0.15s;
-    }
-    .card-icon-btn:hover { border-color: var(--accent); background: var(--row-hover); }
-    .card-icon-btn:active { transform: scale(0.9); }
-    .card-icon-btn.btn-youtube .fa-youtube { color: #cc0000; }
-    .card-footer { margin-top: auto; padding-top: 5px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
-    .card-footer .status-rescue { white-space: normal; word-break: break-word; }
+.date-badge { font-size: 0.8rem; color: var(--text-muted); background: rgba(128,128,128,0.1); padding: 2px 8px;
+border-radius: 10px; border: 1px solid var(--border); white-space: nowrap; }
+.date-badge.today-badge { color: #e3b341; border-color: rgba(227, 179, 65, 0.4); }
+.date-badge.today-badge::before { content: "\f005"; font-family: "Font Awesome 5 Free"; font-weight: 900; margin-right:
+4px; font-size: 0.7rem; }
+.breed-info { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 5px; border-bottom: 1px solid var(--border);
+padding-bottom: 10px; }
+.card-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 0.82rem; color:
+var(--text-muted); }
+.los-badge { display: inline-flex; align-items: center; gap: 4px; }
+.los-badge i { font-size: 0.75rem; }
+.los-badge.los-long { color: var(--warning-text); }
+.los-badge.los-vlong { color: var(--danger-text); }
+.card-links { display: inline-flex; gap: 6px; margin-left: auto; }
+.card-icon-btn {
+display: inline-flex; align-items: center; justify-content: center;
+width: 30px; height: 30px; border-radius: 6px;
+background: var(--row); border: 1px solid var(--border); color: var(--accent);
+text-decoration: none; font-size: 0.85rem; transition: all 0.15s;
+}
+.card-icon-btn:hover { border-color: var(--accent); background: var(--row-hover); }
+.card-icon-btn:active { transform: scale(0.9); }
+.card-icon-btn.btn-youtube .fa-youtube { color: #cc0000; }
+.card-footer { margin-top: auto; padding-top: 5px; display: flex; align-items: center; justify-content: space-between;
+gap: 8px; flex-wrap: wrap; }
+.card-footer .status-rescue { white-space: normal; word-break: break-word; }
 
-    /* Drill Down */
-    #drillDownSection { display: none; margin-top: 40px; animation: slideDown 0.4s ease-out; }
-    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+/* Drill Down */
+#drillDownSection { display: none; margin-top: 40px; animation: slideDown 0.4s ease-out; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-    .details-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px; }
-    .details-title { font-size: 1.5rem; margin: 0; color: var(--text); }
-    .close-btn { background: transparent; border: 1px solid var(--border); color: var(--text); min-width: 44px; min-height: 44px; padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.95rem; }
-    .close-btn:hover { background: var(--row-hover); border-color: var(--accent); color: var(--accent); }
-    .close-btn:active { transform: scale(0.95); background: var(--row-hover); }
+.details-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid
+var(--border); padding-bottom: 15px; margin-bottom: 20px; }
+.details-title { font-size: 1.5rem; margin: 0; color: var(--text); }
+.close-btn { background: transparent; border: 1px solid var(--border); color: var(--text); min-width: 44px; min-height:
+44px; padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items:
+center; justify-content: center; gap: 6px; font-size: 0.95rem; }
+.close-btn:hover { background: var(--row-hover); border-color: var(--accent); color: var(--accent); }
+.close-btn:active { transform: scale(0.95); background: var(--row-hover); }
 
-    .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-    .charts-column { display: flex; flex-direction: column; gap: 20px; }
-    .charts-column .pie-container { height: 340px; }
-    .pie-container { background: var(--row); padding: 20px; border-radius: 8px; border: 1px solid var(--border); height: 400px; display: flex; justify-content: center; align-items: center; }
+.details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+.charts-column { display: flex; flex-direction: column; gap: 20px; }
+.charts-column .pie-container { height: 340px; }
+.pie-container { background: var(--row); padding: 20px; border-radius: 8px; border: 1px solid var(--border); height:
+400px; display: flex; justify-content: center; align-items: center; }
 
-    .drill-down-stats { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
-    .drill-stat { background: var(--row); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; flex: 1; min-width: 120px; text-align: center; }
-    .drill-stat-value { font-size: 1.3rem; font-weight: 700; color: var(--text); }
-    .drill-stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
-    .drill-down-footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); }
-    .btn-back {
-        background: transparent; border: 1px solid var(--border); color: var(--text-muted);
-        padding: 10px 24px; border-radius: 6px; cursor: pointer; font-size: 0.95rem;
-        transition: all 0.2s; min-height: 44px; display: inline-flex; align-items: center; gap: 8px;
-    }
-    .btn-back:hover { border-color: var(--accent); color: var(--accent); }
-    .btn-back:active { transform: scale(0.97); }
+.drill-down-stats { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+.drill-stat { background: var(--row); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; flex: 1;
+min-width: 120px; text-align: center; }
+.drill-stat-value { font-size: 1.3rem; font-weight: 700; color: var(--text); }
+.drill-stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+.drill-down-footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); }
+.btn-back {
+background: transparent; border: 1px solid var(--border); color: var(--text-muted);
+padding: 10px 24px; border-radius: 6px; cursor: pointer; font-size: 0.95rem;
+transition: all 0.2s; min-height: 44px; display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-back:hover { border-color: var(--accent); color: var(--accent); }
+.btn-back:active { transform: scale(0.97); }
 
-    /* Controls Bar */
-    .controls-bar {
-        position: sticky; top: 64px; z-index: 100;
-        background: var(--bg); border-bottom: 1px solid var(--border);
-        padding: 15px 0; margin-bottom: 30px;
-        display: flex; flex-wrap: wrap; gap: 15px; align-items: center;
-        backdrop-filter: blur(8px);
-    }
-    .control-group { display: flex; align-items: center; gap: 8px; }
-    .control-group label { font-weight: 600; color: var(--text-muted); font-size: 0.9rem; }
-    .date-input {
-        background: var(--row); color: var(--text); border: 1px solid var(--border);
-        padding: 6px 10px; border-radius: 6px; font-family: inherit; min-height: 44px;
-    }
-    .btn-apply {
-        background: var(--accent); color: white; border: none; padding: 6px 15px;
-        border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s; min-height: 44px;
-    }
-    .btn-apply:hover { opacity: 0.9; }
-    .btn-apply:active { transform: scale(0.95); opacity: 0.8; }
-    .btn-reset {
-        background: transparent; color: var(--text-muted); border: 1px solid var(--border);
-        padding: 6px 15px; border-radius: 6px; cursor: pointer; transition: all 0.2s; min-height: 44px;
-    }
-    .btn-reset:hover { border-color: var(--accent); color: var(--accent); }
-    .btn-reset:active { transform: scale(0.95); border-color: var(--accent); color: var(--accent); }
+/* Controls Bar */
+.controls-bar {
+position: sticky; top: 64px; z-index: 100;
+background: var(--bg); border-bottom: 1px solid var(--border);
+padding: 15px 0; margin-bottom: 30px;
+display: flex; flex-wrap: wrap; gap: 15px; align-items: center;
+backdrop-filter: blur(8px);
+}
+.control-group { display: flex; align-items: center; gap: 8px; }
+.control-group label { font-weight: 600; color: var(--text-muted); font-size: 0.9rem; }
+.date-input {
+background: var(--row); color: var(--text); border: 1px solid var(--border);
+padding: 6px 10px; border-radius: 6px; font-family: inherit; min-height: 44px;
+}
+.btn-apply {
+background: var(--accent); color: white; border: none; padding: 6px 15px;
+border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s; min-height: 44px;
+}
+.btn-apply:hover { opacity: 0.9; }
+.btn-apply:active { transform: scale(0.95); opacity: 0.8; }
+.btn-reset {
+background: transparent; color: var(--text-muted); border: 1px solid var(--border);
+padding: 6px 15px; border-radius: 6px; cursor: pointer; transition: all 0.2s; min-height: 44px;
+}
+.btn-reset:hover { border-color: var(--accent); color: var(--accent); }
+.btn-reset:active { transform: scale(0.95); border-color: var(--accent); color: var(--accent); }
 
-    /* Quick-select date buttons */
-    .quick-dates { display: flex; gap: 6px; flex-wrap: wrap; }
-    .btn-quick {
-        background: rgba(128,128,128,0.1); border: 1px solid var(--border); color: var(--text-muted);
-        padding: 4px 12px; border-radius: 16px; cursor: pointer; font-size: 0.8rem;
-        transition: all 0.15s; min-height: 32px; white-space: nowrap;
-    }
-    .btn-quick:hover { border-color: var(--accent); color: var(--accent); }
-    .btn-quick:active { transform: scale(0.95); background: var(--accent); color: white; }
-    .btn-quick.active { background: var(--accent); color: white; border-color: var(--accent); }
+/* Quick-select date buttons */
+.quick-dates { display: flex; gap: 6px; flex-wrap: wrap; }
+.btn-quick {
+background: rgba(128,128,128,0.1); border: 1px solid var(--border); color: var(--text-muted);
+padding: 4px 12px; border-radius: 16px; cursor: pointer; font-size: 0.8rem;
+transition: all 0.15s; min-height: 32px; white-space: nowrap;
+}
+.btn-quick:hover { border-color: var(--accent); color: var(--accent); }
+.btn-quick:active { transform: scale(0.95); background: var(--accent); color: white; }
+.btn-quick.active { background: var(--accent); color: white; border-color: var(--accent); }
 
-    /* Stats Banner */
-    .stats-banner { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
-    .stat-card { background: var(--row); border: 1px solid var(--border); padding: 15px 20px; border-radius: 8px; flex: 1; min-width: 200px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-    .stat-icon { font-size: 2rem; color: var(--accent); opacity: 0.8; }
-    .stat-info { display: flex; flex-direction: column; }
-    .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--text); line-height: 1.1; }
-    .stat-label { font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; }
+/* Stats Banner */
+.stats-banner { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+.stat-card { background: var(--row); border: 1px solid var(--border); padding: 15px 20px; border-radius: 8px; flex: 1;
+min-width: 200px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.stat-icon { font-size: 2rem; color: var(--accent); opacity: 0.8; }
+.stat-info { display: flex; flex-direction: column; }
+.stat-value { font-size: 1.5rem; font-weight: 700; color: var(--text); line-height: 1.1; }
+.stat-label { font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; }
 
-    .stat-card.clickable { cursor: pointer; transition: all 0.2s ease; position: relative; overflow: hidden; }
-    .stat-card.clickable:hover { border-color: var(--accent); background: var(--row-hover); transform: translateY(-2px); }
-    .stat-card.clickable:active { transform: scale(0.97); background: var(--row-hover); border-color: var(--accent); }
+.stat-card.clickable { cursor: pointer; transition: all 0.2s ease; position: relative; overflow: hidden; }
+.stat-card.clickable:hover { border-color: var(--accent); background: var(--row-hover); transform: translateY(-2px); }
+.stat-card.clickable:active { transform: scale(0.97); background: var(--row-hover); border-color: var(--accent); }
 
-    /* Active Filter Banner */
-    .active-filter-bar {
-        display: none; align-items: center; gap: 10px;
-        padding: 10px 16px; background: var(--row); border: 1px solid var(--border);
-        border-radius: 8px; margin-bottom: 20px; flex-wrap: wrap;
-        animation: fadeIn 0.3s ease-out;
-    }
-    .active-filter-bar.visible { display: flex; }
-    .active-filter-bar-label { font-size: 0.85rem; color: var(--text-muted); flex-shrink: 0; }
-    .filter-pill {
-        display: inline-flex; align-items: center; gap: 6px;
-        background: var(--accent); color: white; padding: 4px 12px;
-        border-radius: 16px; font-size: 0.85rem; font-weight: 600; white-space: nowrap;
-    }
-    .filter-pill-close {
-        background: none; border: none; color: white; cursor: pointer;
-        font-size: 1.1rem; padding: 0 0 0 4px; line-height: 1; opacity: 0.8;
-        transition: opacity 0.15s;
-    }
-    .filter-pill-close:hover { opacity: 1; }
-    .btn-reset-filter {
-        background: transparent; border: 1px solid var(--border); color: var(--text-muted);
-        padding: 4px 14px; border-radius: 16px; cursor: pointer; font-size: 0.82rem;
-        transition: all 0.15s; margin-left: auto; min-height: 32px; white-space: nowrap;
-    }
-    .btn-reset-filter:hover { border-color: var(--accent); color: var(--accent); }
-    .btn-reset-filter:active { transform: scale(0.95); }
+/* Active Filter Banner */
+.active-filter-bar {
+display: none; align-items: center; gap: 10px;
+padding: 10px 16px; background: var(--row); border: 1px solid var(--border);
+border-radius: 8px; margin-bottom: 20px; flex-wrap: wrap;
+animation: fadeIn 0.3s ease-out;
+}
+.active-filter-bar.visible { display: flex; }
+.active-filter-bar-label { font-size: 0.85rem; color: var(--text-muted); flex-shrink: 0; }
+.filter-pill {
+display: inline-flex; align-items: center; gap: 6px;
+background: var(--accent); color: white; padding: 4px 12px;
+border-radius: 16px; font-size: 0.85rem; font-weight: 600; white-space: nowrap;
+}
+.filter-pill-close {
+background: none; border: none; color: white; cursor: pointer;
+font-size: 1.1rem; padding: 0 0 0 4px; line-height: 1; opacity: 0.8;
+transition: opacity 0.15s;
+}
+.filter-pill-close:hover { opacity: 1; }
+.btn-reset-filter {
+background: transparent; border: 1px solid var(--border); color: var(--text-muted);
+padding: 4px 14px; border-radius: 16px; cursor: pointer; font-size: 0.82rem;
+transition: all 0.15s; margin-left: auto; min-height: 32px; white-space: nowrap;
+}
+.btn-reset-filter:hover { border-color: var(--accent); color: var(--accent); }
+.btn-reset-filter:active { transform: scale(0.95); }
 
-    /* Empty State */
-    .empty-state {
-        grid-column: 1 / -1; text-align: center; padding: 60px 20px;
-        color: var(--text-muted); font-size: 1.1rem;
-    }
-    .empty-state i { font-size: 3rem; display: block; margin-bottom: 15px; opacity: 0.4; }
+/* Empty State */
+.empty-state {
+grid-column: 1 / -1; text-align: center; padding: 60px 20px;
+color: var(--text-muted); font-size: 1.1rem;
+}
+.empty-state i { font-size: 3rem; display: block; margin-bottom: 15px; opacity: 0.4; }
 
-    /* Sticky search on mobile */
-    .search-wrapper { position: relative; }
+/* Sticky search on mobile */
+.search-wrapper { position: relative; }
 
-    /* Reduced motion */
-    @media (prefers-reduced-motion: reduce) {
-        .dog-card, .stat-card.clickable, .btn-apply, .btn-reset, .btn-back, .close-btn,
-        .filter-pill-close, .btn-reset-filter, .btn-quick { transition: none !important; }
-        .dog-grid, #drillDownSection { animation: none !important; }
-        .dog-card.highlight-today { animation: none !important; }
-    }
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+.dog-card, .stat-card.clickable, .btn-apply, .btn-reset, .btn-back, .close-btn,
+.filter-pill-close, .btn-reset-filter, .btn-quick { transition: none !important; }
+.dog-grid, #drillDownSection { animation: none !important; }
+.dog-card.highlight-today { animation: none !important; }
+}
 
-    @media (max-width: 800px) {
-        .details-grid { grid-template-columns: 1fr; }
-        .pie-container { height: 280px; }
-        .chart-container { height: 450px; }
-        .search-wrapper {
-            position: sticky; top: 130px; z-index: 99;
-            background: var(--bg); padding: 8px 0; margin: 0 -5px; padding-left: 5px; padding-right: 5px;
-        }
-    }
+@media (max-width: 800px) {
+.details-grid { grid-template-columns: 1fr; }
+.pie-container { height: 280px; }
+.chart-container { height: 450px; }
+.search-wrapper {
+position: sticky; top: 130px; z-index: 99;
+background: var(--bg); padding: 8px 0; margin: 0 -5px; padding-left: 5px; padding-right: 5px;
+}
+}
 
-    @media (max-width: 600px) {
-        .dog-grid { grid-template-columns: 1fr; gap: 12px; }
-        .chart-container { height: 380px; }
-    }
+@media (max-width: 600px) {
+.dog-grid { grid-template-columns: 1fr; gap: 12px; }
+.chart-container { height: 380px; }
+}
 
     </style></head><body><style>
     /* --- Global Theme Variables (Moved here to support Map Overlay) --- */
@@ -427,7 +445,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button><div class=quick-dates><button class=btn-quick onclick=quickDate(7)>7d</button><button class="btn-quick active" onclick=quickDate(30)>30d</button><button class=btn-quick onclick=quickDate(90)>90d</button><button class=btn-quick onclick=quickDate(0)>All</button></div></div><div id=activeFilterBar class=active-filter-bar><span class=active-filter-bar-label><i class="fas fa-filter" style=margin-right:4px;></i> Viewing:</span><span id=filterPill class=filter-pill><span id=filterPillText></span><button class=filter-pill-close onclick=clearActiveFilter() title="Clear filter">&times;</button></span><button class=btn-reset-filter onclick=clearActiveFilter()><i class="fas fa-undo"></i> Reset to 30 Days</button></div><div class=stats-banner><div class="stat-card clickable" onclick=showTodayRescues() title="Click to see today's heroes!"><i class="fas fa-calendar-day stat-icon"></i><div class=stat-info><span class=stat-value id=countToday>0</span><span class=stat-label>Rescues Today</span></div></div><div class=stat-card><i class="fas fa-history stat-icon" style="color: var(--success-text);"></i><div class=stat-info><span class=stat-value id=countTotal>0</span><span class=stat-label id=labelTotal>Total in Range</span></div></div><div class=stat-card><i class="fas fa-clock stat-icon" style="color: var(--warning-text);"></i><div class=stat-info><span class=stat-value id=avgLos>&mdash;</span><span class=stat-label>Avg Shelter Stay</span></div></div><div class=stat-card><i class="fas fa-hands-helping stat-icon" style="color: var(--info-text);"></i><div class=stat-info><span class=stat-value id=uniquePartners>0</span><span class=stat-label id=labelPartners>Partners in Range</span></div></div></div><div class=chart-container><canvas id=rescueChart></canvas></div><div class=chart-legend><span>Short stay</span><div class=chart-legend-gradient></div><span>Long stay</span></div><div class=chart-hint>Bar color reflects average shelter stay before rescue. Tap any bar for breed details.</div><div id=drillDownSection><div class=details-header><h2 class=details-title id=selectedPartnerName>Partner Details</h2><button class=close-btn onclick=closeDrillDown()>Close Details <i class="fas fa-times"></i></button></div><div id=drillDownStats class=drill-down-stats></div><div class=details-grid><div class=charts-column><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Composition</h3><div class=pie-container><canvas id=breedPieChart></canvas></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Sizes</h3><div class=pie-container id=sizeChartContainer><canvas id=sizePieChart></canvas></div></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Recent Pulls (In Range)</h3><div class=table-container><table id=drillDownTable><thead><tr><th>Date</th><th>Name</th><th>Breed</th><th>Stay</th></tr></thead><tbody id=drillDownBody></tbody></table></div></div></div><div class=drill-down-footer><button class=btn-back onclick=closeDrillDown()><i class="fas fa-arrow-left"></i> Back to all rescues</button></div></div><div id=recentRescuesSection><h2 id=gridTitle style="margin: 0 0 10px 0;">Rescues in Range</h2><div class=search-wrapper><input type=text id=searchRecent placeholder="Filter visible cards (e.g. 'Paws', 'Bulldog')..."></div><div id=recentGrid class=dog-grid></div></div><div class=footer><span>Last Updated: March 04, 2026 05:45 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=controls-bar><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button><div class=quick-dates><button class=btn-quick onclick=quickDate(7)>7d</button><button class="btn-quick active" onclick=quickDate(30)>30d</button><button class=btn-quick onclick=quickDate(90)>90d</button><button class=btn-quick onclick=quickDate(0)>All</button></div></div><div id=activeFilterBar class=active-filter-bar><span class=active-filter-bar-label><i class="fas fa-filter" style=margin-right:4px;></i> Viewing:</span><span id=filterPill class=filter-pill><span id=filterPillText></span><button class=filter-pill-close onclick=clearActiveFilter() title="Clear filter">&times;</button></span><button class=btn-reset-filter onclick=clearActiveFilter()><i class="fas fa-undo"></i> Reset to 30 Days</button></div><div class=stats-banner><div class="stat-card clickable" onclick=showTodayRescues() title="Click to see today's heroes!"><i class="fas fa-calendar-day stat-icon"></i><div class=stat-info><span class=stat-value id=countToday>0</span><span class=stat-label>Rescues Today</span></div></div><div class=stat-card><i class="fas fa-history stat-icon" style="color: var(--success-text);"></i><div class=stat-info><span class=stat-value id=countTotal>0</span><span class=stat-label id=labelTotal>Total in Range</span></div></div><div class=stat-card><i class="fas fa-clock stat-icon" style="color: var(--warning-text);"></i><div class=stat-info><span class=stat-value id=avgLos>&mdash;</span><span class=stat-label>Avg Shelter Stay</span></div></div><div class=stat-card><i class="fas fa-hands-helping stat-icon" style="color: var(--info-text);"></i><div class=stat-info><span class=stat-value id=uniquePartners>0</span><span class=stat-label id=labelPartners>Partners in Range</span></div></div></div><div class=chart-container><canvas id=rescueChart></canvas></div><div class=chart-legend><span>Short stay</span><div class=chart-legend-gradient></div><span>Long stay</span></div><div class=chart-hint>Bar color reflects average shelter stay before rescue. Tap any bar for breed details.</div><div id=drillDownSection><div class=details-header><h2 class=details-title id=selectedPartnerName>Partner Details</h2><button class=close-btn onclick=closeDrillDown()>Close Details <i class="fas fa-times"></i></button></div><div id=drillDownStats class=drill-down-stats></div><div class=details-grid><div class=charts-column><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Composition </h3><div class=pie-container><canvas id=breedPieChart></canvas></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Sizes</h3><div class=pie-container id=sizeChartContainer><canvas id=sizePieChart></canvas></div></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Recent Pulls (In Range)</h3><div class=table-container><table id=drillDownTable><thead><tr><th>Date</th><th>Name</th><th>Breed</th><th>Stay</th></tr></thead><tbody id=drillDownBody></tbody></table></div></div></div><div class=drill-down-footer><button class=btn-back onclick=closeDrillDown()><i class="fas fa-arrow-left"></i> Back to all rescues</button></div></div><div id=recentRescuesSection><h2 id=gridTitle style="margin: 0 0 10px 0;">Rescues in Range</h2><div class=search-wrapper><input type=text id=searchRecent placeholder="Filter visible cards (e.g. 'Paws', 'Bulldog')..."></div><div id=recentGrid class=dog-grid></div></div><div class=footer><span>Last Updated: March 04, 2026 09:21 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -594,7 +612,7 @@
 
     // --- Active Filter Banner ---
     function isDefaultDateRange() {
-        const todayStr = new Date().toLocaleDateString("en-CA", {timeZone: "America/Chicago"});
+        const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
         const endStr = document.getElementById('endDate').value;
         const startStr = document.getElementById('startDate').value;
         if (endStr !== todayStr) return false;
@@ -616,7 +634,7 @@
     function updateFilterBanner() {
         const bar = document.getElementById('activeFilterBar');
         const pillText = document.getElementById('filterPillText');
-        const todayStr = new Date().toLocaleDateString("en-CA", {timeZone: "America/Chicago"});
+        const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
         const startStr = document.getElementById('startDate').value;
         const endStr = document.getElementById('endDate').value;
         const isTodayView = (startStr === todayStr && endStr === todayStr);
@@ -648,7 +666,7 @@
     document.getElementById('searchRecent').addEventListener('keyup', debounce(filterTiles, 300));
 
     // Delegated event listener for AKA name toggling (replaces inline onclick)
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         // Handle card header clicks (entire header row is tappable)
         const header = e.target.closest('.card-header.has-aka');
         if (header) {
@@ -685,6 +703,8 @@
             const fb = fbRaw ? fbRaw.split(' | ').map(u => decompressUrl(u.trim())).join(' | ') : "";
             const ytRaw = row[7];
             const yt = ytRaw ? ytRaw.split(' | ').map(u => decompressUrl(u.trim())).join(' | ') : "";
+            const igRaw = row[11];
+            const ig = igRaw ? igRaw.split(' | ').map(u => decompressUrl(u.trim())).join(' | ') : "";
 
             return {
                 partner: partners[row[0]],
@@ -694,6 +714,7 @@
                 aka: row[4] || "",
                 los: (row[5] !== undefined && row[5] !== null) ? row[5] : -1,
                 fb: fb,
+                ig: ig,
                 yt: yt,
                 sizeCategory: sizeIdx,
                 sizeName: sizes[sizeIdx],
@@ -713,7 +734,7 @@
 
     // --- Quick Date Logic ---
     function quickDate(days) {
-        const todayChicago = new Date().toLocaleDateString("en-CA", {timeZone: "America/Chicago"});
+        const todayChicago = new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
         const end = new Date(todayChicago);
         const fmt = d => d.toISOString().split('T')[0];
 
@@ -737,7 +758,7 @@
 
         // Update active button state
         document.querySelectorAll('.btn-quick').forEach(btn => btn.classList.remove('active'));
-        const labels = {'7': 0, '30': 1, '90': 2, '0': 3};
+        const labels = { '7': 0, '30': 1, '90': 2, '0': 3 };
         const idx = labels[String(days)];
         if (idx !== undefined) document.querySelectorAll('.btn-quick')[idx].classList.add('active');
 
@@ -756,7 +777,7 @@
         FILTERED_DATA = ALL_DATA.filter(d => d.date >= startStr && d.date <= endStr);
 
         // Calculate Today (Chicago Time) with DASHES
-        const todayStr = new Date().toLocaleDateString("en-CA", {timeZone: "America/Chicago"});
+        const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
         const todayCount = ALL_DATA.filter(d => d.date === todayStr).length;
 
         document.getElementById('countToday').innerText = todayCount;
@@ -815,7 +836,7 @@
         const count = parseInt(document.getElementById('countToday').innerText);
         if (count === 0) return; // Nothing to show
 
-        const todayStr = new Date().toLocaleDateString("en-CA", {timeZone: "America/Chicago"});
+        const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
 
         // 1. Clear text filter so everything shows
         document.getElementById('searchRecent').value = '';
@@ -874,13 +895,13 @@
         var counts = {};
         var losAccum = {};
         var total = data.length;
-        data.forEach(function(r) {
+        data.forEach(function (r) {
             counts[r.partner] = (counts[r.partner] || 0) + 1;
             if (!losAccum[r.partner]) losAccum[r.partner] = { sum: 0, n: 0 };
             if (r.los >= 0) { losAccum[r.partner].sum += r.los; losAccum[r.partner].n++; }
         });
-        var entries = Object.entries(counts).sort(function(a, b) { return b[1] - a[1]; });
-        return entries.map(function(e) {
+        var entries = Object.entries(counts).sort(function (a, b) { return b[1] - a[1]; });
+        return entries.map(function (e) {
             var name = e[0], count = e[1];
             var la = losAccum[name];
             var avg = la.n > 0 ? Math.round(la.sum / la.n) : -1;
@@ -892,7 +913,7 @@
     // Custom Chart.js plugin: draw "count (X%)" labels at end of bars
     var barLabelPlugin = {
         id: 'barLabels',
-        afterDatasetsDraw: function(chart) {
+        afterDatasetsDraw: function (chart) {
             var ctx = chart.ctx;
             var meta = chart.getDatasetMeta(0);
             if (!meta || !chart._barLabelData) return;
@@ -900,7 +921,7 @@
             ctx.save();
             ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif';
             ctx.textBaseline = 'middle';
-            meta.data.forEach(function(bar, i) {
+            meta.data.forEach(function (bar, i) {
                 if (i >= labelData.length) return;
                 var d = labelData[i];
                 var label = d.count + ' (' + d.pct + '%)';
@@ -929,17 +950,17 @@
         var ctx = document.getElementById('rescueChart').getContext('2d');
         if (rescueChart) rescueChart.destroy();
 
-        var colors = sorted.map(function(s) { return losColor(s.avgLos); });
+        var colors = sorted.map(function (s) { return losColor(s.avgLos); });
 
         rescueChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: sorted.map(function(s) { return s.name; }),
+                labels: sorted.map(function (s) { return s.name; }),
                 datasets: [{
                     label: 'Dogs Pulled',
-                    data: sorted.map(function(s) { return s.count; }),
+                    data: sorted.map(function (s) { return s.count; }),
                     backgroundColor: colors,
-                    borderColor: colors.map(function(c) { return c; }),
+                    borderColor: colors.map(function (c) { return c; }),
                     borderWidth: 1,
                     barThickness: isMobile() ? 28 : undefined
                 }]
@@ -951,8 +972,8 @@
                 maintainAspectRatio: false,
                 interaction: { mode: 'y', intersect: false },
                 layout: { padding: { right: 70 } },
-                onHover: function(event, chartElement) { event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default'; },
-                onClick: function(evt, elements, chart) {
+                onHover: function (event, chartElement) { event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default'; },
+                onClick: function (evt, elements, chart) {
                     var points = chart.getElementsAtEventForMode(evt, 'y', { intersect: false }, true);
                     if (points.length > 0) showDrillDown(sorted[points[0].index].name, data);
                 },
@@ -962,8 +983,8 @@
                     legend: { display: false },
                     tooltip: {
                         callbacks: {
-                            title: function(items) { return items[0].label; },
-                            label: function(ctx) {
+                            title: function (items) { return items[0].label; },
+                            label: function (ctx) {
                                 var s = sorted[ctx.dataIndex];
                                 var lines = [s.count + ' dogs pulled (' + s.pct + '% of total)'];
                                 if (s.avgLos >= 0) lines.push('Avg shelter stay: ' + s.avgLos + ' days');
@@ -983,7 +1004,7 @@
     }
 
     function renderTiles(data) {
-        const sorted = [...data].sort((a,b) => new Date(b.date) - new Date(a.date));
+        const sorted = [...data].sort((a, b) => new Date(b.date) - new Date(a.date));
         const grid = document.getElementById('recentGrid');
         grid.innerHTML = '';
 
@@ -993,7 +1014,7 @@
         }
 
         // Calculate Today (Chicago) using DASHES
-        const todayStr = new Date().toLocaleDateString("en-CA", {timeZone: "America/Chicago"});
+        const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
 
         // Determine if we are in "Today Only" mode (Celebration Mode)
         const startInput = document.getElementById('startDate').value;
@@ -1035,11 +1056,15 @@
 
             // Social links (icon-only buttons)
             let linksHtml = '';
-            if (row.fb || row.yt) {
+            if (row.fb || row.yt || row.ig) {
                 let btns = '';
                 if (row.fb) {
                     const fbUrl = row.fb.split(' | ')[0].trim();
                     btns += '<a class="card-icon-btn" href="' + fbUrl.replace(/"/g, '&quot;') + '" target="_blank" rel="noopener" title="View on Facebook" onclick="event.stopPropagation()"><i class="fab fa-facebook"></i></a>';
+                }
+                if (row.ig) {
+                    const igUrl = row.ig.split(' | ')[0].trim();
+                    btns += '<a class="card-icon-btn" href="' + igUrl.replace(/"/g, '&quot;') + '" target="_blank" rel="noopener" title="View on Instagram" onclick="event.stopPropagation()" style="color:#E1306C"><i class="fab fa-instagram"></i></a>';
                 }
                 if (row.yt) {
                     const ytUrl = row.yt.split(' | ')[0].split('~')[0].trim();
@@ -1125,7 +1150,7 @@
         const breedCounts = {};
         partnerRecords.forEach(r => {
             let b = r.breed.split('/')[0].trim();
-            if(b.includes('Pit Bull')) b = 'Pit Bull';
+            if (b.includes('Pit Bull')) b = 'Pit Bull';
             breedCounts[b] = (breedCounts[b] || 0) + 1;
         });
 
@@ -1137,7 +1162,7 @@
         });
         if (finalBreeds['Other'] === 0) delete finalBreeds['Other'];
 
-        const entries = Object.entries(finalBreeds).filter(([k]) => k !== 'Other').sort((a,b) => b[1] - a[1]);
+        const entries = Object.entries(finalBreeds).filter(([k]) => k !== 'Other').sort((a, b) => b[1] - a[1]);
         if (finalBreeds['Other']) entries.push(['Other', finalBreeds['Other']]);
 
         const dynamicPalette = ['#d29922', '#a371f7', '#3fb950', '#f85149', '#39c5cf', '#e3b341', '#f778ba', '#2ea043', '#db6d28', '#8957e5', '#1f6feb', '#ff7b72', '#bc8cff', '#238636', '#d2a8ff'];
@@ -1161,7 +1186,7 @@
                     legend: { position: isMobile() ? 'bottom' : 'right', labels: { color: '#c9d1d9', boxWidth: 12 } },
                     tooltip: {
                         callbacks: {
-                            label: function(context) {
+                            label: function (context) {
                                 let label = context.label || '';
                                 if (label) label += ': ';
                                 let value = context.raw;
@@ -1187,7 +1212,7 @@
         const sizeEntries = [];
         const sizeChartColors = [];
 
-        SIZE_LABELS.forEach(function(label, i) {
+        SIZE_LABELS.forEach(function (label, i) {
             if (sizeCounts[i] > 0) {
                 sizeEntries.push({ label: label, count: sizeCounts[i] });
                 sizeChartColors.push(SIZE_COLORS[i]);
@@ -1200,9 +1225,9 @@
             sizeChart = new Chart(document.getElementById('sizePieChart').getContext('2d'), {
                 type: 'doughnut',
                 data: {
-                    labels: sizeEntries.map(function(e) { return e.label; }),
+                    labels: sizeEntries.map(function (e) { return e.label; }),
                     datasets: [{
-                        data: sizeEntries.map(function(e) { return e.count; }),
+                        data: sizeEntries.map(function (e) { return e.count; }),
                         backgroundColor: sizeChartColors,
                         borderWidth: 0
                     }]
@@ -1218,11 +1243,11 @@
                         },
                         tooltip: {
                             callbacks: {
-                                label: function(context) {
+                                label: function (context) {
                                     var label = context.label || '';
                                     if (label) label += ': ';
                                     var value = context.raw;
-                                    var total = context.dataset.data.reduce(function(a, b) { return a + b; }, 0);
+                                    var total = context.dataset.data.reduce(function (a, b) { return a + b; }, 0);
                                     var percentage = Math.round((value / total) * 100) + '%';
                                     return label + percentage + ' (' + value + ')';
                                 }
@@ -1235,7 +1260,7 @@
 
         const drillBody = document.getElementById('drillDownBody');
         drillBody.innerHTML = '';
-        partnerRecords.sort((a,b) => new Date(b.date) - new Date(a.date));
+        partnerRecords.sort((a, b) => new Date(b.date) - new Date(a.date));
         partnerRecords.forEach(row => {
             let nameCell;
             if (row.aka) {
@@ -1261,7 +1286,7 @@
 
     function debounce(func, wait) {
         let timeout;
-        return function(...args) {
+        return function (...args) {
             const context = this;
             clearTimeout(timeout);
             timeout = setTimeout(() => func.apply(context, args), wait);

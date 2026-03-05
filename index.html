@@ -78,169 +78,188 @@
         .footer .disclaimer { font-size: 0.75rem; opacity: 0.8; max-width: 800px; margin: 0 auto; }
 
         
-    /* --- Layout & Components --- */
-    .sticky-header { 
-        position: sticky; 
-        top: 64px; 
-        z-index: 90; 
-        background: var(--header-bg); 
-        padding: 15px 20px; 
-        margin: 0 -20px; 
-        backdrop-filter: blur(5px); 
-        border-bottom: 1px solid var(--border); 
-        transition: top 0.2s;
-    }
+/* --- Layout & Components --- */
+.sticky-header {
+position: sticky;
+top: 64px;
+z-index: 90;
+background: var(--header-bg);
+padding: 15px 20px;
+margin: 0 -20px;
+backdrop-filter: blur(5px);
+border-bottom: 1px solid var(--border);
+transition: top 0.2s;
+}
 
-    @media (max-width: 600px) {
-        .sticky-header {
-            top: 56px; /* Mobile Navbar Height */
-            padding: 10px 15px;
-        }
-    }
+@media (max-width: 600px) {
+.sticky-header {
+top: 56px; /* Mobile Navbar Height */
+padding: 10px 15px;
+}
+}
 
-    .search-controls { display: flex; gap: 10px; margin-bottom: 10px; }
-    .search-container { position: relative; flex-grow: 1; }
-    .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-    
-    input.search-input { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 12px 35px 12px 40px; width: 100%; border-radius: 8px; font-size: 16px; box-sizing: border-box; appearance: none; }
-    
-    .search-clear { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; display: none; font-size: 1.1em; transition: color 0.2s; }
-    .search-clear:hover { color: var(--text); }
-    
-    select.sort-select { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 0 35px 0 15px; border-radius: 8px; font-size: 14px; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238b949e' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
+.search-controls { display: flex; gap: 10px; margin-bottom: 10px; }
+.search-container { position: relative; flex-grow: 1; }
+.search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
-    .filter-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-    .filter-chips::-webkit-scrollbar { display: none; }
-    
-    .chip { white-space: nowrap; padding: 6px 12px; border-radius: 16px; background: var(--row); border: 1px solid var(--border); color: var(--text); font-size: 0.85rem; cursor: pointer; user-select: none; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
-    .chip.active { background: var(--accent); color: white; border-color: var(--accent); padding-right: 8px; }
-    .chip-close { font-size: 1.1em; opacity: 0.8; font-weight: bold; display: none; }
-    .chip.active .chip-close { display: inline-block; }
+input.search-input { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 12px
+35px 12px 40px; width: 100%; border-radius: 8px; font-size: 16px; box-sizing: border-box; appearance: none; }
 
-    /* Grid & Cards */
-    .dog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; opacity: 0; animation: fadeIn 0.5s ease-in forwards; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.search-clear { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted);
+cursor: pointer; display: none; font-size: 1.1em; transition: color 0.2s; }
+.search-clear:hover { color: var(--text); }
 
-    .dog-card { background: var(--row); border: 1px solid var(--border); border-radius: 12px; padding: 16px; box-shadow: 0 2px 5px var(--card-shadow); display: flex; flex-direction: column; gap: 12px; transition: transform 0.2s, box-shadow 0.2s; content-visibility: auto; contain-intrinsic-size: auto 280px; }
-    .dog-card:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); border-color: var(--accent); }
+select.sort-select { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 0 35px 0
+15px; border-radius: 8px; font-size: 14px; cursor: pointer; appearance: none; background-image:
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238b949e' viewBox='0 0
+16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0
+1-1.506 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
 
-    /* Highlight Today Logic */
-    .dog-card.highlight-today {
-        border-color: #e3b341; /* Gold-ish accent */
-        box-shadow: 0 0 20px rgba(227, 179, 65, 0.25);
-    }
+.filter-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; -webkit-overflow-scrolling: touch;
+scrollbar-width: none; }
+.filter-chips::-webkit-scrollbar { display: none; }
 
-    .rescue-today-pill {
-        font-size: 0.75rem;
-        color: #e3b341;
-        background: rgba(227, 179, 65, 0.15);
-        padding: 2px 8px;
-        border-radius: 10px;
-        border: 1px solid rgba(227, 179, 65, 0.4);
-        white-space: nowrap;
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        vertical-align: bottom;
-    }
+.chip { white-space: nowrap; padding: 6px 12px; border-radius: 16px; background: var(--row); border: 1px solid
+var(--border); color: var(--text); font-size: 0.85rem; cursor: pointer; user-select: none; transition: all 0.2s;
+display: flex; align-items: center; gap: 6px; }
+.chip.active { background: var(--accent); color: white; border-color: var(--accent); padding-right: 8px; }
+.chip-close { font-size: 1.1em; opacity: 0.8; font-weight: bold; display: none; }
+.chip.active .chip-close { display: inline-block; }
 
-    .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
-    
-    /* Name & ID Styling */
-    .dog-name { font-size: 1.4rem; font-weight: 700; color: var(--text); margin: 0; line-height: 1.2; }
-    
-    /* New: Interactive Name Style */
-    .dog-name.has-aka { 
-        cursor: pointer; 
-        text-decoration-line: underline; 
-        text-decoration-style: dotted; 
-        text-decoration-color: var(--text-muted); 
-        text-underline-offset: 4px;
-    }
-    .dog-name.has-aka:hover { text-decoration-color: var(--accent); }
+/* Grid & Cards */
+.dog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; opacity: 0;
+animation: fadeIn 0.5s ease-in forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    .tag.id { color: var(--text-muted); background: rgba(139, 148, 158, 0.15); border: 1px solid rgba(139, 148, 158, 0.3); font-family: monospace; font-size: 0.85rem; letter-spacing: 0.5px; }
-    .tag.age { background: var(--row-hover); color: var(--text-muted); border: 1px solid var(--border); }
+.dog-card { background: var(--row); border: 1px solid var(--border); border-radius: 12px; padding: 16px; box-shadow: 0
+2px 5px var(--card-shadow); display: flex; flex-direction: column; gap: 12px; transition: transform 0.2s, box-shadow
+0.2s; content-visibility: auto; contain-intrinsic-size: auto 280px; }
+.dog-card:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); border-color: var(--accent); }
 
-    .card-attrs { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 4px; }
-    .left-attr { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-    .right-attr { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-left: auto; }
-    .breed-info { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 5px; }
+/* Highlight Today Logic */
+.dog-card.highlight-today {
+border-color: #e3b341; /* Gold-ish accent */
+box-shadow: 0 0 20px rgba(227, 179, 65, 0.25);
+}
 
-    .card-footer { margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding-top: 10px; flex-wrap: wrap; gap: 8px; }
-    .status-badges { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.rescue-today-pill {
+font-size: 0.75rem;
+color: #e3b341;
+background: rgba(227, 179, 65, 0.15);
+padding: 2px 8px;
+border-radius: 10px;
+border: 1px solid rgba(227, 179, 65, 0.4);
+white-space: nowrap;
+display: inline-flex;
+align-items: center;
+gap: 4px;
+vertical-align: bottom;
+}
 
-    .action-group { display: flex; gap: 6px; margin-left: auto; align-items: center; }
-    
-    .action-btn { 
-        cursor: pointer; 
-        height: 30px; 
-        padding: 0 14px; 
-        border-radius: 6px; 
-        text-decoration: none; 
-        display: inline-flex; 
-        align-items: center; 
-        justify-content: center; 
-        gap: 6px; 
-        font-size: 13px; 
-        box-sizing: border-box; 
-        background: var(--row); 
-        border: 1px solid var(--border); 
-        color: var(--accent); 
-        transition: background 0.2s; 
-    }
-    .action-btn:hover { background: var(--row-hover); }
-    
-    .btn-youtube .fa-youtube { color: #cc0000; } 
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; }
 
-    .share-btn { color: var(--text-muted); padding: 6px 10px; cursor: pointer; border: 1px solid var(--border); border-radius: 6px; background: transparent; font-size: 1.1em; transition: color 0.2s; }
-    .share-btn:hover { color: var(--text); border-color: var(--text-muted); }
+/* Name & ID Styling */
+.dog-name { font-size: 1.4rem; font-weight: 700; color: var(--text); margin: 0; line-height: 1.2; }
 
-    .media-wrapper { position: relative; display: inline-block; }
-    .media-menu { display: none; position: fixed; background: var(--row); border: 1px solid var(--border); border-radius: 6px; padding: 5px 0; min-width: 160px; box-shadow: 0 5px 15px var(--card-shadow); z-index: 100; }
-    @keyframes menuSlideUp { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes menuSlideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-    .media-menu.show { display: block; }
-    .media-item { display: flex; align-items: center; gap: 10px; padding: 8px 15px; color: var(--text); text-decoration: none; font-size: 0.85rem; transition: background 0.2s; }
-    .media-item:hover { background: var(--row-hover); color: var(--accent); }
-    .media-icon { width: 14px; text-align: center; }
+/* New: Interactive Name Style */
+.dog-name.has-aka {
+cursor: pointer;
+text-decoration-line: underline;
+text-decoration-style: dotted;
+text-decoration-color: var(--text-muted);
+text-underline-offset: 4px;
+}
+.dog-name.has-aka:hover { text-decoration-color: var(--accent); }
 
-    .section-title { margin-top: 30px; color: var(--accent); border-bottom: 1px solid var(--border); margin-bottom: 20px; }
-    #loading-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
-    #scroll-sentinel { height: 50px; margin-top: 20px; }
+.tag.id { color: var(--text-muted); background: rgba(139, 148, 158, 0.15); border: 1px solid rgba(139, 148, 158, 0.3);
+font-family: monospace; font-size: 0.85rem; letter-spacing: 0.5px; }
+.tag.age { background: var(--row-hover); color: var(--text-muted); border: 1px solid var(--border); }
 
-    /* Celebration Effects */
-    .celebration-container {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        pointer-events: none; z-index: 9999; overflow: hidden;
-    }
-    .heart-particle {
-        position: absolute; bottom: -50px;
-        font-size: 24px; animation: floatUp linear forwards;
-        opacity: 0;
-    }
-    @keyframes floatUp {
-        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-        100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
-    }
+.card-attrs { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; border-bottom: 1px solid var(--border);
+padding-bottom: 12px; margin-bottom: 4px; }
+.left-attr { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.right-attr { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+.breed-info { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 5px; }
 
-    @media (max-width: 768px) {
-        .dog-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
-        .card-footer { flex-direction: column; align-items: flex-start; gap: 10px; }
-        .status-badges { width: 100%; }
-        .action-group { width: 100%; margin-left: 0; }
-    }
+.card-footer { margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding-top: 10px;
+flex-wrap: wrap; gap: 8px; }
+.status-badges { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 
-    @media (max-width: 480px) {
-        .dog-grid { grid-template-columns: 1fr; }
-        .card-footer { gap: 12px; }
-        .status-badges { margin-bottom: 4px; }
-        .action-group { display: flex; }
-        .action-btn { flex: 1; justify-content: center; padding: 0 8px; }
-        .media-wrapper { flex: 1; }
-        .media-wrapper .action-btn { width: 100%; }
-        .share-btn { padding: 0 14px; height: 30px; }
-    }
+.action-group { display: flex; gap: 6px; margin-left: auto; align-items: center; }
+
+.action-btn {
+cursor: pointer;
+height: 30px;
+padding: 0 14px;
+border-radius: 6px;
+text-decoration: none;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 6px;
+font-size: 13px;
+box-sizing: border-box;
+background: var(--row);
+border: 1px solid var(--border);
+color: var(--accent);
+transition: background 0.2s;
+}
+.action-btn:hover { background: var(--row-hover); }
+
+.btn-youtube .fa-youtube { color: #cc0000; }
+
+.share-btn { color: var(--text-muted); padding: 6px 10px; cursor: pointer; border: 1px solid var(--border);
+border-radius: 6px; background: transparent; font-size: 1.1em; transition: color 0.2s; }
+.share-btn:hover { color: var(--text); border-color: var(--text-muted); }
+
+.media-wrapper { position: relative; display: inline-block; }
+.media-menu { display: none; position: fixed; background: var(--row); border: 1px solid var(--border); border-radius:
+6px; padding: 5px 0; min-width: 160px; box-shadow: 0 5px 15px var(--card-shadow); z-index: 100; }
+@keyframes menuSlideUp { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes menuSlideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0);
+} }
+.media-menu.show { display: block; }
+.media-item { display: flex; align-items: center; gap: 10px; padding: 8px 15px; color: var(--text); text-decoration:
+none; font-size: 0.85rem; transition: background 0.2s; }
+.media-item:hover { background: var(--row-hover); color: var(--accent); }
+.media-icon { width: 14px; text-align: center; }
+
+.section-title { margin-top: 30px; color: var(--accent); border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+#loading-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+#scroll-sentinel { height: 50px; margin-top: 20px; }
+
+/* Celebration Effects */
+.celebration-container {
+position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+pointer-events: none; z-index: 9999; overflow: hidden;
+}
+.heart-particle {
+position: absolute; bottom: -50px;
+font-size: 24px; animation: floatUp linear forwards;
+opacity: 0;
+}
+@keyframes floatUp {
+0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+}
+
+@media (max-width: 768px) {
+.dog-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+.card-footer { flex-direction: column; align-items: flex-start; gap: 10px; }
+.status-badges { width: 100%; }
+.action-group { width: 100%; margin-left: 0; }
+}
+
+@media (max-width: 480px) {
+.dog-grid { grid-template-columns: 1fr; }
+.card-footer { gap: 12px; }
+.status-badges { margin-bottom: 4px; }
+.action-group { display: flex; }
+.action-btn { flex: 1; justify-content: center; padding: 0 8px; }
+.media-wrapper { flex: 1; }
+.media-wrapper .action-btn { width: 100%; }
+.share-btn { padding: 0 14px; height: 30px; }
+}
 
     </style></head><body><style>
     /* --- Global Theme Variables (Moved here to support Map Overlay) --- */
@@ -373,7 +392,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-return_guest onclick="filterByChip('return_guest')">🔄 Returns <span class=chip-close>&times;</span></div><div class=chip id=chip-non_pit onclick="filterByChip('non_pit')">🐩 Non-Pit <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: March 04, 2026 05:45 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-return_guest onclick="filterByChip('return_guest')">🔄 Returns <span class=chip-close>&times;</span></div><div class=chip id=chip-non_pit onclick="filterByChip('non_pit')">🐩 Non-Pit <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: March 04, 2026 09:21 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -446,7 +465,7 @@
     }
 
     // --- Init ---
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', function (event) {
         if (openMenuCount > 0 && !event.target.closest('.media-wrapper') && !event.target.closest('.media-menu')) {
             closeAllMediaMenus();
         }
@@ -459,10 +478,10 @@
     // --- Data Loading ---
     fetch('search_index.json').then(r => r.json()).then(payload => {
         const { meta, data } = payload;
-        
+
         // 1. Calculate Today's Date (Chicago Time) using en-CA locale (YYYY-MM-DD)
         // This is the most robust way to ensure ISO format across all browsers/locales.
-        TODAY_STR = new Date().toLocaleDateString("en-CA", {timeZone: "America/Chicago"});
+        TODAY_STR = new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
         const TODAY_TS = new Date(TODAY_STR).getTime();
         const MS_PER_DAY = 86400000;
         console.log("System Date (Chicago):", TODAY_STR);
@@ -487,7 +506,7 @@
             const breedName = meta.b[item.b] || "Unknown";
             const partnerName = item.p !== undefined ? meta.p[item.p] : null;
             const statusName = meta.s[item.s] || "Other";
-            
+
             // Hydrate Age & Color (Indices -> Strings)
             // Uses optional chaining safety in case of data mismatch
             const ageVal = item.a !== undefined ? (meta.a[item.a] || "Unknown") : "Unknown";
@@ -495,6 +514,7 @@
 
             // Hydrate URLs
             const fbUrl = decompressUrl(item.l);
+            const igUrl = decompressUrl(item.ig);
             let ytUrls = null;
             if (item.y) {
                 // Handle pipe-separated list of compressed URLs
@@ -506,7 +526,7 @@
                 name: item.n,
                 breed: breedName,
                 status: statusName,
-                date: item.d, 
+                date: item.d,
                 scrape_date: item.sd,
                 outcome_date: item.od,
                 age: ageVal,
@@ -516,8 +536,9 @@
                 is_altered: !!item.fx,
                 is_small: !!item.sm,
                 facebook_url: fbUrl,
-                youtube_urls: ytUrls, 
-                aka: item.k, 
+                instagram_url: igUrl,
+                youtube_urls: ytUrls,
+                aka: item.k,
                 link: `https://24petconnect.com/chgoall/Details/CHGO/${item.id}`,
                 rescue_partner: partnerName,
                 is_active: statusName === "Available" || statusName === "Pending",
@@ -525,7 +546,7 @@
                 is_mappable: !!item.m,
                 stray_hold_date: item.h || null
             };
-            
+
             dog.ageMonths = parseAgeToMonths(dog.age);
             dog._intakeTs = new Date(dog.date || dog.scrape_date || TODAY_STR).getTime();
             dog._outcomeTs = dog.outcome_date ? new Date(dog.outcome_date).getTime() : dog._intakeTs;
@@ -608,21 +629,21 @@
 
         activeFilters.clear();
         setupObserver();
-        
+
         document.getElementById('loading-state').style.display = 'none';
         document.getElementById('main-view').style.display = 'block';
 
         // 3. Handle Filters
         const params = new URLSearchParams(window.location.search);
         if (params.get('filter') === 'adopted') {
-            filterByChip('adopted'); 
+            filterByChip('adopted');
         } else {
-            applyFiltersAndSort(); 
+            applyFiltersAndSort();
         }
 
-    }).catch(err => { 
-        console.error("Data Load Error:", err); 
-        document.getElementById('loading-state').innerHTML = `<p style="color:#ff7b72"><i class="fas fa-exclamation-triangle"></i> Failed to load data.<br><small>${err.message}</small></p>`; 
+    }).catch(err => {
+        console.error("Data Load Error:", err);
+        document.getElementById('loading-state').innerHTML = `<p style="color:#ff7b72"><i class="fas fa-exclamation-triangle"></i> Failed to load data.<br><small>${err.message}</small></p>`;
     });
 
     function setupObserver() {
@@ -632,7 +653,7 @@
                 renderNextBatch();
             }
         }, options);
-        
+
         const sentinel = document.getElementById('scroll-sentinel');
         if (sentinel) observer.observe(sentinel);
     }
@@ -686,7 +707,7 @@
         } else {
             activeFilters.forEach(f => {
                 const el = document.getElementById('chip-' + f);
-                if(el) el.classList.add('active');
+                if (el) el.classList.add('active');
             });
             if (activeFilters.has('rto')) document.getElementById('view-title').innerText = '↩️ Returned to Owner';
             else if (activeFilters.has('rescued')) document.getElementById('view-title').innerText = '🚑 Rescued Dogs';
@@ -741,11 +762,11 @@
         } else if (activeFilters.has('new') || activeFilters.has('stray') || activeFilters.has('puppy')) {
             sortMode = 'newest';
         }
-        
+
         const select = document.getElementById('sortSelect');
         const uiMap = { 'outcome_newest': 'newest', 'outcome_oldest': 'longest' };
         select.value = uiMap[sortMode] || sortMode;
-        
+
         const countEl = document.getElementById('headerCount');
         if (countEl) countEl.innerText = filtered.length;
 
@@ -800,10 +821,10 @@
         currentDisplayList = results;
         resetGrid();
     }
-    
+
     function clearSearch() {
         document.getElementById('mainSearch').value = '';
-        handleGlobalSearch(); 
+        handleGlobalSearch();
     }
 
     function resetGrid() {
@@ -834,7 +855,7 @@
 
     function buildDogCard(dog) {
         const days = dog._daysSinceIntake;
-        
+
         let isToday = false;
 
         let statusBadge = '';
@@ -870,7 +891,7 @@
             const dayText = safeDays === 0 ? 'Today' : (safeDays === 1 ? 'Yesterday' : `${safeDays} Days`);
             statusBadge = `<span class="status-badge ${badgeClass}">${dayText}</span>`;
         }
-        
+
         let strayBadge = '';
         if (dog.is_stray) {
             const chipIcon = dog.is_chipped ? '<i class="fas fa-microchip"></i> ' : '';
@@ -909,16 +930,16 @@
                 links.forEach((link, idx) => {
                     const icon = getMediaIcon(link);
                     const typeLabel = link.includes('/video') ? 'Video' : 'Photo';
-                    menuItems += `<a href="${link}" rel="noopener noreferrer" class="media-item">${icon} ${typeLabel} ${idx+1}</a>`;
+                    menuItems += `<a href="${link}" rel="noopener noreferrer" class="media-item">${icon} ${typeLabel} ${idx + 1}</a>`;
                 });
                 fbBtn = `<div class="media-wrapper"><button class="action-btn" onclick="toggleMediaMenu(this, event)"><i class="fab fa-facebook"></i> <i class="fas fa-caret-down" style="font-size: 0.8em; margin-left: 2px;"></i></button><div class="media-menu">${menuItems}</div></div>`;
             }
         }
 
-        let ytBtn = ''; 
+        let ytBtn = '';
         if (dog.youtube_urls) {
-             const ytRawItems = dog.youtube_urls.split(' | ').filter(l => l.trim() !== '');
-             const ytItems = ytRawItems.map((raw, idx) => {
+            const ytRawItems = dog.youtube_urls.split(' | ').filter(l => l.trim() !== '');
+            const ytItems = ytRawItems.map((raw, idx) => {
                 const parts = raw.split('~');
                 const url = parts[0];
                 let label = parts.length > 1 ? parts[1] : 'Video';
@@ -934,6 +955,11 @@
                 });
                 ytBtn = `<div class="media-wrapper"><button class="action-btn btn-youtube" onclick="toggleMediaMenu(this, event)"><i class="fab fa-youtube"></i> <i class="fas fa-caret-down" style="font-size: 0.8em; margin-left: 2px;"></i></button><div class="media-menu">${ytMenuContent}</div></div>`;
             }
+        }
+
+        let igBtn = '';
+        if (dog.instagram_url) {
+            igBtn = `<a href="${dog.instagram_url.split(' | ')[0].trim()}" rel="noopener noreferrer" class="action-btn" title="View on Instagram" style="color:#E1306C"><i class="fab fa-instagram"></i></a>`;
         }
 
         let ageHtml = '';
@@ -955,7 +981,7 @@
         const alteredIcon = dog.is_altered ? '<i class="fas fa-scissors" style="font-size:0.9em"></i> ' : '';
         const alteredClass = dog.is_altered ? ' altered' : '';
         const alteredTitle = dog.is_altered ? ` title="${genderClass === 'female' ? 'Spayed' : 'Neutered'}"` : '';
-        
+
         let nameHtml = `<h3 class="dog-name">${dog.name}</h3>`;
         if (dog.aka) {
             const safeName = dog.name.replace(/'/g, "\\'");
@@ -990,6 +1016,7 @@
                     </div>
                     <div class="action-group">
                         ${ytBtn}
+                        ${igBtn}
                         ${fbBtn}
                         <a href="${dog.link}" rel="noopener noreferrer" class="action-btn">View</a>
                         <button class="share-btn" onclick="shareDog('${dog.name}', '${dog.id}', '${dog.link}')"><i class="fas fa-share-alt"></i></button>
@@ -1038,7 +1065,7 @@
 
     async function shareDog(name, id, url) {
         if (navigator.share) {
-            try { await navigator.share({ title: `Adopt ${name}`, text: `Check out ${name} at CACC!`, url: url }); } catch (e) {}
+            try { await navigator.share({ title: `Adopt ${name}`, text: `Check out ${name} at CACC!`, url: url }); } catch (e) { }
         } else {
             navigator.clipboard.writeText(url); alert('Link copied!');
         }
@@ -1131,7 +1158,7 @@
         activeMenuInfo = { menu, wrapper };
         openMenuCount = 1;
     }
-    
+
     function toggleName(el, currentName, aka) {
         if (el.getAttribute('data-showing') === 'aka') {
             el.innerText = currentName;

@@ -78,138 +78,149 @@
         .footer .disclaimer { font-size: 0.75rem; opacity: 0.8; max-width: 800px; margin: 0 auto; }
 
         
-    /* Reusing base card styles, adding specific overrides for the Removed context */
-    .controls-bar {
-        position: sticky; top: 64px; z-index: 90;
-        background: var(--header-bg); padding: 15px 20px; margin: 0 -20px;
-        backdrop-filter: blur(5px); border-bottom: 1px solid var(--border);
-        display: flex; gap: 15px; align-items: center; justify-content: space-between;
-        flex-wrap: wrap;
-    }
+/* Reusing base card styles, adding specific overrides for the Removed context */
+.controls-bar {
+position: sticky; top: 64px; z-index: 90;
+background: var(--header-bg); padding: 15px 20px; margin: 0 -20px;
+backdrop-filter: blur(5px); border-bottom: 1px solid var(--border);
+display: flex; gap: 15px; align-items: center; justify-content: space-between;
+flex-wrap: wrap;
+}
 
-    @media (max-width: 600px) {
-        .controls-bar { top: 56px; padding: 10px 15px; flex-direction: column; align-items: stretch; }
-    }
+@media (max-width: 600px) {
+.controls-bar { top: 56px; padding: 10px 15px; flex-direction: column; align-items: stretch; }
+}
 
-    .search-container { position: relative; flex-grow: 1; min-width: 200px; }
-    .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-    .search-input { 
-        background: var(--input-bg); border: 1px solid var(--border); color: var(--text); 
-        padding: 10px 35px 10px 40px; width: 100%; border-radius: 8px; font-size: 16px; 
-        box-sizing: border-box; 
-    }
+.search-container { position: relative; flex-grow: 1; min-width: 200px; }
+.search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+.search-input {
+background: var(--input-bg); border: 1px solid var(--border); color: var(--text);
+padding: 10px 35px 10px 40px; width: 100%; border-radius: 8px; font-size: 16px;
+box-sizing: border-box;
+}
 
-    .sort-select { 
-        background: var(--input-bg); border: 1px solid var(--border); color: var(--text); 
-        padding: 10px 35px 10px 15px; border-radius: 8px; font-size: 14px; cursor: pointer; 
-        appearance: none; 
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238b949e' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); 
-        background-repeat: no-repeat; background-position: right 10px center; 
-    }
+.sort-select {
+background: var(--input-bg); border: 1px solid var(--border); color: var(--text);
+padding: 10px 35px 10px 15px; border-radius: 8px; font-size: 14px; cursor: pointer;
+appearance: none;
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'
+fill='%238b949e' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1
+.753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+background-repeat: no-repeat; background-position: right 10px center;
+}
 
-    /* Grid & Cards */
-    .dog-grid { 
-        display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
-        gap: 20px; margin-top: 30px; 
-        opacity: 0; animation: fadeIn 0.5s ease-in forwards; 
-    }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* Grid & Cards */
+.dog-grid {
+display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+gap: 20px; margin-top: 30px;
+opacity: 0; animation: fadeIn 0.5s ease-in forwards;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    .dog-card { 
-        background: var(--row); border: 1px solid var(--border); border-radius: 12px; padding: 16px; 
-        box-shadow: 0 2px 5px var(--card-shadow); display: flex; flex-direction: column; gap: 12px; 
-        transition: transform 0.2s; opacity: 0.85; /* Slightly muted to indicate inactive */
-    }
-    .dog-card:hover { transform: translateY(-2px); opacity: 1; border-color: var(--accent); }
+.dog-card {
+background: var(--row); border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+box-shadow: 0 2px 5px var(--card-shadow); display: flex; flex-direction: column; gap: 12px;
+transition: transform 0.2s; opacity: 0.85; /* Slightly muted to indicate inactive */
+}
+.dog-card:hover { transform: translateY(-2px); opacity: 1; border-color: var(--accent); }
 
-    .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
-    
-    /* Removed strikethrough style here */
-    .dog-name { font-size: 1.4rem; font-weight: 700; color: var(--text); margin: 0; line-height: 1.2; }
-    
-    .tag.id { color: var(--text-muted); font-family: monospace; font-size: 0.85rem; }
-    .breed-info { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 5px; }
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; }
 
-    .card-footer { margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-    .status-badge { 
-        background: rgba(218, 54, 51, 0.1); color: var(--danger-text); border: 1px solid rgba(218, 54, 51, 0.3);
-        padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;
-    }
+/* Removed strikethrough style here */
+.dog-name { font-size: 1.4rem; font-weight: 700; color: var(--text); margin: 0; line-height: 1.2; }
 
-    .info-banner {
-        background: var(--row); border: 1px solid var(--border); border-radius: 8px; padding: 20px;
-        margin-bottom: 20px; text-align: center; color: var(--text-muted); font-size: 0.95rem;
-    }
+.tag.id { color: var(--text-muted); font-family: monospace; font-size: 0.85rem; }
+.breed-info { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 5px; }
 
-    #loading-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+.card-footer { margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border); display: flex; justify-content:
+space-between; align-items: center; }
+.status-badge {
+background: rgba(218, 54, 51, 0.1); color: var(--danger-text); border: 1px solid rgba(218, 54, 51, 0.3);
+padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center;
+gap: 6px;
+}
 
-    /* Stats Grid */
-    .stats-container {
-        margin: 0 -20px 20px -20px; padding: 0 20px;
-        overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
-        mask-image: linear-gradient(90deg, black 90%, transparent 100%);
-        -webkit-mask-image: linear-gradient(90deg, black 90%, transparent 100%);
-    }
-    .stats-container::-webkit-scrollbar { display: none; }
-    .stats-grid { display: flex; gap: 15px; padding-right: 20px; }
-    @media (min-width: 900px) {
-        .stats-container { margin: 0 0 20px 0; padding: 0; overflow: visible; mask-image: none; -webkit-mask-image: none; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); padding-right: 0; }
-    }
+.info-banner {
+background: var(--row); border: 1px solid var(--border); border-radius: 8px; padding: 20px;
+margin-bottom: 20px; text-align: center; color: var(--text-muted); font-size: 0.95rem;
+}
 
-    .stat-card {
-        background: var(--row); border: 1px solid var(--border);
-        border-radius: 12px; padding: 16px 20px;
-        display: flex; flex-direction: column; align-items: flex-start;
-        position: relative; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;
-        min-width: 160px; flex-shrink: 0;
-    }
-    .stat-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent); }
-    .stat-card.removed::before { background: #da3633; }
-    .stat-card.los::before { background: #a371f7; }
+#loading-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
 
-    .stat-value { font-size: 2rem; font-weight: 700; color: var(--text); line-height: 1.1; margin-bottom: 4px; display: flex; align-items: baseline; gap: 8px; }
-    .stat-label { color: var(--text-muted); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
-    .stat-sub { font-size: 0.8rem; color: var(--text-muted); font-weight: 400; margin-top: 2px; }
-    .stat-date { position: absolute; top: 12px; right: 12px; font-size: 0.65rem; font-weight: 700; color: var(--text-muted); opacity: 0.6; text-transform: uppercase; }
+/* Stats Grid */
+.stats-container {
+margin: 0 -20px 20px -20px; padding: 0 20px;
+overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+mask-image: linear-gradient(90deg, black 90%, transparent 100%);
+-webkit-mask-image: linear-gradient(90deg, black 90%, transparent 100%);
+}
+.stats-container::-webkit-scrollbar { display: none; }
+.stats-grid { display: flex; gap: 15px; padding-right: 20px; }
+@media (min-width: 900px) {
+.stats-container { margin: 0 0 20px 0; padding: 0; overflow: visible; mask-image: none; -webkit-mask-image: none; }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); padding-right: 0; }
+}
 
-    .trend-indicator { font-size: 0.9rem; cursor: help; position: relative; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); }
-    .trend-good { color: #238636; border-color: rgba(35, 134, 54, 0.3); }
-    .trend-bad { color: #da3633; border-color: rgba(218, 54, 51, 0.3); }
-    .trend-neutral { color: var(--text-muted); }
-    .trend-indicator::after {
-        content: attr(data-tooltip); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
-        background: #1f2428; color: #f0f6fc; padding: 6px 10px; border-radius: 6px;
-        font-size: 0.75rem; white-space: nowrap; pointer-events: none; opacity: 0;
-        transition: opacity 0.2s, transform 0.2s; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        z-index: 20; font-weight: normal;
-    }
-    .trend-indicator:hover::after { opacity: 1; transform: translateX(-50%) translateY(-2px); }
+.stat-card {
+background: var(--row); border: 1px solid var(--border);
+border-radius: 12px; padding: 16px 20px;
+display: flex; flex-direction: column; align-items: flex-start;
+position: relative; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;
+min-width: 160px; flex-shrink: 0;
+}
+.stat-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent);
+}
+.stat-card.removed::before { background: #da3633; }
+.stat-card.los::before { background: #a371f7; }
 
-    /* LOS Badge & Card Meta */
-    .card-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 0.82rem; color: var(--text-muted); }
-    .los-badge { display: inline-flex; align-items: center; gap: 4px; }
-    .los-badge i { font-size: 0.75rem; }
-    .los-badge.los-long { color: var(--warning-text); }
-    .los-badge.los-vlong { color: var(--danger-text); }
+.stat-value { font-size: 2rem; font-weight: 700; color: var(--text); line-height: 1.1; margin-bottom: 4px; display:
+flex; align-items: baseline; gap: 8px; }
+.stat-label { color: var(--text-muted); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing:
+0.5px; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.stat-sub { font-size: 0.8rem; color: var(--text-muted); font-weight: 400; margin-top: 2px; }
+.stat-date { position: absolute; top: 12px; right: 12px; font-size: 0.65rem; font-weight: 700; color: var(--text-muted);
+opacity: 0.6; text-transform: uppercase; }
 
-    /* Social Link Buttons */
-    .card-links { display: inline-flex; gap: 6px; margin-left: auto; }
-    .card-icon-btn {
-        display: inline-flex; align-items: center; justify-content: center;
-        width: 30px; height: 30px; border-radius: 6px;
-        background: var(--row); border: 1px solid var(--border); color: var(--accent);
-        text-decoration: none; font-size: 0.85rem; transition: all 0.15s;
-    }
-    .card-icon-btn:hover { border-color: var(--accent); background: var(--row-hover); }
-    .card-icon-btn:active { transform: scale(0.9); }
-    .card-icon-btn.btn-youtube .fa-youtube { color: #cc0000; }
+.trend-indicator { font-size: 0.9rem; cursor: help; position: relative; display: inline-flex; align-items: center;
+justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--bg); border: 1px solid
+var(--border); }
+.trend-good { color: #238636; border-color: rgba(35, 134, 54, 0.3); }
+.trend-bad { color: #da3633; border-color: rgba(218, 54, 51, 0.3); }
+.trend-neutral { color: var(--text-muted); }
+.trend-indicator::after {
+content: attr(data-tooltip); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+background: #1f2428; color: #f0f6fc; padding: 6px 10px; border-radius: 6px;
+font-size: 0.75rem; white-space: nowrap; pointer-events: none; opacity: 0;
+transition: opacity 0.2s, transform 0.2s; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+z-index: 20; font-weight: normal;
+}
+.trend-indicator:hover::after { opacity: 1; transform: translateX(-50%) translateY(-2px); }
 
-    .card-gender { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px; }
+/* LOS Badge & Card Meta */
+.card-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 0.82rem; color:
+var(--text-muted); }
+.los-badge { display: inline-flex; align-items: center; gap: 4px; }
+.los-badge i { font-size: 0.75rem; }
+.los-badge.los-long { color: var(--warning-text); }
+.los-badge.los-vlong { color: var(--danger-text); }
 
-    @media (max-width: 768px) {
-        .dog-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
-    }
+/* Social Link Buttons */
+.card-links { display: inline-flex; gap: 6px; margin-left: auto; }
+.card-icon-btn {
+display: inline-flex; align-items: center; justify-content: center;
+width: 30px; height: 30px; border-radius: 6px;
+background: var(--row); border: 1px solid var(--border); color: var(--accent);
+text-decoration: none; font-size: 0.85rem; transition: all 0.15s;
+}
+.card-icon-btn:hover { border-color: var(--accent); background: var(--row-hover); }
+.card-icon-btn:active { transform: scale(0.9); }
+.card-icon-btn.btn-youtube .fa-youtube { color: #cc0000; }
+
+.card-gender { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px; }
+
+@media (max-width: 768px) {
+.dog-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+}
 
     </style></head><body><style>
     /* --- Global Theme Variables (Moved here to support Map Overlay) --- */
@@ -342,7 +353,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=info-banner><i class="fas fa-info-circle"></i> These dogs were removed from the public listing without a confirmed Adoption, Rescue, or RTO event. <br><small>They may have been euthanized, died in care, or were lost. Data is limited to what is publicly available.</small></div><div class=stats-container><div class=stats-grid><div class="stat-card removed"><span class=stat-date>Today</span><div class=stat-value><span id=todayRemoved>--</span> <span id=removedIndicator></span></div><div class=stat-label><i class="fas fa-times-circle"></i> Removed</div><div class=stat-sub id=removedSub></div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=medianLOS>--</span></div><div class=stat-label><i class="fas fa-hourglass-half"></i> Median Stay</div><div class=stat-sub>days until removal</div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=avgLOS>--</span></div><div class=stat-label><i class="fas fa-clock"></i> Average Stay</div><div class=stat-sub>days until removal</div></div></div></div><div class=controls-bar><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Removed Dogs..."></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=recent>Date Removed (Recent First)</option><option value=oldest>Date Removed (Oldest First)</option><option value=name>Name (A ➝ Z)</option><option value=los>Length of Stay (Longest First)</option></select></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Loading historical records...</p></div><div id=main-view style=display:none;><h2 style="margin: 30px 0 10px 0; font-size:1.2rem; color:var(--text-muted);"><span id=count>0</span> Records Found </h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel style="height: 50px; margin-top: 20px;"></div></div><div class=footer><span>Last Updated: March 04, 2026 05:45 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=info-banner><i class="fas fa-info-circle"></i> These dogs were removed from the public listing without a confirmed Adoption, Rescue, or RTO event. <br><small>They may have been euthanized, died in care, or were lost. Data is limited to what is publicly available.</small></div><div class=stats-container><div class=stats-grid><div class="stat-card removed"><span class=stat-date>Today</span><div class=stat-value><span id=todayRemoved>--</span> <span id=removedIndicator></span></div><div class=stat-label><i class="fas fa-times-circle"></i> Removed</div><div class=stat-sub id=removedSub></div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=medianLOS>--</span></div><div class=stat-label><i class="fas fa-hourglass-half"></i> Median Stay</div><div class=stat-sub>days until removal</div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=avgLOS>--</span></div><div class=stat-label><i class="fas fa-clock"></i> Average Stay</div><div class=stat-sub>days until removal</div></div></div></div><div class=controls-bar><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Removed Dogs..."></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=recent>Date Removed (Recent First)</option><option value=oldest>Date Removed (Oldest First)</option><option value=name>Name (A ➝ Z)</option><option value=los>Length of Stay (Longest First)</option></select></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Loading historical records...</p></div><div id=main-view style=display:none;><h2 style="margin: 30px 0 10px 0; font-size:1.2rem; color:var(--text-muted);"><span id=count>0</span> Records Found </h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel style="height: 50px; margin-top: 20px;"></div></div><div class=footer><span>Last Updated: March 04, 2026 09:21 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -431,6 +442,7 @@
 
                 // Decompress URLs
                 const fbUrl = decompressUrl(item.l);
+                const igUrl = decompressUrl(item.ig);
                 let ytUrl = null;
                 if (item.y) {
                     ytUrl = item.y.split(' | ').map(u => decompressUrl(u)).join(' | ');
@@ -451,6 +463,7 @@
                     age: ageVal,
                     link: `https://24petconnect.com/chgoall/Details/CHGO/${item.id}`,
                     fb: fbUrl,
+                    ig: igUrl,
                     yt: ytUrl,
                     aka: item.k || ""
                 };
@@ -475,10 +488,10 @@
 
     function updateStatsCards() {
         // Card 1: Today's removed count with trend indicator
-        const todayStr = new Date().toLocaleDateString("en-CA", {timeZone: "America/Chicago"});
+        const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
-        const yesterdayStr = yesterday.toLocaleDateString("en-CA", {timeZone: "America/Chicago"});
+        const yesterdayStr = yesterday.toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
 
         const todayCount = fullDataset.filter(d => d.date === todayStr).length;
         const yesterdayCount = fullDataset.filter(d => d.date === yesterdayStr).length;
@@ -529,9 +542,9 @@
             return;
         }
 
-        currentDisplayList = fullDataset.filter(d => 
-            d.name.toLowerCase().includes(q) || 
-            d.id.toLowerCase().includes(q) || 
+        currentDisplayList = fullDataset.filter(d =>
+            d.name.toLowerCase().includes(q) ||
+            d.id.toLowerCase().includes(q) ||
             d.breed.toLowerCase().includes(q)
         );
         handleSortChange();
@@ -539,7 +552,7 @@
 
     function handleSortChange() {
         const mode = document.getElementById('sortSelect').value;
-        
+
         currentDisplayList.sort((a, b) => {
             if (mode === 'recent') return new Date(b.date) - new Date(a.date);
             if (mode === 'oldest') return new Date(a.date) - new Date(b.date);
@@ -547,7 +560,7 @@
             if (mode === 'los') return (b.los >= 0 ? b.los : -1) - (a.los >= 0 ? a.los : -1);
             return 0;
         });
-        
+
         resetGrid();
     }
 
@@ -555,7 +568,7 @@
         displayedCount = 0;
         document.getElementById('dog-grid').innerHTML = '';
         document.getElementById('count').innerText = currentDisplayList.length;
-        
+
         if (currentDisplayList.length === 0) {
             document.getElementById('dog-grid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;">No records found.</div>';
             return;
@@ -603,11 +616,15 @@
 
         // Social link buttons
         let linksHtml = '';
-        if (dog.fb || dog.yt) {
+        if (dog.fb || dog.yt || dog.ig) {
             let btns = '';
             if (dog.fb) {
                 const fbUrl = dog.fb.split(' | ')[0].trim();
                 btns += '<a class="card-icon-btn" href="' + fbUrl.replace(/"/g, '&quot;') + '" target="_blank" rel="noopener" title="View on Facebook"><i class="fab fa-facebook"></i></a>';
+            }
+            if (dog.ig) {
+                const igUrl = dog.ig.split(' | ')[0].trim();
+                btns += '<a class="card-icon-btn" href="' + igUrl.replace(/"/g, '&quot;') + '" target="_blank" rel="noopener" title="View on Instagram" style="color:#E1306C"><i class="fab fa-instagram"></i></a>';
             }
             if (dog.yt) {
                 const ytUrl = dog.yt.split(' | ')[0].split('~')[0].trim();
@@ -656,7 +673,7 @@
 
     function debounce(func, wait) {
         let timeout;
-        return function(...args) {
+        return function (...args) {
             clearTimeout(timeout);
             timeout = setTimeout(() => func.apply(this, args), wait);
         };
