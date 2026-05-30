@@ -238,6 +238,29 @@ transition: background 0.2s;
 .share-btn { color: var(--text-muted); padding: 6px 10px; cursor: pointer; border: 1px solid var(--border); border-radius: 6px; background: transparent; font-size: 1.1em; transition: color 0.2s; }
 .share-btn:hover { color: var(--text); border-color: var(--text-muted); }
 
+/* --- Favorites --- */
+.fav-btn { color: var(--text-muted); padding: 6px 10px; cursor: pointer; border: 1px solid var(--border); border-radius: 6px; background: transparent; font-size: 1.1em; line-height: 1; transition: color 0.2s, border-color 0.2s; }
+.fav-btn:hover { color: var(--danger-text); border-color: var(--danger-text); }
+.fav-btn[aria-pressed="true"], .fav-btn[aria-pressed="true"] .fa-heart { color: var(--danger-text); }
+.fav-btn[aria-pressed="true"] { border-color: var(--danger-text); }
+.fav-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.fav-btn .fa-heart { transition: transform 0.18s ease; }
+.fav-btn.just-faved .fa-heart { animation: heartPop 0.32s ease; }
+@keyframes heartPop { 0% { transform: scale(1); } 40% { transform: scale(1.35); } 70% { transform: scale(0.9); } 100% { transform: scale(1); } }
+
+.chip-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--accent); color: white; font-size: 0.72rem; font-weight: 600; line-height: 1; }
+.chip.active .chip-badge { background: white; color: var(--accent); }
+
+/* Stale favorite placeholder card */
+.fav-stale-card { border: 1px dashed var(--border); border-radius: 8px; background: var(--row); padding: 20px; display: flex; flex-direction: column; gap: 10px; justify-content: center; align-items: flex-start; color: var(--text-muted); opacity: 0.85; }
+.fav-stale-card .stale-title { font-weight: 600; color: var(--text); }
+.fav-stale-card .stale-sub { font-size: 0.85rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fav-btn.just-faved .fa-heart { animation: none; }
+  .fav-btn .fa-heart { transition: none; }
+}
+
 .media-wrapper { position: relative; display: inline-block; }
 .media-menu { display: none; position: fixed; background: var(--row); border: 1px solid var(--border); border-radius: 6px; padding: 5px 0; min-width: 160px; box-shadow: 0 5px 15px var(--card-shadow); z-index: 100; }
 @keyframes menuSlideUp { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
@@ -278,6 +301,7 @@ opacity: 0;
 .chip { padding: 10px 14px; }
 .action-btn { height: 40px; }
 .share-btn { height: 40px; }
+.fav-btn { height: 40px; }
 .legend-toggle { padding: 8px 12px; }
 }
 
@@ -424,7 +448,7 @@ opacity: 0;
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=page-meta><div class=freshness-bar><span class=freshness-pill id=freshnessPill><i class="fas fa-clock"></i> Updated May 30, 2026 10:06 AM CST</span><button class=legend-toggle onclick=toggleLegend() aria-expanded=false aria-controls=legendPanel><i class="fas fa-circle-info"></i> What do the badges mean?</button></div><div class=legend-panel id=legendPanel><ul><li><strong>⏳ Long Stay</strong> — Has been waiting at CACC a while (30+ days) and could use extra attention.</li><li><strong>📍 Stray</strong> — Found as a stray. CACC holds strays for a few days so an owner can reclaim them before they become available for adoption.</li><li><strong>🔄 Return</strong> — Previously lived at CACC and has come back.</li><li><strong>↩️ RTO</strong> — &ldquo;Returned to Owner&rdquo; — reunited with their family.</li><li><strong>🚑 Rescue-only</strong> — Available to approved rescue partners rather than the general public.</li><li><strong>🏠 Adopted</strong> — Found a new home!</li></ul></div></div><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-available onclick="filterByChip('available')">✅ Available <span class=chip-close>&times;</span></div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-return_guest onclick="filterByChip('return_guest')">🔄 Returns <span class=chip-close>&times;</span></div><div class=chip id=chip-non_pit onclick="filterByChip('non_pit')">🐩 Non-Pit <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: May 30, 2026 10:06 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=page-meta><div class=freshness-bar><span class=freshness-pill id=freshnessPill><i class="fas fa-clock"></i> Updated May 30, 2026 10:20 AM CST</span><button class=legend-toggle onclick=toggleLegend() aria-expanded=false aria-controls=legendPanel><i class="fas fa-circle-info"></i> What do the badges mean?</button></div><div class=legend-panel id=legendPanel><ul><li><strong>⏳ Long Stay</strong> — Has been waiting at CACC a while (30+ days) and could use extra attention.</li><li><strong>📍 Stray</strong> — Found as a stray. CACC holds strays for a few days so an owner can reclaim them before they become available for adoption.</li><li><strong>🔄 Return</strong> — Previously lived at CACC and has come back.</li><li><strong>↩️ RTO</strong> — &ldquo;Returned to Owner&rdquo; — reunited with their family.</li><li><strong>🚑 Rescue-only</strong> — Available to approved rescue partners rather than the general public.</li><li><strong>🏠 Adopted</strong> — Found a new home!</li></ul></div></div><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-favorites onclick="filterByChip('favorites')">❤️ Favorites <span class=chip-badge id=fav-count>0</span> <span class=chip-close>&times;</span></div><div class=chip id=chip-available onclick="filterByChip('available')">✅ Available <span class=chip-close>&times;</span></div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-return_guest onclick="filterByChip('return_guest')">🔄 Returns <span class=chip-close>&times;</span></div><div class=chip id=chip-non_pit onclick="filterByChip('non_pit')">🐩 Non-Pit <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: May 30, 2026 10:20 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -477,6 +501,52 @@ opacity: 0;
     let TODAY_STR = "";
     let openMenuCount = 0;
     let activeMenuInfo = null; // { menu, wrapper }
+
+    // --- Favorites (localStorage-backed) ---
+    const FAV_KEY = 'cacc_favorites';
+
+    function getFavorites() {
+        try {
+            const raw = localStorage.getItem(FAV_KEY);
+            const arr = raw ? JSON.parse(raw) : [];
+            return Array.isArray(arr) ? arr.map(String) : [];
+        } catch (e) { return []; }
+    }
+    function saveFavorites(ids) {
+        try { localStorage.setItem(FAV_KEY, JSON.stringify(ids)); } catch (e) { /* disabled/quota: ignore */ }
+    }
+    function isFavorite(id) { return getFavorites().includes(String(id)); }
+    function toggleFavorite(id) {
+        id = String(id);
+        const favs = getFavorites();
+        const i = favs.indexOf(id);
+        let nowFav;
+        if (i === -1) { favs.push(id); nowFav = true; } else { favs.splice(i, 1); nowFav = false; }
+        saveFavorites(favs);
+        return nowFav;
+    }
+    function updateFavCount() {
+        const el = document.getElementById('fav-count');
+        if (el) el.innerText = getFavorites().length;
+    }
+    function toggleFavoriteBtn(btn) {
+        const id = btn.dataset.id;
+        const name = btn.dataset.name || 'this dog';
+        const nowFav = toggleFavorite(id);
+        const icon = btn.querySelector('i');
+        if (icon) { icon.classList.toggle('far', !nowFav); icon.classList.toggle('fas', nowFav); }
+        btn.setAttribute('aria-pressed', nowFav ? 'true' : 'false');
+        btn.setAttribute('aria-label', (nowFav ? 'Remove ' : 'Save ') + name + (nowFav ? ' from favorites' : ' to favorites'));
+        if (nowFav) { btn.classList.remove('just-faved'); void btn.offsetWidth; btn.classList.add('just-faved'); }
+        updateFavCount();
+        if (activeFilters.has('favorites')) applyFiltersAndSort(); // keep favorites view in sync
+    }
+    // Remove a stale (no-longer-listed) favorite from its placeholder card
+    function removeStaleFavorite(id) {
+        toggleFavorite(id);
+        updateFavCount();
+        applyFiltersAndSort();
+    }
 
     function closeAllMediaMenus() {
         if (!activeMenuInfo) return;
@@ -660,6 +730,7 @@ opacity: 0;
 
         activeFilters.clear();
         setupObserver();
+        updateFavCount();
 
         document.getElementById('loading-state').style.display = 'none';
         document.getElementById('main-view').style.display = 'block';
@@ -707,7 +778,12 @@ opacity: 0;
     async function filterByChip(type) {
         if (type === 'all') {
             activeFilters.clear();
+        } else if (type === 'favorites') {
+            // Exclusive view: turning it on clears everything else
+            if (activeFilters.has('favorites')) activeFilters.delete('favorites');
+            else { activeFilters.clear(); activeFilters.add('favorites'); }
         } else {
+            activeFilters.delete('favorites'); // any other filter exits the favorites view
             const exclusiveOutcomes = ['adopted', 'rto', 'rescued', 'available'];
             const exclusiveAges = ['puppy', 'senior'];
 
@@ -748,7 +824,8 @@ opacity: 0;
                 const el = document.getElementById('chip-' + f);
                 if (el) el.classList.add('active');
             });
-            if (activeFilters.has('rto')) document.getElementById('view-title').innerText = '↩️ Returned to Owner';
+            if (activeFilters.has('favorites')) document.getElementById('view-title').innerText = '❤️ Your Favorites';
+            else if (activeFilters.has('rto')) document.getElementById('view-title').innerText = '↩️ Returned to Owner';
             else if (activeFilters.has('rescued')) document.getElementById('view-title').innerText = '🚑 Rescued Dogs';
             else if (activeFilters.has('adopted')) document.getElementById('view-title').innerText = '🏠 Adopted Dogs';
             else if (activeFilters.has('return_guest')) document.getElementById('view-title').innerText = '🔄 Returns';
@@ -761,6 +838,25 @@ opacity: 0;
     }
 
     function applyFiltersAndSort() {
+        // Favorites is an exclusive view: present favorites as real cards,
+        // saved-but-missing ids as stale placeholder markers (no crash on missing dog).
+        if (activeFilters.has('favorites')) {
+            const favIds = getFavorites();
+            const favSet = new Set(favIds);
+            const present = sortDogs(fullDataset.filter(d => favSet.has(String(d.id))), 'longest');
+            const presentIds = new Set(present.map(d => String(d.id)));
+            const staleEntries = favIds.filter(id => !presentIds.has(id)).map(id => ({ _stale: true, id }));
+
+            const select = document.getElementById('sortSelect');
+            if (select) select.value = 'longest';
+            const countEl = document.getElementById('headerCount');
+            if (countEl) countEl.innerText = present.length;
+
+            currentDisplayList = present.concat(staleEntries);
+            resetGrid();
+            return;
+        }
+
         const showRTO = activeFilters.has('rto');
         const showRescued = activeFilters.has('rescued');
         const showAdopted = activeFilters.has('adopted');
@@ -892,7 +988,15 @@ opacity: 0;
         openMenuCount = 0;
         document.getElementById('dog-grid').innerHTML = '';
         if (currentDisplayList.length === 0) {
-            document.getElementById('dog-grid').innerHTML = `
+            if (activeFilters.has('favorites')) {
+                document.getElementById('dog-grid').innerHTML = `
+                <div class="empty-state">
+                    <i class="far fa-heart"></i>
+                    No favorites yet.
+                    <div style="margin-top:8px; font-size:0.95rem;">Tap the ♥ on a dog to save them here.</div>
+                </div>`;
+            } else {
+                document.getElementById('dog-grid').innerHTML = `
                 <div class="empty-state">
                     <i class="fas fa-dog"></i>
                     No dogs match your current filters.
@@ -900,6 +1004,7 @@ opacity: 0;
                         <button class="action-btn" onclick="resetAllFilters()"><i class="fas fa-rotate-left"></i> Clear filters</button>
                     </div>
                 </div>`;
+            }
             return;
         }
         renderNextBatch();
@@ -912,16 +1017,31 @@ opacity: 0;
         const batch = currentDisplayList.slice(displayedCount, displayedCount + batchSize);
         let htmlBuffer = '';
 
-        batch.forEach(dog => {
-            htmlBuffer += buildDogCard(dog);
+        batch.forEach(item => {
+            htmlBuffer += item._stale ? buildStaleCard(item.id) : buildDogCard(item);
         });
 
         document.getElementById('dog-grid').insertAdjacentHTML('beforeend', htmlBuffer);
         displayedCount += batch.length;
     }
 
+    function buildStaleCard(id) {
+        const safeId = String(id).replace(/"/g, '&quot;');
+        return `
+        <div class="fav-stale-card">
+            <div class="stale-title"><i class="far fa-circle-question"></i> No longer listed</div>
+            <div class="stale-sub">Saved dog <strong>${safeId}</strong> has been adopted or removed.</div>
+            <button class="action-btn" type="button" onclick="removeStaleFavorite('${safeId}')"><i class="fas fa-heart-broken"></i> Remove</button>
+        </div>`;
+    }
+
     function buildDogCard(dog) {
         const days = dog._daysSinceIntake;
+
+        const faved = isFavorite(dog.id);
+        const favIcon = faved ? 'fas' : 'far';
+        const favName = String(dog.name || '').replace(/"/g, '&quot;');
+        const favLabel = (faved ? 'Remove ' : 'Save ') + favName + (faved ? ' from favorites' : ' to favorites');
 
         let isToday = false;
 
@@ -1086,6 +1206,11 @@ opacity: 0;
                         ${igBtn}
                         ${fbBtn}
                         <a href="${dog.link}" rel="noopener noreferrer" class="action-btn">View</a>
+                        <button class="fav-btn" type="button"
+                                data-id="${dog.id}" data-name="${favName}"
+                                aria-pressed="${faved ? 'true' : 'false'}"
+                                aria-label="${favLabel}"
+                                onclick="toggleFavoriteBtn(this)"><i class="${favIcon} fa-heart"></i></button>
                         <button class="share-btn" onclick="shareDog('${dog.name}', '${dog.id}', '${dog.link}')"><i class="fas fa-share-alt"></i></button>
                     </div>
                 </div>
