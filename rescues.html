@@ -380,7 +380,7 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button><div class=quick-dates><button class=btn-quick onclick=quickDate(7)>7d</button><button class="btn-quick active" onclick=quickDate(30)>30d</button><button class=btn-quick onclick=quickDate(90)>90d</button><button class=btn-quick onclick=quickDate(0)>All</button></div></div><div id=activeFilterBar class=active-filter-bar><span class=active-filter-bar-label><i class="fas fa-filter" style=margin-right:4px;></i> Viewing:</span><span id=filterPill class=filter-pill><span id=filterPillText></span><button class=filter-pill-close onclick=clearActiveFilter() title="Clear filter">&times;</button></span><button class=btn-reset-filter onclick=clearActiveFilter()><i class="fas fa-undo"></i> Reset to 30 Days</button></div><div class=stats-banner><div class="stat-card clickable" onclick=showTodayRescues() title="Click to see today's heroes!"><i class="fas fa-calendar-day stat-icon"></i><div class=stat-info><span class=stat-value id=countToday>0</span><span class=stat-label>Rescues Today</span></div></div><div class=stat-card><i class="fas fa-history stat-icon" style="color: var(--success-text);"></i><div class=stat-info><span class=stat-value id=countTotal>0</span><span class=stat-label id=labelTotal>Total in Range</span></div></div><div class=stat-card><i class="fas fa-clock stat-icon" style="color: var(--warning-text);"></i><div class=stat-info><span class=stat-value id=avgLos>&mdash;</span><span class=stat-label>Avg Shelter Stay</span></div></div><div class=stat-card><i class="fas fa-hands-helping stat-icon" style="color: var(--info-text);"></i><div class=stat-info><span class=stat-value id=uniquePartners>0</span><span class=stat-label id=labelPartners>Partners in Range</span></div></div></div><div class=chart-container><canvas id=rescueChart></canvas></div><div class=chart-legend><span>Short stay</span><div class=chart-legend-gradient></div><span>Long stay</span></div><div class=chart-hint>Bar color reflects average shelter stay before rescue. Tap any bar for breed details.</div><div id=drillDownSection><div class=details-header><h2 class=details-title id=selectedPartnerName>Partner Details</h2><button class=close-btn onclick=closeDrillDown()>Close Details <i class="fas fa-times"></i></button></div><div id=drillDownStats class=drill-down-stats></div><div class=details-grid><div class=charts-column><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Composition </h3><div class=pie-container><canvas id=breedPieChart></canvas></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Sizes</h3><div class=pie-container id=sizeChartContainer><canvas id=sizePieChart></canvas></div></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Recent Pulls (In Range)</h3><div class=table-container><table id=drillDownTable><thead><tr><th>Date</th><th>Name</th><th>Breed</th><th>Stay</th></tr></thead><tbody id=drillDownBody></tbody></table></div></div></div><div class=drill-down-footer><button class=btn-back onclick=closeDrillDown()><i class="fas fa-arrow-left"></i> Back to all rescues</button></div></div><div id=recentRescuesSection><h2 id=gridTitle style="margin: 0 0 10px 0;">Rescues in Range</h2><div class=search-wrapper><input type=text id=searchRecent placeholder="Filter visible cards (e.g. 'Paws', 'Bulldog')..."></div><div id=recentGrid class=dog-grid></div></div><div class=footer><span>Last Updated: June 02, 2026 09:08 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button><div class=quick-dates><button class=btn-quick onclick=quickDate(7)>7d</button><button class="btn-quick active" onclick=quickDate(30)>30d</button><button class=btn-quick onclick=quickDate(90)>90d</button><button class=btn-quick onclick=quickDate(0)>All</button></div></div><div id=activeFilterBar class=active-filter-bar><span class=active-filter-bar-label><i class="fas fa-filter" style=margin-right:4px;></i> Viewing:</span><span id=filterPill class=filter-pill><span id=filterPillText></span><button class=filter-pill-close onclick=clearActiveFilter() title="Clear filter">&times;</button></span><button class=btn-reset-filter onclick=clearActiveFilter()><i class="fas fa-undo"></i> Reset to 30 Days</button></div><div class=stats-banner><div class="stat-card clickable" onclick=showTodayRescues() title="Click to see today's heroes!"><i class="fas fa-calendar-day stat-icon"></i><div class=stat-info><span class=stat-value id=countToday>0</span><span class=stat-label>Rescues Today</span></div></div><div class=stat-card><i class="fas fa-history stat-icon" style="color: var(--success-text);"></i><div class=stat-info><span class=stat-value id=countTotal>0</span><span class=stat-label id=labelTotal>Total in Range</span></div></div><div class=stat-card><i class="fas fa-clock stat-icon" style="color: var(--warning-text);"></i><div class=stat-info><span class=stat-value id=avgLos>&mdash;</span><span class=stat-label>Avg Shelter Stay</span></div></div><div class=stat-card><i class="fas fa-hands-helping stat-icon" style="color: var(--info-text);"></i><div class=stat-info><span class=stat-value id=uniquePartners>0</span><span class=stat-label id=labelPartners>Partners in Range</span></div></div></div><div class=chart-container><canvas id=rescueChart></canvas></div><div class=chart-legend><span>Short stay</span><div class=chart-legend-gradient></div><span>Long stay</span></div><div class=chart-hint>Bar color reflects average shelter stay before rescue. Tap any bar for breed details.</div><div id=drillDownSection><div class=details-header><h2 class=details-title id=selectedPartnerName>Partner Details</h2><button class=close-btn onclick=closeDrillDown()>Close Details <i class="fas fa-times"></i></button></div><div id=drillDownStats class=drill-down-stats></div><div class=details-grid><div class=charts-column><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Composition </h3><div class=pie-container><canvas id=breedPieChart></canvas></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Sizes</h3><div class=pie-container id=sizeChartContainer><canvas id=sizePieChart></canvas></div></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Recent Pulls (In Range)</h3><div class=table-container><table id=drillDownTable><thead><tr><th>Date</th><th>Name</th><th>Breed</th><th>Stay</th></tr></thead><tbody id=drillDownBody></tbody></table></div></div></div><div class=drill-down-footer><button class=btn-back onclick=closeDrillDown()><i class="fas fa-arrow-left"></i> Back to all rescues</button></div></div><div id=recentRescuesSection><h2 id=gridTitle style="margin: 0 0 10px 0;">Rescues in Range</h2><div class=search-wrapper><input type=text id=searchRecent placeholder="Filter visible cards (e.g. 'Paws', 'Bulldog')..."></div><div id=recentGrid class=dog-grid></div></div><div class=footer><span>Last Updated: June 02, 2026 09:20 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -389,6 +389,60 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
                 clearTimeout(timeout);
                 timeout = setTimeout(() => func.apply(context, args), wait);
             };
+        }
+
+        // --- Site-wide Date/Timezone Utilities ---
+        // Canonical tz is America/Chicago. Dates are stored as date-only "YYYY-MM-DD".
+        // The ES spec parses bare "YYYY-MM-DD" as UTC midnight, so we treat EVERY date
+        // (including "today") as a UTC-midnight calendar date — making comparisons and
+        // day-diffs timezone-stable regardless of the viewer's browser timezone.
+        const SITE_TZ = "America/Chicago";
+        const MS_PER_DAY = 86400000;
+
+        // "Today" in site tz as "YYYY-MM-DD" (en-CA => ISO order across all locales).
+        function siteToday() {
+            return new Date().toLocaleDateString("en-CA", { timeZone: SITE_TZ });
+        }
+
+        // Parse a date-only "YYYY-MM-DD" string to a Date at UTC midnight (null if invalid).
+        function parseSiteDate(str) {
+            if (!str) return null;
+            const d = new Date(str);            // bare ISO date => UTC midnight
+            return isNaN(d.getTime()) ? null : d;
+        }
+
+        // Epoch ms at UTC midnight for a "YYYY-MM-DD" string (or null).
+        function siteDateTs(str) {
+            const d = parseSiteDate(str);
+            return d ? d.getTime() : null;
+        }
+
+        // Day-of-week (0=Sun..6=Sat) of a "YYYY-MM-DD" date. getUTCDay can't drift
+        // across the local-midnight boundary.
+        function siteDayOfWeek(str) {
+            const d = parseSiteDate(str);
+            return d ? d.getUTCDay() : null;
+        }
+
+        // Whole calendar days between two "YYYY-MM-DD" strings (b - a), or null.
+        function siteDayDiff(aStr, bStr) {
+            const a = siteDateTs(aStr), b = siteDateTs(bStr);
+            if (a === null || b === null) return null;
+            return Math.round((b - a) / MS_PER_DAY);
+        }
+
+        // Format a "YYYY-MM-DD" string for display. timeZone:'UTC' forces the formatter
+        // to read back the same UTC-midnight calendar date so the shown day never drifts.
+        function formatSiteDate(str, opts) {
+            const d = parseSiteDate(str);
+            if (!d) return "";
+            return d.toLocaleDateString("en-US",
+                Object.assign({ timeZone: "UTC" }, opts || { month: "short", day: "numeric" }));
+        }
+
+        // "YYYY-MM-DD" for N days before site-today (N>=0). siteDateNDaysAgo(0) === siteToday().
+        function siteDateNDaysAgo(n) {
+            return new Date(siteDateTs(siteToday()) - n * MS_PER_DAY).toISOString().split("T")[0];
         }
 
         // Optimization: "Just-in-Time" Connection Warmer
@@ -534,16 +588,13 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
 
     // --- Active Filter Banner ---
     function isDefaultDateRange() {
-        const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
+        const todayStr = siteToday();
         const endStr = document.getElementById('endDate').value;
         const startStr = document.getElementById('startDate').value;
         if (endStr !== todayStr) return false;
 
-        const end = new Date(todayStr);
         for (const days of [7, 30, 90]) {
-            const presetStart = new Date(todayStr);
-            presetStart.setDate(end.getDate() - days);
-            if (startStr === presetStart.toISOString().split('T')[0]) return true;
+            if (startStr === siteDateNDaysAgo(days)) return true;
         }
         // Check "All" — matches earliest data date
         if (ALL_DATA.length > 0) {
@@ -556,7 +607,7 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
     function updateFilterBanner() {
         const bar = document.getElementById('activeFilterBar');
         const pillText = document.getElementById('filterPillText');
-        const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
+        const todayStr = siteToday();
         const startStr = document.getElementById('startDate').value;
         const endStr = document.getElementById('endDate').value;
         const isTodayView = (startStr === todayStr && endStr === todayStr);
@@ -655,11 +706,7 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
 
     // --- Quick Date Logic ---
     function quickDate(days) {
-        const todayChicago = new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
-        const end = new Date(todayChicago);
-        const fmt = d => d.toISOString().split('T')[0];
-
-        document.getElementById('endDate').value = fmt(end);
+        document.getElementById('endDate').value = siteToday();
 
         if (days === 0) {
             // "All" — find earliest date in data
@@ -667,14 +714,10 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
                 const earliest = ALL_DATA.reduce((min, d) => d.date < min ? d.date : min, ALL_DATA[0].date);
                 document.getElementById('startDate').value = earliest;
             } else {
-                const start = new Date(todayChicago);
-                start.setFullYear(start.getFullYear() - 5);
-                document.getElementById('startDate').value = fmt(start);
+                document.getElementById('startDate').value = siteDateNDaysAgo(365 * 5);
             }
         } else {
-            const start = new Date(todayChicago);
-            start.setDate(end.getDate() - days);
-            document.getElementById('startDate').value = fmt(start);
+            document.getElementById('startDate').value = siteDateNDaysAgo(days);
         }
 
         // Update active button state
@@ -697,8 +740,7 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
 
         FILTERED_DATA = ALL_DATA.filter(d => d.date >= startStr && d.date <= endStr);
 
-        // Calculate Today (Chicago Time) with DASHES
-        const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
+        const todayStr = siteToday();
         const todayCount = ALL_DATA.filter(d => d.date === todayStr).length;
 
         document.getElementById('countToday').innerText = todayCount;
@@ -720,10 +762,7 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
         // Dynamic Label Logic
         const labelEl = document.getElementById('labelTotal');
         if (endStr === todayStr) {
-            const s = new Date(startStr);
-            const e = new Date(endStr);
-            const diffTime = Math.abs(e - s);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const diffDays = siteDayDiff(startStr, endStr);
             labelEl.innerText = `Total (Past ${diffDays} Days)`;
         } else {
             labelEl.innerText = "Total in Selected Range";
@@ -757,7 +796,7 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
         const count = parseInt(document.getElementById('countToday').innerText);
         if (count === 0) return; // Nothing to show
 
-        const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
+        const todayStr = siteToday();
 
         // 1. Clear text filter so everything shows
         document.getElementById('searchRecent').value = '';
@@ -934,8 +973,7 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
             return;
         }
 
-        // Calculate Today (Chicago) using DASHES
-        const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
+        const todayStr = siteToday();
 
         // Determine if we are in "Today Only" mode (Celebration Mode)
         const startInput = document.getElementById('startDate').value;

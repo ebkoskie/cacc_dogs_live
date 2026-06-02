@@ -454,7 +454,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable()><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: June 02, 2026 09:08 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable()><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: June 02, 2026 09:20 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -463,6 +463,60 @@
                 clearTimeout(timeout);
                 timeout = setTimeout(() => func.apply(context, args), wait);
             };
+        }
+
+        // --- Site-wide Date/Timezone Utilities ---
+        // Canonical tz is America/Chicago. Dates are stored as date-only "YYYY-MM-DD".
+        // The ES spec parses bare "YYYY-MM-DD" as UTC midnight, so we treat EVERY date
+        // (including "today") as a UTC-midnight calendar date — making comparisons and
+        // day-diffs timezone-stable regardless of the viewer's browser timezone.
+        const SITE_TZ = "America/Chicago";
+        const MS_PER_DAY = 86400000;
+
+        // "Today" in site tz as "YYYY-MM-DD" (en-CA => ISO order across all locales).
+        function siteToday() {
+            return new Date().toLocaleDateString("en-CA", { timeZone: SITE_TZ });
+        }
+
+        // Parse a date-only "YYYY-MM-DD" string to a Date at UTC midnight (null if invalid).
+        function parseSiteDate(str) {
+            if (!str) return null;
+            const d = new Date(str);            // bare ISO date => UTC midnight
+            return isNaN(d.getTime()) ? null : d;
+        }
+
+        // Epoch ms at UTC midnight for a "YYYY-MM-DD" string (or null).
+        function siteDateTs(str) {
+            const d = parseSiteDate(str);
+            return d ? d.getTime() : null;
+        }
+
+        // Day-of-week (0=Sun..6=Sat) of a "YYYY-MM-DD" date. getUTCDay can't drift
+        // across the local-midnight boundary.
+        function siteDayOfWeek(str) {
+            const d = parseSiteDate(str);
+            return d ? d.getUTCDay() : null;
+        }
+
+        // Whole calendar days between two "YYYY-MM-DD" strings (b - a), or null.
+        function siteDayDiff(aStr, bStr) {
+            const a = siteDateTs(aStr), b = siteDateTs(bStr);
+            if (a === null || b === null) return null;
+            return Math.round((b - a) / MS_PER_DAY);
+        }
+
+        // Format a "YYYY-MM-DD" string for display. timeZone:'UTC' forces the formatter
+        // to read back the same UTC-midnight calendar date so the shown day never drifts.
+        function formatSiteDate(str, opts) {
+            const d = parseSiteDate(str);
+            if (!d) return "";
+            return d.toLocaleDateString("en-US",
+                Object.assign({ timeZone: "UTC" }, opts || { month: "short", day: "numeric" }));
+        }
+
+        // "YYYY-MM-DD" for N days before site-today (N>=0). siteDateNDaysAgo(0) === siteToday().
+        function siteDateNDaysAgo(n) {
+            return new Date(siteDateTs(siteToday()) - n * MS_PER_DAY).toISOString().split("T")[0];
         }
 
         // Optimization: "Just-in-Time" Connection Warmer
@@ -828,9 +882,11 @@
     }
 
     function processData(startStr, endStr) {
-        // Normalize Dates to midnight for inclusive comparison
-        const start = new Date(startStr); start.setHours(0,0,0,0);
-        const end = new Date(endStr); end.setHours(23,59,59,999);
+        // Normalize Dates to UTC midnight so comparisons stay timezone-stable.
+        // item.d/item.od are also parsed via bare new Date() (UTC midnight), and
+        // since all values are date-only, `>= start`/`<= end` keep both ends inclusive.
+        const start = parseSiteDate(startStr);
+        const end = parseSiteDate(endStr);
 
         // Helper: Resolve Status/Breed Strings
         const getBreed = (idx) => {
@@ -1128,9 +1184,8 @@
         document.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('active'));
         if (btnEl) btnEl.classList.add('active');
 
-        const fmt = d => d.toISOString().split('T')[0];
-        const end = new Date();
-        let start;
+        const endStr = siteToday();
+        let startStr;
         if (days === 0) {
             // "All" — find earliest date from fullIndex items
             let earliest = null;
@@ -1138,13 +1193,12 @@
                 if (item.d && (!earliest || item.d < earliest)) earliest = item.d;
                 if (item.od && (!earliest || item.od < earliest)) earliest = item.od;
             });
-            start = earliest ? new Date(earliest) : new Date(end.getTime() - 365 * 86400000);
+            startStr = earliest || siteDateNDaysAgo(365);
         } else {
-            start = new Date();
-            start.setDate(end.getDate() - days);
+            startStr = siteDateNDaysAgo(days);
         }
-        document.getElementById('startDate').value = fmt(start);
-        document.getElementById('endDate').value = fmt(end);
+        document.getElementById('startDate').value = startStr;
+        document.getElementById('endDate').value = endStr;
         applyDateFilter();
     }
 </script></body></html>
