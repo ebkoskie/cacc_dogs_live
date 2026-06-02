@@ -101,6 +101,14 @@
         .date-range { border: 0; padding: 0; margin: 0; min-width: 0; display: flex; gap: 15px; align-items: center; }
         .date-range > legend { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
+        /* Trend indicator badge (today-vs-yesterday arrow + hover tooltip) */
+        .trend-indicator { font-size: 0.9rem; cursor: help; position: relative; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); }
+        .trend-good { color: #238636; border-color: rgba(35, 134, 54, 0.3); }
+        .trend-bad { color: #da3633; border-color: rgba(218, 54, 51, 0.3); }
+        .trend-neutral { color: var(--text-muted); }
+        .trend-indicator::after { content: attr(data-tooltip); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1f2428; color: #f0f6fc; padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.2s, transform 0.2s; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 20; font-weight: normal; }
+        .trend-indicator:hover::after { opacity: 1; transform: translateX(-50%) translateY(-2px); }
+
         
     /* --- Controls Bar (Fixed for Mobile & Sticky Positioning) --- */
     .controls-bar {
@@ -454,7 +462,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable()><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: June 02, 2026 09:20 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable()><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: June 02, 2026 11:44 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -517,6 +525,27 @@
         // "YYYY-MM-DD" for N days before site-today (N>=0). siteDateNDaysAgo(0) === siteToday().
         function siteDateNDaysAgo(n) {
             return new Date(siteDateTs(siteToday()) - n * MS_PER_DAY).toISOString().split("T")[0];
+        }
+
+        // --- Trend Indicator ---
+        // Renders an up/down/flat arrow + tooltip into elId comparing today vs yesterday.
+        // lowerIsBetter flips the good/bad coloring (e.g. fewer removals is "good").
+        function setTrendIndicator(elId, today, yesterday, lowerIsBetter) {
+            const el = document.getElementById(elId);
+            if (!el || yesterday === null || yesterday === undefined) return;
+            if (today < yesterday) {
+                el.innerHTML = '<i class="fas fa-arrow-down"></i>';
+                el.className = 'trend-indicator ' + (lowerIsBetter ? 'trend-good' : 'trend-bad');
+                el.setAttribute('data-tooltip', 'Was ' + yesterday + ' yesterday');
+            } else if (today > yesterday) {
+                el.innerHTML = '<i class="fas fa-arrow-up"></i>';
+                el.className = 'trend-indicator ' + (lowerIsBetter ? 'trend-bad' : 'trend-good');
+                el.setAttribute('data-tooltip', 'Was ' + yesterday + ' yesterday');
+            } else {
+                el.innerHTML = '<i class="fas fa-minus" style="font-size:0.7em;"></i>';
+                el.className = 'trend-indicator trend-neutral';
+                el.setAttribute('data-tooltip', 'No change from yesterday');
+            }
         }
 
         // Optimization: "Just-in-Time" Connection Warmer

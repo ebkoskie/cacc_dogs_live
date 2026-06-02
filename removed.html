@@ -101,6 +101,14 @@
         .date-range { border: 0; padding: 0; margin: 0; min-width: 0; display: flex; gap: 15px; align-items: center; }
         .date-range > legend { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
+        /* Trend indicator badge (today-vs-yesterday arrow + hover tooltip) */
+        .trend-indicator { font-size: 0.9rem; cursor: help; position: relative; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); }
+        .trend-good { color: #238636; border-color: rgba(35, 134, 54, 0.3); }
+        .trend-bad { color: #da3633; border-color: rgba(218, 54, 51, 0.3); }
+        .trend-neutral { color: var(--text-muted); }
+        .trend-indicator::after { content: attr(data-tooltip); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1f2428; color: #f0f6fc; padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.2s, transform 0.2s; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 20; font-weight: normal; }
+        .trend-indicator:hover::after { opacity: 1; transform: translateX(-50%) translateY(-2px); }
+
         
 /* Reusing base card styles, adding specific overrides for the Removed context */
 .controls-bar { position: sticky; top: 64px; z-index: 90; background: var(--header-bg); padding: 15px 20px; margin: 0 -20px; backdrop-filter: blur(5px); border-bottom: 1px solid var(--border); display: flex; gap: 15px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
@@ -156,12 +164,7 @@
 .stat-sub { font-size: 0.8rem; color: var(--text-muted); font-weight: 400; margin-top: 2px; }
 .stat-date { position: absolute; top: 12px; right: 12px; font-size: 0.65rem; font-weight: 700; color: var(--text-muted); opacity: 0.6; text-transform: uppercase; }
 
-.trend-indicator { font-size: 0.9rem; cursor: help; position: relative; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); }
-.trend-good { color: #238636; border-color: rgba(35, 134, 54, 0.3); }
-.trend-bad { color: #da3633; border-color: rgba(218, 54, 51, 0.3); }
-.trend-neutral { color: var(--text-muted); }
-.trend-indicator::after { content: attr(data-tooltip); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1f2428; color: #f0f6fc; padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.2s, transform 0.2s; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 20; font-weight: normal; }
-.trend-indicator:hover::after { opacity: 1; transform: translateX(-50%) translateY(-2px); }
+/* .trend-indicator styles are shared in base.html */
 
 /* LOS Badge & Card Meta */
 .card-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 0.82rem; color: var(--text-muted); }
@@ -315,7 +318,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=info-banner><i class="fas fa-info-circle"></i> These dogs were removed from the public listing without a confirmed Adoption, Rescue, or RTO event. <br><small>They may have been euthanized, died in care, or were lost. Data is limited to what is publicly available.</small></div><div class=stats-container><div class=stats-grid><div class="stat-card removed"><span class=stat-date>Today</span><div class=stat-value><span id=todayRemoved>--</span> <span id=removedIndicator></span></div><div class=stat-label><i class="fas fa-times-circle"></i> Removed</div><div class=stat-sub id=removedSub></div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=medianLOS>--</span></div><div class=stat-label><i class="fas fa-hourglass-half"></i> Median Stay</div><div class=stat-sub>days until removal</div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=avgLOS>--</span></div><div class=stat-label><i class="fas fa-clock"></i> Average Stay</div><div class=stat-sub>days until removal</div></div></div></div><div class=controls-bar><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Removed Dogs..."></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=recent>Date Removed (Recent First)</option><option value=oldest>Date Removed (Oldest First)</option><option value=name>Name (A ➝ Z)</option><option value=los>Length of Stay (Longest First)</option></select></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Loading historical records...</p></div><div id=main-view style=display:none;><h2 style="margin: 30px 0 10px 0; font-size:1.2rem; color:var(--text-muted);"><span id=count>0</span> Records Found </h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel style="height: 50px; margin-top: 20px;"></div></div><div class=footer><span>Last Updated: June 02, 2026 09:20 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=info-banner><i class="fas fa-info-circle"></i> These dogs were removed from the public listing without a confirmed Adoption, Rescue, or RTO event. <br><small>They may have been euthanized, died in care, or were lost. Data is limited to what is publicly available.</small></div><div class=stats-container><div class=stats-grid><div class="stat-card removed"><span class=stat-date>Today</span><div class=stat-value><span id=todayRemoved>--</span> <span id=removedIndicator></span></div><div class=stat-label><i class="fas fa-times-circle"></i> Removed</div><div class=stat-sub id=removedSub></div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=medianLOS>--</span></div><div class=stat-label><i class="fas fa-hourglass-half"></i> Median Stay</div><div class=stat-sub>days until removal</div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=avgLOS>--</span></div><div class=stat-label><i class="fas fa-clock"></i> Average Stay</div><div class=stat-sub>days until removal</div></div></div></div><div class=controls-bar><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Removed Dogs..."></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=recent>Date Removed (Recent First)</option><option value=oldest>Date Removed (Oldest First)</option><option value=name>Name (A ➝ Z)</option><option value=los>Length of Stay (Longest First)</option></select></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Loading historical records...</p></div><div id=main-view style=display:none;><h2 style="margin: 30px 0 10px 0; font-size:1.2rem; color:var(--text-muted);"><span id=count>0</span> Records Found </h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel style="height: 50px; margin-top: 20px;"></div></div><div class=footer><span>Last Updated: June 02, 2026 11:44 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -378,6 +381,27 @@
         // "YYYY-MM-DD" for N days before site-today (N>=0). siteDateNDaysAgo(0) === siteToday().
         function siteDateNDaysAgo(n) {
             return new Date(siteDateTs(siteToday()) - n * MS_PER_DAY).toISOString().split("T")[0];
+        }
+
+        // --- Trend Indicator ---
+        // Renders an up/down/flat arrow + tooltip into elId comparing today vs yesterday.
+        // lowerIsBetter flips the good/bad coloring (e.g. fewer removals is "good").
+        function setTrendIndicator(elId, today, yesterday, lowerIsBetter) {
+            const el = document.getElementById(elId);
+            if (!el || yesterday === null || yesterday === undefined) return;
+            if (today < yesterday) {
+                el.innerHTML = '<i class="fas fa-arrow-down"></i>';
+                el.className = 'trend-indicator ' + (lowerIsBetter ? 'trend-good' : 'trend-bad');
+                el.setAttribute('data-tooltip', 'Was ' + yesterday + ' yesterday');
+            } else if (today > yesterday) {
+                el.innerHTML = '<i class="fas fa-arrow-up"></i>';
+                el.className = 'trend-indicator ' + (lowerIsBetter ? 'trend-bad' : 'trend-good');
+                el.setAttribute('data-tooltip', 'Was ' + yesterday + ' yesterday');
+            } else {
+                el.innerHTML = '<i class="fas fa-minus" style="font-size:0.7em;"></i>';
+                el.className = 'trend-indicator trend-neutral';
+                el.setAttribute('data-tooltip', 'No change from yesterday');
+            }
         }
 
         // Optimization: "Just-in-Time" Connection Warmer
@@ -517,23 +541,6 @@
         }
     }
 
-    function setTrendIndicator(elId, today, yesterday, lowerIsBetter) {
-        const el = document.getElementById(elId);
-        if (!el || yesterday === null || yesterday === undefined) return;
-        if (today < yesterday) {
-            el.innerHTML = '<i class="fas fa-arrow-down"></i>';
-            el.className = 'trend-indicator ' + (lowerIsBetter ? 'trend-good' : 'trend-bad');
-            el.setAttribute('data-tooltip', 'Was ' + yesterday + ' yesterday');
-        } else if (today > yesterday) {
-            el.innerHTML = '<i class="fas fa-arrow-up"></i>';
-            el.className = 'trend-indicator ' + (lowerIsBetter ? 'trend-bad' : 'trend-good');
-            el.setAttribute('data-tooltip', 'Was ' + yesterday + ' yesterday');
-        } else {
-            el.innerHTML = '<i class="fas fa-minus" style="font-size:0.7em;"></i>';
-            el.className = 'trend-indicator trend-neutral';
-            el.setAttribute('data-tooltip', 'No change from yesterday');
-        }
-    }
 
     function handleSearch() {
         const q = document.getElementById('mainSearch').value.toLowerCase();
@@ -672,11 +679,4 @@
         observer.observe(document.getElementById('scroll-sentinel'));
     }
 
-    function debounce(func, wait) {
-        let timeout;
-        return function (...args) {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), wait);
-        };
-    }
 </script></body></html>
