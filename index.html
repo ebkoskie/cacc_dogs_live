@@ -109,6 +109,9 @@
         .trend-indicator::after { content: attr(data-tooltip); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1f2428; color: #f0f6fc; padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.2s, transform 0.2s; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 20; font-weight: normal; }
         .trend-indicator:hover::after { opacity: 1; transform: translateX(-50%) translateY(-2px); }
 
+        /* Date badge whose label can be tapped/clicked to swap for the exact local scrape time */
+        .ts-toggle { cursor: pointer; user-select: none; -webkit-user-select: none; }
+
         
 /* --- Layout & Components --- */
 .sticky-header {
@@ -456,7 +459,7 @@ opacity: 0;
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=page-meta><div class=freshness-bar><span class=freshness-pill id=freshnessPill><i class="fas fa-clock"></i> Updated June 03, 2026 03:43 PM CST</span><button class=legend-toggle onclick=toggleLegend() aria-expanded=false aria-controls=legendPanel><i class="fas fa-circle-info"></i> What do the badges mean?</button></div><div class=legend-panel id=legendPanel><ul><li><strong>⏳ Long Stay</strong> — Has been waiting at CACC a while (30+ days) and could use extra attention.</li><li><strong>📍 Stray</strong> — Found as a stray. CACC holds strays for a few days so an owner can reclaim them before they become available for adoption.</li><li><strong>🔄 Return</strong> — Previously lived at CACC and has come back.</li><li><strong>↩️ RTO</strong> — &ldquo;Returned to Owner&rdquo; — reunited with their family.</li><li><strong>🚑 Rescue-only</strong> — Available to approved rescue partners rather than the general public.</li><li><strong>🏠 Adopted</strong> — Found a new home!</li></ul></div></div><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-favorites onclick="filterByChip('favorites')">❤️ Favorites <span class=chip-badge id=fav-count>0</span> <span class=chip-close>&times;</span></div><div class=chip id=chip-available onclick="filterByChip('available')">✅ Available <span class=chip-close>&times;</span></div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-return_guest onclick="filterByChip('return_guest')">🔄 Returns <span class=chip-close>&times;</span></div><div class=chip id=chip-non_pit onclick="filterByChip('non_pit')">🐩 Non-Pit <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: June 03, 2026 03:43 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=page-meta><div class=freshness-bar><span class=freshness-pill id=freshnessPill><i class="fas fa-clock"></i> Updated June 03, 2026 04:21 PM CST</span><button class=legend-toggle onclick=toggleLegend() aria-expanded=false aria-controls=legendPanel><i class="fas fa-circle-info"></i> What do the badges mean?</button></div><div class=legend-panel id=legendPanel><ul><li><strong>⏳ Long Stay</strong> — Has been waiting at CACC a while (30+ days) and could use extra attention.</li><li><strong>📍 Stray</strong> — Found as a stray. CACC holds strays for a few days so an owner can reclaim them before they become available for adoption.</li><li><strong>🔄 Return</strong> — Previously lived at CACC and has come back.</li><li><strong>↩️ RTO</strong> — &ldquo;Returned to Owner&rdquo; — reunited with their family.</li><li><strong>🚑 Rescue-only</strong> — Available to approved rescue partners rather than the general public.</li><li><strong>🏠 Adopted</strong> — Found a new home!</li></ul></div></div><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-favorites onclick="filterByChip('favorites')">❤️ Favorites <span class=chip-badge id=fav-count>0</span> <span class=chip-close>&times;</span></div><div class=chip id=chip-available onclick="filterByChip('available')">✅ Available <span class=chip-close>&times;</span></div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-return_guest onclick="filterByChip('return_guest')">🔄 Returns <span class=chip-close>&times;</span></div><div class=chip id=chip-non_pit onclick="filterByChip('non_pit')">🐩 Non-Pit <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Available Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: June 03, 2026 04:21 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -520,6 +523,31 @@ opacity: 0;
         function siteDateNDaysAgo(n) {
             return new Date(siteDateTs(siteToday()) - n * MS_PER_DAY).toISOString().split("T")[0];
         }
+
+        // Format epoch-ms (a scrape timecode) as a viewer-LOCAL date+time,
+        // e.g. "Jun 2, 2026, 2:31 PM". Returns "" for falsy/missing values.
+        function formatLocalTimecode(ms) {
+            if (!ms) return "";
+            return new Date(ms).toLocaleString(undefined,
+                { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
+        }
+
+        // Date badges carrying a known scrape timecode (data-ts) swap their label for
+        // the exact local time on tap/click, and back again. Mobile-first: identical
+        // behavior on touch and desktop, no hover required. The original markup is
+        // stashed lazily so any badge (icon + text) round-trips cleanly.
+        document.addEventListener("click", function (e) {
+            const el = e.target.closest(".ts-toggle");
+            if (!el || !el.getAttribute("data-ts")) return;
+            if (el.dataset.showing === "ts") {
+                el.innerHTML = el.dataset.tsOrig;
+                el.dataset.showing = "orig";
+            } else {
+                if (el.dataset.tsOrig == null) el.dataset.tsOrig = el.innerHTML;
+                el.innerHTML = `<i class="fas fa-clock"></i> ${el.getAttribute("data-ts")}`;
+                el.dataset.showing = "ts";
+            }
+        });
 
         // --- Trend Indicator ---
         // Renders an up/down/flat arrow + tooltip into elId comparing today vs yesterday.
@@ -710,6 +738,8 @@ opacity: 0;
                 status: statusName,
                 date: item.d,
                 scrape_date: item.sd,
+                first_seen_ts: item.fs || null,
+                status_changed_ts: item.sc || null,
                 outcome_date: item.od,
                 age: ageVal,
                 color: colorVal,
@@ -1126,24 +1156,31 @@ opacity: 0;
         let statusBadge = '';
         if (!dog.is_active) {
             const displayDate = dog.outcome_date || dog.date || dog.scrape_date;
+            // Tap/click swaps the badge label for the exact local time we detected
+            // this status change (data-ts). Only newer dogs carry a real timecode.
+            const scTs = dog.status_changed_ts ? formatLocalTimecode(dog.status_changed_ts) : '';
+            const tsCls = scTs ? ' ts-toggle' : '';
+            const tsData = scTs ? ` data-ts="${scTs}"` : '';
             if (dog.status === 'RTO') {
-                statusBadge = `<span class="status-badge status-rto"><i class="fas fa-home"></i> Returned: ${displayDate}</span>`;
+                statusBadge = `<span class="status-badge status-rto${tsCls}"${tsData}><i class="fas fa-home"></i> Returned: ${displayDate}</span>`;
             } else if (dog.status === 'Rescued') {
                 const partner = dog.rescue_partner || 'Rescued';
-                const safePartner = partner.replace(/'/g, "\\'");
-                if (normalizeDate(displayDate) === TODAY_STR) {
-                    isToday = true;
-                    statusBadge = `<span class="status-badge status-rescue" onclick="toggleRescueDate(this, 'Today', '${safePartner}')" title="Tap to see date"><i class="fas fa-ambulance"></i> ${partner}</span><span class="rescue-today-pill"><i class="fas fa-star" style="font-size:0.65rem"></i> Today</span>`;
-                } else {
-                    statusBadge = `<span class="status-badge status-rescue" onclick="toggleRescueDate(this, '${displayDate}', '${safePartner}')" title="Tap to see date"><i class="fas fa-ambulance"></i> ${partner}</span>`;
-                }
+                // Rescued has always been tap-to-reveal: show the precise timecode for
+                // newer dogs, else fall back to the outcome date (preserves old behavior).
+                const isTodayRescue = normalizeDate(displayDate) === TODAY_STR;
+                const rescueReveal = scTs || (isTodayRescue ? 'Today' : displayDate);
+                const todayPill = isTodayRescue
+                    ? `<span class="rescue-today-pill"><i class="fas fa-star" style="font-size:0.65rem"></i> Today</span>`
+                    : '';
+                if (isTodayRescue) isToday = true;
+                statusBadge = `<span class="status-badge status-rescue ts-toggle" data-ts="${rescueReveal}" title="Tap to see date/time"><i class="fas fa-ambulance"></i> ${partner}</span>${todayPill}`;
             } else if (dog.status === 'Adopted') {
                 // FIXED: Normalize both sides to ensure matching regardless of JSON format
                 if (normalizeDate(displayDate) === TODAY_STR) {
                     isToday = true;
-                    statusBadge = `<span class="status-badge status-adopted"><i class="fas fa-heart"></i> Adopted: Today</span>`;
+                    statusBadge = `<span class="status-badge status-adopted${tsCls}"${tsData}><i class="fas fa-heart"></i> Adopted: Today</span>`;
                 } else {
-                    statusBadge = `<span class="status-badge status-adopted"><i class="fas fa-heart"></i> Adopted: ${displayDate}</span>`;
+                    statusBadge = `<span class="status-badge status-adopted${tsCls}"${tsData}><i class="fas fa-heart"></i> Adopted: ${displayDate}</span>`;
                 }
             } else {
                 statusBadge = `<span class="status-badge" style="border:1px solid #555; color:#aaa;">${dog.status}</span>`;
@@ -1154,7 +1191,11 @@ opacity: 0;
             if (safeDays >= 30) badgeClass = 'los-red';
             else if (safeDays >= 15) badgeClass = 'los-yellow';
             const dayText = safeDays === 0 ? 'Today' : (safeDays === 1 ? 'Yesterday' : `${safeDays} Days`);
-            statusBadge = `<span class="status-badge ${badgeClass}">${dayText}</span>`;
+            if (dog.first_seen_ts) {
+                statusBadge = `<span class="status-badge ${badgeClass} ts-toggle" data-ts="${formatLocalTimecode(dog.first_seen_ts)}" title="Tap to see when first seen">${dayText}</span>`;
+            } else {
+                statusBadge = `<span class="status-badge ${badgeClass}">${dayText}</span>`;
+            }
         }
 
         let strayBadge = '';
@@ -1438,16 +1479,6 @@ opacity: 0;
             el.innerHTML = `<span style="font-size:0.8em; color:var(--text-muted); font-weight:normal;">FKA:</span> ${aka}`;
             el.setAttribute('data-showing', 'aka');
             el.title = "Tap to show current name";
-        }
-    }
-
-    function toggleRescueDate(el, date, partner) {
-        if (el.getAttribute('data-showing') === 'date') {
-            el.innerHTML = `<i class="fas fa-ambulance"></i> ${partner}`;
-            el.setAttribute('data-showing', 'partner');
-        } else {
-            el.innerHTML = `<i class="fas fa-calendar-alt"></i> ${date}`;
-            el.setAttribute('data-showing', 'date');
         }
     }
 
