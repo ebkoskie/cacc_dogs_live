@@ -11,9 +11,12 @@
         /* Note: :root Variables are now in partials/navbar.html */
 
         /* Base styles that don't belong in the navbar partial */
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; 
-            background: var(--bg); color: var(--text); 
+        /* Reserve the scrollbar gutter so opening the legend modal (which locks body
+           scroll) doesn't shift the page horizontally. */
+        html { scrollbar-gutter: stable; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: var(--bg); color: var(--text);
             margin: 0; padding: 0; line-height: 1.5;
             padding-top: calc(var(--header-height) + 16px); /* Offset for fixed header */
             transition: background 0.3s, color 0.3s; 
@@ -102,8 +105,8 @@
 
         /* Trend indicator badge (today-vs-yesterday arrow + hover tooltip) */
         .trend-indicator { font-size: 0.9rem; cursor: help; position: relative; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); }
-        .trend-good { color: #238636; border-color: rgba(35, 134, 54, 0.3); }
-        .trend-bad { color: #da3633; border-color: rgba(218, 54, 51, 0.3); }
+        .trend-good { color: #4AA564; border-color: rgba(74, 165, 100, 0.3); }
+        .trend-bad { color: #CC393E; border-color: rgba(204, 57, 62, 0.3); }
         .trend-neutral { color: var(--text-muted); }
         .trend-indicator::after { content: attr(data-tooltip); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1f2428; color: #f0f6fc; padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.2s, transform 0.2s; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 20; font-weight: normal; }
         .trend-indicator:hover::after { opacity: 1; transform: translateX(-50%) translateY(-2px); }
@@ -145,7 +148,7 @@
     }
     
     .btn-apply {
-        background: var(--accent); color: white; border: none; padding: 6px 15px;
+        background: var(--accent); color: var(--on-accent); border: none; padding: 6px 15px;
         border-radius: 6px; cursor: pointer; font-weight: 600; transition: opacity 0.2s;
         font-size: 0.9rem; display: flex; align-items: center; gap: 6px;
     }
@@ -158,7 +161,7 @@
         font-weight: 600; transition: all 0.2s; font-family: inherit;
     }
     .quick-btn:hover { border-color: var(--accent); color: var(--accent); }
-    .quick-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+    .quick-btn.active { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
     .quick-btn .dismiss { margin-left: 4px; font-size: 0.7rem; opacity: 0.8; }
     .quick-btn .dismiss:hover { opacity: 1; }
 
@@ -348,7 +351,8 @@
         --header-height: 64px;
         --header-bg: rgba(13, 17, 23, 0.85);
         --nav-item-hover: rgba(177, 186, 196, 0.12);
-        --accent: #58a6ff;
+        --accent: #41B6E6;
+        --on-accent: #0d1117; /* readable text/icon on a filled --accent surface */
         --text: #c9d1d9;
         --text-muted: #8b949e;
         --border: #30363d;
@@ -357,17 +361,23 @@
         --input-bg: #0d1117;
         --card-shadow: rgba(0,0,0,0.3);
 
-        /* Badge & Status Colors (Dark Mode) */
-        --gender-male-text: #79c0ff; --gender-male-bg: rgba(56, 139, 253, 0.15); --gender-male-border: rgba(56, 139, 253, 0.4);
+        /* Chicago Design System brand hues (shared, theme-independent) */
+        --cds-flag-blue: #41B6E6; --cds-malibu-blue: #0075BB;
+        --cds-green: #2E8540; --cds-green-light: #4AA564; --cds-green-lightest: #E7F4E4;
+        --cds-gold: #FDB81E; --cds-gold-light: #F9C642;
+        --cds-red-dark: #CC393E; --cds-red-light: #E59393;
+
+        /* Badge & Status Colors (Dark Mode) — Chicago palette, lighter tints for dark bg */
+        --gender-male-text: #41B6E6; --gender-male-bg: rgba(65, 182, 230, 0.15); --gender-male-border: rgba(65, 182, 230, 0.4);
         --gender-female-text: #ff7b72; --gender-female-bg: rgba(235, 87, 87, 0.15); --gender-female-border: rgba(235, 87, 87, 0.4);
         --stray-text: #d2a8ff; --stray-bg: rgba(187, 128, 255, 0.15); --stray-border: rgba(187, 128, 255, 0.4);
-        --hold-text: #f0c674; --hold-bg: rgba(240, 198, 116, 0.15); --hold-border: rgba(240, 198, 116, 0.4);
+        --hold-text: #F9C642; --hold-bg: rgba(253, 184, 30, 0.15); --hold-border: rgba(253, 184, 30, 0.4);
         --rescue-only-text: #e09070; --rescue-only-bg: rgba(224, 144, 112, 0.15); --rescue-only-border: rgba(224, 144, 112, 0.4);
 
-        --success-text: #7ee787; --success-bg: rgba(46, 160, 67, 0.15); --success-border: rgba(46, 160, 67, 0.4);
-        --warning-text: #d29922; --warning-bg: rgba(187, 128, 9, 0.15);  --warning-border: rgba(187, 128, 9, 0.4);
-        --danger-text: #ffa198;  --danger-bg: rgba(248, 81, 73, 0.15);  --danger-border: rgba(248, 81, 73, 0.4);
-        --info-text: #a5d6ff;    --info-bg: rgba(56, 139, 253, 0.15);   --info-border: rgba(56, 139, 253, 0.4);
+        --success-text: #4AA564; --success-bg: rgba(46, 133, 64, 0.15); --success-border: rgba(46, 133, 64, 0.4);
+        --warning-text: #F9C642; --warning-bg: rgba(253, 184, 30, 0.15);  --warning-border: rgba(253, 184, 30, 0.4);
+        --danger-text: #E59393;  --danger-bg: rgba(204, 57, 62, 0.15);  --danger-border: rgba(204, 57, 62, 0.4);
+        --info-text: #A4D5EE;    --info-bg: rgba(65, 182, 230, 0.15);   --info-border: rgba(65, 182, 230, 0.4);
         
         --rto-text: var(--warning-text); --rto-bg: var(--warning-bg); --rto-border: var(--warning-border);
         --rescue-text: var(--info-text); --rescue-bg: var(--info-bg); --rescue-border: var(--info-border);
@@ -379,7 +389,8 @@
     body.light-mode {
         --header-bg: rgba(255, 255, 255, 0.85);
         --nav-item-hover: rgba(0, 0, 0, 0.08);
-        --accent: #0969da;
+        --accent: #0075BB;
+        --on-accent: #ffffff;
         --text: #24292f;
         --text-muted: #57606a;
         --border: #d0d7de;
@@ -388,16 +399,16 @@
         --input-bg: #ffffff;
         --card-shadow: rgba(0,0,0,0.1);
 
-        --gender-male-text: #0969da; --gender-male-bg: #ddf4ff; --gender-male-border: #54aeff;
+        --gender-male-text: #0075BB; --gender-male-bg: #E1F3F8; --gender-male-border: #A4D5EE;
         --gender-female-text: #bf3989; --gender-female-bg: #ffeff7; --gender-female-border: #ff80c8;
         --stray-text: #8250df; --stray-bg: #fbefff; --stray-border: #d4a7ff;
-        --hold-text: #8a6d3b; --hold-bg: #fef9e7; --hold-border: #f0c674;
+        --hold-text: #8a6d3b; --hold-bg: #FFF1D2; --hold-border: #F9C642;
         --rescue-only-text: #9a4a2a; --rescue-only-bg: #fdf0eb; --rescue-only-border: #e09070;
-        
-        --success-text: #1a7f37; --success-bg: #dafbe1; --success-border: #4ac26b;
-        --warning-text: #9a6700; --warning-bg: #fff8c5; --warning-border: #d4a72c;
-        --danger-text: #cf222e; --danger-bg: #ffebe9; --danger-border: #ff8182;
-        --info-text: #0969da;    --info-bg: #ddf4ff;    --info-border: #54aeff;
+
+        --success-text: #2E8540; --success-bg: #E7F4E4; --success-border: #94BFA2;
+        --warning-text: #9a6700; --warning-bg: #FFF1D2; --warning-border: #F9C642;
+        --danger-text: #CC393E; --danger-bg: #FBD9DF; --danger-border: #E59393;
+        --info-text: #0075BB;    --info-bg: #E1F3F8;    --info-border: #A4D5EE;
         
         --row-hover: #eaeef2;
     }
@@ -535,7 +546,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable()><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: June 05, 2026 01:55 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable()><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: June 05, 2026 02:16 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -780,13 +791,13 @@
     ];
     // Explicit colors for bar chart segments
     const BAR_COLORS = {
-        Rescued: '#238636',
-        Adopted: '#58a6ff',
-        RTO: '#d29922',
-        Other: '#da3633'
+        Rescued: '#4AA564',
+        Adopted: '#41B6E6',
+        RTO: '#F9C642',
+        Other: '#CC393E'
     };
 
-    const GENDER_COLORS = { Male: '#79c0ff', Female: '#ff7b72' };
+    const GENDER_COLORS = { Male: '#41B6E6', Female: '#ff7b72' };
     const STRAY_COLORS = { Stray: '#d2a8ff', NonStray: '#8b949e' };
     const MIN_BREED_THRESHOLD = 5;
 
@@ -804,18 +815,18 @@
 
     function ageColor(months, minM, maxM) {
         const t = maxM > minM ? (months - minM) / (maxM - minM) : 0.5;
-        // Green (#3fb950) -> Yellow (#d29922) -> Red (#f85149)
+        // CDS Green (#4AA564) -> Gold (#F9C642) -> Red (#CC393E)
         if (t < 0.5) {
             const p = t * 2;
-            const r = Math.round(0x3f + (0xd2 - 0x3f) * p);
-            const g = Math.round(0xb9 + (0x99 - 0xb9) * p);
-            const b = Math.round(0x50 + (0x22 - 0x50) * p);
+            const r = Math.round(0x4a + (0xf9 - 0x4a) * p);
+            const g = Math.round(0xa5 + (0xc6 - 0xa5) * p);
+            const b = Math.round(0x64 + (0x42 - 0x64) * p);
             return `rgb(${r},${g},${b})`;
         } else {
             const p = (t - 0.5) * 2;
-            const r = Math.round(0xd2 + (0xf8 - 0xd2) * p);
-            const g = Math.round(0x99 + (0x51 - 0x99) * p);
-            const b = Math.round(0x22 + (0x49 - 0x22) * p);
+            const r = Math.round(0xf9 + (0xcc - 0xf9) * p);
+            const g = Math.round(0xc6 + (0x39 - 0xc6) * p);
+            const b = Math.round(0x42 + (0x3e - 0x42) * p);
             return `rgb(${r},${g},${b})`;
         }
     }
