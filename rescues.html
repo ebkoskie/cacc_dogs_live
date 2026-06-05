@@ -121,6 +121,7 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
 .chart-container { background: var(--row); padding: 20px; border-radius: 6px; border: 1px solid var(--border); height: 600px; position: relative; margin-bottom: 10px; }
 .chart-legend { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; }
 .chart-legend-gradient { width: 120px; height: 10px; border-radius: 5px; background: linear-gradient(to right, #4AA564, #F9C642, #CC393E); }
+body.light-mode .chart-legend-gradient { background: linear-gradient(to right, #2E8540, #9a6700, #CC393E); }
 .chart-hint { text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-top: 5px; font-style: italic; margin-bottom: 30px; }
 
 /* Tile Grid */
@@ -472,7 +473,7 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button><div class=quick-dates><button class=btn-quick onclick=quickDate(7)>7d</button><button class="btn-quick active" onclick=quickDate(30)>30d</button><button class=btn-quick onclick=quickDate(90)>90d</button><button class=btn-quick onclick=quickDate(0)>All</button></div></div><div id=activeFilterBar class=active-filter-bar><span class=active-filter-bar-label><i class="fas fa-filter" style=margin-right:4px;></i> Viewing:</span><span id=filterPill class=filter-pill><span id=filterPillText></span><button class=filter-pill-close onclick=clearActiveFilter() title="Clear filter">&times;</button></span><button class=btn-reset-filter onclick=clearActiveFilter()><i class="fas fa-undo"></i> Reset to 30 Days</button></div><div class=stats-banner><div class="stat-card clickable" onclick=showTodayRescues() title="Click to see today's heroes!"><i class="fas fa-calendar-day stat-icon"></i><div class=stat-info><span class=stat-value id=countToday>0</span><span class=stat-label>Rescues Today</span></div></div><div class=stat-card><i class="fas fa-history stat-icon" style="color: var(--success-text);"></i><div class=stat-info><span class=stat-value id=countTotal>0</span><span class=stat-label id=labelTotal>Total in Range</span></div></div><div class=stat-card><i class="fas fa-clock stat-icon" style="color: var(--warning-text);"></i><div class=stat-info><span class=stat-value id=avgLos>&mdash;</span><span class=stat-label>Avg Shelter Stay</span></div></div><div class=stat-card><i class="fas fa-hands-helping stat-icon" style="color: var(--info-text);"></i><div class=stat-info><span class=stat-value id=uniquePartners>0</span><span class=stat-label id=labelPartners>Partners in Range</span></div></div></div><div class=chart-container><canvas id=rescueChart></canvas></div><div class=chart-legend><span>Short stay</span><div class=chart-legend-gradient></div><span>Long stay</span></div><div class=chart-hint>Bar color reflects average shelter stay before rescue. Tap any bar for breed details.</div><div id=drillDownSection><div class=details-header><h2 class=details-title id=selectedPartnerName>Partner Details</h2><button class=close-btn onclick=closeDrillDown()>Close Details <i class="fas fa-times"></i></button></div><div id=drillDownStats class=drill-down-stats></div><div class=details-grid><div class=charts-column><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Composition </h3><div class=pie-container><canvas id=breedPieChart></canvas></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Sizes</h3><div class=pie-container id=sizeChartContainer><canvas id=sizePieChart></canvas></div></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Recent Pulls (In Range)</h3><div class=table-container><table id=drillDownTable><thead><tr><th>Date</th><th>Name</th><th>Breed</th><th>Stay</th></tr></thead><tbody id=drillDownBody></tbody></table></div></div></div><div class=drill-down-footer><button class=btn-back onclick=closeDrillDown()><i class="fas fa-arrow-left"></i> Back to all rescues</button></div></div><div id=recentRescuesSection><h2 id=gridTitle style="margin: 0 0 10px 0;">Rescues in Range</h2><div class=search-wrapper><input type=text id=searchRecent placeholder="Filter visible cards (e.g. 'Paws', 'Bulldog')..."></div><div id=recentGrid class=dog-grid></div></div><div class=footer><span>Last Updated: June 05, 2026 04:44 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button><div class=quick-dates><button class=btn-quick onclick=quickDate(7)>7d</button><button class="btn-quick active" onclick=quickDate(30)>30d</button><button class=btn-quick onclick=quickDate(90)>90d</button><button class=btn-quick onclick=quickDate(0)>All</button></div></div><div id=activeFilterBar class=active-filter-bar><span class=active-filter-bar-label><i class="fas fa-filter" style=margin-right:4px;></i> Viewing:</span><span id=filterPill class=filter-pill><span id=filterPillText></span><button class=filter-pill-close onclick=clearActiveFilter() title="Clear filter">&times;</button></span><button class=btn-reset-filter onclick=clearActiveFilter()><i class="fas fa-undo"></i> Reset to 30 Days</button></div><div class=stats-banner><div class="stat-card clickable" onclick=showTodayRescues() title="Click to see today's heroes!"><i class="fas fa-calendar-day stat-icon"></i><div class=stat-info><span class=stat-value id=countToday>0</span><span class=stat-label>Rescues Today</span></div></div><div class=stat-card><i class="fas fa-history stat-icon" style="color: var(--success-text);"></i><div class=stat-info><span class=stat-value id=countTotal>0</span><span class=stat-label id=labelTotal>Total in Range</span></div></div><div class=stat-card><i class="fas fa-clock stat-icon" style="color: var(--warning-text);"></i><div class=stat-info><span class=stat-value id=avgLos>&mdash;</span><span class=stat-label>Avg Shelter Stay</span></div></div><div class=stat-card><i class="fas fa-hands-helping stat-icon" style="color: var(--info-text);"></i><div class=stat-info><span class=stat-value id=uniquePartners>0</span><span class=stat-label id=labelPartners>Partners in Range</span></div></div></div><div class=chart-container><canvas id=rescueChart role=img aria-label="Top Rescue Partners bar chart. Tells how many dogs each partner pulled in the selected date range. Tap a bar to view breed details."></canvas></div><div class=chart-legend><span>Short stay</span><div class=chart-legend-gradient></div><span>Long stay</span></div><div class=chart-hint>Bar color reflects average shelter stay before rescue. Tap any bar for breed details.</div><div id=drillDownSection><div class=details-header><h2 class=details-title id=selectedPartnerName tabindex=-1 style="outline: none;">Partner Details</h2><button class=close-btn onclick=closeDrillDown()>Close Details <i class="fas fa-times"></i></button></div><div id=drillDownStats class=drill-down-stats></div><div class=details-grid><div class=charts-column><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Composition </h3><div class=pie-container><canvas id=breedPieChart role=img aria-label="Breed Composition doughnut chart for this rescue partner. Detailed data is available in the Recent Pulls table on the right."></canvas></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Sizes</h3><div class=pie-container id=sizeChartContainer><canvas id=sizePieChart role=img aria-label="Dog Size Category doughnut chart for this rescue partner."></canvas></div></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Recent Pulls (In Range)</h3><div class=table-container><table id=drillDownTable><thead><tr><th>Date</th><th>Name</th><th>Breed</th><th>Stay</th></tr></thead><tbody id=drillDownBody></tbody></table></div></div></div><div class=drill-down-footer><button class=btn-back onclick=closeDrillDown()><i class="fas fa-arrow-left"></i> Back to all rescues</button></div></div><div id=recentRescuesSection><h2 id=gridTitle tabindex=-1 style="margin: 0 0 10px 0; outline: none;">Rescues in Range</h2><div class=search-wrapper><input type=text id=searchRecent placeholder="Filter visible cards (e.g. 'Paws', 'Bulldog')..."></div><div id=recentGrid class=dog-grid></div></div><div class=footer><span>Last Updated: June 05, 2026 04:56 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -637,11 +638,13 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
         }
     };
 
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     const GLOBAL_CHART_OPTS = {
         responsive: true,
         maintainAspectRatio: false,
         interaction: { mode: 'index', intersect: false },
-        animation: { duration: 800, easing: 'easeOutQuart' },
+        animation: prefersReducedMotion ? { duration: 0 } : { duration: 800, easing: 'easeOutQuart' },
         plugins: {
             legend: { labels: { color: '#c9d1d9' } },
             filler: { propagate: false },
@@ -674,18 +677,175 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
         }
     };
 
+    // Shared color interpolation helper (Green -> Gold -> Red)
+    // t should be a value from 0 to 1
+    function getThemeColorInterpolation(t) {
+        var isLight = document.body.classList.contains('light-mode');
+        // Endpoints:
+        // Short/Young (Green): Dark = (74, 165, 100), Light = (46, 133, 64)
+        // Mid (Gold): Dark = (249, 198, 66), Light = (154, 103, 0)
+        // Long/Old (Red): Dark = (204, 57, 62), Light = (204, 57, 62)
+        var g_r = isLight ? 46 : 74,  g_g = isLight ? 133 : 165, g_b = isLight ? 64 : 100;
+        var y_r = isLight ? 154 : 249, y_g = isLight ? 103 : 198, y_b = isLight ? 0 : 66;
+        var r_r = 204,                r_g = 57,                  r_b = 62;
+        var r, g, b;
+        
+        t = Math.max(0, Math.min(1, t)); // clamp t to 0..1
+        
+        if (t < 0.5) {
+            var p = t * 2; // 0..1 within first half
+            r = Math.round(g_r + (y_r - g_r) * p);
+            g = Math.round(g_g + (y_g - g_g) * p);
+            b = Math.round(g_b + (y_b - g_b) * p);
+        } else {
+            var p = (t - 0.5) * 2; // 0..1 within second half
+            r = Math.round(y_r + (r_r - y_r) * p);
+            g = Math.round(y_g + (r_g - y_g) * p);
+            b = Math.round(y_b + (r_b - y_b) * p);
+        }
+        return 'rgb(' + r + ',' + g + ',' + b + ')';
+    }
+
     // Light/dark mode observer — updates Chart.js defaults when theme toggles
     (function () {
-        function applyChartTheme() {
+        const isLightInit = document.body.classList.contains('light-mode');
+        const tInit = isLightInit ? CHART_THEMES.light : CHART_THEMES.dark;
+
+        // Apply theme to defaults immediately
+        Chart.defaults.color = tInit.muted;
+        Chart.defaults.borderColor = tInit.grid;
+
+        // Mutate GLOBAL_CHART_OPTS properties to match initial theme
+        if (GLOBAL_CHART_OPTS.plugins && GLOBAL_CHART_OPTS.plugins.legend && GLOBAL_CHART_OPTS.plugins.legend.labels) {
+            GLOBAL_CHART_OPTS.plugins.legend.labels.color = tInit.text;
+        }
+        if (GLOBAL_CHART_OPTS.plugins && GLOBAL_CHART_OPTS.plugins.tooltip) {
+            GLOBAL_CHART_OPTS.plugins.tooltip.backgroundColor = tInit.tooltipBg;
+            GLOBAL_CHART_OPTS.plugins.tooltip.titleColor = tInit.text;
+            GLOBAL_CHART_OPTS.plugins.tooltip.bodyColor = tInit.text;
+            GLOBAL_CHART_OPTS.plugins.tooltip.borderColor = tInit.tooltipBorder;
+        }
+        ['x', 'y'].forEach(axis => {
+            if (GLOBAL_CHART_OPTS.scales && GLOBAL_CHART_OPTS.scales[axis]) {
+                if (GLOBAL_CHART_OPTS.scales[axis].grid) GLOBAL_CHART_OPTS.scales[axis].grid.color = tInit.grid;
+                if (GLOBAL_CHART_OPTS.scales[axis].ticks) GLOBAL_CHART_OPTS.scales[axis].ticks.color = tInit.muted;
+            }
+        });
+
+        const colorMapLight = {
+            // Dark -> Light mappings
+            '#a371f7': '#8250df',
+            'rgba(163, 113, 247, 0.1)': 'rgba(130, 80, 223, 0.1)',
+            '#60a5fa': '#0969da',
+            '#58a6ff': '#0969da',
+            'rgba(96, 165, 250, 0.10)': 'rgba(9, 105, 218, 0.10)',
+            'rgba(88, 166, 255, 0.1)': 'rgba(9, 105, 218, 0.1)',
+            '#34d399': '#1a7f37',
+            '#4AA564': '#2E8540', // CDS Green
+            'rgba(52, 211, 153, 0.10)': 'rgba(26, 127, 55, 0.10)',
+            'rgba(74, 165, 100, 0.15)': 'rgba(26, 127, 55, 0.15)',
+            'rgba(74, 165, 100, 0.2)': 'rgba(26, 127, 55, 0.15)',
+            '#fbbf24': '#b58900',
+            '#F9C642': '#9a6700', // CDS Gold Dark
+            '#d29922': '#b58900',
+            'rgba(251, 191, 36, 0.10)': 'rgba(181, 137, 0, 0.10)',
+            '#f0883e': '#bc4c00',
+            'rgba(240, 136, 62, 0.35)': 'rgba(188, 76, 0, 0.2)',
+            '#d2a8ff': '#8250df',
+            'rgba(210, 168, 255, 0.3)': 'rgba(130, 80, 223, 0.15)',
+            'rgba(210, 168, 255, 0.35)': 'rgba(130, 80, 223, 0.15)',
+            'rgba(210, 168, 255, 0.6)': 'rgba(130, 80, 223, 0.5)',
+            'rgba(88, 166, 255, 0.6)': 'rgba(9, 105, 218, 0.5)',
+            '#CC393E': '#CC393E', // CDS Red Dark (kept same for light mode, contrast > 4.5:1)
+            '#da3633': '#cf222e',
+            'rgba(204, 57, 62, 0.45)': 'rgba(207, 34, 46, 0.2)',
+            'rgba(204, 57, 62, 0.3)': 'rgba(207, 34, 46, 0.15)',
+            'rgba(204, 57, 62, 0.2)': 'rgba(207, 34, 46, 0.15)',
+            'rgba(176, 120, 120, 0.45)': 'rgba(207, 34, 46, 0.25)',
+            'rgba(176, 120, 120, 0.6)': 'rgba(207, 34, 46, 0.4)',
+            '#b07878': '#cf222e',
+            
+            // Expanded colors for Rescues & Breeds
+            '#ff7b72': '#bf3989',             // Female pink
+            '#8b949e': '#57606a',             // Muted gray / Stray NonStray
+            '#6e7681': '#57606a',             // Other / Unknown Gray
+            '#f85149': '#CC393E',             // CDS Red Dark
+            '#db6d28': '#9a4a2a',             // CDS terracotta orange
+            '#41B6E6': '#0075BB',             // Adopted/Male blue (CDS Malibu Blue)
+            '#1f6feb': '#0075BB',             // Blue (CDS Malibu Blue)
+            '#238636': '#2E8540',             // CDS Green
+            '#3fb950': '#2E8540',             // Green (CDS Green - added for rescues drill-down)
+            '#2ea043': '#2E8540',             // Green (CDS Green)
+            '#8957e5': '#8250df',             // Purple
+            '#bc8cff': '#8250df',             // Light Purple
+            '#e3b341': '#9a6700',             // CDS Gold Dark
+            '#9e6a03': '#9a6700',             // Dark Gold (CDS Gold Dark)
+            '#39c5cf': '#0075BB',             // Cyan / Small Size (CDS Malibu Blue)
+            '#f778ba': '#bf3989',             // Pink
+            '#30363d': '#d0d7de'              // Border/Grid Gray
+        };
+
+        let lastThemeWasLight = document.body.classList.contains('light-mode');
+        function applyChartTheme(mutations) {
             const isLight = document.body.classList.contains('light-mode');
+            if (mutations && lastThemeWasLight === isLight) return; // guard against redundant class observations
+            lastThemeWasLight = isLight;
+
             const t = isLight ? CHART_THEMES.light : CHART_THEMES.dark;
             Chart.defaults.color = t.muted;
             Chart.defaults.borderColor = t.grid;
             // Update all existing chart instances
             Chart.instances && Object.values(Chart.instances).forEach(c => {
                 if (!c || !c.options) return;
+                
+                // Swap dataset colors dynamically
+                c.data.datasets.forEach(ds => {
+                    if (ds._origBorderColor === undefined) ds._origBorderColor = ds.borderColor;
+                    if (ds._origBackgroundColor === undefined) ds._origBackgroundColor = ds.backgroundColor;
+                    if (ds._orig_color === undefined) ds._orig_color = ds._color;
+                    if (ds._orig_bg === undefined) ds._orig_bg = ds._bg;
+                    if (ds._origFill === undefined) ds._origFill = ds.fill ? JSON.parse(JSON.stringify(ds.fill)) : null;
+
+                    if (isLight) {
+                        // Apply light mode color transformations
+                        if (ds._origBorderColor && typeof ds._origBorderColor === 'string') {
+                            ds.borderColor = colorMapLight[ds._origBorderColor] || ds._origBorderColor;
+                        }
+                        if (ds._origBackgroundColor) {
+                            if (typeof ds._origBackgroundColor === 'string') {
+                                ds.backgroundColor = colorMapLight[ds._origBackgroundColor] || ds._origBackgroundColor;
+                            } else if (Array.isArray(ds._origBackgroundColor)) {
+                                ds.backgroundColor = ds._origBackgroundColor.map(color => colorMapLight[color] || color);
+                            }
+                        }
+                        if (ds._orig_color) {
+                            ds._color = colorMapLight[ds._orig_color] || ds._orig_color;
+                        }
+                        if (ds._orig_bg) {
+                            ds._bg = colorMapLight[ds._orig_bg] || ds._orig_bg;
+                        }
+                        if (ds._origFill && typeof ds._origFill === 'object' && ds.fill) {
+                            ds.fill.above = colorMapLight[ds._origFill.above] || ds._origFill.above;
+                            ds.fill.below = colorMapLight[ds._origFill.below] || ds._origFill.below;
+                        }
+                    } else {
+                        // Revert to original dark mode colors
+                        ds.borderColor = ds._origBorderColor;
+                        ds.backgroundColor = ds._origBackgroundColor;
+                        ds._color = ds._orig_color;
+                        ds._bg = ds._orig_bg;
+                        if (ds._origFill && ds.fill) {
+                            ds.fill.above = ds._origFill.above;
+                            ds.fill.below = ds._origFill.below;
+                        }
+                    }
+                });
+
                 if (c.options.plugins && c.options.plugins.legend && c.options.plugins.legend.labels) {
                     c.options.plugins.legend.labels.color = t.text;
+                }
+                if (c.options.plugins && c.options.plugins.title) {
+                    c.options.plugins.title.color = t.text;
                 }
                 if (c.options.plugins && c.options.plugins.tooltip) {
                     c.options.plugins.tooltip.backgroundColor = t.tooltipBg;
@@ -704,6 +864,11 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
         }
         const observer = new MutationObserver(applyChartTheme);
         observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+        // Run once on load to ensure theme is applied to charts initialized on page load
+        window.addEventListener('load', applyChartTheme);
+        // Expose globally so it can be triggered manually if needed
+        window.applyChartTheme = applyChartTheme;
     })();
 </script><script src=assets/js/decompress.js></script><script>
     let ALL_DATA = [];
@@ -975,23 +1140,11 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
     // --- LOS Color Helpers ---
     // Maps avg LOS to a green → amber → red gradient
     function losColor(avgLos) {
-        if (avgLos < 0) return '#41B6E6'; // fallback blue when no LOS data
+        var isLight = document.body.classList.contains('light-mode');
+        if (avgLos < 0) return isLight ? '#0075BB' : '#41B6E6'; // fallback blue
         // Clamp to 0..90 range for gradient
         var t = Math.min(avgLos, 90) / 90; // 0 = short, 1 = long
-        // CDS Green (#4AA564) → Gold (#F9C642) → Red (#CC393E)
-        var r, g, b;
-        if (t < 0.5) {
-            var p = t * 2; // 0..1 within first half
-            r = Math.round(74 + (249 - 74) * p);
-            g = Math.round(165 + (198 - 165) * p);
-            b = Math.round(100 + (66 - 100) * p);
-        } else {
-            var p = (t - 0.5) * 2; // 0..1 within second half
-            r = Math.round(249 + (204 - 249) * p);
-            g = Math.round(198 + (57 - 198) * p);
-            b = Math.round(66 + (62 - 66) * p);
-        }
-        return 'rgb(' + r + ',' + g + ',' + b + ')';
+        return getThemeColorInterpolation(t);
     }
 
     function partnerStats(data) {
@@ -1021,6 +1174,7 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
             var meta = chart.getDatasetMeta(0);
             if (!meta || !chart._barLabelData) return;
             var labelData = chart._barLabelData;
+            var isLight = document.body.classList.contains('light-mode');
             ctx.save();
             ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif';
             ctx.textBaseline = 'middle';
@@ -1034,10 +1188,10 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
                 var chartRight = chart.chartArea.right;
                 var textW = ctx.measureText(label).width;
                 if (x + textW > chartRight - 4) {
-                    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+                    ctx.fillStyle = 'rgba(255,255,255,0.95)';
                     x = bar.x - textW - 6;
                 } else {
-                    ctx.fillStyle = '#c9d1d9';
+                    ctx.fillStyle = isLight ? '#57606a' : '#c9d1d9';
                 }
                 ctx.fillText(label, x, y);
             });
@@ -1054,6 +1208,9 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
         if (rescueChart) rescueChart.destroy();
 
         var colors = sorted.map(function (s) { return losColor(s.avgLos); });
+
+        var isLight = document.body.classList.contains('light-mode');
+        var t = isLight ? CHART_THEMES.light : CHART_THEMES.dark;
 
         rescueChart = new Chart(ctx, {
             type: 'bar',
@@ -1082,7 +1239,7 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
                 },
                 plugins: {
                     ...GLOBAL_CHART_OPTS.plugins,
-                    title: { display: true, text: 'Top ' + topN + ' Rescue Partners', color: '#c9d1d9', font: { size: 16 } },
+                    title: { display: true, text: 'Top ' + topN + ' Rescue Partners', color: t.text, font: { size: 16 } },
                     legend: { display: false },
                     tooltip: {
                         callbacks: {
@@ -1097,8 +1254,8 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
                     }
                 },
                 scales: {
-                    x: { grid: { color: '#30363d' }, ticks: { color: '#8b949e' } },
-                    y: { grid: { display: false }, ticks: { color: '#c9d1d9' } }
+                    x: { grid: { color: t.grid }, ticks: { color: t.muted } },
+                    y: { grid: { display: false }, ticks: { color: t.text } }
                 }
             }
         });
@@ -1227,9 +1384,12 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
     // --- Drill Down Logic ---
     function showDrillDown(partner, dataContext) {
         ACTIVE_DRILL_DOWN_PARTNER = partner;
+        const isLight = document.body.classList.contains('light-mode');
+        const t = isLight ? CHART_THEMES.light : CHART_THEMES.dark;
         document.getElementById('selectedPartnerName').innerText = partner;
         document.getElementById('drillDownSection').style.display = 'block';
         document.getElementById('recentRescuesSection').style.display = 'none';
+        document.getElementById('selectedPartnerName').focus();
         scrollToElement(document.getElementById('drillDownSection'));
 
         const partnerRecords = (dataContext || FILTERED_DATA).filter(d => d.partner === partner);
@@ -1285,7 +1445,7 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
                 scales: { x: { display: false }, y: { display: false } },
                 plugins: {
                     ...GLOBAL_CHART_OPTS.plugins,
-                    legend: { position: isMobile() ? 'bottom' : 'right', labels: { color: '#c9d1d9', boxWidth: 12 } },
+                    legend: { position: isMobile() ? 'bottom' : 'right', labels: { color: t.text, boxWidth: 12 } },
                     tooltip: {
                         callbacks: {
                             label: function (context) {
@@ -1341,7 +1501,7 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
                         ...GLOBAL_CHART_OPTS.plugins,
                         legend: {
                             position: isMobile() ? 'bottom' : 'right',
-                            labels: { color: '#c9d1d9', boxWidth: 12 }
+                            labels: { color: t.text, boxWidth: 12 }
                         },
                         tooltip: {
                             callbacks: {
@@ -1375,6 +1535,7 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
             drillBody.innerHTML += '<tr><td>' + row.date + '</td>' + nameCell + '<td>' + row.breed + '</td>' + losCell + '</tr>';
         });
         updateFilterBanner();
+        if (window.applyChartTheme) window.applyChartTheme();
     }
 
     function closeDrillDown() {
@@ -1382,6 +1543,7 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
         document.getElementById('drillDownSection').style.display = 'none';
         document.getElementById('recentRescuesSection').style.display = 'block';
         if (sizeChart) { sizeChart.destroy(); sizeChart = null; }
+        document.getElementById('gridTitle').focus();
         window.scrollTo({ top: 0, behavior: smoothOrAuto() });
         updateFilterBanner();
     }
