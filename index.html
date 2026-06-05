@@ -152,16 +152,213 @@ mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent 100%);
 /* --- Freshness + Legend bar (data clarity, scrolls away with content) --- */
 .page-meta { margin-bottom: 12px; }
 .freshness-bar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-.freshness-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 500; color: var(--text-muted); padding: 2px 4px; opacity: 0.85; }
-.freshness-pill.fresh { color: var(--success-text); }
+
+.freshness-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: var(--row);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    transition: all 0.3s ease;
+}
+
+.freshness-pill.fresh {
+    background: rgba(74, 165, 100, 0.1);
+    border-color: rgba(74, 165, 100, 0.35);
+    color: #4AA564;
+}
+
+body.light-mode .freshness-pill.fresh {
+    background: #e7f4e4;
+    border-color: rgba(46, 133, 64, 0.3);
+    color: #2E8540;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    display: inline-block;
+    position: relative;
+}
+
+.freshness-pill.fresh .status-dot {
+    background: #4AA564;
+    box-shadow: 0 0 0 0 rgba(74, 165, 100, 0.7);
+    animation: statusPulse 2s infinite;
+}
+
+body.light-mode .freshness-pill.fresh .status-dot {
+    background: #2E8540;
+    box-shadow: 0 0 0 0 rgba(46, 133, 64, 0.7);
+}
+
+@keyframes statusPulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(74, 165, 100, 0.7);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 6px rgba(74, 165, 100, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(74, 165, 100, 0);
+    }
+}
+
 .legend-toggle { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-size: 0.8rem; padding: 5px 10px; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
 .legend-toggle:hover { color: var(--text); border-color: var(--text-muted); }
 
-.legend-panel { display: none; margin-top: 10px; background: var(--row); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
-.legend-panel.open { display: block; animation: fadeIn 0.25s ease-in; }
-.legend-panel ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px 20px; }
-.legend-panel li { font-size: 0.85rem; color: var(--text-muted); line-height: 1.45; }
-.legend-panel li strong { color: var(--text); font-weight: 600; }
+/* --- Legend Modal Dialog --- */
+.legend-modal {
+    border: none;
+    border-radius: 16px;
+    padding: 0;
+    max-width: 600px;
+    width: 90%;
+    background: var(--row);
+    color: var(--text);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.legend-modal[open] {
+    animation: modalShow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modalShow {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.legend-modal::backdrop {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.legend-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+}
+
+.legend-modal-header h2 {
+    margin: 0;
+    font-size: 1.35rem;
+    font-family: 'Big Shoulders Text', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    color: #41B6E6;
+    text-transform: uppercase;
+}
+
+body.light-mode .legend-modal-header h2 {
+    color: #0075BB;
+}
+
+.close-modal-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.8rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    margin: 0;
+    transition: color 0.2s;
+}
+
+.close-modal-btn:hover {
+    color: var(--text);
+}
+
+.legend-modal-body {
+    padding: 24px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.legend-group-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin: 20px 0 10px 0;
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: 6px;
+}
+
+.legend-group-title:first-child {
+    margin-top: 0;
+}
+
+.legend-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.legend-item {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 16px;
+    align-items: start;
+}
+
+@media (max-width: 600px) {
+    .legend-item {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+}
+
+.legend-badge-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+
+.legend-desc {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+}
+
+.legend-desc strong {
+    color: var(--text);
+}
+
+.los-detail {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+@media (max-width: 480px) {
+    .desktop-only { display: none; }
+}
 
 .chip { white-space: nowrap; padding: 6px 12px; border-radius: 16px; background: var(--row); border: 1px solid var(--border); color: var(--text); font-size: 0.85rem; cursor: pointer; user-select: none; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
 .chip.active { background: var(--accent); color: white; border-color: var(--accent); padding-right: 8px; }
@@ -541,7 +738,7 @@ opacity: 0;
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=page-meta><div class=freshness-bar><span class=freshness-pill id=freshnessPill><i class="fas fa-clock"></i> Updated June 05, 2026 01:54 PM CST</span><button class=legend-toggle onclick=toggleLegend() aria-expanded=false aria-controls=legendPanel><i class="fas fa-circle-info"></i> What do the badges mean?</button></div><div class=legend-panel id=legendPanel><ul><li><strong>⏳ Long Stay</strong> — Has been waiting at CACC a while (30+ days) and could use extra attention.</li><li><strong>📍 Stray</strong> — Found as a stray. CACC holds strays for a few days so an owner can reclaim them before they become available for adoption.</li><li><strong>🔄 Return</strong> — Previously lived at CACC and has come back.</li><li><strong>↩️ RTO</strong> — &ldquo;Returned to Owner&rdquo; — reunited with their family.</li><li><strong>🚑 Rescue-only</strong> — Available to approved rescue partners rather than the general public.</li><li><strong>🏠 Adopted</strong> — Found a new home!</li></ul></div></div><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-favorites onclick="filterByChip('favorites')">❤️ Favorites <span class=chip-badge id=fav-count>0</span> <span class=chip-close>&times;</span></div><div class=chip id=chip-available onclick="filterByChip('available')">✅ Available <span class=chip-close>&times;</span></div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-return_guest onclick="filterByChip('return_guest')">🔄 Returns <span class=chip-close>&times;</span></div><div class=chip id=chip-non_pit onclick="filterByChip('non_pit')">🐩 Non-Pit <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Active Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: June 05, 2026 01:54 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=page-meta><div class=freshness-bar><div class=freshness-pill id=freshnessPill data-updated="June 05, 2026 01:55 PM"><span class=status-dot></span><span class=updated-text>Updated June 05, 2026 01:55 PM</span></div><button class=legend-toggle onclick=openLegendModal()><i class="fas fa-circle-info"></i> What do the badges mean?</button></div><dialog id=legendModal class=legend-modal><div class=legend-modal-header><h2>What do the badges mean?</h2><button class=close-modal-btn onclick=closeLegendModal() aria-label="Close modal">&times;</button></div><div class=legend-modal-body><div class=legend-grid><div class=legend-group-title>Active Dog Badges</div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge los-green">5 Days</span><span class="status-badge los-yellow">18 Days</span><span class="status-badge los-red">35 Days</span></div><div class=legend-desc><strong>Time at CACC:</strong> Indicates how long a dog has been at the shelter. <span class=los-detail><span class=text-success>Green</span> (0-14 days), <span class=text-warning>Yellow</span> (15-29 days), and <span class=text-danger>Red</span> (30+ days / Long Stay). Red status needs urgent attention!</span></div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag stray"><i class="fas fa-map-marker-alt"></i> Stray</span></div><div class=legend-desc><strong>Stray Status:</strong> Found as a stray. CACC holds strays for a mandatory 3-day hold period so owners can reclaim them before they become available for adoption. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag stray chipped"><i class="fas fa-map-marker-alt"></i> <i class="fas fa-microchip"></i> Stray</span></div><div class=legend-desc><strong>Chipped Stray:</strong> A stray found with a microchip. The dashed border indicates CACC is actively contacting the registered owner. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag rescue-only"><i class="fas fa-ambulance"></i> Rescue-only</span></div><div class=legend-desc><strong>Rescue-only:</strong> The dog can only be transferred to approved non-profit rescue partners rather than the general public (often due to medical or behavioral needs). </div></div><div class=legend-group-title>Outcome Badges</div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-adopted"><i class="fas fa-heart"></i> Adopted: Date</span></div><div class=legend-desc><strong>Adopted:</strong> The dog has been officially adopted and has left the shelter! </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-rto"><i class="fas fa-home"></i> Returned: Date</span></div><div class=legend-desc><strong>Returned to Owner (RTO):</strong> Reunited with their family! </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-rescue"><i class="fas fa-ambulance"></i> Rescue Partner</span></div><div class=legend-desc><strong>Rescued:</strong> Transferred to an approved rescue partner to continue their journey toward adoption. </div></div></div></div></dialog></div><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-favorites onclick="filterByChip('favorites')">❤️ Favorites <span class=chip-badge id=fav-count>0</span> <span class=chip-close>&times;</span></div><div class=chip id=chip-available onclick="filterByChip('available')">✅ Available <span class=chip-close>&times;</span></div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-return_guest onclick="filterByChip('return_guest')">🔄 Returns <span class=chip-close>&times;</span></div><div class=chip id=chip-non_pit onclick="filterByChip('non_pit')">🐩 Non-Pit <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Active Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: June 05, 2026 01:55 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -796,17 +993,46 @@ opacity: 0;
 
     document.getElementById('mainSearch').addEventListener('keyup', debounce(handleGlobalSearch, 300));
 
-    // Highlight the freshness pill green if the data was updated today (Chicago time)
-    (function markFreshness() {
+    // Highlight and format the freshness pill using Chicago tertiary green colors if updated today
+    (function formatFreshness() {
         try {
             const pill = document.getElementById('freshnessPill');
             if (!pill) return;
-            const m = pill.textContent.match(/Updated\s+(.+?)\s+CST/);
-            if (!m) return;
-            const updated = new Date(m[1]);
+            const rawTime = pill.dataset.updated;
+            if (!rawTime) return;
+            const updated = new Date(rawTime);
             if (isNaN(updated.getTime())) return;
+            
             const todayChi = siteToday();
-            if (updated.toLocaleDateString("en-CA") === todayChi) pill.classList.add('fresh');
+            const isToday = updated.toLocaleDateString("en-CA") === todayChi;
+            if (isToday) {
+                pill.classList.add('fresh');
+            }
+            
+            // Format display text: "Updated Today, 1:26 PM" or "Updated Jun 5, 1:26 PM"
+            // Hide "Updated" prefix on mobile via .desktop-only CSS class wrapper
+            const timePart = rawTime.split(' ').slice(-2).join(' ').replace(/^0/, ''); // "1:26 PM"
+            const dateParts = rawTime.split(',');
+            const datePart = dateParts[0]; // "June 05" or "June 5"
+            
+            const textEl = pill.querySelector('.updated-text');
+            if (textEl) {
+                if (isToday) {
+                    textEl.innerHTML = `<span class="desktop-only">Updated </span>Today, ${timePart}`;
+                } else {
+                    // Shorten month names for date part if too long
+                    const shortDate = datePart.replace("January", "Jan")
+                                              .replace("February", "Feb")
+                                              .replace("March", "Mar")
+                                              .replace("April", "Apr")
+                                              .replace("August", "Aug")
+                                              .replace("September", "Sep")
+                                              .replace("October", "Oct")
+                                              .replace("November", "Nov")
+                                              .replace("December", "Dec");
+                    textEl.innerHTML = `<span class="desktop-only">Updated </span>${shortDate}, ${timePart}`;
+                }
+            }
         } catch (e) { /* non-critical visual enhancement */ }
     })();
 
@@ -1211,12 +1437,39 @@ opacity: 0;
         filterByChip('all');
     }
 
-    function toggleLegend() {
-        const panel = document.getElementById('legendPanel');
-        const btn = document.querySelector('.legend-toggle');
-        const open = panel.classList.toggle('open');
-        if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    function openLegendModal() {
+        const modal = document.getElementById('legendModal');
+        if (modal) {
+            modal.showModal();
+            document.body.style.overflow = 'hidden';
+        }
     }
+
+    function closeLegendModal() {
+        const modal = document.getElementById('legendModal');
+        if (modal) {
+            modal.close();
+            document.body.style.overflow = '';
+        }
+    }
+
+    // Modal accessibility and light-dismiss
+    document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('legendModal');
+        if (modal) {
+            modal.addEventListener('click', (event) => {
+                const rect = modal.getBoundingClientRect();
+                const isInDialog = (rect.top <= event.clientY && event.clientY <= rect.top + rect.height
+                    && rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
+                if (!isInDialog) {
+                    closeLegendModal();
+                }
+            });
+            modal.addEventListener('cancel', () => {
+                document.body.style.overflow = '';
+            });
+        }
+    });
 
     function resetGrid() {
         displayedCount = 0;
