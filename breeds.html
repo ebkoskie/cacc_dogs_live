@@ -333,7 +333,7 @@
         .table-collapse-wrapper:has(.table-container:not(.expanded))::before { bottom: 42px; }
     }
 
-    </style></head><body><style>
+    </style></head><body><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Text:wght@800&display=swap" rel=stylesheet><style>
     /* --- Global Theme Variables (Moved here to support Map Overlay) --- */
     :root {
         /* Core Colors */
@@ -410,8 +410,73 @@
     }
 
     .brand-section h1 { 
-        color: var(--accent); margin: 0; font-size: 1.25rem; 
-        display: flex; align-items: center; gap: 8px; white-space: nowrap; 
+        margin: 0; font-size: 1.25rem; 
+        display: flex; align-items: center; white-space: nowrap; 
+    }
+    
+    .brand-link {
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        gap: 6px;
+    }
+    
+    .brand-blue-paw {
+        color: #41B6E6;
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    
+    .chistar-svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+    
+    .brand-chicago {
+        font-family: 'Big Shoulders Text', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-weight: 800;
+        font-size: 1.35rem;
+        letter-spacing: 0.04em;
+        color: var(--text);
+        line-height: 1;
+    }
+    
+    .brand-divider {
+        color: var(--border);
+        font-size: 1.1rem;
+        margin: 0 4px;
+        user-select: none;
+    }
+    
+    .brand-title {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--accent);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .brand-badge {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        padding: 2px 6px;
+        border-radius: 4px;
+        background: rgba(139, 148, 158, 0.15);
+        color: var(--text-muted);
+        border: 1px solid var(--border);
+        margin-left: 6px;
+        text-transform: uppercase;
+        line-height: 1;
+        display: inline-block;
+        vertical-align: middle;
     }
 
     /* Desktop Navigation */
@@ -452,7 +517,7 @@
         .nav-links { display: none; }
         .mobile-menu-btn { display: flex; }
     }
-</style><header class=site-header><div class=header-content><div class=brand-section><h1> 🐶 Breed Outcomes </h1></div><nav class=nav-links><a href=index.html class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link active">Breeds</a></nav><div class=actions><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button><button class=mobile-menu-btn onclick=toggleMobileMenu()><i class="fas fa-bars"></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=index.html class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link active"><i class="fas fa-paw" style=width:20px></i> Breeds</a></div></header><script>
+</style><header class=site-header><div class=header-content><div class=brand-section><h1><a href=index.html class=brand-link><i class="fas fa-paw brand-blue-paw"></i><svg class=chistar-svg viewbox="0 0 120 120" xmlns=http://www.w3.org/2000/svg><path fill=#E4002B d="M60 0 L71 41 L112 30 L82 60 L112 90 L71 79 L60 120 L49 79 L8 90 L38 60 L8 30 L49 41 Z"/></svg><span class=brand-chicago>CHI</span><span class=brand-divider>|</span><span class=brand-title> Breed Outcomes <span class=brand-badge>BOT</span></span></a></h1></div><nav class=nav-links><a href=index.html class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link active">Breeds</a></nav><div class=actions><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button><button class=mobile-menu-btn onclick=toggleMobileMenu()><i class="fas fa-bars"></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=index.html class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link active"><i class="fas fa-paw" style=width:20px></i> Breeds</a></div></header><script>
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
         const icon = document.querySelector('.theme-toggle i');
@@ -465,7 +530,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable()><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: June 05, 2026 11:04 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable()><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: June 05, 2026 11:28 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;

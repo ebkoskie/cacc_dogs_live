@@ -259,7 +259,7 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
 .chart-container { height: 380px; }
 }
 
-    </style></head><body><style>
+    </style></head><body><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Text:wght@800&display=swap" rel=stylesheet><style>
     /* --- Global Theme Variables (Moved here to support Map Overlay) --- */
     :root {
         /* Core Colors */
@@ -336,8 +336,73 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
     }
 
     .brand-section h1 { 
-        color: var(--accent); margin: 0; font-size: 1.25rem; 
-        display: flex; align-items: center; gap: 8px; white-space: nowrap; 
+        margin: 0; font-size: 1.25rem; 
+        display: flex; align-items: center; white-space: nowrap; 
+    }
+    
+    .brand-link {
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        gap: 6px;
+    }
+    
+    .brand-blue-paw {
+        color: #41B6E6;
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    
+    .chistar-svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+    
+    .brand-chicago {
+        font-family: 'Big Shoulders Text', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-weight: 800;
+        font-size: 1.35rem;
+        letter-spacing: 0.04em;
+        color: var(--text);
+        line-height: 1;
+    }
+    
+    .brand-divider {
+        color: var(--border);
+        font-size: 1.1rem;
+        margin: 0 4px;
+        user-select: none;
+    }
+    
+    .brand-title {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--accent);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .brand-badge {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        padding: 2px 6px;
+        border-radius: 4px;
+        background: rgba(139, 148, 158, 0.15);
+        color: var(--text-muted);
+        border: 1px solid var(--border);
+        margin-left: 6px;
+        text-transform: uppercase;
+        line-height: 1;
+        display: inline-block;
+        vertical-align: middle;
     }
 
     /* Desktop Navigation */
@@ -378,7 +443,7 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
         .nav-links { display: none; }
         .mobile-menu-btn { display: flex; }
     }
-</style><header class=site-header><div class=header-content><div class=brand-section><h1> 🚑 Rescue Stats </h1></div><nav class=nav-links><a href=index.html class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link active">Rescues</a><a href=breeds.html class="nav-link ">Breeds</a></nav><div class=actions><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button><button class=mobile-menu-btn onclick=toggleMobileMenu()><i class="fas fa-bars"></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=index.html class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=rescues.html class="mobile-link active"><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link "><i class="fas fa-paw" style=width:20px></i> Breeds</a></div></header><script>
+</style><header class=site-header><div class=header-content><div class=brand-section><h1><a href=index.html class=brand-link><i class="fas fa-paw brand-blue-paw"></i><svg class=chistar-svg viewbox="0 0 120 120" xmlns=http://www.w3.org/2000/svg><path fill=#E4002B d="M60 0 L71 41 L112 30 L82 60 L112 90 L71 79 L60 120 L49 79 L8 90 L38 60 L8 30 L49 41 Z"/></svg><span class=brand-chicago>CHI</span><span class=brand-divider>|</span><span class=brand-title> Rescue Stats <span class=brand-badge>BOT</span></span></a></h1></div><nav class=nav-links><a href=index.html class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link active">Rescues</a><a href=breeds.html class="nav-link ">Breeds</a></nav><div class=actions><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button><button class=mobile-menu-btn onclick=toggleMobileMenu()><i class="fas fa-bars"></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=index.html class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=rescues.html class="mobile-link active"><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link "><i class="fas fa-paw" style=width:20px></i> Breeds</a></div></header><script>
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
         const icon = document.querySelector('.theme-toggle i');
@@ -391,7 +456,7 @@ input { background: var(--input-bg); border: 1px solid var(--border); color: var
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button><div class=quick-dates><button class=btn-quick onclick=quickDate(7)>7d</button><button class="btn-quick active" onclick=quickDate(30)>30d</button><button class=btn-quick onclick=quickDate(90)>90d</button><button class=btn-quick onclick=quickDate(0)>All</button></div></div><div id=activeFilterBar class=active-filter-bar><span class=active-filter-bar-label><i class="fas fa-filter" style=margin-right:4px;></i> Viewing:</span><span id=filterPill class=filter-pill><span id=filterPillText></span><button class=filter-pill-close onclick=clearActiveFilter() title="Clear filter">&times;</button></span><button class=btn-reset-filter onclick=clearActiveFilter()><i class="fas fa-undo"></i> Reset to 30 Days</button></div><div class=stats-banner><div class="stat-card clickable" onclick=showTodayRescues() title="Click to see today's heroes!"><i class="fas fa-calendar-day stat-icon"></i><div class=stat-info><span class=stat-value id=countToday>0</span><span class=stat-label>Rescues Today</span></div></div><div class=stat-card><i class="fas fa-history stat-icon" style="color: var(--success-text);"></i><div class=stat-info><span class=stat-value id=countTotal>0</span><span class=stat-label id=labelTotal>Total in Range</span></div></div><div class=stat-card><i class="fas fa-clock stat-icon" style="color: var(--warning-text);"></i><div class=stat-info><span class=stat-value id=avgLos>&mdash;</span><span class=stat-label>Avg Shelter Stay</span></div></div><div class=stat-card><i class="fas fa-hands-helping stat-icon" style="color: var(--info-text);"></i><div class=stat-info><span class=stat-value id=uniquePartners>0</span><span class=stat-label id=labelPartners>Partners in Range</span></div></div></div><div class=chart-container><canvas id=rescueChart></canvas></div><div class=chart-legend><span>Short stay</span><div class=chart-legend-gradient></div><span>Long stay</span></div><div class=chart-hint>Bar color reflects average shelter stay before rescue. Tap any bar for breed details.</div><div id=drillDownSection><div class=details-header><h2 class=details-title id=selectedPartnerName>Partner Details</h2><button class=close-btn onclick=closeDrillDown()>Close Details <i class="fas fa-times"></i></button></div><div id=drillDownStats class=drill-down-stats></div><div class=details-grid><div class=charts-column><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Composition </h3><div class=pie-container><canvas id=breedPieChart></canvas></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Sizes</h3><div class=pie-container id=sizeChartContainer><canvas id=sizePieChart></canvas></div></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Recent Pulls (In Range)</h3><div class=table-container><table id=drillDownTable><thead><tr><th>Date</th><th>Name</th><th>Breed</th><th>Stay</th></tr></thead><tbody id=drillDownBody></tbody></table></div></div></div><div class=drill-down-footer><button class=btn-back onclick=closeDrillDown()><i class="fas fa-arrow-left"></i> Back to all rescues</button></div></div><div id=recentRescuesSection><h2 id=gridTitle style="margin: 0 0 10px 0;">Rescues in Range</h2><div class=search-wrapper><input type=text id=searchRecent placeholder="Filter visible cards (e.g. 'Paws', 'Bulldog')..."></div><div id=recentGrid class=dog-grid></div></div><div class=footer><span>Last Updated: June 05, 2026 11:04 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button><div class=quick-dates><button class=btn-quick onclick=quickDate(7)>7d</button><button class="btn-quick active" onclick=quickDate(30)>30d</button><button class=btn-quick onclick=quickDate(90)>90d</button><button class=btn-quick onclick=quickDate(0)>All</button></div></div><div id=activeFilterBar class=active-filter-bar><span class=active-filter-bar-label><i class="fas fa-filter" style=margin-right:4px;></i> Viewing:</span><span id=filterPill class=filter-pill><span id=filterPillText></span><button class=filter-pill-close onclick=clearActiveFilter() title="Clear filter">&times;</button></span><button class=btn-reset-filter onclick=clearActiveFilter()><i class="fas fa-undo"></i> Reset to 30 Days</button></div><div class=stats-banner><div class="stat-card clickable" onclick=showTodayRescues() title="Click to see today's heroes!"><i class="fas fa-calendar-day stat-icon"></i><div class=stat-info><span class=stat-value id=countToday>0</span><span class=stat-label>Rescues Today</span></div></div><div class=stat-card><i class="fas fa-history stat-icon" style="color: var(--success-text);"></i><div class=stat-info><span class=stat-value id=countTotal>0</span><span class=stat-label id=labelTotal>Total in Range</span></div></div><div class=stat-card><i class="fas fa-clock stat-icon" style="color: var(--warning-text);"></i><div class=stat-info><span class=stat-value id=avgLos>&mdash;</span><span class=stat-label>Avg Shelter Stay</span></div></div><div class=stat-card><i class="fas fa-hands-helping stat-icon" style="color: var(--info-text);"></i><div class=stat-info><span class=stat-value id=uniquePartners>0</span><span class=stat-label id=labelPartners>Partners in Range</span></div></div></div><div class=chart-container><canvas id=rescueChart></canvas></div><div class=chart-legend><span>Short stay</span><div class=chart-legend-gradient></div><span>Long stay</span></div><div class=chart-hint>Bar color reflects average shelter stay before rescue. Tap any bar for breed details.</div><div id=drillDownSection><div class=details-header><h2 class=details-title id=selectedPartnerName>Partner Details</h2><button class=close-btn onclick=closeDrillDown()>Close Details <i class="fas fa-times"></i></button></div><div id=drillDownStats class=drill-down-stats></div><div class=details-grid><div class=charts-column><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Composition </h3><div class=pie-container><canvas id=breedPieChart></canvas></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Sizes</h3><div class=pie-container id=sizeChartContainer><canvas id=sizePieChart></canvas></div></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Recent Pulls (In Range)</h3><div class=table-container><table id=drillDownTable><thead><tr><th>Date</th><th>Name</th><th>Breed</th><th>Stay</th></tr></thead><tbody id=drillDownBody></tbody></table></div></div></div><div class=drill-down-footer><button class=btn-back onclick=closeDrillDown()><i class="fas fa-arrow-left"></i> Back to all rescues</button></div></div><div id=recentRescuesSection><h2 id=gridTitle style="margin: 0 0 10px 0;">Rescues in Range</h2><div class=search-wrapper><input type=text id=searchRecent placeholder="Filter visible cards (e.g. 'Paws', 'Bulldog')..."></div><div id=recentGrid class=dog-grid></div></div><div class=footer><span>Last Updated: June 05, 2026 11:28 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
