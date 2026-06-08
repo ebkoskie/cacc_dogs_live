@@ -371,7 +371,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Sheets expire after a day or two, so re-upload whenever they're rewritten. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet — the processing service hasn't been deployed. Please check back soon. </div><form id=uploadForm class=card-panel><label class=field for=passcode><span>Volunteer passcode</span><input type=password id=passcode name=passcode autocomplete=current-password required></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option></select></label><label class=field for=photo><span>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* capture=environment required></label><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div></form><details class="card-panel admin-panel"><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password></label><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>D</code> plus a number (e.g. <code>C 70</code>), or clear it. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div><div id=adminStatus class=status role=status aria-live=polite></div></details></div><div class=footer><span>Last Updated: June 08, 2026 02:37 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Sheets expire after a day or two, so re-upload whenever they're rewritten. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet — the processing service hasn't been deployed. Please check back soon. </div><form id=uploadForm class=card-panel><label class=field for=passcode><span>Volunteer passcode</span><input type=password id=passcode name=passcode autocomplete=current-password required></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option></select></label><label class=field for=photo><span>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* capture=environment required></label><div id=ts-upload style=margin-bottom:14px;></div><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div></form><details class="card-panel admin-panel"><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password></label><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>D</code> plus a number (e.g. <code>C 70</code>), or clear it. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div><div id=ts-admin style="margin:10px 0;"></div><div id=adminStatus class=status role=status aria-live=polite></div></details></div><div class=footer><span>Last Updated: June 08, 2026 04:02 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -517,8 +517,25 @@
             document.addEventListener('mouseover', handleInteraction, { passive: true });
             document.addEventListener('touchstart', handleInteraction, { passive: true });
         })();
-    </script><script>
-    const PAVILION_API_BASE = "";
+    </script><script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad" async defer></script><script>
+    const PAVILION_API_BASE = "https://pavilion-worker.caccdog.workers.dev";
+    // Public Turnstile site key (safe to expose). Empty when not configured, in
+    // which case the widgets are absent and the worker skips token verification.
+    const TURNSTILE_SITE_KEY = "0x4AAAAAADg9jPJwIBGf1aqy";
+
+    // Explicit render: this page has two widgets (upload + admin), so we capture
+    // each widget id and address them individually. Populated by onTurnstileLoad.
+    let tsUploadId = null, tsAdminId = null;
+    window.onTurnstileLoad = function () {
+        if (!window.turnstile) return;
+        const up = document.getElementById('ts-upload');
+        if (up) tsUploadId = window.turnstile.render(up, { sitekey: TURNSTILE_SITE_KEY });
+        const ad = document.getElementById('ts-admin');
+        if (ad) tsAdminId = window.turnstile.render(ad, { sitekey: TURNSTILE_SITE_KEY, appearance: 'interaction-only' });
+    };
+    // True when Turnstile is required but its script failed to load (e.g. blocked
+    // by an adblocker/privacy shield) — used to give the user an actionable message.
+    function turnstileBlocked() { return TURNSTILE_SITE_KEY && !window.turnstile; }
     // Passcode caching trade-off (both are shared secrets, not per-user creds):
     // the low-stakes volunteer passcode is cached in localStorage for convenience
     // across visits; the more sensitive admin passcode uses sessionStorage so it
@@ -578,6 +595,21 @@
             return;
         }
         localStorage.setItem(PASS_KEY, passInput.value);
+        // Verify Turnstile up front — before the (mobile-expensive) image
+        // compression — so we don't burn battery/CPU on a request the worker
+        // would reject anyway.
+        let tsToken = '';
+        if (TURNSTILE_SITE_KEY) {
+            if (turnstileBlocked()) {
+                setStatus(uploadStatus, 'Security check failed to load — please disable any adblocker/privacy shield and refresh.', 'err');
+                return;
+            }
+            tsToken = (window.turnstile && window.turnstile.getResponse(tsUploadId)) || '';
+            if (!tsToken) {
+                setStatus(uploadStatus, 'Please complete the security check, then upload.', 'err');
+                return;
+            }
+        }
         submitBtn.disabled = true;
         setStatus(uploadStatus, 'Compressing photo…', '');
         try {
@@ -586,6 +618,7 @@
             const body = new FormData();
             body.append('pavilion', pavilion);
             body.append('image', blob, 'sheet.jpg');
+            if (tsToken) body.append('cf-turnstile-response', tsToken);
             const resp = await fetch(`${PAVILION_API_BASE}/upload`, {
                 method: 'POST',
                 headers: { 'X-Volunteer-Passcode': passInput.value },
@@ -607,6 +640,8 @@
         } catch (err) {
             setStatus(uploadStatus, 'Something went wrong preparing the photo.', 'err');
         } finally {
+            // Turnstile tokens are single-use — reset so the next upload gets a fresh one.
+            if (TURNSTILE_SITE_KEY && window.turnstile && tsUploadId !== null) window.turnstile.reset(tsUploadId);
             submitBtn.disabled = !PAVILION_API_BASE ? true : false;
         }
     });
@@ -665,15 +700,30 @@
     async function adminPost(dogId, pk) {
         if (!PAVILION_API_BASE) { setStatus(adminStatus, 'Service not deployed yet.', 'err'); return; }
         if (!adminPass.value) { setStatus(adminStatus, 'Enter the admin passcode first.', 'err'); return; }
+        // Turnstile gates this endpoint too (anti-brute-force). Resolve a token
+        // before writing; the interaction-only widget is silent unless challenged.
+        let tsToken = '';
+        if (TURNSTILE_SITE_KEY) {
+            if (turnstileBlocked()) {
+                setStatus(adminStatus, 'Security check failed to load — please disable any adblocker/privacy shield and refresh.', 'err');
+                return;
+            }
+            tsToken = (window.turnstile && window.turnstile.getResponse(tsAdminId)) || '';
+            if (!tsToken) { setStatus(adminStatus, 'Please complete the security check, then retry.', 'err'); return; }
+        }
         sessionStorage.setItem(ADMIN_KEY, adminPass.value);
         setStatus(adminStatus, 'Saving…', '');
         try {
+            // Send the dog's correct name so the worker can stage a learned alias
+            // (as-read -> correct) when this override fixes an OCR name misread.
+            const dog = roster.find(x => x.id === dogId);
             const resp = await fetch(`${PAVILION_API_BASE}/admin`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'X-Admin-Passcode': adminPass.value },
-                body: JSON.stringify({ dog_id: dogId, pk })
+                body: JSON.stringify({ dog_id: dogId, pk, name: dog ? dog.name : undefined, 'cf-turnstile-response': tsToken || undefined })
             });
             if (resp.status === 401) { setStatus(adminStatus, 'Admin passcode rejected.', 'err'); return; }
+            if (resp.status === 403) { setStatus(adminStatus, 'Security check failed. Please retry.', 'err'); return; }
             if (!resp.ok) { setStatus(adminStatus, 'Save failed. Try again.', 'err'); return; }
             const d = roster.find(x => x.id === dogId);
             if (d) d.pk = pk || '';
@@ -681,6 +731,9 @@
             renderAdmin();
         } catch (e) {
             setStatus(adminStatus, 'Save failed. Try again.', 'err');
+        } finally {
+            // Token is single-use — refresh for the next admin action.
+            if (TURNSTILE_SITE_KEY && window.turnstile && tsAdminId !== null) window.turnstile.reset(tsAdminId);
         }
     }
 
