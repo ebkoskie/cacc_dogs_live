@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>CACC - Removed Dogs</title><link rel=preload href=https://cdn.jsdelivr.net/npm/@fontsource/big-shoulders-text@5.0.13/files/big-shoulders-text-latin-800-normal.woff2 as=font type=font/woff2 crossorigin><link rel=icon type=image/svg+xml href=favicon.svg><link rel=preconnect href=https://us.i.posthog.com><script>
+<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>Pavilion Upload — CACC Dogs</title><link rel=preload href=https://cdn.jsdelivr.net/npm/@fontsource/big-shoulders-text@5.0.13/files/big-shoulders-text-latin-800-normal.woff2 as=font type=font/woff2 crossorigin><link rel=icon type=image/svg+xml href=favicon.svg><link rel=preconnect href=https://us.i.posthog.com><script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group identify setPersonProperties setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags resetGroups onFeatureFlags addFeatureFlagsHandler onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
     posthog.init('phc_lza7BKDzKEmNeMw4V2psaoRFTDqKENUudMMrcp2pR2S', {
         api_host: 'https://us.i.posthog.com',
@@ -118,81 +118,47 @@
         .ts-toggle { cursor: pointer; user-select: none; -webkit-user-select: none; }
 
         
-/* Reusing base card styles, adding specific overrides for the Removed context */
-.controls-bar { position: sticky; top: 64px; z-index: 90; background: var(--header-bg); padding: 15px 20px; margin: 0 -20px; backdrop-filter: blur(5px); border-bottom: 1px solid var(--border); display: flex; gap: 15px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.upload-wrap { max-width: 640px; margin: 0 auto; }
+.upload-title { font-size: 1.4rem; display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.upload-intro { color: var(--text-muted); margin-top: 0; }
 
-@media (max-width: 600px) {
-.controls-bar { top: 56px; padding: 10px 15px; flex-direction: column; align-items: stretch; }
+.card-panel { background: var(--row); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 18px; }
+.field { display: block; margin-bottom: 14px; }
+.field > span { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
+.field input, .field select {
+    width: 100%; box-sizing: border-box; padding: 12px; font-size: 16px; min-height: 48px;
+    background: var(--input-bg); color: var(--text);
+    border: 1px solid var(--border); border-radius: 8px; appearance: none;
 }
-
-.search-container { position: relative; flex-grow: 1; min-width: 200px; }
-.search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-.search-input { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 10px 35px 10px 40px; width: 100%; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
-
-.sort-select { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 10px 35px 10px 15px; border-radius: 8px; font-size: 14px; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238b949e' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
-
-/* Grid & Cards */
-.dog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; margin-top: 30px; opacity: 0; animation: fadeIn 0.5s ease-in forwards; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-.dog-card { background: var(--row); border: 1px solid var(--border); border-radius: 12px; padding: 16px; box-shadow: 0 2px 5px var(--card-shadow); display: flex; flex-direction: column; gap: 12px; transition: transform 0.2s; opacity: 0.85; /* Slightly muted to indicate inactive */ }
-.dog-card:hover { transform: translateY(-2px); opacity: 1; border-color: var(--accent); }
-
-.card-header { display: flex; justify-content: space-between; align-items: flex-start; }
-
-/* Removed strikethrough style here */
-.dog-name { font-size: 1.4rem; font-weight: 700; color: var(--text); margin: 0; line-height: 1.2; }
-
-.tag.id { color: var(--text-muted); font-family: monospace; font-size: 0.85rem; }
-.breed-info { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 5px; }
-
-.card-footer { margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-.status-badge { background: rgba(204, 57, 62, 0.1); color: var(--danger-text); border: 1px solid rgba(204, 57, 62, 0.3); padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
-
-.info-banner { background: var(--row); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 20px; text-align: center; color: var(--text-muted); font-size: 0.95rem; }
-
-#loading-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
-
-/* Stats Grid */
-.stats-container { margin: 0 -20px 20px -20px; padding: 0 20px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; mask-image: linear-gradient(90deg, black 90%, transparent 100%); -webkit-mask-image: linear-gradient(90deg, black 90%, transparent 100%); }
-.stats-container::-webkit-scrollbar { display: none; }
-.stats-grid { display: flex; gap: 15px; padding-right: 20px; }
-@media (min-width: 900px) {
-.stats-container { margin: 0 0 20px 0; padding: 0; overflow: visible; mask-image: none; -webkit-mask-image: none; }
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); padding-right: 0; }
+.primary-btn {
+    width: 100%; padding: 14px; font-size: 1rem; font-weight: 700; cursor: pointer;
+    background: var(--accent); color: var(--on-accent); border: none; border-radius: 8px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
 }
-
-.stat-card { background: var(--row); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; align-items: flex-start; position: relative; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; min-width: 160px; flex-shrink: 0; }
-.stat-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent); }
-.stat-card.removed::before { background: #CC393E; }
-.stat-card.los::before { background: #a371f7; }
-
-.stat-value { font-size: 2rem; font-weight: 700; color: var(--text); line-height: 1.1; margin-bottom: 4px; display: flex; align-items: baseline; gap: 8px; }
-.stat-label { color: var(--text-muted); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
-.stat-sub { font-size: 0.8rem; color: var(--text-muted); font-weight: 400; margin-top: 2px; }
-.stat-date { position: absolute; top: 12px; right: 12px; font-size: 0.65rem; font-weight: 700; color: var(--text-muted); opacity: 0.6; text-transform: uppercase; }
-
-/* .trend-indicator styles are shared in base.html */
-
-/* LOS Badge & Card Meta */
-.card-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 0.82rem; color: var(--text-muted); }
-.los-badge { display: inline-flex; align-items: center; gap: 4px; }
-.los-badge i { font-size: 0.75rem; }
-.los-badge.los-long { color: var(--warning-text); }
-.los-badge.los-vlong { color: var(--danger-text); }
-
-/* Social Link Buttons */
-.card-links { display: inline-flex; gap: 6px; margin-left: auto; }
-.card-icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 6px; background: var(--row); border: 1px solid var(--border); color: var(--accent); text-decoration: none; font-size: 0.85rem; transition: all 0.15s; }
-.card-icon-btn:hover { border-color: var(--accent); background: var(--row-hover); }
-.card-icon-btn:active { transform: scale(0.9); }
-.card-icon-btn.btn-youtube .fa-youtube { color: #cc0000; }
-
-.card-gender { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px; }
-
-@media (max-width: 768px) {
-.dog-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+.primary-btn:disabled { opacity: 0.6; cursor: progress; }
+.ghost-btn {
+    padding: 8px 12px; font-size: 0.85rem; cursor: pointer; border-radius: 6px;
+    background: transparent; color: var(--text); border: 1px solid var(--border);
 }
+.ghost-btn.danger { color: var(--danger-text); border-color: var(--danger-border); }
+.status { margin-top: 12px; font-size: 0.9rem; min-height: 1.2em; }
+.status.ok { color: var(--success-text); }
+.status.err { color: var(--danger-text); }
+.notice {
+    background: var(--warning-bg); color: var(--warning-text); border: 1px solid var(--warning-border);
+    border-radius: 8px; padding: 12px; margin-bottom: 18px; font-size: 0.9rem;
+}
+.admin-panel summary { cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.admin-panel[open] summary { margin-bottom: 14px; }
+.admin-row {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.admin-row .who { flex: 1 1 160px; min-width: 0; }
+.admin-row .who b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.admin-row .who small { color: var(--text-muted); }
+.admin-row input.kennel { width: 110px; margin: 0; }
+.muted { color: var(--text-muted); font-size: 0.85rem; }
 
     </style></head><body><style>
     @font-face {
@@ -392,7 +358,7 @@
         .nav-links { display: none; }
         .mobile-menu-btn { display: flex; }
     }
-</style><header class=site-header><div class=header-content><div class=brand-section><h1><a href=index.html class=brand-link><i class="fas fa-paw brand-blue-paw"></i><svg class=chistar-svg viewbox="0 0 120 120" xmlns=http://www.w3.org/2000/svg><path fill=#E4002B d="M60 0 L71 41 L112 30 L82 60 L112 90 L71 79 L60 120 L49 79 L8 90 L38 60 L8 30 L49 41 Z"/></svg><span class=brand-chicago>CHI</span><span class=brand-divider>|</span><span class=brand-title> Removed Dogs </span></a></h1></div><nav class=nav-links><a href=index.html class="nav-link active">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link ">Breeds</a><a href=upload.html class="nav-link ">Upload</a></nav><div class=actions><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button><button class=mobile-menu-btn onclick=toggleMobileMenu()><i class="fas fa-bars"></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=index.html class="mobile-link active"><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link "><i class="fas fa-paw" style=width:20px></i> Breeds</a><a href=upload.html class="mobile-link "><i class="fas fa-camera" style=width:20px aria-hidden=true></i> Upload</a></div></header><script>
+</style><header class=site-header><div class=header-content><div class=brand-section><h1><a href=index.html class=brand-link><i class="fas fa-paw brand-blue-paw"></i><svg class=chistar-svg viewbox="0 0 120 120" xmlns=http://www.w3.org/2000/svg><path fill=#E4002B d="M60 0 L71 41 L112 30 L82 60 L112 90 L71 79 L60 120 L49 79 L8 90 L38 60 L8 30 L49 41 Z"/></svg><span class=brand-chicago>CHI</span><span class=brand-divider>|</span><span class=brand-title> Pavilion Upload </span></a></h1></div><nav class=nav-links><a href=index.html class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link ">Breeds</a><a href=upload.html class="nav-link active">Upload</a></nav><div class=actions><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button><button class=mobile-menu-btn onclick=toggleMobileMenu()><i class="fas fa-bars"></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=index.html class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link "><i class="fas fa-paw" style=width:20px></i> Breeds</a><a href=upload.html class="mobile-link active"><i class="fas fa-camera" style=width:20px aria-hidden=true></i> Upload</a></div></header><script>
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
         const icon = document.querySelector('.theme-toggle i');
@@ -405,7 +371,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=info-banner><i class="fas fa-info-circle"></i> These dogs were removed from the public listing without a confirmed Adoption, Rescue, or RTO event. <br><small>They may have been euthanized, died in care, or were lost. Data is limited to what is publicly available.</small></div><div class=stats-container><div class=stats-grid><div class="stat-card removed"><span class=stat-date>Today</span><div class=stat-value><span id=todayRemoved>--</span> <span id=removedIndicator></span></div><div class=stat-label><i class="fas fa-times-circle"></i> Removed</div><div class=stat-sub id=removedSub></div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=medianLOS>--</span></div><div class=stat-label><i class="fas fa-hourglass-half"></i> Median Stay</div><div class=stat-sub>days until removal</div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=avgLOS>--</span></div><div class=stat-label><i class="fas fa-clock"></i> Average Stay</div><div class=stat-sub>days until removal</div></div></div></div><div class=controls-bar><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Removed Dogs..."></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=recent>Date Removed (Recent First)</option><option value=oldest>Date Removed (Oldest First)</option><option value=name>Name (A ➝ Z)</option><option value=los>Length of Stay (Longest First)</option></select></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Loading historical records...</p></div><div id=main-view style=display:none;><h2 style="margin: 30px 0 10px 0; font-size:1.2rem; color:var(--text-muted);"><span id=count>0</span> Records Found </h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel style="height: 50px; margin-top: 20px;"></div></div><div class=footer><span>Last Updated: June 08, 2026 10:32 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
+</script><div class=container><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Sheets expire after a day or two, so re-upload whenever they're rewritten. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet — the processing service hasn't been deployed. Please check back soon. </div><form id=uploadForm class=card-panel><label class=field for=passcode><span>Volunteer passcode</span><input type=password id=passcode name=passcode autocomplete=current-password required></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option></select></label><label class=field for=photo><span>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* capture=environment required></label><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div></form><details class="card-panel admin-panel"><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password></label><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>D</code> plus a number (e.g. <code>C 70</code>), or clear it. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div><div id=adminStatus class=status role=status aria-live=polite></div></details></div><div class=footer><span>Last Updated: June 08, 2026 10:32 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care & Control (CACC) or the City of Chicago. All data is sourced from public records and provided "as is" without warranty. </div></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -551,250 +517,178 @@
             document.addEventListener('mouseover', handleInteraction, { passive: true });
             document.addEventListener('touchstart', handleInteraction, { passive: true });
         })();
-    </script><script src=assets/js/decompress.js></script><script>
-    let fullDataset = [];
-    let currentDisplayList = [];
-    let displayedCount = 0;
-    const BATCH_SIZE = 48;
-    let observer = null;
-    let META = null;
+    </script><script>
+    const PAVILION_API_BASE = "";
+    // Passcode caching trade-off (both are shared secrets, not per-user creds):
+    // the low-stakes volunteer passcode is cached in localStorage for convenience
+    // across visits; the more sensitive admin passcode uses sessionStorage so it
+    // is not persisted on the device beyond the current tab/session.
+    const PASS_KEY = 'pavilionVolunteerPass';   // localStorage
+    const ADMIN_KEY = 'pavilionAdminPass';      // sessionStorage
 
-    document.getElementById('mainSearch').addEventListener('keyup', debounce(handleSearch, 300));
+    // ---- Shared helpers ----------------------------------------------------
+    function setStatus(el, msg, kind) {
+        el.textContent = msg;
+        el.className = 'status' + (kind ? ' ' + kind : '');
+    }
 
-    // Load Data
-    fetch('site_data.json').then(r => r.json()).then(payload => {
-        const { meta, dogs: data } = payload;
-        META = meta;
+    function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, c =>
+            ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
 
-        // 1. Filter AND Hydrate only "Other" status dogs
-        const OTHER_STATUS_IDX = meta.s.indexOf("Other");
+    // Downscale + re-encode to keep uploads small for cellular data and the
+    // serverless payload limit. (This strips EXIF — intentional; we timestamp
+    // server-side on receipt.)
+    async function compressImage(file, maxDim, quality) {
+        const bitmap = await createImageBitmap(file);
+        let { width, height } = bitmap;
+        const scale = Math.min(1, maxDim / Math.max(width, height));
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext('2d').drawImage(bitmap, 0, 0, width, height);
+        bitmap.close && bitmap.close();
+        return await new Promise(res => canvas.toBlob(res, 'image/jpeg', quality));
+    }
 
-        fullDataset = data
-            .filter(item => item.s === OTHER_STATUS_IDX)
-            .map(item => {
-                const breedName = meta.b[item.b] || "Unknown";
-                const intakeDate = item.d || null;
-                const outcomeDate = item.od || null;
-                const dateVal = outcomeDate || intakeDate;
+    // ---- Volunteer upload --------------------------------------------------
+    const form = document.getElementById('uploadForm');
+    const passInput = document.getElementById('passcode');
+    const submitBtn = document.getElementById('submitBtn');
+    const uploadStatus = document.getElementById('uploadStatus');
 
-                // Calculate Length of Stay
-                let los = -1;
-                if (intakeDate && outcomeDate) {
-                    los = Math.floor((new Date(outcomeDate) - new Date(intakeDate)) / 86400000);
-                    if (los < 0) los = -1;
-                }
+    if (!PAVILION_API_BASE) {
+        document.getElementById('notConfigured').hidden = false;
+        submitBtn.disabled = true;
+    }
 
-                // Decompress URLs
-                const fbUrl = decompressUrl(META, item.l);
-                const igUrl = decompressUrl(META, item.ig);
-                let ytUrl = null;
-                if (item.y) {
-                    ytUrl = item.y.split(' | ').map(u => decompressUrl(META, u)).join(' | ');
-                }
+    passInput.value = localStorage.getItem(PASS_KEY) || '';
+    passInput.addEventListener('change', () => localStorage.setItem(PASS_KEY, passInput.value));
 
-                const ageVal = item.a !== undefined ? (meta.a[item.a] || "Unknown") : "Unknown";
-
-                return {
-                    id: item.id,
-                    name: item.n,
-                    breed: breedName,
-                    date: dateVal,
-                    status_changed_ts: item.sc || null,
-                    los: los,
-                    gender: item.g === 1 ? "Female" : (item.g === 0 ? "Male" : "Unknown"),
-                    is_stray: !!item.st,
-                    is_chipped: !!item.ch,
-                    is_altered: !!item.fx,
-                    age: ageVal,
-                    link: `https://24petconnect.com/chgoall/Details/CHGO/${item.id}`,
-                    fb: fbUrl,
-                    ig: igUrl,
-                    yt: ytUrl,
-                    aka: item.k || ""
-                };
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!PAVILION_API_BASE) return;
+        const pavilion = document.getElementById('pavilion').value;
+        const file = document.getElementById('photo').files[0];
+        if (!pavilion || !file || !passInput.value) {
+            setStatus(uploadStatus, 'Please fill in every field.', 'err');
+            return;
+        }
+        localStorage.setItem(PASS_KEY, passInput.value);
+        submitBtn.disabled = true;
+        setStatus(uploadStatus, 'Compressing photo…', '');
+        try {
+            const blob = await compressImage(file, 1600, 0.75);
+            setStatus(uploadStatus, 'Reading the sheet… this can take a few seconds.', '');
+            const body = new FormData();
+            body.append('pavilion', pavilion);
+            body.append('image', blob, 'sheet.jpg');
+            const resp = await fetch(`${PAVILION_API_BASE}/upload`, {
+                method: 'POST',
+                headers: { 'X-Volunteer-Passcode': passInput.value },
+                body
             });
-
-        // Initial Sort (Recent First)
-        fullDataset.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        currentDisplayList = fullDataset;
-
-        document.getElementById('loading-state').style.display = 'none';
-        document.getElementById('main-view').style.display = 'block';
-
-        updateStatsCards();
-        setupObserver();
-        resetGrid();
-
-    }).catch(err => {
-        console.error(err);
-        document.getElementById('loading-state').innerHTML = "Failed to load records.";
+            if (resp.status === 401) {
+                setStatus(uploadStatus, 'Passcode rejected. Please check it and try again.', 'err');
+            } else if (!resp.ok) {
+                setStatus(uploadStatus, 'Upload failed. Please try again in a moment.', 'err');
+            } else {
+                const data = await resp.json().catch(() => ({}));
+                const n = data.kennels != null ? data.kennels : '';
+                setStatus(uploadStatus,
+                    `Done! Read ${n} kennel row${n === 1 ? '' : 's'} for Pavilion ${pavilion}. ` +
+                    `Badges appear on the dashboard at the next refresh.`, 'ok');
+                form.reset();
+                passInput.value = localStorage.getItem(PASS_KEY) || '';
+            }
+        } catch (err) {
+            setStatus(uploadStatus, 'Something went wrong preparing the photo.', 'err');
+        } finally {
+            submitBtn.disabled = !PAVILION_API_BASE ? true : false;
+        }
     });
 
-    function updateStatsCards() {
-        // Card 1: Today's removed count with trend indicator
-        const todayStr = siteToday();
-        const yesterdayStr = siteDateNDaysAgo(1);
+    // ---- Admin corrections -------------------------------------------------
+    const adminPass = document.getElementById('adminPasscode');
+    const adminSearch = document.getElementById('adminSearch');
+    const adminResults = document.getElementById('adminResults');
+    const adminStatus = document.getElementById('adminStatus');
+    let roster = [];
 
-        const todayCount = fullDataset.filter(d => d.date === todayStr).length;
-        const yesterdayCount = fullDataset.filter(d => d.date === yesterdayStr).length;
+    adminPass.value = sessionStorage.getItem(ADMIN_KEY) || '';
+    adminPass.addEventListener('change', () => sessionStorage.setItem(ADMIN_KEY, adminPass.value));
 
-        document.getElementById('todayRemoved').textContent = todayCount;
-        setTrendIndicator('removedIndicator', todayCount, yesterdayCount, true);
-        document.getElementById('removedSub').textContent = 'Yesterday: ' + yesterdayCount;
+    // Reuse the public, already-published roster. Include every dog that could
+    // carry a badge — `resolve_locations` badges any dog with no outcome date
+    // (site_data omits `od` for those) — plus any already-badged dog (`d.pk`),
+    // so an admin can always find and fix/clear an existing badge.
+    fetch('site_data.json').then(r => r.json()).then(payload => {
+        roster = payload.dogs
+            .filter(d => !d.od || d.pk)
+            .map(d => ({ id: d.id, name: d.n, pk: d.pk || '' }));
+        renderAdmin();
+    }).catch(() => {
+        adminResults.innerHTML = '<p class="muted">Could not load the roster.</p>';
+    });
 
-        // Cards 2 & 3: Median and Average LOS
-        const losValues = fullDataset.filter(d => d.los >= 0).map(d => d.los);
-
-        if (losValues.length > 0) {
-            const avg = Math.round(losValues.reduce((a, b) => a + b, 0) / losValues.length);
-            document.getElementById('avgLOS').textContent = avg + 'd';
-
-            const sorted = [...losValues].sort((a, b) => a - b);
-            const mid = Math.floor(sorted.length / 2);
-            const median = sorted.length % 2 !== 0
-                ? sorted[mid]
-                : Math.round((sorted[mid - 1] + sorted[mid]) / 2);
-            document.getElementById('medianLOS').textContent = median + 'd';
-        }
-    }
-
-
-    function handleSearch() {
-        const q = document.getElementById('mainSearch').value.toLowerCase();
-        if (!q) {
-            currentDisplayList = [...fullDataset]; // Reset to full list
-            handleSortChange(); // Re-apply current sort
+    function renderAdmin() {
+        const q = adminSearch.value.trim().toLowerCase();
+        // With no query, show only dogs that already carry a badge (the ones most
+        // likely to need fixing); searching opens up the full active roster.
+        let list = q
+            ? roster.filter(d => d.name.toLowerCase().includes(q) || d.id.toLowerCase().includes(q))
+            : roster.filter(d => d.pk);
+        list = list.slice(0, 40);
+        if (!list.length) {
+            adminResults.innerHTML = `<p class="muted">${q ? 'No matches.' : 'No dogs currently have a location badge. Search to set one.'}</p>`;
             return;
         }
-
-        currentDisplayList = fullDataset.filter(d =>
-            d.name.toLowerCase().includes(q) ||
-            d.id.toLowerCase().includes(q) ||
-            d.breed.toLowerCase().includes(q)
-        );
-        handleSortChange();
-    }
-
-    function handleSortChange() {
-        const mode = document.getElementById('sortSelect').value;
-
-        currentDisplayList.sort((a, b) => {
-            if (mode === 'recent') return new Date(b.date) - new Date(a.date);
-            if (mode === 'oldest') return new Date(a.date) - new Date(b.date);
-            if (mode === 'name') return a.name.localeCompare(b.name);
-            if (mode === 'los') return (b.los >= 0 ? b.los : -1) - (a.los >= 0 ? a.los : -1);
-            return 0;
-        });
-
-        resetGrid();
-    }
-
-    function resetGrid() {
-        displayedCount = 0;
-        document.getElementById('dog-grid').innerHTML = '';
-        document.getElementById('count').innerText = currentDisplayList.length;
-
-        if (currentDisplayList.length === 0) {
-            document.getElementById('dog-grid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;">No records found.</div>';
-            return;
-        }
-        renderNextBatch();
-    }
-
-    function renderNextBatch() {
-        if (displayedCount >= currentDisplayList.length) return;
-        const batch = currentDisplayList.slice(displayedCount, displayedCount + BATCH_SIZE);
-        let html = '';
-        batch.forEach(dog => html += buildCard(dog));
-        document.getElementById('dog-grid').insertAdjacentHTML('beforeend', html);
-        displayedCount += BATCH_SIZE;
-    }
-
-    function buildCard(dog) {
-        const genderClass = dog.gender.includes('Female') ? 'female' : 'male';
-        const genderIcon = genderClass === 'female' ? '&#9792;&#65039;' : '&#9794;&#65039;';
-        const alteredIcon = dog.is_altered ? '<i class="fas fa-scissors" style="font-size:0.9em"></i> ' : '';
-        const alteredClass = dog.is_altered ? ' altered' : '';
-        const alteredTitle = dog.is_altered ? ` title="${genderClass === 'female' ? 'Spayed' : 'Neutered'}"` : '';
-
-        let ageHtml = '';
-        if (dog.age && dog.age !== 'Unknown') {
-            const displayAge = dog.age === 'My age is unknown' ? 'Age unknown' : dog.age;
-            ageHtml = `<div class="tag age">${displayAge}</div>`;
-        }
-
-        let strayBadge = '';
-        if (dog.is_stray) {
-            const chipIcon = dog.is_chipped ? '<i class="fas fa-microchip"></i> ' : '';
-            const strayClass = dog.is_chipped ? 'tag stray chipped' : 'tag stray';
-            strayBadge = `<span class="${strayClass}" style="cursor:help" title="${dog.is_chipped ? 'Found with a chip or tag' : 'Stray intake'}">${chipIcon}<i class="fas fa-map-marker-alt"></i> Stray</span>`;
-        }
-
-        // LOS badge
-        let losHtml = '';
-        if (dog.los >= 0) {
-            let losCls = 'los-badge';
-            if (dog.los >= 60) losCls += ' los-vlong';
-            else if (dog.los >= 30) losCls += ' los-long';
-            losHtml = '<span class="' + losCls + '"><i class="fas fa-hourglass-half"></i> ' + dog.los + 'd in shelter</span>';
-        }
-
-        // Social link buttons
-        let linksHtml = '';
-        if (dog.fb || dog.yt || dog.ig) {
-            let btns = '';
-            if (dog.fb) {
-                const fbUrl = dog.fb.split(' | ')[0].trim();
-                btns += '<a class="card-icon-btn" href="' + fbUrl.replace(/"/g, '&quot;') + '" target="_blank" rel="noopener" title="View on Facebook"><i class="fab fa-facebook"></i></a>';
-            }
-            if (dog.ig) {
-                const igUrl = dog.ig.split(' | ')[0].trim();
-                btns += '<a class="card-icon-btn" href="' + igUrl.replace(/"/g, '&quot;') + '" target="_blank" rel="noopener" title="View on Instagram" style="color:#E1306C"><i class="fab fa-instagram"></i></a>';
-            }
-            if (dog.yt) {
-                const ytUrl = dog.yt.split(' | ')[0].split('~')[0].trim();
-                btns += '<a class="card-icon-btn btn-youtube" href="' + ytUrl.replace(/"/g, '&quot;') + '" target="_blank" rel="noopener" title="Watch on YouTube"><i class="fab fa-youtube"></i></a>';
-            }
-            linksHtml = '<div class="card-links">' + btns + '</div>';
-        }
-
-        // Card meta row (LOS + social links)
-        let metaHtml = '';
-        if (losHtml || linksHtml) {
-            metaHtml = '<div class="card-meta">' + losHtml + linksHtml + '</div>';
-        }
-
-        return `
-            <div class="dog-card">
-                <div class="card-header">
-                    <h3 class="dog-name">${dog.name}</h3>
-                    <span class="tag id">${dog.id}</span>
-                </div>
-                <div class="breed-info">${dog.breed}</div>
-                <div class="card-gender">
-                    <span class="tag ${genderClass}${alteredClass}"${alteredTitle}>${alteredIcon}${genderIcon} ${dog.gender}</span>
-                    ${ageHtml}
-                </div>
-                ${metaHtml}
-                <div class="card-footer">
-                    <span class="status-badge${dog.status_changed_ts ? ' ts-toggle' : ''}"${dog.status_changed_ts ? ` data-ts="${formatLocalTimecode(dog.status_changed_ts)}" title="Tap to see exact time"` : ''}>
-                        <i class="fas fa-times-circle"></i> Removed: ${dog.date}
-                    </span>
-                    ${strayBadge}
-                    <a href="${dog.link}" target="_blank" style="color:var(--accent); text-decoration:none; font-size:0.9rem;">
-                        <i class="fas fa-external-link-alt"></i> Profile
-                    </a>
-                </div>
+        adminResults.innerHTML = list.map(d => `
+            <div class="admin-row" data-id="${d.id}">
+                <span class="who"><b>${escapeHtml(d.name)}</b><small>${d.id}${d.pk ? ' · now ' + d.pk : ''}</small></span>
+                <input class="kennel field" type="text" placeholder="C 70" value="${d.pk ? d.pk.replace('-', ' ') : ''}" aria-label="Kennel for ${escapeHtml(d.name)} (${d.id})">
+                <button type="button" class="ghost-btn" onclick="adminSet('${d.id}', this)" aria-label="Set kennel for ${escapeHtml(d.name)}">Set</button>
+                <button type="button" class="ghost-btn danger" onclick="adminClear('${d.id}')" aria-label="Clear kennel for ${escapeHtml(d.name)}">Clear</button>
             </div>
-        `;
+        `).join('');
+    }
+    adminSearch.addEventListener('input', debounce(renderAdmin, 200));
+
+    function parsePk(raw) {
+        const m = String(raw || '').trim().toUpperCase().match(/^([A-D])[\s-]*(\d{1,3})$/);
+        return m ? `${m[1]}-${m[2]}` : null;
     }
 
-    function setupObserver() {
-        observer = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) renderNextBatch();
-        }, { root: null, rootMargin: '400px', threshold: 0.1 });
-        observer.observe(document.getElementById('scroll-sentinel'));
+    async function adminPost(dogId, pk) {
+        if (!PAVILION_API_BASE) { setStatus(adminStatus, 'Service not deployed yet.', 'err'); return; }
+        if (!adminPass.value) { setStatus(adminStatus, 'Enter the admin passcode first.', 'err'); return; }
+        sessionStorage.setItem(ADMIN_KEY, adminPass.value);
+        setStatus(adminStatus, 'Saving…', '');
+        try {
+            const resp = await fetch(`${PAVILION_API_BASE}/admin`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Admin-Passcode': adminPass.value },
+                body: JSON.stringify({ dog_id: dogId, pk })
+            });
+            if (resp.status === 401) { setStatus(adminStatus, 'Admin passcode rejected.', 'err'); return; }
+            if (!resp.ok) { setStatus(adminStatus, 'Save failed. Try again.', 'err'); return; }
+            const d = roster.find(x => x.id === dogId);
+            if (d) d.pk = pk || '';
+            setStatus(adminStatus, pk ? `Set ${dogId} to ${pk}.` : `Cleared ${dogId}.`, 'ok');
+            renderAdmin();
+        } catch (e) {
+            setStatus(adminStatus, 'Save failed. Try again.', 'err');
+        }
     }
 
+    function adminSet(dogId, btn) {
+        const input = btn.closest('.admin-row').querySelector('.kennel');
+        const pk = parsePk(input.value);
+        if (!pk) { setStatus(adminStatus, 'Use a pavilion letter A–D and a kennel number, e.g. "C 70".', 'err'); return; }
+        adminPost(dogId, pk);
+    }
+    function adminClear(dogId) { adminPost(dogId, null); }
 </script></body></html>
