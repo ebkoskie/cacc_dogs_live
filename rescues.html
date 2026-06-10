@@ -245,15 +245,50 @@ body.light-mode .chart-legend-gradient { background: linear-gradient(to right, #
 
 /* Empty State styles live in base.html (.empty-state) */
 
+/* Partner Picker (filterable combobox) */
+.partner-picker { position: relative; max-width: 340px; margin: 0 auto 30px auto; }
+.partner-picker label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px; text-align: center; }
+.partner-input { margin-bottom: 0; max-width: none; }
+.partner-list { display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 200; background: var(--row); border: 1px solid var(--border); border-radius: 6px; margin-top: 4px; max-height: 280px; overflow-y: auto; box-shadow: 0 4px 12px var(--card-shadow); }
+.partner-list.open { display: block; }
+.partner-option { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 14px; min-height: 44px; cursor: pointer; font-size: 0.9rem; color: var(--text); }
+.partner-option:hover, .partner-option.is-active { background: var(--row-hover); color: var(--accent); }
+.partner-option .partner-count { font-size: 0.8rem; color: var(--text-muted); white-space: nowrap; }
+.partner-list .partner-no-match { padding: 12px 14px; font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+
+/* Page Toast */
+.page-toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); z-index: 10000; background: var(--row); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; font-size: 0.85rem; box-shadow: 0 4px 12px var(--card-shadow); opacity: 0; pointer-events: none; transition: opacity 0.3s; max-width: 90vw; text-align: center; }
+.page-toast.show { opacity: 1; }
+
+/* Loading skeletons & chart overlay */
+.stat-value.skeleton { display: inline-block; min-width: 48px; height: 1.5rem; border-radius: 6px; color: transparent !important; background: linear-gradient(90deg, rgba(128,128,128,0.15) 25%, rgba(128,128,128,0.3) 50%, rgba(128,128,128,0.15) 75%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; }
+@keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+.chart-loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--text-muted); font-size: 0.9rem; background: var(--row); border-radius: 6px; z-index: 5; }
+.chart-loading i { font-size: 1.8rem; color: var(--accent); }
+
+/* Disabled "Rescues Today" card */
+.stat-card.clickable.disabled { opacity: 0.55; cursor: default; }
+.stat-card.clickable.disabled:hover { border-color: var(--border); background: var(--row); transform: none; }
+.stat-card.clickable.disabled:active { transform: none; }
+
+/* Share/copy-link buttons */
+.share-btn.copied { border-color: var(--success-text); color: var(--success-text); }
+.filter-share-btn { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 4px 10px; border-radius: 16px; cursor: pointer; font-size: 0.82rem; transition: all 0.15s; min-height: 32px; white-space: nowrap; }
+.filter-share-btn:hover { border-color: var(--accent); color: var(--accent); }
+.filter-share-btn:active { transform: scale(0.95); }
+.filter-share-btn.copied { border-color: var(--success-text); color: var(--success-text); }
+
 /* Sticky search on mobile */
 .search-wrapper { position: relative; }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
 .dog-card, .stat-card.clickable, .btn-apply, .btn-reset, .btn-back, .close-btn,
-.filter-pill-close, .btn-reset-filter, .btn-quick { transition: none !important; }
+.filter-pill-close, .btn-reset-filter, .btn-quick, .page-toast, .filter-share-btn, .partner-option { transition: none !important; }
 .dog-grid, #drillDownSection { animation: none !important; }
 .dog-card.highlight-today { animation: none !important; }
+.stat-value.skeleton { animation: none !important; background: rgba(128,128,128,0.2); }
+.chart-loading i { animation: none !important; }
 }
 
 @media (max-width: 800px) {
@@ -261,6 +296,7 @@ body.light-mode .chart-legend-gradient { background: linear-gradient(to right, #
 .pie-container { height: 280px; }
 .chart-container { height: 450px; }
 .search-wrapper { position: sticky; top: 130px; z-index: 99; background: var(--bg); padding: 8px 0; margin: 0 -5px; padding-left: 5px; padding-right: 5px; }
+.btn-quick { min-height: 44px; }
 }
 
 @media (max-width: 600px) {
@@ -479,7 +515,7 @@ body.light-mode .chart-legend-gradient { background: linear-gradient(to right, #
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button><div class=quick-dates><button class=btn-quick onclick=quickDate(7)>7d</button><button class="btn-quick active" onclick=quickDate(30)>30d</button><button class=btn-quick onclick=quickDate(90)>90d</button><button class=btn-quick onclick=quickDate(0)>All</button></div></div><div id=activeFilterBar class=active-filter-bar><span class=active-filter-bar-label><i class="fas fa-filter" style=margin-right:4px;></i> Viewing:</span><span id=filterPill class=filter-pill><span id=filterPillText></span><button class=filter-pill-close onclick=clearActiveFilter() title="Clear filter">&times;</button></span><button class=btn-reset-filter onclick=clearActiveFilter()><i class="fas fa-undo"></i> Reset to 30 Days</button></div><div class=stats-banner><div class="stat-card clickable" onclick=showTodayRescues() title="Click to see today's heroes!"><i class="fas fa-calendar-day stat-icon"></i><div class=stat-info><span class=stat-value id=countToday>0</span><span class=stat-label>Rescues Today</span></div></div><div class=stat-card><i class="fas fa-history stat-icon" style="color: var(--success-text);"></i><div class=stat-info><span class=stat-value id=countTotal>0</span><span class=stat-label id=labelTotal>Total in Range</span></div></div><div class=stat-card><i class="fas fa-clock stat-icon" style="color: var(--warning-text);"></i><div class=stat-info><span class=stat-value id=avgLos>&mdash;</span><span class=stat-label>Avg Shelter Stay</span></div></div><div class=stat-card><i class="fas fa-hands-helping stat-icon" style="color: var(--info-text);"></i><div class=stat-info><span class=stat-value id=uniquePartners>0</span><span class=stat-label id=labelPartners>Partners in Range</span></div></div></div><div class=chart-container><canvas id=rescueChart role=img aria-label="Top Rescue Partners bar chart. Tells how many dogs each partner pulled in the selected date range. Tap a bar to view breed details."></canvas></div><div class=chart-legend><span>Short stay</span><div class=chart-legend-gradient></div><span>Long stay</span></div><div class=chart-hint>Bar color reflects average shelter stay before rescue. Tap any bar for breed details.</div><div id=drillDownSection><div class=details-header><h2 class=details-title id=selectedPartnerName tabindex=-1 style="outline: none;">Partner Details</h2><button class=close-btn onclick=closeDrillDown()>Close Details <i class="fas fa-times"></i></button></div><div id=drillDownStats class=drill-down-stats></div><div class=details-grid><div class=charts-column><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Composition </h3><div class=pie-container><canvas id=breedPieChart role=img aria-label="Breed Composition doughnut chart for this rescue partner. Detailed data is available in the Recent Pulls table on the right."></canvas></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Sizes</h3><div class=pie-container id=sizeChartContainer><canvas id=sizePieChart role=img aria-label="Dog Size Category doughnut chart for this rescue partner."></canvas></div></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Recent Pulls (In Range)</h3><div class=table-container><table id=drillDownTable><thead><tr><th>Date</th><th>Name</th><th>Breed</th><th>Stay</th></tr></thead><tbody id=drillDownBody></tbody></table></div></div></div><div class=drill-down-footer><button class=btn-back onclick=closeDrillDown()><i class="fas fa-arrow-left"></i> Back to all rescues</button></div></div><div id=recentRescuesSection><h2 id=gridTitle tabindex=-1 style="margin: 0 0 10px 0; outline: none;">Rescues in Range</h2><div class=search-wrapper><input type=text id=searchRecent placeholder="Filter visible cards (e.g. 'Paws', 'Bulldog')..."></div><div id=recentGrid class=dog-grid></div></div><div class=footer><span>Last Updated: June 10, 2026 08:55 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Legal><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a></nav></div></div><script>
+</script><div class=container><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyDateFilter() class=btn-apply><i class="fas fa-filter"></i> Apply</button><button onclick=resetDates() class=btn-reset>Reset (30 Days)</button><div class=quick-dates><button class=btn-quick data-days=7 onclick=quickDate(7)>7d</button><button class="btn-quick active" data-days=30 onclick=quickDate(30)>30d</button><button class=btn-quick data-days=90 onclick=quickDate(90)>90d</button><button class=btn-quick data-days=0 onclick=quickDate(0)>All</button></div></div><div id=activeFilterBar class=active-filter-bar><span class=active-filter-bar-label><i class="fas fa-filter" style=margin-right:4px;></i> Viewing:</span><span id=filterPill class=filter-pill><span id=filterPillText></span><button class=filter-pill-close onclick=clearActiveFilter() title="Clear filter">&times;</button></span><button class=filter-share-btn onclick=copyCurrentLink(this) title="Copy a shareable link to this view"><i class="fas fa-link"></i> Copy Link</button><button class=btn-reset-filter onclick=clearActiveFilter()><i class="fas fa-undo"></i> Reset to 30 Days</button></div><div class=stats-banner><div class="stat-card clickable" id=todayCard role=button tabindex=0 onclick=showTodayRescues() title="Click to see today's heroes!"><i class="fas fa-calendar-day stat-icon"></i><div class=stat-info><span class="stat-value skeleton" id=countToday>0</span><span class=stat-label>Rescues Today</span></div></div><div class=stat-card><i class="fas fa-history stat-icon" style="color: var(--success-text);"></i><div class=stat-info><span class="stat-value skeleton" id=countTotal>0</span><span class=stat-label id=labelTotal>Total in Range</span></div></div><div class=stat-card><i class="fas fa-clock stat-icon" style="color: var(--warning-text);"></i><div class=stat-info><span class="stat-value skeleton" id=avgLos>&mdash;</span><span class=stat-label>Avg Shelter Stay</span></div></div><div class=stat-card><i class="fas fa-hands-helping stat-icon" style="color: var(--info-text);"></i><div class=stat-info><span class="stat-value skeleton" id=uniquePartners>0</span><span class=stat-label id=labelPartners>Partners in Range</span></div></div></div><div class=chart-container><canvas id=rescueChart role=img aria-label="Top Rescue Partners bar chart. Tells how many dogs each partner pulled in the selected date range. Tap a bar to view breed details."></canvas><div id=chartLoading class=chart-loading><i class="fas fa-circle-notch fa-spin"></i><span>Loading rescue data&hellip;</span></div></div><div class=chart-legend><span>Short stay</span><div class=chart-legend-gradient></div><span>Long stay</span></div><div class=chart-hint>Bar color reflects average shelter stay before rescue. Tap any bar for breed details.</div><div class=partner-picker><label for=partnerSearch>Or find any partner in range:</label><input type=text id=partnerSearch class=partner-input placeholder="Type a rescue partner name..." autocomplete=off role=combobox aria-expanded=false aria-controls=partnerList aria-autocomplete=list><div id=partnerList class=partner-list role=listbox aria-label="Rescue partners"></div></div><div id=drillDownSection><div class=details-header><h2 class=details-title id=selectedPartnerName tabindex=-1 style="outline: none;">Partner Details</h2><div style="display:inline-flex; gap:8px;"><button class="close-btn share-btn" onclick=copyCurrentLink(this) title="Copy a shareable link to this partner's stats"><i class="fas fa-link"></i> Copy Link</button><button class=close-btn onclick=closeDrillDown()>Close Details <i class="fas fa-times"></i></button></div></div><div id=drillDownStats class=drill-down-stats></div><div class=details-grid><div class=charts-column><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Composition </h3><div class=pie-container><canvas id=breedPieChart role=img aria-label="Breed Composition doughnut chart for this rescue partner. Detailed data is available in the Recent Pulls table on the right."></canvas></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Breed Sizes</h3><div class=pie-container id=sizeChartContainer><canvas id=sizePieChart role=img aria-label="Dog Size Category doughnut chart for this rescue partner."></canvas></div></div></div><div><h3 style="margin-top:0; color:var(--text-muted); font-size:1rem; margin-bottom:10px;">Recent Pulls (In Range)</h3><div class=table-container><table id=drillDownTable><thead><tr><th>Date</th><th>Name</th><th>Breed</th><th>Stay</th></tr></thead><tbody id=drillDownBody></tbody></table></div></div></div><div class=drill-down-footer><button class=btn-back onclick=closeDrillDown()><i class="fas fa-arrow-left"></i> Back to all rescues</button></div></div><div id=recentRescuesSection><h2 id=gridTitle tabindex=-1 style="margin: 0 0 10px 0; outline: none;">Rescues in Range</h2><div class=search-wrapper><input type=text id=searchRecent placeholder="Filter visible cards (e.g. 'Paws', 'Bulldog')..."></div><div id=recentGrid class=dog-grid></div></div><div id=pageToast class=page-toast role=status aria-live=polite></div><div class=footer><span>Last Updated: June 10, 2026 10:41 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Legal><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -884,10 +920,17 @@ body.light-mode .chart-legend-gradient { background: linear-gradient(to right, #
     let sizeChart = null;
     let ACTIVE_DRILL_DOWN_PARTNER = null;
     let META = null;
+    let SUPPRESS_URL_SYNC = false;
+    let toastTimer = null;
 
     // Motion preference helper (prefersReducedMotion is declared globally in chart_setup.html)
     const smoothOrAuto = () => prefersReducedMotion ? 'auto' : 'smooth';
     const isMobile = () => window.innerWidth <= 800;
+
+    function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, c =>
+            ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
 
     // Scroll utility: accounts for fixed header (64px) + sticky controls bar
     function scrollToElement(element) {
@@ -899,22 +942,168 @@ body.light-mode .chart-legend-gradient { background: linear-gradient(to right, #
         window.scrollTo({ top: Math.max(0, elementTop), behavior: smoothOrAuto() });
     }
 
+    // --- Toast ---
+    function showToast(msg) {
+        const t = document.getElementById('pageToast');
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // --- Copy Link ---
+    function copyCurrentLink(btn) {
+        const url = window.location.href;
+        const onSuccess = function () {
+            showToast('Link copied');
+            if (btn) {
+                const icon = btn.querySelector('i');
+                btn.classList.add('copied');
+                if (icon) icon.className = 'fas fa-check';
+                setTimeout(function () {
+                    btn.classList.remove('copied');
+                    if (icon) icon.className = 'fas fa-link';
+                }, 1500);
+            }
+        };
+        const fallbackCopy = function () {
+            const ta = document.createElement('textarea');
+            ta.value = url;
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            let ok = false;
+            try { ok = document.execCommand('copy'); } catch (e) { /* unsupported */ }
+            document.body.removeChild(ta);
+            if (ok) onSuccess(); else showToast('Could not copy link');
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(onSuccess).catch(fallbackCopy);
+        } else {
+            fallbackCopy();
+        }
+    }
+
+    // --- State <-> URL Core ---
+    function earliestDataDate() {
+        if (ALL_DATA.length === 0) return siteDateNDaysAgo(365 * 5);
+        return ALL_DATA.reduce((min, d) => d.date < min ? d.date : min, ALL_DATA[0].date);
+    }
+
+    // Returns 7|30|90 for matching quick presets, 0 for "All", null for custom ranges
+    function detectPreset(startStr, endStr) {
+        if (endStr !== siteToday()) return null;
+        for (const days of [7, 30, 90]) {
+            if (startStr === siteDateNDaysAgo(days)) return days;
+        }
+        if (startStr === earliestDataDate()) return 0;
+        return null;
+    }
+
+    function setActiveQuickButton(days) {
+        document.querySelectorAll('.btn-quick').forEach(btn => {
+            btn.classList.toggle('active', days !== null && btn.getAttribute('data-days') === String(days));
+        });
+    }
+
+    function urlFromState() {
+        const startStr = document.getElementById('startDate').value;
+        const endStr = document.getElementById('endDate').value;
+        const todayStr = siteToday();
+        const qs = new URLSearchParams();
+
+        if (startStr === todayStr && endStr === todayStr) {
+            qs.set('view', 'today');
+        } else {
+            const preset = detectPreset(startStr, endStr);
+            if (preset === 7 || preset === 90) qs.set('range', String(preset));
+            else if (preset === 0) qs.set('range', 'all');
+            else if (preset !== 30 && startStr && endStr) { qs.set('start', startStr); qs.set('end', endStr); }
+            // preset 30 = default view: no params
+        }
+        if (ACTIVE_DRILL_DOWN_PARTNER) qs.set('partner', ACTIVE_DRILL_DOWN_PARTNER);
+
+        const str = qs.toString();
+        return str ? window.location.pathname + '?' + str : window.location.pathname;
+    }
+
+    function syncUrl(push) {
+        if (SUPPRESS_URL_SYNC) return;
+        const url = urlFromState();
+        const current = window.location.pathname + window.location.search;
+        if (url === current) return;
+        if (push) history.pushState({ dd: true }, '', url);
+        else history.replaceState(history.state, '', url);
+    }
+
+    function applyStateFromUrl(params, opts) {
+        opts = opts || {};
+        const todayStr = siteToday();
+        const dateRe = /^\d{4}-\d{2}-\d{2}$/;
+        let startStr = null, endStr = null, preset = null;
+
+        if (params.get('view') === 'today') {
+            startStr = todayStr; endStr = todayStr;
+        } else if (params.get('range')) {
+            const r = params.get('range');
+            preset = (r === 'all') ? 0 : (r === '7' || r === '90' ? parseInt(r, 10) : 30);
+        } else if (dateRe.test(params.get('start') || '') && dateRe.test(params.get('end') || '')
+            && params.get('start') <= params.get('end')) {
+            startStr = params.get('start'); endStr = params.get('end');
+        } else {
+            preset = 30; // default / malformed fallback
+        }
+
+        SUPPRESS_URL_SYNC = true;
+        try {
+            if (preset !== null) {
+                quickDate(preset);
+            } else {
+                document.getElementById('startDate').value = startStr;
+                document.getElementById('endDate').value = endStr;
+                const todayCount = ALL_DATA.filter(d => d.date === todayStr).length;
+                if (opts.celebrate && startStr === todayStr && endStr === todayStr && todayCount > 0) {
+                    // Seed countToday so showTodayRescues' guard can read it; it
+                    // runs applyDateFilter itself (avoids a double render here)
+                    document.getElementById('countToday').innerText = todayCount;
+                    showTodayRescues();
+                } else {
+                    applyDateFilter();
+                }
+            }
+
+            // Apply partner drill-down (case-insensitive match against real data)
+            const rawPartner = params.get('partner');
+            if (rawPartner) {
+                let canonical = null;
+                const wanted = rawPartner.toLowerCase();
+                for (const d of ALL_DATA) {
+                    if (d.partner.toLowerCase() === wanted) { canonical = d.partner; break; }
+                }
+                if (canonical) {
+                    showDrillDown(canonical, FILTERED_DATA);
+                } else {
+                    showToast('Couldn’t find rescue partner “' + rawPartner + '” — showing all rescues');
+                }
+            }
+        } finally {
+            SUPPRESS_URL_SYNC = false;
+        }
+        // Normalize the URL (drops malformed/unknown params)
+        history.replaceState(history.state, '', urlFromState());
+    }
+
+    window.addEventListener('popstate', function () {
+        if (ALL_DATA.length === 0) return; // data not loaded yet
+        applyStateFromUrl(new URLSearchParams(window.location.search), { celebrate: false });
+    });
+
     // --- Active Filter Banner ---
     function isDefaultDateRange() {
-        const todayStr = siteToday();
-        const endStr = document.getElementById('endDate').value;
         const startStr = document.getElementById('startDate').value;
-        if (endStr !== todayStr) return false;
-
-        for (const days of [7, 30, 90]) {
-            if (startStr === siteDateNDaysAgo(days)) return true;
-        }
-        // Check "All" — matches earliest data date
-        if (ALL_DATA.length > 0) {
-            const earliest = ALL_DATA.reduce((min, d) => d.date < min ? d.date : min, ALL_DATA[0].date);
-            if (startStr === earliest) return true;
-        }
-        return false;
+        const endStr = document.getElementById('endDate').value;
+        return detectPreset(startStr, endStr) !== null;
     }
 
     function updateFilterBanner() {
@@ -943,9 +1132,8 @@ body.light-mode .chart-legend-gradient { background: linear-gradient(to right, #
     }
 
     function clearActiveFilter() {
-        ACTIVE_DRILL_DOWN_PARTNER = null;
-        closeDrillDown();
-        resetDates();
+        hideDrillDown();
+        resetDates(); // applyDateFilter() drops the partner param from the URL
     }
 
     // Bind Listeners
@@ -971,6 +1159,88 @@ body.light-mode .chart-legend-gradient { background: linear-gradient(to right, #
             const aka = tdToggle.getAttribute('data-aka');
             if (name && aka) toggleName(tdToggle, name, aka);
         }
+        // Close partner picker when clicking outside it
+        if (!e.target.closest('.partner-picker')) closePartnerList();
+    });
+
+    // Keyboard support for the "Rescues Today" card (role="button")
+    document.getElementById('todayCard').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showTodayRescues(); }
+    });
+
+    // --- Partner Picker (filterable combobox) ---
+    const partnerInput = document.getElementById('partnerSearch');
+    const partnerListEl = document.getElementById('partnerList');
+    let pickerActiveIndex = -1;
+
+    function renderPartnerList() {
+        const q = partnerInput.value.trim().toLowerCase();
+        const stats = partnerStats(FILTERED_DATA).filter(s => s.name.toLowerCase().includes(q));
+        pickerActiveIndex = -1;
+        partnerInput.removeAttribute('aria-activedescendant');
+        if (stats.length === 0) {
+            partnerListEl.innerHTML = '<div class="partner-no-match">No partners match in this date range.</div>';
+        } else {
+            partnerListEl.innerHTML = stats.map(function (s, i) {
+                return '<div class="partner-option" role="option" aria-selected="false" id="partnerOpt' + i + '" data-partner="' + s.name.replace(/"/g, '&quot;') + '">'
+                    + '<span>' + escapeHtml(s.name) + '</span><span class="partner-count">' + s.count + (s.count === 1 ? ' dog' : ' dogs') + '</span></div>';
+            }).join('');
+        }
+        partnerListEl.classList.add('open');
+        partnerInput.setAttribute('aria-expanded', 'true');
+    }
+
+    function closePartnerList() {
+        partnerListEl.classList.remove('open');
+        partnerInput.setAttribute('aria-expanded', 'false');
+        partnerInput.removeAttribute('aria-activedescendant');
+        pickerActiveIndex = -1;
+    }
+
+    function pickPartner(name) {
+        closePartnerList();
+        partnerInput.value = '';
+        showDrillDown(name, FILTERED_DATA);
+    }
+
+    partnerInput.addEventListener('focus', renderPartnerList);
+    partnerInput.addEventListener('input', debounce(renderPartnerList, 150));
+    partnerInput.addEventListener('blur', closePartnerList);
+    partnerInput.addEventListener('keydown', function (e) {
+        const options = partnerListEl.querySelectorAll('.partner-option');
+        if (e.key === 'Escape') { closePartnerList(); return; }
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (!partnerListEl.classList.contains('open')) { renderPartnerList(); return; }
+            if (options.length === 0) return;
+            if (e.key === 'ArrowDown') {
+                pickerActiveIndex = (pickerActiveIndex + 1) % options.length;
+            } else {
+                // From -1 (nothing active) or 0, wrap to the last item
+                pickerActiveIndex = pickerActiveIndex <= 0 ? options.length - 1 : pickerActiveIndex - 1;
+            }
+            options.forEach(function (o, i) {
+                const isActive = i === pickerActiveIndex;
+                o.classList.toggle('is-active', isActive);
+                o.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            });
+            partnerInput.setAttribute('aria-activedescendant', options[pickerActiveIndex].id);
+            options[pickerActiveIndex].scrollIntoView({ block: 'nearest' });
+            return;
+        }
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (pickerActiveIndex >= 0 && options[pickerActiveIndex]) {
+                pickPartner(options[pickerActiveIndex].getAttribute('data-partner'));
+            } else if (options.length === 1) {
+                pickPartner(options[0].getAttribute('data-partner'));
+            }
+        }
+    });
+    // mousedown (not click) so the input's blur handler doesn't close the list first
+    partnerListEl.addEventListener('mousedown', function (e) {
+        const opt = e.target.closest('.partner-option');
+        if (opt) { e.preventDefault(); pickPartner(opt.getAttribute('data-partner')); }
     });
 
     // Fetch Rescue Data & Init
@@ -1008,37 +1278,25 @@ body.light-mode .chart-legend-gradient { background: linear-gradient(to right, #
             };
         });
 
-        resetDates(); // Start with default 30 days
+        // Clear loading state
+        document.querySelectorAll('.stat-value.skeleton').forEach(el => el.classList.remove('skeleton'));
+        const loadingEl = document.getElementById('chartLoading');
+        if (loadingEl) loadingEl.remove();
 
-        // Check for Inbound URL Flag
-        const params = new URLSearchParams(window.location.search);
-        if (params.get('view') === 'today') {
-            showTodayRescues();
-        }
-    }).catch(err => console.error("Failed to load rescue data:", err));
+        // Restore view from URL (date range + partner drill-down), or default 30 days
+        applyStateFromUrl(new URLSearchParams(window.location.search), { celebrate: true });
+    }).catch(err => {
+        console.error("Failed to load rescue data:", err);
+        const errorHtml = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i>Couldn\'t load rescue data. Please check your connection.<br><button class="btn-apply" style="margin-top:12px;" onclick="location.reload()"><i class="fas fa-redo"></i> Retry</button></div>';
+        const loadingEl = document.getElementById('chartLoading');
+        if (loadingEl) loadingEl.innerHTML = errorHtml;
+        document.getElementById('recentGrid').innerHTML = errorHtml;
+    });
 
     // --- Quick Date Logic ---
     function quickDate(days) {
         document.getElementById('endDate').value = siteToday();
-
-        if (days === 0) {
-            // "All" — find earliest date in data
-            if (ALL_DATA.length > 0) {
-                const earliest = ALL_DATA.reduce((min, d) => d.date < min ? d.date : min, ALL_DATA[0].date);
-                document.getElementById('startDate').value = earliest;
-            } else {
-                document.getElementById('startDate').value = siteDateNDaysAgo(365 * 5);
-            }
-        } else {
-            document.getElementById('startDate').value = siteDateNDaysAgo(days);
-        }
-
-        // Update active button state
-        document.querySelectorAll('.btn-quick').forEach(btn => btn.classList.remove('active'));
-        const labels = { '7': 0, '30': 1, '90': 2, '0': 3 };
-        const idx = labels[String(days)];
-        if (idx !== undefined) document.querySelectorAll('.btn-quick')[idx].classList.add('active');
-
+        document.getElementById('startDate').value = (days === 0) ? earliestDataDate() : siteDateNDaysAgo(days);
         applyDateFilter();
     }
 
@@ -1058,6 +1316,11 @@ body.light-mode .chart-legend-gradient { background: linear-gradient(to right, #
 
         document.getElementById('countToday').innerText = todayCount;
         document.getElementById('countTotal').innerText = FILTERED_DATA.length;
+
+        // Disable the "Rescues Today" card when there's nothing to celebrate
+        const todayCard = document.getElementById('todayCard');
+        todayCard.classList.toggle('disabled', todayCount === 0);
+        todayCard.setAttribute('aria-disabled', todayCount === 0 ? 'true' : 'false');
 
         // Avg Length of Stay
         const losValues = FILTERED_DATA.filter(d => d.los >= 0).map(d => d.los);
@@ -1085,6 +1348,8 @@ body.light-mode .chart-legend-gradient { background: linear-gradient(to right, #
 
         updateDashboard();
         updateFilterBanner();
+        setActiveQuickButton(detectPreset(startStr, endStr));
+        syncUrl(false);
     }
 
     // --- Toggle Name Logic ---
@@ -1137,7 +1402,7 @@ body.light-mode .chart-legend-gradient { background: linear-gradient(to right, #
 
     // --- Dashboard Render Logic ---
     function updateDashboard() {
-        closeDrillDown();
+        hideDrillDown();
         renderTiles(FILTERED_DATA);
         renderMainChart(FILTERED_DATA);
     }
@@ -1414,6 +1679,18 @@ body.light-mode .chart-legend-gradient { background: linear-gradient(to right, #
         statsHtml += '<div class="drill-stat"><div class="drill-stat-value">' + uniqueBreeds.size + '</div><div class="drill-stat-label">Breeds Pulled</div></div>';
         statsEl.innerHTML = statsHtml;
 
+        if (pieChart) { pieChart.destroy(); pieChart = null; }
+        if (sizeChart) { sizeChart.destroy(); sizeChart = null; }
+
+        // No records in the current range (e.g. deep link to an out-of-range partner):
+        // show stats + empty table, skip the doughnuts
+        if (partnerRecords.length === 0) {
+            document.getElementById('drillDownBody').innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:20px;">No pulls by this partner in the selected date range &mdash; try widening the dates.</td></tr>';
+            updateFilterBanner();
+            syncUrl(true);
+            return;
+        }
+
         const breedCounts = {};
         partnerRecords.forEach(r => {
             let b = r.breed.split('/')[0].trim();
@@ -1439,8 +1716,6 @@ body.light-mode .chart-legend-gradient { background: linear-gradient(to right, #
             if (e[0] === 'Other') return '#6e7681';
             return dynamicPalette[paletteIndex++ % dynamicPalette.length];
         });
-
-        if (pieChart) pieChart.destroy();
 
         pieChart = new Chart(document.getElementById('breedPieChart').getContext('2d'), {
             type: 'doughnut',
@@ -1485,8 +1760,6 @@ body.light-mode .chart-legend-gradient { background: linear-gradient(to right, #
                 sizeChartColors.push(SIZE_COLORS[i]);
             }
         });
-
-        if (sizeChart) sizeChart.destroy();
 
         if (sizeEntries.length > 0) {
             sizeChart = new Chart(document.getElementById('sizePieChart').getContext('2d'), {
@@ -1541,15 +1814,29 @@ body.light-mode .chart-legend-gradient { background: linear-gradient(to right, #
         });
         updateFilterBanner();
         if (window.applyChartTheme) window.applyChartTheme();
+        syncUrl(true);
     }
 
-    function closeDrillDown() {
+    // Pure DOM teardown — no focus/scroll/history side effects
+    function hideDrillDown() {
         ACTIVE_DRILL_DOWN_PARTNER = null;
         document.getElementById('drillDownSection').style.display = 'none';
         document.getElementById('recentRescuesSection').style.display = 'block';
+        if (pieChart) { pieChart.destroy(); pieChart = null; }
         if (sizeChart) { sizeChart.destroy(); sizeChart = null; }
+    }
+
+    // User-action close (Close/Back buttons)
+    function closeDrillDown() {
+        if (!SUPPRESS_URL_SYNC && history.state && history.state.dd) {
+            // We pushed an entry when opening — going back closes it via popstate
+            history.back();
+            return;
+        }
+        hideDrillDown();
         document.getElementById('gridTitle').focus();
         window.scrollTo({ top: 0, behavior: smoothOrAuto() });
         updateFilterBanner();
+        syncUrl(false);
     }
 </script></body></html>
