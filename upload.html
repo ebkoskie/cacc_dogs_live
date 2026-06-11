@@ -237,6 +237,7 @@
     margin-bottom: 18px;
 }
 .admin-panel > *:not(summary) { animation: slideDown 0.3s ease-out; }
+#adminUnlockBtn { margin-bottom: 14px; }
 @keyframes slideDown {
     from { opacity: 0; transform: translateY(-8px); }
     to { opacity: 1; transform: translateY(0); }
@@ -502,7 +503,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Sheets expire after a day or two, so re-upload whenever they're rewritten. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet — the processing service hasn't been deployed. Please check back soon. </div><form id=uploadForm class=card-panel><label class=field for=passcode><span>Volunteer passcode</span><div class=password-wrapper><input type=password id=passcode name=passcode autocomplete=current-password required><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option><option value=E>E</option></select></label><div class=field><span id=photoLabel>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* required class=visually-hidden aria-labelledby=photoLabel><div class=file-btn-group><button type=button id=snapBtn class=file-btn><i class="fas fa-camera" aria-hidden=true></i> Take photo </button><button type=button id=pickBtn class=file-btn><i class="fas fa-image" aria-hidden=true></i> Choose photo </button></div><span id=photoName class=muted></span></div><label class=agree id=agreeRow for=agreeTerms><input type=checkbox id=agreeTerms name=agreeTerms required><span>I have read and agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>.</span></label><p class="agreed-note muted" id=agreedNote hidden><span>By uploading, you agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a> (accepted <span id=agreedWhen></span>).</span><button type=button class=linklike id=reviewTerms>Review</button></p><div id=ts-upload class=ts-widget></div><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div></form><details class="card-panel admin-panel" id=adminPanel><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><div class=password-wrapper><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>E</code> plus a number (e.g. <code>C 70</code>), or clear it. Optionally pick the walker-level color matching the marker highlight on the sheet (yellow = intermediate, orange = advanced) — setting a kennel with "No color" removes any existing color. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div><div id=ts-admin class=ts-widget-admin></div><div id=adminStatus class=status role=status aria-live=polite></div></details></div><div class=footer><span>Last Updated: June 11, 2026 02:32 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Legal><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a></nav></div></div><script>
+</script><div class=container><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Sheets expire after a day or two, so re-upload whenever they're rewritten. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet — the processing service hasn't been deployed. Please check back soon. </div><form id=uploadForm class=card-panel><label class=field for=passcode><span>Volunteer passcode</span><div class=password-wrapper><input type=password id=passcode name=passcode autocomplete=current-password required><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option><option value=E>E</option></select></label><div class=field><span id=photoLabel>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* required class=visually-hidden aria-labelledby=photoLabel><div class=file-btn-group><button type=button id=snapBtn class=file-btn><i class="fas fa-camera" aria-hidden=true></i> Take photo </button><button type=button id=pickBtn class=file-btn><i class="fas fa-image" aria-hidden=true></i> Choose photo </button></div><span id=photoName class=muted></span></div><label class=agree id=agreeRow for=agreeTerms><input type=checkbox id=agreeTerms name=agreeTerms required><span>I have read and agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>.</span></label><p class="agreed-note muted" id=agreedNote hidden><span>By uploading, you agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a> (accepted <span id=agreedWhen></span>).</span><button type=button class=linklike id=reviewTerms>Review</button></p><div id=ts-upload class=ts-widget></div><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div></form><details class="card-panel admin-panel" id=adminPanel><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><div class=password-wrapper><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><div id=ts-admin class=ts-widget-admin></div><button type=button class=primary-btn id=adminUnlockBtn><i class="fas fa-lock-open" aria-hidden=true></i> Unlock </button><div id=adminGated hidden><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>E</code> plus a number (e.g. <code>C 70</code>), or clear it. Optionally pick the walker-level color matching the marker highlight on the sheet (yellow = intermediate, orange = advanced) — setting a kennel with "No color" removes any existing color. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div></div><div id=adminStatus class=status role=status aria-live=polite></div></details></div><div class=footer><span>Last Updated: June 11, 2026 02:35 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Legal><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -1006,6 +1007,13 @@
     const adminSearch = document.getElementById('adminSearch');
     const adminResults = document.getElementById('adminResults');
     const adminStatus = document.getElementById('adminStatus');
+    const adminGated = document.getElementById('adminGated');
+    const adminUnlockBtn = document.getElementById('adminUnlockBtn');
+    // The console (search + roster + override controls) stays hidden until the
+    // worker confirms the passcode via /admin/verify. Closing the panel
+    // re-locks it, so every open requires an explicit Unlock.
+    let adminUnlocked = false;
+    let unlockInFlight = false;
     let roster = [];
     // Row-level busy state: dogId -> 'set' | 'clear' while a request is in flight.
     const inFlightAdmins = new Map();
@@ -1023,10 +1031,16 @@
     // (site_data omits `od` for those) — plus any already-badged dog (`d.pk`),
     // so an admin can always find and fix/clear an existing badge.
     // The roster is the largest payload on this page and only the admin panel
-    // needs it, so defer the fetch until the panel is first opened.
-    let rosterLoaded = false;
-    document.getElementById('adminPanel').addEventListener('toggle', function () {
-        if (!this.open || rosterLoaded) return;
+    // needs it, so defer the fetch until the first successful unlock.
+    let rosterLoaded = false;  // an attempt was made
+    let rosterReady = false;   // the roster parsed and can be re-rendered
+    function loadRoster() {
+        if (rosterLoaded) {
+            // Cached from an earlier unlock. A failed fetch keeps its "reload
+            // to retry" message in place rather than rendering an empty list.
+            if (rosterReady) renderAdmin();
+            return;
+        }
         rosterLoaded = true;  // one attempt; the failure message says to reload
         fetch('site_data.json')
             .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
@@ -1044,11 +1058,87 @@
                         ps: d.ps === 'c' || d.ps === 'a' ? d.ps : '',
                         fl: !!d.fl
                     }));
+                rosterReady = true;
                 renderAdmin();
             }).catch(() => {
                 adminResults.innerHTML = '<p class="muted">Could not load the roster — reload the page to retry.</p>';
             });
+    }
+
+    const adminPanel = document.getElementById('adminPanel');
+    function lockAdmin() {
+        adminUnlocked = false;
+        adminGated.hidden = true;
+        adminUnlockBtn.hidden = false;
+        setStatus(adminStatus, '', '');
+    }
+    adminPanel.addEventListener('toggle', function () {
+        if (!this.open) lockAdmin();
     });
+
+    function unlockAdmin() {
+        if (unlockInFlight || adminUnlocked) return;
+        if (!PAVILION_API_BASE) { setStatus(adminStatus, 'Service not deployed yet.', 'err'); return; }
+        if (!adminPass.value) { setStatus(adminStatus, 'Enter the admin passcode first.', 'err'); return; }
+        unlockInFlight = true;
+        adminUnlockBtn.disabled = true;
+        const originalHtml = adminUnlockBtn.innerHTML;
+        adminUnlockBtn.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Unlocking…';
+        // The verify request consumes a single-use admin Turnstile token, so it
+        // runs on the same chain that serializes Set/Clear posts.
+        adminChain = adminChain.then(() => sendVerify(originalHtml)).catch(() => {});
+    }
+    adminUnlockBtn.addEventListener('click', unlockAdmin);
+    // The passcode field isn't inside a <form>, so Enter does nothing by default.
+    adminPass.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); unlockAdmin(); }
+    });
+
+    async function sendVerify(originalHtml) {
+        try {
+            let tsToken = '';
+            if (TURNSTILE_SITE_KEY) {
+                if (turnstileBlocked()) {
+                    setStatus(adminStatus, 'Security check failed to load — please disable any adblocker/privacy shield and refresh.', 'err');
+                    return;
+                }
+                tsToken = await getAdminToken();
+                if (!tsToken) { setStatus(adminStatus, 'Please complete the security check, then retry.', 'err'); return; }
+            }
+            sessionStorage.setItem(ADMIN_KEY, adminPass.value);
+            setStatus(adminStatus, 'Checking passcode…', '');
+            let resp;
+            try {
+                resp = await fetch(`${PAVILION_API_BASE}/admin/verify`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-Admin-Passcode': adminPass.value },
+                    body: JSON.stringify({ 'cf-turnstile-response': tsToken || undefined }),
+                    signal: AbortSignal.timeout(30000)
+                });
+            } catch (e) {
+                setStatus(adminStatus, e && e.name === 'TimeoutError'
+                    ? 'Unlock timed out — try again.' : 'Unlock failed — check your connection and try again.', 'err');
+                return;
+            }
+            if (resp.status === 401) { setStatus(adminStatus, 'Admin passcode rejected.', 'err'); return; }
+            if (resp.status === 403) { setStatus(adminStatus, 'Security check failed. Please retry.', 'err'); return; }
+            if (!resp.ok) { setStatus(adminStatus, `Unlock failed (HTTP ${resp.status}). Try again.`, 'err'); return; }
+            // The panel was collapsed mid-request: it re-locked on close, and
+            // every open requires its own explicit unlock — stay locked.
+            if (!adminPanel.open) return;
+            adminUnlocked = true;
+            adminUnlockBtn.hidden = true;
+            adminGated.hidden = false;
+            setStatus(adminStatus, '', '');
+            loadRoster();
+        } finally {
+            // Token is single-use — refresh for the next admin action.
+            if (TURNSTILE_SITE_KEY && window.turnstile && tsAdminId !== null) window.turnstile.reset(tsAdminId);
+            unlockInFlight = false;
+            adminUnlockBtn.disabled = false;
+            adminUnlockBtn.innerHTML = originalHtml;
+        }
+    }
 
     function renderAdmin() {
         const q = adminSearch.value.trim().toLowerCase();
@@ -1177,6 +1267,7 @@
     }
 
     function adminPost(dogId, pk, hl, action) {
+        if (!adminUnlocked) return; // gated UI is hidden; stale clicks can't post
         if (!PAVILION_API_BASE) { setStatus(adminStatus, 'Service not deployed yet.', 'err'); return; }
         if (!adminPass.value) { setStatus(adminStatus, 'Enter the admin passcode first.', 'err'); return; }
         if (inFlightAdmins.has(dogId)) return; // this row is already saving
@@ -1227,7 +1318,15 @@
                 body: JSON.stringify({ dog_id: dogId, pk, hl: hl || null, name: dog ? dog.name : undefined, 'cf-turnstile-response': tsToken || undefined }),
                 signal: AbortSignal.timeout(30000)
             });
-            if (resp.status === 401) { failAdminRow(dogId, action, originalHtml, 'Admin passcode rejected.'); return; }
+            if (resp.status === 401) {
+                // The passcode was rotated mid-session: the verified state is
+                // void, so re-lock. lockAdmin clears the status line — set the
+                // explanation after it.
+                failAdminRow(dogId, action, originalHtml, 'Admin passcode rejected.');
+                lockAdmin();
+                setStatus(adminStatus, 'Admin passcode rejected — the panel is locked. Re-enter the passcode and unlock.', 'err');
+                return;
+            }
             if (resp.status === 403) { failAdminRow(dogId, action, originalHtml, 'Security check failed. Please retry.'); return; }
             if (!resp.ok) {
                 const data = await resp.json().catch(() => ({}));
