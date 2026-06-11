@@ -41,6 +41,10 @@
         .tag.pavilion.hl-orange { color: var(--hl-orange-text); background: var(--hl-orange-bg); border-color: var(--hl-orange-border); }
         .tag.pavilion .pk-report { color: var(--text-muted); cursor: pointer; font-size: 0.85em; opacity: 0.7; margin-left: 2px; background: none; border: none; padding: 0; line-height: 1; }
         .tag.pavilion .pk-report:hover { color: var(--danger-text); opacity: 1; }
+        /* A reported ("disputed") badge stays visible but dims and carries a
+           small warning mark — only consensus or an admin changes the value. */
+        .tag.pavilion.flagged { opacity: 0.65; }
+        .tag.pavilion .pk-flag-mark { font-size: 0.8em; color: var(--warning-text); }
 
         .tag.color { border: 1px solid transparent; }
         .tag.color-black { background: rgba(100,100,100,0.15); color: #c9d1d9; border: 1px solid rgba(100,100,100,0.5); }
@@ -260,7 +264,7 @@
 .admin-row input.kennel.is-invalid:focus { outline: 2px solid var(--danger-text); outline-offset: -1px; }
 .admin-row-error { grid-column: 1 / -1; color: var(--danger-text); font-size: 0.85rem; margin-top: 4px; }
 
-/* Badge-provenance chips: crowd-set badges and flag-suppressed dogs. */
+/* Badge-provenance chips: crowd-set badges, flagged dogs, pending suggestions. */
 .who-chip {
     display: inline-flex; align-items: center; gap: 4px;
     padding: 1px 6px; margin-left: 6px; border-radius: 999px;
@@ -268,6 +272,8 @@
 }
 .who-chip.crowd { color: var(--accent); border: 1px solid var(--accent); }
 .who-chip.flagged { color: var(--warning-text); background: var(--warning-bg); border: 1px solid var(--warning-border); }
+/* Dashed border distinguishes a pending suggestion from a promoted (crowd) one. */
+.who-chip.suggest { color: var(--accent); border: 1px dashed var(--accent); }
 .muted { color: var(--text-muted); font-size: 0.85rem; }
 .agree { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; line-height: 1.45; }
 .agree input[type="checkbox"] { width: 18px; height: 18px; min-height: 0; margin: 2px 0 0; flex: 0 0 auto; accent-color: var(--accent); cursor: pointer; }
@@ -503,7 +509,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Sheets expire after a day or two, so re-upload whenever they're rewritten. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet — the processing service hasn't been deployed. Please check back soon. </div><form id=uploadForm class=card-panel><label class=field for=passcode><span>Volunteer passcode</span><div class=password-wrapper><input type=password id=passcode name=passcode autocomplete=current-password required><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option><option value=E>E</option></select></label><div class=field><span id=photoLabel>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* required class=visually-hidden aria-labelledby=photoLabel><div class=file-btn-group><button type=button id=snapBtn class=file-btn><i class="fas fa-camera" aria-hidden=true></i> Take photo </button><button type=button id=pickBtn class=file-btn><i class="fas fa-image" aria-hidden=true></i> Choose photo </button></div><span id=photoName class=muted></span></div><label class=agree id=agreeRow for=agreeTerms><input type=checkbox id=agreeTerms name=agreeTerms required><span>I have read and agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>.</span></label><p class="agreed-note muted" id=agreedNote hidden><span>By uploading, you agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a> (accepted <span id=agreedWhen></span>).</span><button type=button class=linklike id=reviewTerms>Review</button></p><div id=ts-upload class=ts-widget></div><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div></form><details class="card-panel admin-panel" id=adminPanel><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><div class=password-wrapper><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><div id=ts-admin class=ts-widget-admin></div><button type=button class=primary-btn id=adminUnlockBtn><i class="fas fa-lock-open" aria-hidden=true></i> Unlock </button><div id=adminGated hidden><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>E</code> plus a number (e.g. <code>C 70</code>), or clear it. Optionally pick the walker-level color matching the marker highlight on the sheet (yellow = intermediate, orange = advanced) — setting a kennel with "No color" removes any existing color. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div></div><div id=adminStatus class=status role=status aria-live=polite></div></details></div><div class=footer><span>Last Updated: June 11, 2026 02:35 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Legal><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a></nav></div></div><script>
+</script><div class=container><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Sheets expire after a day or two, so re-upload whenever they're rewritten. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet — the processing service hasn't been deployed. Please check back soon. </div><form id=uploadForm class=card-panel><label class=field for=passcode><span>Volunteer passcode</span><div class=password-wrapper><input type=password id=passcode name=passcode autocomplete=current-password required><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option><option value=E>E</option></select></label><div class=field><span id=photoLabel>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* required class=visually-hidden aria-labelledby=photoLabel><div class=file-btn-group><button type=button id=snapBtn class=file-btn><i class="fas fa-camera" aria-hidden=true></i> Take photo </button><button type=button id=pickBtn class=file-btn><i class="fas fa-image" aria-hidden=true></i> Choose photo </button></div><span id=photoName class=muted></span></div><label class=agree id=agreeRow for=agreeTerms><input type=checkbox id=agreeTerms name=agreeTerms required><span>I have read and agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>.</span></label><p class="agreed-note muted" id=agreedNote hidden><span>By uploading, you agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a> (accepted <span id=agreedWhen></span>).</span><button type=button class=linklike id=reviewTerms>Review</button></p><div id=ts-upload class=ts-widget></div><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div></form><details class="card-panel admin-panel" id=adminPanel><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><div class=password-wrapper><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><div id=ts-admin class=ts-widget-admin></div><button type=button class=primary-btn id=adminUnlockBtn><i class="fas fa-lock-open" aria-hidden=true></i> Unlock </button><div id=adminGated hidden><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>E</code> plus a number (e.g. <code>C 70</code>), or clear it. Optionally pick the walker-level color matching the marker highlight on the sheet (yellow = intermediate, orange = advanced) — setting a kennel with "No color" removes any existing color. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div></div><div id=adminStatus class=status role=status aria-live=polite></div></details></div><div class=footer><span>Last Updated: June 11, 2026 03:14 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Legal><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -1054,9 +1060,12 @@
                         // Decode through an allowlist map — junk degrades to ''.
                         hl: d.hl === 'y' ? 'yellow' : (d.hl === 'o' ? 'orange' : ''),
                         // Provenance: badge from crowd consensus ('c') or admin
-                        // override ('a'); fl = badge suppressed by a public flag.
+                        // override ('a'); fl = count of anonymous "badge is
+                        // wrong" flags (the badge itself stays visible);
+                        // sg = pending volunteer suggestions {pk: votes}.
                         ps: d.ps === 'c' || d.ps === 'a' ? d.ps : '',
-                        fl: !!d.fl
+                        fl: Number(d.fl) || 0,
+                        sg: (d.sg && typeof d.sg === 'object' && !Array.isArray(d.sg)) ? d.sg : null
                     }));
                 rosterReady = true;
                 renderAdmin();
@@ -1143,11 +1152,11 @@
     function renderAdmin() {
         const q = adminSearch.value.trim().toLowerCase();
         // With no query, show dogs that already carry a badge (the ones most
-        // likely to need fixing) plus flag-suppressed dogs awaiting an admin;
-        // searching opens up the full active roster.
+        // likely to need fixing) plus flagged dogs and dogs with pending
+        // suggestions awaiting review; searching opens up the full roster.
         let list = q
             ? roster.filter(d => d.name.toLowerCase().includes(q) || d.id.toLowerCase().includes(q))
-            : roster.filter(d => d.pk || d.fl);
+            : roster.filter(d => d.pk || d.fl || d.sg);
         list = list.slice(0, 40);
         if (!list.length) {
             adminResults.innerHTML = `<p class="muted">${q ? 'No matches.' : 'No dogs currently have a location badge. Search to set one.'}</p>`;
@@ -1159,17 +1168,27 @@
         adminResults.innerHTML = list.map(d => {
             const inFlight = inFlightAdmins.get(d.id);
             const disabledAttr = inFlight ? ' disabled' : '';
-            // Provenance chips so an admin sees which badges came from a 3-user
-            // crowd consensus and which dogs a public flag has hidden.
+            // Review chips: crowd = recently overridden by volunteer consensus;
+            // flagged ×N = anonymous reports disputing the (still visible)
+            // badge; → pk ×N = pending volunteer suggestions and their votes.
             const crowdChip = d.ps === 'c'
-                ? ' <span class="who-chip crowd" title="Set by 3 matching public reports"><i class="fas fa-users" aria-hidden="true"></i> crowd ×3</span>'
+                ? ' <span class="who-chip crowd" title="Recently overridden by volunteer consensus (3 matching reports)"><i class="fas fa-users" aria-hidden="true"></i> crowd ×3</span>'
                 : '';
             const flagChip = d.fl
-                ? ' <span class="who-chip flagged" title="Badge hidden by a public report — set the correct kennel or clear"><i class="fas fa-flag" aria-hidden="true"></i> flagged</span>'
+                ? ` <span class="who-chip flagged" title="${d.fl} anonymous report${d.fl === 1 ? '' : 's'} say this badge is wrong — verify, then Set the correct kennel or Clear"><i class="fas fa-flag" aria-hidden="true"></i> flagged ×${Number(d.fl)}</span>`
+                : '';
+            // Suggested kennels are re-validated before rendering (same
+            // defense-in-depth posture as the rest of the row).
+            const suggestChips = d.sg
+                ? Object.entries(d.sg)
+                    .filter(([pk, votes]) => /^[A-E]-\d{1,3}$/.test(pk) && Number(votes) > 0)
+                    .sort((a, b) => Number(b[1]) - Number(a[1]))
+                    .map(([pk, votes]) => ` <span class="who-chip suggest" title="Pending volunteer correction — promotes automatically at 3 matching reports"><i class="fas fa-arrow-right" aria-hidden="true"></i> ${escapeHtml(pk)} ×${Number(votes)}</span>`)
+                    .join('')
                 : '';
             return `
             <div class="admin-row" data-id="${escapeHtml(d.id)}">
-                <span class="who"><b>${escapeHtml(d.name)}</b><small>${escapeHtml(d.id)}${d.pk ? ' · now ' + escapeHtml(d.pk) : ''}${d.hl ? ' (' + escapeHtml(d.hl) + ')' : ''}${crowdChip}${flagChip}</small></span>
+                <span class="who"><b>${escapeHtml(d.name)}</b><small>${escapeHtml(d.id)}${d.pk ? ' · now ' + escapeHtml(d.pk) : ''}${d.hl ? ' (' + escapeHtml(d.hl) + ')' : ''}${crowdChip}${flagChip}${suggestChips}</small></span>
                 <input class="kennel field" type="text" placeholder="C 70" value="${escapeHtml(d.pk ? d.pk.replace(/-/g, ' ') : '')}" aria-label="Kennel for ${escapeHtml(d.name)} (${escapeHtml(d.id)})"${disabledAttr}>
                 <select class="hl field" aria-label="Walker-level color for ${escapeHtml(d.name)} (${escapeHtml(d.id)})"${disabledAttr}>
                     <option value="">No color</option>
@@ -1335,8 +1354,9 @@
                 return;
             }
             // The save is now an admin override: refresh provenance locally so
-            // any crowd/flagged chip disappears without waiting for a rebuild.
-            if (dog) { dog.pk = pk || ''; dog.hl = (pk && hl) || ''; dog.ps = pk ? 'a' : ''; dog.fl = false; }
+            // any crowd/flagged/suggestion chip disappears without waiting for
+            // a rebuild.
+            if (dog) { dog.pk = pk || ''; dog.hl = (pk && hl) || ''; dog.ps = pk ? 'a' : ''; dog.fl = 0; dog.sg = null; }
             setStatus(adminStatus, pk ? `Set ${dogId} to ${pk}${hl ? ' (' + hl + ')' : ''}.` : `Cleared ${dogId}.`, 'ok');
             inFlightAdmins.delete(dogId);
             const liveRow = adminRow(dogId);
