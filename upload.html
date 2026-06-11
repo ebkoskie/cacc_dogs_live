@@ -171,17 +171,102 @@
     background: var(--warning-bg); color: var(--warning-text); border: 1px solid var(--warning-border);
     border-radius: 8px; padding: 12px; margin-bottom: 18px; font-size: 0.9rem;
 }
-.admin-panel summary { cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-.admin-panel[open] summary { margin-bottom: 14px; }
-.admin-row {
-    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-    padding: 10px 0; border-bottom: 1px solid var(--border);
-}
-.admin-row .who { flex: 1 1 160px; min-width: 0; }
+/* Corrections roster rows: a responsive grid — five columns on desktop, a
+   2-column stack on narrow phones — with 48px tap targets throughout. */
+.admin-row input.kennel,
+.admin-row select.hl,
+.admin-row button { min-height: 48px; box-sizing: border-box; }
+.admin-row .who { min-width: 0; }
 .admin-row .who b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .admin-row .who small { color: var(--text-muted); }
-.admin-row input.kennel { width: 110px; margin: 0; }
-.admin-row select.hl { width: 150px; margin: 0; }
+.ghost-btn:disabled {
+    opacity: 0.5; cursor: not-allowed;
+    border-color: var(--border); color: var(--text-muted);
+}
+@media (min-width: 640px) {
+    .admin-row {
+        display: grid;
+        grid-template-columns: 1.5fr 110px 170px 75px 75px;
+        align-items: center; gap: 12px;
+        padding: 10px 0; border-bottom: 1px solid var(--border);
+    }
+}
+@media (max-width: 639.98px) {
+    .admin-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--border);
+    }
+    .admin-row .who { grid-column: span 2; }
+}
+.admin-row input.kennel,
+.admin-row select.hl { width: 100%; margin: 0; }
+.admin-row button {
+    width: 100%; display: inline-flex;
+    align-items: center; justify-content: center; padding: 8px 12px;
+}
+
+/* Collapsible admin panel: custom summary with a rotating chevron. */
+.admin-panel { transition: border-color 0.3s ease, box-shadow 0.3s ease; overflow: hidden; }
+.admin-panel:hover { border-color: var(--accent); box-shadow: 0 2px 5px var(--card-shadow); }
+.admin-panel summary {
+    cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 8px;
+    /* Negative margins mirror .card-panel's 18px padding so the summary's
+       hover/focus background bleeds to the card edge. */
+    padding: 14px 18px; margin: -18px -18px 0 -18px;
+    border-radius: 12px; list-style: none;
+    transition: background-color 0.2s, color 0.2s; user-select: none;
+}
+.admin-panel summary::-webkit-details-marker { display: none; }
+.admin-panel summary::after {
+    content: "\f078";
+    font-family: "Font Awesome 6 Free"; font-weight: 900;
+    margin-left: auto;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+.admin-panel[open] summary::after { transform: rotate(180deg); color: var(--accent); }
+.admin-panel summary:focus,
+.admin-panel summary:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: -2px;
+    background-color: var(--row-hover);
+}
+.admin-panel summary:hover { background-color: var(--row-hover); }
+.admin-panel[open] summary {
+    border-bottom: 1px solid var(--border);
+    border-bottom-left-radius: 0; border-bottom-right-radius: 0;
+    margin-bottom: 18px;
+}
+.admin-panel > *:not(summary) { animation: slideDown 0.3s ease-out; }
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Row-level save feedback and kennel-format validity states. */
+.row-flash-success { animation: row-flash-success-anim 1.5s ease-out; }
+.row-flash-error { animation: row-flash-error-anim 1.5s ease-out; }
+@keyframes row-flash-success-anim {
+    0% { background-color: var(--success-bg); outline: 2px solid var(--success-border); }
+    100% { background-color: transparent; outline: 2px solid transparent; }
+}
+@keyframes row-flash-error-anim {
+    0% { background-color: var(--danger-bg); outline: 2px solid var(--danger-border); }
+    100% { background-color: transparent; outline: 2px solid transparent; }
+}
+.admin-row input.kennel.is-valid { border-color: var(--success-text); background-color: var(--success-bg); }
+.admin-row input.kennel.is-invalid { border-color: var(--danger-text); background-color: var(--danger-bg); }
+.admin-row input.kennel.is-valid:focus { outline: 2px solid var(--success-text); outline-offset: -1px; }
+.admin-row input.kennel.is-invalid:focus { outline: 2px solid var(--danger-text); outline-offset: -1px; }
+.admin-row-error { grid-column: 1 / -1; color: var(--danger-text); font-size: 0.85rem; margin-top: 4px; }
+
+/* Badge-provenance chips: crowd-set badges and flag-suppressed dogs. */
+.who-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 1px 6px; margin-left: 6px; border-radius: 999px;
+    font-size: 0.72rem; font-weight: 600; vertical-align: text-bottom;
+}
+.who-chip.crowd { color: var(--accent); border: 1px solid var(--accent); }
+.who-chip.flagged { color: var(--warning-text); background: var(--warning-bg); border: 1px solid var(--warning-border); }
 .muted { color: var(--text-muted); font-size: 0.85rem; }
 .agree { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; line-height: 1.45; }
 .agree input[type="checkbox"] { width: 18px; height: 18px; min-height: 0; margin: 2px 0 0; flex: 0 0 auto; accent-color: var(--accent); cursor: pointer; }
@@ -417,7 +502,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Sheets expire after a day or two, so re-upload whenever they're rewritten. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet — the processing service hasn't been deployed. Please check back soon. </div><form id=uploadForm class=card-panel><label class=field for=passcode><span>Volunteer passcode</span><div class=password-wrapper><input type=password id=passcode name=passcode autocomplete=current-password required><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option><option value=E>E</option></select></label><div class=field><span id=photoLabel>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* required class=visually-hidden aria-labelledby=photoLabel><div class=file-btn-group><button type=button id=snapBtn class=file-btn><i class="fas fa-camera" aria-hidden=true></i> Take photo </button><button type=button id=pickBtn class=file-btn><i class="fas fa-image" aria-hidden=true></i> Choose photo </button></div><span id=photoName class=muted></span></div><label class=agree id=agreeRow for=agreeTerms><input type=checkbox id=agreeTerms name=agreeTerms required><span>I have read and agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>.</span></label><p class="agreed-note muted" id=agreedNote hidden><span>By uploading, you agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a> (accepted <span id=agreedWhen></span>).</span><button type=button class=linklike id=reviewTerms>Review</button></p><div id=ts-upload class=ts-widget></div><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div></form><details class="card-panel admin-panel" id=adminPanel><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><div class=password-wrapper><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>E</code> plus a number (e.g. <code>C 70</code>), or clear it. Optionally pick the walker-level color matching the marker highlight on the sheet (yellow = intermediate, orange = advanced) — setting a kennel with "No color" removes any existing color. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div><div id=ts-admin class=ts-widget-admin></div><div id=adminStatus class=status role=status aria-live=polite></div></details></div><div class=footer><span>Last Updated: June 11, 2026 01:32 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Legal><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a></nav></div></div><script>
+</script><div class=container><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Sheets expire after a day or two, so re-upload whenever they're rewritten. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet — the processing service hasn't been deployed. Please check back soon. </div><form id=uploadForm class=card-panel><label class=field for=passcode><span>Volunteer passcode</span><div class=password-wrapper><input type=password id=passcode name=passcode autocomplete=current-password required><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option><option value=E>E</option></select></label><div class=field><span id=photoLabel>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* required class=visually-hidden aria-labelledby=photoLabel><div class=file-btn-group><button type=button id=snapBtn class=file-btn><i class="fas fa-camera" aria-hidden=true></i> Take photo </button><button type=button id=pickBtn class=file-btn><i class="fas fa-image" aria-hidden=true></i> Choose photo </button></div><span id=photoName class=muted></span></div><label class=agree id=agreeRow for=agreeTerms><input type=checkbox id=agreeTerms name=agreeTerms required><span>I have read and agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>.</span></label><p class="agreed-note muted" id=agreedNote hidden><span>By uploading, you agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a> (accepted <span id=agreedWhen></span>).</span><button type=button class=linklike id=reviewTerms>Review</button></p><div id=ts-upload class=ts-widget></div><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div></form><details class="card-panel admin-panel" id=adminPanel><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><div class=password-wrapper><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>E</code> plus a number (e.g. <code>C 70</code>), or clear it. Optionally pick the walker-level color matching the marker highlight on the sheet (yellow = intermediate, orange = advanced) — setting a kennel with "No color" removes any existing color. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div><div id=ts-admin class=ts-widget-admin></div><div id=adminStatus class=status role=status aria-live=polite></div></details></div><div class=footer><span>Last Updated: June 11, 2026 01:51 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Legal><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -426,6 +511,46 @@
                 clearTimeout(timeout);
                 timeout = setTimeout(() => func.apply(context, args), wait);
             };
+        }
+
+        // --- Kennel-entry helpers (shared by upload.html admin panel and the
+        // --- index.html report dialog) ---
+        // Canonical kennel display format: pavilion letter, space, 1-3 digits.
+        const KENNEL_CANON_RE = /^[A-E] \d{1,3}$/;
+        // Uppercase the pavilion letter, hyphens -> spaces, collapse runs, and
+        // slip a space between letter and digit: "c70" / "c-70" become "C 70".
+        function formatKennelInline(val) {
+            if (/^[a-e]/i.test(val)) val = val.charAt(0).toUpperCase() + val.slice(1);
+            val = val.replace(/-/g, ' ').replace(/\s+/g, ' ');
+            if (/^[A-E]\d/.test(val)) val = val.charAt(0) + ' ' + val.slice(1);
+            return val;
+        }
+        // Canonicalize any reasonable kennel entry ("c-70", " C70 ") to the
+        // display form ("C 70"), or null when it doesn't parse.
+        function canonicalizeKennel(raw) {
+            const m = String(raw || '').trim().toUpperCase().match(/^([A-E])[\s-]*(\d{1,3})$/);
+            return m ? `${m[1]} ${m[2]}` : null;
+        }
+        // Parse any reasonable kennel entry to the stored "<A-E>-<digits>" form.
+        function kennelToPk(raw) {
+            const canon = canonicalizeKennel(raw);
+            return canon ? canon.replace(' ', '-') : null;
+        }
+        // Set a status line's text and ok/err state, preserving base classes.
+        function setStatus(el, msg, kind) {
+            el.textContent = msg;
+            el.classList.remove('ok', 'err');
+            if (kind) el.classList.add(kind);
+        }
+        // Single source of truth for a kennel input's is-valid/is-invalid classes
+        // and its submit button's disabled state. Returns the validity.
+        function applyKennelValidity(input, submitBtn) {
+            if (!input) return false;
+            const isValid = KENNEL_CANON_RE.test(input.value);
+            input.classList.toggle('is-valid', isValid);
+            input.classList.toggle('is-invalid', !isValid && input.value !== '');
+            if (submitBtn) submitBtn.disabled = !isValid;
+            return isValid;
         }
 
         // --- Site-wide Date/Timezone Utilities ---
@@ -572,13 +697,31 @@
     // Explicit render: this page has two widgets (upload + admin), so we capture
     // each widget id and address them individually. Populated by onTurnstileLoad.
     let tsUploadId = null, tsAdminId = null;
+    // Admin tokens are single-use and the widget re-solves *asynchronously* after
+    // each reset, so back-to-back admin actions would read an empty token. The
+    // render callback hands fresh tokens to whoever is awaiting getAdminToken().
+    let adminTsWaiters = [];
     window.onTurnstileLoad = function () {
         if (!window.turnstile) return;
         const up = document.getElementById('ts-upload');
         if (up) tsUploadId = window.turnstile.render(up, { sitekey: TURNSTILE_SITE_KEY });
         const ad = document.getElementById('ts-admin');
-        if (ad) tsAdminId = window.turnstile.render(ad, { sitekey: TURNSTILE_SITE_KEY, appearance: 'interaction-only' });
+        if (ad) tsAdminId = window.turnstile.render(ad, {
+            sitekey: TURNSTILE_SITE_KEY,
+            appearance: 'interaction-only',
+            callback: (token) => { adminTsWaiters.splice(0).forEach(fn => fn(token)); }
+        });
     };
+    // Resolve the current admin token, or wait for the widget to mint the next
+    // one (post-reset). Resolves '' on timeout so callers show the retry message.
+    function getAdminToken(timeoutMs = 15000) {
+        const existing = (window.turnstile && tsAdminId !== null && window.turnstile.getResponse(tsAdminId)) || '';
+        if (existing) return Promise.resolve(existing);
+        return new Promise(resolve => {
+            const timer = setTimeout(() => resolve(''), timeoutMs);
+            adminTsWaiters.push(token => { clearTimeout(timer); resolve(token); });
+        });
+    }
     // True when Turnstile is required but its script failed to load (e.g. blocked
     // by an adblocker/privacy shield) — used to give the user an actionable message.
     function turnstileBlocked() { return TURNSTILE_SITE_KEY && !window.turnstile; }
@@ -617,10 +760,7 @@
     document.querySelectorAll('.password-toggle').forEach(btn =>
         btn.addEventListener('click', () => togglePassword(btn)));
 
-    function setStatus(el, msg, kind) {
-        el.textContent = msg;
-        el.className = 'status' + (kind ? ' ' + kind : '');
-    }
+    // setStatus comes from base.html (shared with the index.html report dialog).
 
     function escapeHtml(s) {
         return String(s).replace(/[&<>"']/g, c =>
@@ -867,6 +1007,13 @@
     const adminResults = document.getElementById('adminResults');
     const adminStatus = document.getElementById('adminStatus');
     let roster = [];
+    // Row-level busy state: dogId -> 'set' | 'clear' while a request is in flight.
+    const inFlightAdmins = new Map();
+    // Admin POSTs run one at a time: the page has a single admin Turnstile widget
+    // and its tokens are single-use, so concurrent requests would race over the
+    // same token (the second would be rejected by siteverify). Rows still show
+    // their busy state immediately; only the network part is serialized.
+    let adminChain = Promise.resolve();
 
     adminPass.value = sessionStorage.getItem(ADMIN_KEY) || '';
     adminPass.addEventListener('change', () => sessionStorage.setItem(ADMIN_KEY, adminPass.value));
@@ -891,7 +1038,11 @@
                         name: d.n,
                         pk: d.pk || '',
                         // Decode through an allowlist map — junk degrades to ''.
-                        hl: d.hl === 'y' ? 'yellow' : (d.hl === 'o' ? 'orange' : '')
+                        hl: d.hl === 'y' ? 'yellow' : (d.hl === 'o' ? 'orange' : ''),
+                        // Provenance: badge from crowd consensus ('c') or admin
+                        // override ('a'); fl = badge suppressed by a public flag.
+                        ps: d.ps === 'c' || d.ps === 'a' ? d.ps : '',
+                        fl: !!d.fl
                     }));
                 renderAdmin();
             }).catch(() => {
@@ -901,11 +1052,12 @@
 
     function renderAdmin() {
         const q = adminSearch.value.trim().toLowerCase();
-        // With no query, show only dogs that already carry a badge (the ones most
-        // likely to need fixing); searching opens up the full active roster.
+        // With no query, show dogs that already carry a badge (the ones most
+        // likely to need fixing) plus flag-suppressed dogs awaiting an admin;
+        // searching opens up the full active roster.
         let list = q
             ? roster.filter(d => d.name.toLowerCase().includes(q) || d.id.toLowerCase().includes(q))
-            : roster.filter(d => d.pk);
+            : roster.filter(d => d.pk || d.fl);
         list = list.slice(0, 40);
         if (!list.length) {
             adminResults.innerHTML = `<p class="muted">${q ? 'No matches.' : 'No dogs currently have a location badge. Search to set one.'}</p>`;
@@ -913,19 +1065,41 @@
         }
         // Escape every interpolation — d.id/d.pk are validated upstream, but the
         // page re-validates as defense in depth (same posture as the build).
-        adminResults.innerHTML = list.map(d => `
+        const spinner = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i>';
+        adminResults.innerHTML = list.map(d => {
+            const inFlight = inFlightAdmins.get(d.id);
+            const disabledAttr = inFlight ? ' disabled' : '';
+            // Provenance chips so an admin sees which badges came from a 3-user
+            // crowd consensus and which dogs a public flag has hidden.
+            const crowdChip = d.ps === 'c'
+                ? ' <span class="who-chip crowd" title="Set by 3 matching public reports"><i class="fas fa-users" aria-hidden="true"></i> crowd ×3</span>'
+                : '';
+            const flagChip = d.fl
+                ? ' <span class="who-chip flagged" title="Badge hidden by a public report — set the correct kennel or clear"><i class="fas fa-flag" aria-hidden="true"></i> flagged</span>'
+                : '';
+            return `
             <div class="admin-row" data-id="${escapeHtml(d.id)}">
-                <span class="who"><b>${escapeHtml(d.name)}</b><small>${escapeHtml(d.id)}${d.pk ? ' · now ' + escapeHtml(d.pk) : ''}${d.hl ? ' (' + escapeHtml(d.hl) + ')' : ''}</small></span>
-                <input class="kennel field" type="text" placeholder="C 70" value="${escapeHtml(d.pk ? d.pk.replace('-', ' ') : '')}" aria-label="Kennel for ${escapeHtml(d.name)} (${escapeHtml(d.id)})">
-                <select class="hl field" aria-label="Walker-level color for ${escapeHtml(d.name)} (${escapeHtml(d.id)})">
+                <span class="who"><b>${escapeHtml(d.name)}</b><small>${escapeHtml(d.id)}${d.pk ? ' · now ' + escapeHtml(d.pk) : ''}${d.hl ? ' (' + escapeHtml(d.hl) + ')' : ''}${crowdChip}${flagChip}</small></span>
+                <input class="kennel field" type="text" placeholder="C 70" value="${escapeHtml(d.pk ? d.pk.replace(/-/g, ' ') : '')}" aria-label="Kennel for ${escapeHtml(d.name)} (${escapeHtml(d.id)})"${disabledAttr}>
+                <select class="hl field" aria-label="Walker-level color for ${escapeHtml(d.name)} (${escapeHtml(d.id)})"${disabledAttr}>
                     <option value="">No color</option>
                     <option value="yellow"${d.hl === 'yellow' ? ' selected' : ''}>Yellow — intermediate</option>
                     <option value="orange"${d.hl === 'orange' ? ' selected' : ''}>Orange — advanced</option>
                 </select>
-                <button type="button" class="ghost-btn" data-action="set" aria-label="Set kennel for ${escapeHtml(d.name)}">Set</button>
-                <button type="button" class="ghost-btn danger" data-action="clear" aria-label="Clear kennel for ${escapeHtml(d.name)}">Clear</button>
-            </div>
-        `).join('');
+                <button type="button" class="ghost-btn" data-action="set"${disabledAttr} aria-label="Set kennel for ${escapeHtml(d.name)}">${inFlight === 'set' ? spinner : 'Set'}</button>
+                <button type="button" class="ghost-btn danger" data-action="clear"${disabledAttr} aria-label="Clear kennel for ${escapeHtml(d.name)}">${inFlight === 'clear' ? spinner : 'Clear'}</button>
+                <div class="admin-row-error" hidden></div>
+            </div>`;
+        }).join('');
+        // Validity classes and Set-button gating live in one helper. In-flight
+        // rows still get their validity classes (a debounced search re-render
+        // can rebuild them mid-request) but their buttons stay disabled.
+        adminResults.querySelectorAll('.admin-row').forEach(row => {
+            const inFlight = inFlightAdmins.has(row.dataset.id);
+            applyKennelValidity(
+                row.querySelector('.kennel'),
+                inFlight ? null : row.querySelector('button[data-action="set"]'));
+        });
     }
 
     // Delegated Set/Clear handling — rows are re-rendered on every search, so a
@@ -935,33 +1109,111 @@
         if (!btn) return;
         const row = btn.closest('.admin-row');
         const dogId = row.dataset.id;
-        if (btn.dataset.action === 'clear') { adminPost(dogId, null, null); return; }
-        const pk = parsePk(row.querySelector('.kennel').value);
+        if (btn.dataset.action === 'clear') { adminPost(dogId, null, null, 'clear'); return; }
+        const pk = kennelToPk(row.querySelector('.kennel').value);
         if (!pk) { setStatus(adminStatus, 'Use a pavilion letter A–E and a kennel number, e.g. "C 70".', 'err'); return; }
         const rawHl = row.querySelector('select.hl').value;
         const hl = (rawHl === 'yellow' || rawHl === 'orange') ? rawHl : null;
-        adminPost(dogId, pk, hl);
+        adminPost(dogId, pk, hl, 'set');
     });
     adminSearch.addEventListener('input', debounce(renderAdmin, 200));
 
-    function parsePk(raw) {
-        const m = String(raw || '').trim().toUpperCase().match(/^([A-E])[\s-]*(\d{1,3})$/);
-        return m ? `${m[1]}-${m[2]}` : null;
+    // Smart kennel entry: format as the admin types, keeping the cursor in place.
+    adminResults.addEventListener('input', (e) => {
+        if (!e.target.classList.contains('kennel')) return;
+        const input = e.target;
+        const val = formatKennelInline(input.value);
+        if (input.value !== val) {
+            const delta = val.length - input.value.length;
+            const start = input.selectionStart, end = input.selectionEnd;
+            input.value = val;
+            input.setSelectionRange(Math.max(0, start + delta), Math.max(0, end + delta));
+        }
+        applyKennelValidity(input, input.closest('.admin-row').querySelector('button[data-action="set"]'));
+    });
+
+    // Full normalization on blur — handles copy-pastes like "c-70" or " C70 ".
+    adminResults.addEventListener('focusout', (e) => {
+        if (!e.target.classList.contains('kennel')) return;
+        const input = e.target;
+        const canon = canonicalizeKennel(input.value);
+        if (canon) input.value = canon;
+        applyKennelValidity(input, input.closest('.admin-row').querySelector('button[data-action="set"]'));
+    });
+
+    // formatKennelInline / KENNEL_CANON_RE / kennelToPk come from base.html
+    // (shared with the index.html report dialog).
+    function adminRow(dogId) {
+        return document.querySelector(`.admin-row[data-id="${CSS.escape(dogId)}"]`);
     }
 
-    async function adminPost(dogId, pk, hl) {
+    function restoreRow(row, btn, originalHtml) {
+        if (!row) return;
+        row.querySelectorAll('input, select').forEach(el => { el.disabled = false; });
+        const clearBtn = row.querySelector('button[data-action="clear"]');
+        if (clearBtn) clearBtn.disabled = false;
+        applyKennelValidity(row.querySelector('.kennel'), row.querySelector('button[data-action="set"]'));
+        if (btn) btn.innerHTML = originalHtml;
+    }
+
+    function flashRow(row, type) {
+        if (!row) return;
+        row.classList.remove('row-flash-success', 'row-flash-error');
+        void row.offsetWidth; // restart the animation if it was already playing
+        row.classList.add(`row-flash-${type}`);
+    }
+
+    // The one failure path for an admin action. Re-queries the row because a
+    // debounced search re-render may have replaced the node mid-request.
+    function failAdminRow(dogId, action, originalHtml, errMsg) {
+        setStatus(adminStatus, errMsg, 'err');
+        inFlightAdmins.delete(dogId);
+        const row = adminRow(dogId);
+        if (!row) return;
+        const errEl = row.querySelector('.admin-row-error');
+        if (errEl) { errEl.textContent = errMsg; errEl.hidden = false; }
+        restoreRow(row, row.querySelector(`button[data-action="${action}"]`), originalHtml);
+        flashRow(row, 'error');
+    }
+
+    function adminPost(dogId, pk, hl, action) {
         if (!PAVILION_API_BASE) { setStatus(adminStatus, 'Service not deployed yet.', 'err'); return; }
         if (!adminPass.value) { setStatus(adminStatus, 'Enter the admin passcode first.', 'err'); return; }
+        if (inFlightAdmins.has(dogId)) return; // this row is already saving
+
+        // Mark the row busy immediately; the network part runs via adminChain.
+        inFlightAdmins.set(dogId, action);
+        const row = adminRow(dogId);
+        let originalHtml = action === 'set' ? 'Set' : 'Clear';
+        if (row) {
+            const errEl = row.querySelector('.admin-row-error');
+            if (errEl) { errEl.hidden = true; errEl.textContent = ''; }
+            row.querySelectorAll('input, select, button').forEach(el => { el.disabled = true; });
+            const btn = row.querySelector(`button[data-action="${action}"]`);
+            if (btn) {
+                originalHtml = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i>';
+            }
+        }
+        adminChain = adminChain
+            .then(() => sendAdminPost(dogId, pk, hl, action, originalHtml))
+            .catch(() => {});
+    }
+
+    async function sendAdminPost(dogId, pk, hl, action, originalHtml) {
         // Turnstile gates this endpoint too (anti-brute-force). Resolve a token
         // before writing; the interaction-only widget is silent unless challenged.
         let tsToken = '';
         if (TURNSTILE_SITE_KEY) {
             if (turnstileBlocked()) {
-                setStatus(adminStatus, 'Security check failed to load — please disable any adblocker/privacy shield and refresh.', 'err');
+                failAdminRow(dogId, action, originalHtml, 'Security check failed to load — please disable any adblocker/privacy shield and refresh.');
                 return;
             }
-            tsToken = (window.turnstile && window.turnstile.getResponse(tsAdminId)) || '';
-            if (!tsToken) { setStatus(adminStatus, 'Please complete the security check, then retry.', 'err'); return; }
+            tsToken = await getAdminToken();
+            if (!tsToken) {
+                failAdminRow(dogId, action, originalHtml, 'Please complete the security check, then retry.');
+                return;
+            }
         }
         sessionStorage.setItem(ADMIN_KEY, adminPass.value);
         setStatus(adminStatus, 'Saving…', '');
@@ -975,15 +1227,30 @@
                 body: JSON.stringify({ dog_id: dogId, pk, hl: hl || null, name: dog ? dog.name : undefined, 'cf-turnstile-response': tsToken || undefined }),
                 signal: AbortSignal.timeout(30000)
             });
-            if (resp.status === 401) { setStatus(adminStatus, 'Admin passcode rejected.', 'err'); return; }
-            if (resp.status === 403) { setStatus(adminStatus, 'Security check failed. Please retry.', 'err'); return; }
-            if (!resp.ok) { setStatus(adminStatus, 'Save failed. Try again.', 'err'); return; }
-            if (dog) { dog.pk = pk || ''; dog.hl = (pk && hl) || ''; }
+            if (resp.status === 401) { failAdminRow(dogId, action, originalHtml, 'Admin passcode rejected.'); return; }
+            if (resp.status === 403) { failAdminRow(dogId, action, originalHtml, 'Security check failed. Please retry.'); return; }
+            if (!resp.ok) {
+                const data = await resp.json().catch(() => ({}));
+                const detail = typeof data.error === 'string' ? data.error.slice(0, 140) : '';
+                failAdminRow(dogId, action, originalHtml, `Save failed (HTTP ${resp.status}${detail ? ': ' + detail : ''}).`);
+                return;
+            }
+            // The save is now an admin override: refresh provenance locally so
+            // any crowd/flagged chip disappears without waiting for a rebuild.
+            if (dog) { dog.pk = pk || ''; dog.hl = (pk && hl) || ''; dog.ps = pk ? 'a' : ''; dog.fl = false; }
             setStatus(adminStatus, pk ? `Set ${dogId} to ${pk}${hl ? ' (' + hl + ')' : ''}.` : `Cleared ${dogId}.`, 'ok');
-            renderAdmin();
+            inFlightAdmins.delete(dogId);
+            const liveRow = adminRow(dogId);
+            if (liveRow) {
+                flashRow(liveRow, 'success');
+                // Let the flash play out before the re-render replaces the row.
+                setTimeout(renderAdmin, 1500);
+            } else {
+                renderAdmin();
+            }
         } catch (e) {
-            setStatus(adminStatus, e && e.name === 'TimeoutError'
-                ? 'Save timed out — try again.' : 'Save failed. Try again.', 'err');
+            failAdminRow(dogId, action, originalHtml, e && e.name === 'TimeoutError'
+                ? 'Save timed out — try again.' : 'Save failed. Try again.');
         } finally {
             // Token is single-use — refresh for the next admin action.
             if (TURNSTILE_SITE_KEY && window.turnstile && tsAdminId !== null) window.turnstile.reset(tsAdminId);

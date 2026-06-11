@@ -305,6 +305,60 @@ body.light-mode .freshness-pill.fresh .status-dot {
     overflow-y: auto;
 }
 
+/* --- Report-wrong-location Dialog (reuses the legend-modal chrome) --- */
+.report-modal { max-width: 420px; }
+.report-modal-body { padding: 20px 24px 24px; }
+.report-context { margin: 0 0 16px; color: var(--text-muted); font-size: 0.95rem; }
+.report-hint { margin: 8px 0 0; color: var(--text-muted); font-size: 0.8rem; }
+.report-remove-btn, .report-submit-btn {
+    width: 100%; min-height: 48px; padding: 10px 14px; font-size: 0.95rem;
+    font-weight: 600; cursor: pointer; border-radius: 8px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+}
+.report-remove-btn {
+    background: transparent; color: var(--danger-text);
+    border: 1px solid var(--danger-border);
+}
+.report-remove-btn:hover { background: var(--danger-bg); }
+.report-submit-btn {
+    background: var(--accent); color: var(--on-accent); border: none;
+}
+.report-remove-btn:disabled, .report-submit-btn:disabled {
+    opacity: 0.5; cursor: not-allowed;
+}
+.report-divider {
+    display: flex; align-items: center; gap: 10px; margin: 18px 0 14px;
+    color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.report-divider::before, .report-divider::after {
+    content: ""; flex: 1; border-top: 1px solid var(--border);
+}
+.report-field { display: block; margin-bottom: 12px; }
+.report-field > span {
+    display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px;
+}
+.report-field input {
+    width: 100%; box-sizing: border-box; padding: 12px; font-size: 16px;
+    min-height: 48px; background: var(--input-bg); color: var(--text);
+    border: 1px solid var(--border); border-radius: 8px; appearance: none;
+}
+.report-field input.is-valid { border-color: var(--success-text); background-color: var(--success-bg); }
+.report-field input.is-invalid { border-color: var(--danger-text); background-color: var(--danger-bg); }
+.report-saved-pass {
+    display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+    margin: 0 0 12px; color: var(--text-muted); font-size: 0.85rem;
+}
+.report-saved-pass button {
+    background: none; border: none; padding: 0; font: inherit;
+    color: var(--accent); text-decoration: underline; cursor: pointer;
+}
+.report-status { margin-top: 12px; font-size: 0.9rem; min-height: 1.2em; }
+.report-status.ok { color: var(--success-text); }
+.report-status.err { color: var(--danger-text); }
+/* The flex rule above overrides the UA [hidden] rule; restore it explicitly. */
+.report-saved-pass[hidden], .report-field[hidden] { display: none; }
+
 .legend-group-title {
     font-size: 0.85rem;
     text-transform: uppercase;
@@ -757,7 +811,7 @@ opacity: 0;
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=page-meta><div class=freshness-bar><div class=freshness-pill id=freshnessPill data-updated="June 11, 2026 01:32 PM"><span class=status-dot></span><span class=updated-text>Updated June 11, 2026 01:32 PM</span></div><button class=legend-toggle onclick=openLegendModal()><i class="fas fa-circle-info"></i> Dashboard Legend & Guide</button></div><dialog id=legendModal class=legend-modal><div class=legend-modal-header><h2>Dashboard Legend & Guide</h2><button class=close-modal-btn onclick=closeLegendModal() aria-label="Close modal">&times;</button></div><div class=legend-modal-body><div class=legend-grid><div class=legend-group-title>Status & Stay Badges</div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge los-green">5 Days</span><span class="status-badge los-yellow">18 Days</span><span class="status-badge los-red">35 Days</span></div><div class=legend-desc><strong>Time at CACC / Stay Duration:</strong> Shows how many days the dog has been at the shelter. Mapped to filters: <span class=los-detail><span class=text-success>Green</span> (0-14 days; matches 🆕 <strong>Fresh In</strong> for under 7 days), <span class=text-warning>Yellow</span> (15-29 days), and <span class=text-danger>Red</span> (30+ days; matches ⏳ <strong>Long Stays</strong>). <em>Tapping or clicking the badge reveals the exact date and time they were first listed.</em></span></div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge los-green">Available</span></div><div class=legend-desc><strong>Available Status:</strong> Dogs currently at the shelter that are ready for adoption. Aligns with the ✅ <strong>Available</strong> filter. </div></div><div class=legend-group-title>Holds & Rescue Indicators</div><div class=legend-item><div class=legend-badge-wrapper><span class="tag hold"><i class="fas fa-clock"></i> Hold for 3 days</span></div><div class=legend-desc><strong>Stray Hold:</strong> The mandatory holding period to give owners time to locate and reclaim their lost pet. The hold is 3 days for unchipped dogs and 7 days for chipped dogs. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag hold"><i class="fas fa-ban"></i> Unavailable</span></div><div class=legend-desc><strong>Unavailable:</strong> The dog is newly arrived and undergoing intake processing, medical checks, or observation, and is not yet ready for adoption. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag rescue-only"><i class="fas fa-hands-helping"></i> Rescue Only</span></div><div class=legend-desc><strong>Rescue Only:</strong> The dog can only be transferred to approved rescue organizations (not directly adopted by the public), usually due to special medical or behavioral needs. </div></div><div class=legend-group-title>Stray & Location Indicators</div><div class=legend-item><div class=legend-badge-wrapper><span class="tag stray"><i class="fas fa-map-marker-alt"></i> Stray</span></div><div class=legend-desc><strong>Stray Status:</strong> Found as a stray. Aligns with the 📍 <strong>Strays</strong> filter. If a location was recorded, you can click this tag to see where they were found on the map. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag stray chipped"><i class="fas fa-map-marker-alt"></i> <i class="fas fa-microchip"></i> Stray</span></div><div class=legend-desc><strong>Chipped Stray:</strong> Found as a stray with a microchip. The dashed border simply highlights that a chip was detected (which gives them a 7-day holding period instead of 3 days). </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag pavilion"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span><span class="tag pavilion hl-yellow"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span><span class="tag pavilion hl-orange"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span></div><div class=legend-desc><strong>Pavilion Location:</strong> Where the dog was last housed, read from the most recent handwritten walk sheet (pavilion letter + kennel number). A yellow or orange tint mirrors a marker highlight on the sheet — CACC's walker levels: yellow = intermediate-level dog, orange = advanced-level dog. Sheets are uploaded by onsite volunteers and expire after a day or two, so a missing badge just means there's no recent sheet. Spot a wrong one? Tap the small flag to report it. </div></div><div class=legend-group-title>Special Profile Indicators</div><div class=legend-item><div class=legend-badge-wrapper><span class="tag return"><i class="fas fa-undo-alt"></i> Return</span></div><div class=legend-desc><strong>Return Guest:</strong> This dog has been at CACC before. We detect this automatically by matching their intake ID against past shelter records. Aligns with the 🔄 <strong>Returns</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><h3 class="dog-name has-aka" style="margin:0; font-size:1.15rem; display:inline-block;">Dog Name</h3></div><div class=legend-desc><strong>FKA (Formerly Known As):</strong> Underlined names mean the dog has a known previous name. Tap or click the name on their card to switch between their current and past name. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class=fav-btn style="border-color:var(--danger-text); color:var(--danger-text); padding:4px 8px; border-radius:6px; font-size:0.9rem; pointer-events:none;"><i class="fas fa-heart"></i> Favorite</span></div><div class=legend-desc><strong>Favorites:</strong> Click the heart icon on any dog's card to save them. View your saved list anytime by clicking the ❤️ <strong>Favorites</strong> filter. </div></div><div class=legend-group-title>Demographics & Attributes</div><div class=legend-item><div class=legend-badge-wrapper style=gap:4px;><span class="tag male altered"><i class="fas fa-scissors"></i> ♂️ Male</span><span class="tag female">♀️ Female</span></div><div class=legend-desc><strong>Gender & Altered Status:</strong> Shows the dog's gender. A dashed border and scissors icon mean the dog is spayed or neutered. A solid border means they are unaltered. Aligns with the ♂️ <strong>Male</strong> and ♀️ <strong>Female</strong> filters. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag age">2 Years</span></div><div class=legend-desc><strong>Age:</strong> Approximate age. Aligns with the 🍼 <strong>Puppies</strong> (under 12 months) and 👴 <strong>Seniors</strong> (5 years and older) filters. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class=chip style="pointer-events:none; padding:4px 10px; font-size:0.8rem; height: auto;">🧸 Small</span></div><div class=legend-desc><strong>Small Dog Filter:</strong> Filters for breeds that typically weigh 25 lbs or less when fully grown. Aligns with the 🧸 <strong>Small</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag color color-black">Black</span><span class="tag color color-tan">Tan</span><span class="tag color color-brindle">Brindle</span></div><div class=legend-desc><strong>Color Pills:</strong> Show the primary colors of the dog's coat. </div></div><div class=legend-group-title>Outcome Badges & Today's Activity</div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-adopted"><i class="fas fa-heart"></i> Adopted: Date</span></div><div class=legend-desc><strong>Adopted:</strong> The dog has been adopted and has left the shelter! Aligns with the 🏠 <strong>Adopted</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-rto"><i class="fas fa-home"></i> Returned: Date</span></div><div class=legend-desc><strong>Returned to Owner (RTO):</strong> Reunited with their family! Aligns with the ↩️ <strong>RTO</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-rescue"><i class="fas fa-ambulance"></i> Rescue Partner</span></div><div class=legend-desc><strong>Rescued:</strong> Transferred to an approved rescue group. Tap or click to see the exact transfer date and time. Aligns with the 🚑 <strong>Rescued</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><div class="dog-card highlight-today" style="border: 1px solid #F9C642; background: rgba(253, 184, 30, 0.05); padding: 8px 12px; border-radius: 8px; display:flex; flex-direction:column; gap:4px; width:100%; box-sizing:border-box; max-width: 150px;"><span class=rescue-today-pill style=align-self:flex-start;><i class="fas fa-star" style=font-size:0.65rem></i> Today</span></div></div><div class=legend-desc><strong>Today's Activity:</strong> A card highlighted with a gold border and a "Today" badge means their adoption or rescue happened today. </div></div></div></div></dialog></div><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-favorites onclick="filterByChip('favorites')">❤️ Favorites <span class=chip-badge id=fav-count>0</span> <span class=chip-close>&times;</span></div><div class=chip id=chip-available onclick="filterByChip('available')">✅ Available <span class=chip-close>&times;</span></div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-return_guest onclick="filterByChip('return_guest')">🔄 Returns <span class=chip-close>&times;</span></div><div class=chip id=chip-non_pit onclick="filterByChip('non_pit')">🐩 Non-Pit <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Active Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=cf-turnstile data-sitekey=0x4AAAAAADg9jPJwIBGf1aqy data-appearance=interaction-only data-expired-callback=onTurnstileExpire style=position:fixed;bottom:8px;right:8px;z-index:9999;></div><div class=footer><span>Last Updated: June 11, 2026 01:32 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Legal><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a></nav></div></div><script>
+</script><div class=container><div class=page-meta><div class=freshness-bar><div class=freshness-pill id=freshnessPill data-updated="June 11, 2026 01:51 PM"><span class=status-dot></span><span class=updated-text>Updated June 11, 2026 01:51 PM</span></div><button class=legend-toggle onclick=openLegendModal()><i class="fas fa-circle-info"></i> Dashboard Legend & Guide</button></div><dialog id=legendModal class=legend-modal><div class=legend-modal-header><h2>Dashboard Legend & Guide</h2><button class=close-modal-btn onclick=closeLegendModal() aria-label="Close modal">&times;</button></div><div class=legend-modal-body><div class=legend-grid><div class=legend-group-title>Status & Stay Badges</div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge los-green">5 Days</span><span class="status-badge los-yellow">18 Days</span><span class="status-badge los-red">35 Days</span></div><div class=legend-desc><strong>Time at CACC / Stay Duration:</strong> Shows how many days the dog has been at the shelter. Mapped to filters: <span class=los-detail><span class=text-success>Green</span> (0-14 days; matches 🆕 <strong>Fresh In</strong> for under 7 days), <span class=text-warning>Yellow</span> (15-29 days), and <span class=text-danger>Red</span> (30+ days; matches ⏳ <strong>Long Stays</strong>). <em>Tapping or clicking the badge reveals the exact date and time they were first listed.</em></span></div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge los-green">Available</span></div><div class=legend-desc><strong>Available Status:</strong> Dogs currently at the shelter that are ready for adoption. Aligns with the ✅ <strong>Available</strong> filter. </div></div><div class=legend-group-title>Holds & Rescue Indicators</div><div class=legend-item><div class=legend-badge-wrapper><span class="tag hold"><i class="fas fa-clock"></i> Hold for 3 days</span></div><div class=legend-desc><strong>Stray Hold:</strong> The mandatory holding period to give owners time to locate and reclaim their lost pet. The hold is 3 days for unchipped dogs and 7 days for chipped dogs. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag hold"><i class="fas fa-ban"></i> Unavailable</span></div><div class=legend-desc><strong>Unavailable:</strong> The dog is newly arrived and undergoing intake processing, medical checks, or observation, and is not yet ready for adoption. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag rescue-only"><i class="fas fa-hands-helping"></i> Rescue Only</span></div><div class=legend-desc><strong>Rescue Only:</strong> The dog can only be transferred to approved rescue organizations (not directly adopted by the public), usually due to special medical or behavioral needs. </div></div><div class=legend-group-title>Stray & Location Indicators</div><div class=legend-item><div class=legend-badge-wrapper><span class="tag stray"><i class="fas fa-map-marker-alt"></i> Stray</span></div><div class=legend-desc><strong>Stray Status:</strong> Found as a stray. Aligns with the 📍 <strong>Strays</strong> filter. If a location was recorded, you can click this tag to see where they were found on the map. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag stray chipped"><i class="fas fa-map-marker-alt"></i> <i class="fas fa-microchip"></i> Stray</span></div><div class=legend-desc><strong>Chipped Stray:</strong> Found as a stray with a microchip. The dashed border simply highlights that a chip was detected (which gives them a 7-day holding period instead of 3 days). </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag pavilion"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span><span class="tag pavilion hl-yellow"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span><span class="tag pavilion hl-orange"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span></div><div class=legend-desc><strong>Pavilion Location:</strong> Where the dog was last housed, read from the most recent handwritten walk sheet (pavilion letter + kennel number). A yellow or orange tint mirrors a marker highlight on the sheet — CACC's walker levels: yellow = intermediate-level dog, orange = advanced-level dog. Sheets are uploaded by onsite volunteers and expire after a day or two, so a missing badge just means there's no recent sheet. Spot a wrong one? Tap the small flag to report it. </div></div><div class=legend-group-title>Special Profile Indicators</div><div class=legend-item><div class=legend-badge-wrapper><span class="tag return"><i class="fas fa-undo-alt"></i> Return</span></div><div class=legend-desc><strong>Return Guest:</strong> This dog has been at CACC before. We detect this automatically by matching their intake ID against past shelter records. Aligns with the 🔄 <strong>Returns</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><h3 class="dog-name has-aka" style="margin:0; font-size:1.15rem; display:inline-block;">Dog Name</h3></div><div class=legend-desc><strong>FKA (Formerly Known As):</strong> Underlined names mean the dog has a known previous name. Tap or click the name on their card to switch between their current and past name. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class=fav-btn style="border-color:var(--danger-text); color:var(--danger-text); padding:4px 8px; border-radius:6px; font-size:0.9rem; pointer-events:none;"><i class="fas fa-heart"></i> Favorite</span></div><div class=legend-desc><strong>Favorites:</strong> Click the heart icon on any dog's card to save them. View your saved list anytime by clicking the ❤️ <strong>Favorites</strong> filter. </div></div><div class=legend-group-title>Demographics & Attributes</div><div class=legend-item><div class=legend-badge-wrapper style=gap:4px;><span class="tag male altered"><i class="fas fa-scissors"></i> ♂️ Male</span><span class="tag female">♀️ Female</span></div><div class=legend-desc><strong>Gender & Altered Status:</strong> Shows the dog's gender. A dashed border and scissors icon mean the dog is spayed or neutered. A solid border means they are unaltered. Aligns with the ♂️ <strong>Male</strong> and ♀️ <strong>Female</strong> filters. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag age">2 Years</span></div><div class=legend-desc><strong>Age:</strong> Approximate age. Aligns with the 🍼 <strong>Puppies</strong> (under 12 months) and 👴 <strong>Seniors</strong> (5 years and older) filters. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class=chip style="pointer-events:none; padding:4px 10px; font-size:0.8rem; height: auto;">🧸 Small</span></div><div class=legend-desc><strong>Small Dog Filter:</strong> Filters for breeds that typically weigh 25 lbs or less when fully grown. Aligns with the 🧸 <strong>Small</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag color color-black">Black</span><span class="tag color color-tan">Tan</span><span class="tag color color-brindle">Brindle</span></div><div class=legend-desc><strong>Color Pills:</strong> Show the primary colors of the dog's coat. </div></div><div class=legend-group-title>Outcome Badges & Today's Activity</div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-adopted"><i class="fas fa-heart"></i> Adopted: Date</span></div><div class=legend-desc><strong>Adopted:</strong> The dog has been adopted and has left the shelter! Aligns with the 🏠 <strong>Adopted</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-rto"><i class="fas fa-home"></i> Returned: Date</span></div><div class=legend-desc><strong>Returned to Owner (RTO):</strong> Reunited with their family! Aligns with the ↩️ <strong>RTO</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-rescue"><i class="fas fa-ambulance"></i> Rescue Partner</span></div><div class=legend-desc><strong>Rescued:</strong> Transferred to an approved rescue group. Tap or click to see the exact transfer date and time. Aligns with the 🚑 <strong>Rescued</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><div class="dog-card highlight-today" style="border: 1px solid #F9C642; background: rgba(253, 184, 30, 0.05); padding: 8px 12px; border-radius: 8px; display:flex; flex-direction:column; gap:4px; width:100%; box-sizing:border-box; max-width: 150px;"><span class=rescue-today-pill style=align-self:flex-start;><i class="fas fa-star" style=font-size:0.65rem></i> Today</span></div></div><div class=legend-desc><strong>Today's Activity:</strong> A card highlighted with a gold border and a "Today" badge means their adoption or rescue happened today. </div></div></div></div></dialog><dialog id=reportModal class="legend-modal report-modal"><div class=legend-modal-header><h2><i class="fas fa-flag" aria-hidden=true></i> Wrong location?</h2><button type=button class=close-modal-btn id=reportCloseBtn aria-label="Close dialog">&times;</button></div><div class=report-modal-body><p class=report-context id=reportContext></p><button type=button class=report-remove-btn id=reportRemoveBtn><i class="fas fa-eraser" aria-hidden=true></i> Remove the badge </button><p class=report-hint>The badge disappears at the next site refresh. No passcode needed.</p><div class=report-divider><span>or, volunteers</span></div><form id=reportMoveForm><label class=report-field for=reportKennel><span>It moved — the correct kennel is</span><input type=text id=reportKennel autocomplete=off placeholder="e.g. C 70"></label><p class=report-saved-pass id=reportSavedPass hidden><i class="fas fa-key" aria-hidden=true></i> Using your saved volunteer passcode. <button type=button id=reportChangePass>Change</button></p><label class=report-field for=reportPasscode id=reportPassField><span>Volunteer passcode</span><input type=password id=reportPasscode autocomplete=current-password></label><button type=submit class=report-submit-btn id=reportMoveBtn disabled><i class="fas fa-paper-plane" aria-hidden=true></i> Submit correction </button><p class=report-hint>When enough people report the same kennel, the badge updates automatically.</p></form><div id=reportStatus class=report-status role=status aria-live=polite></div></div></dialog></div><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=text id=mainSearch class=search-input placeholder="Search Name, ID, Breed..."><i class="fas fa-times search-clear" id=searchClear onclick=clearSearch()></i></div><select id=sortSelect class=sort-select onchange=handleSortChange()><option value=longest>Sort: Time (High ➝ Low)</option><option value=newest>Sort: Time (Low ➝ High)</option><option value=age_young>Sort: Age (Young ➝ Old)</option><option value=age_old>Sort: Age (Old ➝ Young)</option><option value=name_asc>Sort: Name (A ➝ Z)</option><option value=breed_asc>Sort: Breed (A ➝ Z)</option><option value=id_asc>Sort: ID (A ➝ Z)</option></select></div><div class=filter-chips><div class="chip active" id=chip-all onclick="filterByChip('all')">All</div><div class=chip id=chip-favorites onclick="filterByChip('favorites')">❤️ Favorites <span class=chip-badge id=fav-count>0</span> <span class=chip-close>&times;</span></div><div class=chip id=chip-available onclick="filterByChip('available')">✅ Available <span class=chip-close>&times;</span></div><div class=chip id=chip-stray onclick="filterByChip('stray')">📍 Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay onclick="filterByChip('long_stay')">⏳ Long Stays <span class=chip-close>&times;</span></div><div class=chip id=chip-new onclick="filterByChip('new')">🆕 Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-male onclick="filterByChip('male')">♂️ Male <span class=chip-close>&times;</span></div><div class=chip id=chip-female onclick="filterByChip('female')">♀️ Female <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy onclick="filterByChip('puppy')">🍼 Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-senior onclick="filterByChip('senior')">👴 Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-small onclick="filterByChip('small')">🧸 Small <span class=chip-close>&times;</span></div><div class=chip id=chip-return_guest onclick="filterByChip('return_guest')">🔄 Returns <span class=chip-close>&times;</span></div><div class=chip id=chip-non_pit onclick="filterByChip('non_pit')">🐩 Non-Pit <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted onclick="filterByChip('adopted')">🏠 Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-rto onclick="filterByChip('rto')">↩️ RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued onclick="filterByChip('rescued')">🚑 Rescued <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><h2 class=section-title id=view-title>📋 Active Dogs</h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=cf-turnstile data-sitekey=0x4AAAAAADg9jPJwIBGf1aqy data-appearance=interaction-only data-expired-callback=onTurnstileExpire style=position:fixed;bottom:8px;right:8px;z-index:9999;></div><div class=footer><span>Last Updated: June 11, 2026 01:51 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Legal><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -766,6 +820,46 @@ opacity: 0;
                 clearTimeout(timeout);
                 timeout = setTimeout(() => func.apply(context, args), wait);
             };
+        }
+
+        // --- Kennel-entry helpers (shared by upload.html admin panel and the
+        // --- index.html report dialog) ---
+        // Canonical kennel display format: pavilion letter, space, 1-3 digits.
+        const KENNEL_CANON_RE = /^[A-E] \d{1,3}$/;
+        // Uppercase the pavilion letter, hyphens -> spaces, collapse runs, and
+        // slip a space between letter and digit: "c70" / "c-70" become "C 70".
+        function formatKennelInline(val) {
+            if (/^[a-e]/i.test(val)) val = val.charAt(0).toUpperCase() + val.slice(1);
+            val = val.replace(/-/g, ' ').replace(/\s+/g, ' ');
+            if (/^[A-E]\d/.test(val)) val = val.charAt(0) + ' ' + val.slice(1);
+            return val;
+        }
+        // Canonicalize any reasonable kennel entry ("c-70", " C70 ") to the
+        // display form ("C 70"), or null when it doesn't parse.
+        function canonicalizeKennel(raw) {
+            const m = String(raw || '').trim().toUpperCase().match(/^([A-E])[\s-]*(\d{1,3})$/);
+            return m ? `${m[1]} ${m[2]}` : null;
+        }
+        // Parse any reasonable kennel entry to the stored "<A-E>-<digits>" form.
+        function kennelToPk(raw) {
+            const canon = canonicalizeKennel(raw);
+            return canon ? canon.replace(' ', '-') : null;
+        }
+        // Set a status line's text and ok/err state, preserving base classes.
+        function setStatus(el, msg, kind) {
+            el.textContent = msg;
+            el.classList.remove('ok', 'err');
+            if (kind) el.classList.add(kind);
+        }
+        // Single source of truth for a kennel input's is-valid/is-invalid classes
+        // and its submit button's disabled state. Returns the validity.
+        function applyKennelValidity(input, submitBtn) {
+            if (!input) return false;
+            const isValid = KENNEL_CANON_RE.test(input.value);
+            input.classList.toggle('is-valid', isValid);
+            input.classList.toggle('is-invalid', !isValid && input.value !== '');
+            if (submitBtn) submitBtn.disabled = !isValid;
+            return isValid;
         }
 
         // --- Site-wide Date/Timezone Utilities ---
@@ -1469,38 +1563,38 @@ opacity: 0;
         filterByChip('all');
     }
 
-    function openLegendModal() {
-        const modal = document.getElementById('legendModal');
-        if (modal) {
-            modal.showModal();
-            document.body.style.overflow = 'hidden';
-        }
+    // --- Shared <dialog> helpers (legend modal + report dialog) ---
+    function openModal(modal) {
+        if (!modal) return;
+        modal.showModal();
+        document.body.style.overflow = 'hidden';
     }
 
-    function closeLegendModal() {
-        const modal = document.getElementById('legendModal');
-        if (modal) {
-            modal.close();
+    function closeModal(modal) {
+        if (!modal) return;
+        modal.close();
+        document.body.style.overflow = '';
+    }
+
+    // Light-dismiss on backdrop click, plus Esc (cancel) scroll-lock cleanup.
+    function bindLightDismiss(modal) {
+        if (!modal) return;
+        modal.addEventListener('click', (event) => {
+            const rect = modal.getBoundingClientRect();
+            const isInDialog = (rect.top <= event.clientY && event.clientY <= rect.top + rect.height
+                && rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
+            if (!isInDialog) closeModal(modal);
+        });
+        modal.addEventListener('cancel', () => {
             document.body.style.overflow = '';
-        }
+        });
     }
 
-    // Modal accessibility and light-dismiss
+    function openLegendModal() { openModal(document.getElementById('legendModal')); }
+    function closeLegendModal() { closeModal(document.getElementById('legendModal')); }
+
     document.addEventListener('DOMContentLoaded', () => {
-        const modal = document.getElementById('legendModal');
-        if (modal) {
-            modal.addEventListener('click', (event) => {
-                const rect = modal.getBoundingClientRect();
-                const isInDialog = (rect.top <= event.clientY && event.clientY <= rect.top + rect.height
-                    && rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
-                if (!isInDialog) {
-                    closeLegendModal();
-                }
-            });
-            modal.addEventListener('cancel', () => {
-                document.body.style.overflow = '';
-            });
-        }
+        bindLightDismiss(document.getElementById('legendModal'));
     });
 
     function resetGrid() {
@@ -1556,41 +1650,226 @@ opacity: 0;
         </div>`;
     }
 
-    // Public, fail-safe correction valve: posts a suppression flag for a kennel.
-    // The worker only ever *hides* a badge in response — it can never inject one —
-    // and the change takes effect on the next site rebuild.
-    async function reportWrongLocation(dogId, pk, btn) {
-        if (!PAVILION_API_BASE) return;
+    // Public, fail-safe correction valve, now a dialog with two paths:
+    //  - "Remove the badge" posts a suppression flag, exactly as before. The
+    //    worker only ever *hides* a badge in response — it can never inject one.
+    //  - "It moved" lets a volunteer (passcode-gated) submit the correct kennel;
+    //    the worker auto-promotes the correction once 3 distinct devices agree.
+    const REPORT_PASS_KEY = 'pavilionVolunteerPass'; // shared cache with upload.html
+    const DEVICE_ID_KEY = 'caccDeviceId';            // anonymous per-browser vote id
+    const REPORT_DRAFT_KEY = 'pavilionReportDraft';  // sessionStorage {dogId, kennel, ts}
+    const REPORT_DRAFT_MAX_AGE_MS = 2 * 60 * 60 * 1000; // resume within 2 h
+    let reportTarget = null; // { dogId, pk, btn } for the open dialog
+
+    const reportModal = document.getElementById('reportModal');
+    const reportContext = document.getElementById('reportContext');
+    const reportRemoveBtn = document.getElementById('reportRemoveBtn');
+    const reportMoveForm = document.getElementById('reportMoveForm');
+    const reportKennel = document.getElementById('reportKennel');
+    const reportSavedPass = document.getElementById('reportSavedPass');
+    const reportPassField = document.getElementById('reportPassField');
+    const reportPasscode = document.getElementById('reportPasscode');
+    const reportMoveBtn = document.getElementById('reportMoveBtn');
+    const reportStatus = document.getElementById('reportStatus');
+
+    // Votes are deduped per browser, not per IP — everyone at the shelter
+    // shares the guest WiFi, so an IP would collapse all onsite voters into one.
+    function reportDeviceId() {
+        let id = localStorage.getItem(DEVICE_ID_KEY);
+        if (!id) { id = crypto.randomUUID(); localStorage.setItem(DEVICE_ID_KEY, id); }
+        return id;
+    }
+
+    function readReportDraft() {
+        try {
+            const d = JSON.parse(sessionStorage.getItem(REPORT_DRAFT_KEY) || 'null');
+            if (d && Date.now() - (d.ts || 0) <= REPORT_DRAFT_MAX_AGE_MS) return d;
+        } catch (e) { /* ignore malformed drafts */ }
+        return null;
+    }
+
+    function saveReportDraft() {
+        if (!reportTarget) return;
+        sessionStorage.setItem(REPORT_DRAFT_KEY, JSON.stringify({
+            dogId: reportTarget.dogId, kennel: reportKennel.value, ts: Date.now()
+        }));
+    }
+
+    function syncReportPassUi() {
+        const saved = localStorage.getItem(REPORT_PASS_KEY) || '';
+        reportPasscode.value = saved;
+        reportSavedPass.hidden = !saved;
+        reportPassField.hidden = !!saved;
+    }
+
+    function showReportPassField() {
+        reportSavedPass.hidden = true;
+        reportPassField.hidden = false;
+    }
+
+    function closeReportModal() {
+        if (reportModal) { reportModal.close(); document.body.style.overflow = ''; }
+    }
+
+    function setReportBusy(busy) {
+        reportRemoveBtn.disabled = busy;
+        reportKennel.disabled = busy;
+        reportPasscode.disabled = busy;
+        reportMoveBtn.disabled = busy || !KENNEL_CANON_RE.test(reportKennel.value);
+    }
+
+    function reportWrongLocation(dogId, pk, btn) {
+        if (!PAVILION_API_BASE || !reportModal) return;
         // If Turnstile is required but its script was blocked, the worker would
         // reject this with a 403 — tell the user why instead of failing opaquely.
         if (TURNSTILE_SITE_KEY && !window.turnstile) {
             alert('Security check failed to load — please disable any adblocker/privacy shield and refresh to report a wrong location.');
             return;
         }
-        if (!confirm(`Report ${pk} as the wrong location for this dog? The badge will be removed shortly.`)) return;
-        const [pavilion, kennel] = String(pk).split('-');
-        btn.disabled = true;
+        const dog = fullDataset.find(d => d.id === dogId);
+        reportTarget = { dogId, pk, btn };
+        reportContext.textContent =
+            `${dog && dog.name ? dog.name : 'This dog'} (${dogId}) is currently shown at ${pk.replace(/-/g, ' ')}.`;
+        // Resume an unfinished correction for this dog — the reporter may have
+        // walked off to check the kennel and come back.
+        const draft = readReportDraft();
+        reportKennel.value = draft && draft.dogId === dogId ? draft.kennel : '';
+        applyKennelValidity(reportKennel, reportMoveBtn);
+        syncReportPassUi();
+        setReportBusy(false);
+        setStatus(reportStatus, '', '');
+        openModal(reportModal);
+    }
+
+    // Smart kennel entry — same live formatting as the upload.html admin panel.
+    reportKennel.addEventListener('input', () => {
+        const val = formatKennelInline(reportKennel.value);
+        if (reportKennel.value !== val) {
+            const delta = val.length - reportKennel.value.length;
+            const start = reportKennel.selectionStart, end = reportKennel.selectionEnd;
+            reportKennel.value = val;
+            reportKennel.setSelectionRange(Math.max(0, start + delta), Math.max(0, end + delta));
+        }
+        applyKennelValidity(reportKennel, reportMoveBtn);
+        saveReportDraft();
+    });
+    reportKennel.addEventListener('blur', () => {
+        const canon = canonicalizeKennel(reportKennel.value);
+        if (canon) reportKennel.value = canon;
+        applyKennelValidity(reportKennel, reportMoveBtn);
+        saveReportDraft();
+    });
+
+    document.getElementById('reportChangePass').addEventListener('click', () => {
+        reportPasscode.value = '';
+        showReportPassField();
+        reportPasscode.focus();
+    });
+    document.getElementById('reportCloseBtn').addEventListener('click', closeReportModal);
+    bindLightDismiss(reportModal);
+
+    // Pre-dialog feedback, unchanged: dim the badge, swap the flag for a check.
+    function markBadgeReported() {
+        const btn = reportTarget && reportTarget.btn;
+        if (!btn || !btn.isConnected) return;
+        const tag = btn.closest('.tag.pavilion');
+        if (tag) { tag.style.opacity = '0.5'; tag.title = 'Reported — updates on the next rebuild'; }
+        btn.outerHTML = ' <i class="fas fa-check" style="color:var(--success-text)"></i>';
+    }
+
+    async function postReport(payload, passcode) {
+        // Resolve the Turnstile token at submit time — tokens expire after a few
+        // minutes and the reporter may keep the dialog open for a while.
+        if (TURNSTILE_SITE_KEY && window.turnstile) {
+            payload['cf-turnstile-response'] = window.turnstile.getResponse() || '';
+        }
+        const headers = { 'Content-Type': 'application/json' };
+        if (passcode) headers['X-Volunteer-Passcode'] = passcode;
         try {
-            const payload = { pavilion, kennel };
-            if (TURNSTILE_SITE_KEY && window.turnstile) {
-                payload['cf-turnstile-response'] = window.turnstile.getResponse() || '';
-            }
-            const resp = await fetch(`${PAVILION_API_BASE}/report`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+            return await fetch(`${PAVILION_API_BASE}/report`, {
+                method: 'POST', headers, body: JSON.stringify(payload),
+                signal: AbortSignal.timeout(30000)
             });
+        } finally {
             // Tokens are single-use; refresh for any subsequent report.
             if (TURNSTILE_SITE_KEY && window.turnstile) window.turnstile.reset();
-            if (!resp.ok) throw new Error('bad status');
-            const tag = btn.closest('.tag.pavilion');
-            if (tag) { tag.style.opacity = '0.5'; tag.title = 'Reported — updates on the next rebuild'; }
-            btn.outerHTML = ' <i class="fas fa-check" style="color:var(--success-text)"></i>';
-        } catch (e) {
-            btn.disabled = false;
-            alert('Could not submit the report. Please try again later.');
         }
     }
+
+    reportRemoveBtn.addEventListener('click', async () => {
+        if (!reportTarget) return;
+        const [pavilion, kennel] = String(reportTarget.pk).split('-');
+        setReportBusy(true);
+        setStatus(reportStatus, 'Sending…', '');
+        try {
+            const resp = await postReport({ pavilion, kennel });
+            if (!resp.ok) throw new Error('bad status');
+            markBadgeReported();
+            setStatus(reportStatus, 'Reported — the badge will be removed shortly.', 'ok');
+            setTimeout(closeReportModal, 1500);
+        } catch (e) {
+            setReportBusy(false);
+            setStatus(reportStatus, 'Could not submit the report. Please try again later.', 'err');
+        }
+    });
+
+    reportMoveForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!reportTarget) return;
+        const correctPk = kennelToPk(reportKennel.value);
+        if (!correctPk) {
+            setStatus(reportStatus, 'Use a pavilion letter A–E and a kennel number, e.g. "C 70".', 'err');
+            return;
+        }
+        if (correctPk === reportTarget.pk) {
+            setStatus(reportStatus, 'That is the kennel already shown — enter the new one, or use "Remove the badge".', 'err');
+            return;
+        }
+        const passcode = reportPasscode.value;
+        if (!passcode) {
+            showReportPassField();
+            setStatus(reportStatus, 'Enter the volunteer passcode to submit a correction.', 'err');
+            return;
+        }
+        const [pavilion, kennel] = String(reportTarget.pk).split('-');
+        setReportBusy(true);
+        setStatus(reportStatus, 'Sending…', '');
+        try {
+            const resp = await postReport({
+                pavilion, kennel,
+                dog_id: reportTarget.dogId,
+                correct_pk: correctPk,
+                device_id: reportDeviceId()
+            }, passcode);
+            if (resp.status === 401) {
+                setReportBusy(false);
+                showReportPassField();
+                setStatus(reportStatus, 'Volunteer passcode rejected.', 'err');
+                return;
+            }
+            if (!resp.ok) throw new Error('bad status');
+            const data = await resp.json().catch(() => ({}));
+            localStorage.setItem(REPORT_PASS_KEY, passcode);
+            sessionStorage.removeItem(REPORT_DRAFT_KEY);
+            markBadgeReported();
+            // The worker reports its own consensus threshold (`needed`) so the
+            // messaging can't drift from the server constant. When a count is
+            // missing (older worker, malformed body), don't invent one.
+            const votes = Number(data.votes);
+            const needed = Number(data.needed);
+            const remaining = Number.isFinite(votes) && Number.isFinite(needed)
+                ? Math.max(0, needed - votes) : null;
+            setStatus(reportStatus, data.promoted || remaining === 0
+                ? 'Thanks! Enough reports agree — the badge will update shortly.'
+                : remaining === null
+                    ? 'Thanks! Your correction was recorded.'
+                    : `Thanks! ${remaining} more matching ${remaining === 1 ? 'report' : 'reports'} will update the badge automatically.`, 'ok');
+            setTimeout(closeReportModal, 2500);
+        } catch (err) {
+            setReportBusy(false);
+            setStatus(reportStatus, 'Could not submit the correction. Please try again later.', 'err');
+        }
+    });
 
     function buildDogCard(dog) {
         const days = dog._daysSinceIntake;
