@@ -1,12 +1,28 @@
 <!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>CACC - Breed Stats</title><link rel=preload href=https://cdn.jsdelivr.net/npm/@fontsource/big-shoulders-text@5.0.13/files/big-shoulders-text-latin-800-normal.woff2 as=font type=font/woff2 crossorigin><link rel=icon type=image/svg+xml href=favicon.svg><link rel=preconnect href=https://us.i.posthog.com><script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group identify setPersonProperties setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags resetGroups onFeatureFlags addFeatureFlagsHandler onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-    posthog.init('phc_lza7BKDzKEmNeMw4V2psaoRFTDqKENUudMMrcp2pR2S', {
-        api_host: 'https://us.i.posthog.com',
-        defaults: '2026-01-30',
-        person_profiles: 'anonymous',
-        capture_pageview: true,
-        capture_pageleave: true
-    });
+    // Production hosts only. Saved copies opened from file:// and local previews were
+    // polluting the project with phantom entry pages ("/C:/Users/.../index.html") and
+    // are the likely source of the 0-duration session recordings.
+    // Skipping init() is enough to go fully inert: the loader above only injects
+    // array.js and stubs out capture/identify/etc. from *inside* init, so off-host
+    // `posthog` stays a bare array with no .capture — which is exactly the condition
+    // base.html's track() checks before firing.
+    if (/(^|\.)cacc\.dog$/.test(location.hostname)) {
+        posthog.init('phc_lza7BKDzKEmNeMw4V2psaoRFTDqKENUudMMrcp2pR2S', {
+            api_host: 'https://us.i.posthog.com',
+            defaults: '2026-01-30',
+            person_profiles: 'anonymous',
+            capture_pageview: true,
+            capture_pageleave: true,
+            session_recording: {
+                // Inputs carry no personal data here; the only sensitive fields site-wide
+                // are the volunteer passcodes, and those are type="password", which
+                // posthog masks unconditionally regardless of this setting.
+                maskAllInputs: false,
+                maskInputOptions: { password: true }
+            }
+        });
+    }
 </script><link rel=preconnect href=https://cdnjs.cloudflare.com><link rel=preconnect href=https://cdn.jsdelivr.net><link rel=preload as=font type=font/woff2 href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2 crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css><style>
         /* Note: :root Variables are now in partials/navbar.html */
 
@@ -21,7 +37,9 @@
             padding-top: calc(var(--header-height) + 16px); /* Offset for fixed header */
             transition: background 0.3s, color 0.3s; 
         }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; }
+        /* scroll-margin keeps the skip-link target clear of the fixed header */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; scroll-margin-top: calc(var(--header-height) + 8px); }
+        .container:focus { outline: none; }
         
         /* --- Global Utility Classes --- */
 
@@ -131,6 +149,10 @@
         /* Date badge whose label can be tapped/clicked to swap for the exact local scrape time */
         .ts-toggle { cursor: pointer; user-select: none; -webkit-user-select: none; }
 
+        /* Keyboard skip link: off-screen until focused, then above the fixed header (z 9999) */
+        .skip-link { position: absolute; left: 8px; top: -80px; z-index: 10000; background: var(--row); color: var(--accent); border: 1px solid var(--accent); border-radius: 8px; padding: 10px 16px; font-weight: 600; text-decoration: none; transition: top 0.15s; }
+        .skip-link:focus { top: 8px; }
+
         
     /* --- Controls Bar (Fixed for Mobile & Sticky Positioning) --- */
     .controls-bar {
@@ -217,7 +239,7 @@
     }
 
     .pie-container { height: 450px; }
-    .outcome-rate-container { min-height: 450px; }
+    .outcome-rate-container { min-height: 500px; }
     
     .chart-canvas-wrapper {
         flex-grow: 1;
@@ -277,7 +299,7 @@
         tr { animation: none !important; }
     }
 
-    #loading-overlay { text-align: center; padding: 40px; color: var(--text-muted); }
+    #loading-overlay { text-align: center; padding: 40px; color: var(--text-muted); min-height: 70vh; }
 
     /* --- Section Divider --- */
     .section-divider {
@@ -297,7 +319,7 @@
         margin-bottom: 20px;
     }
 
-    .analysis-container { min-height: 380px; }
+    .analysis-container { min-height: 500px; }
 
     /* --- Chart Footnotes --- */
     .chart-footnote {
@@ -352,7 +374,7 @@
         .table-collapse-wrapper:has(.table-container:not(.expanded))::before { bottom: 42px; }
     }
 
-    </style></head><body><style>
+    </style></head><body><a class=skip-link href=#main-content>Skip to main content</a><style>
     @font-face {
         font-family: 'Big Shoulders Text';
         font-style: normal;
@@ -548,11 +570,13 @@
     .mobile-link:hover { background: var(--row); }
     .mobile-link.active { background: var(--nav-item-hover); border-color: var(--border); color: var(--accent); }
 
-    @media (max-width: 850px) {
+    /* 950px, not 850: with 7 links the row needs ~946px before the brand
+       (longest: "PAVILION UPLOAD") and the nav start colliding. */
+    @media (max-width: 950px) {
         .nav-links { display: none; }
         .mobile-menu-btn { display: flex; }
     }
-</style><header class=site-header><div class=header-content><div class=brand-section><h1><a href=index.html class=brand-link><i class="fas fa-paw brand-blue-paw"></i><svg class=chistar-svg viewbox="0 0 120 120" xmlns=http://www.w3.org/2000/svg><path fill=#E4002B d="M60 0 L71 41 L112 30 L82 60 L112 90 L71 79 L60 120 L49 79 L8 90 L38 60 L8 30 L49 41 Z"/></svg><span class=brand-chicago>CHI</span><span class=brand-divider>|</span><span class=brand-title> Breed Outcomes </span></a></h1></div><nav class=nav-links><a href=index.html class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link active">Breeds</a><a href=upload.html class="nav-link ">Upload</a></nav><div class=actions><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button><button class=mobile-menu-btn onclick=toggleMobileMenu()><i class="fas fa-bars"></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=index.html class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link active"><i class="fas fa-paw" style=width:20px></i> Breeds</a><a href=upload.html class="mobile-link "><i class="fas fa-camera" style=width:20px aria-hidden=true></i> Upload</a></div></header><script>
+</style><header class=site-header><div class=header-content><div class=brand-section><h1><a href=./ class=brand-link><i class="fas fa-paw brand-blue-paw"></i><svg class=chistar-svg viewbox="0 0 120 120" xmlns=http://www.w3.org/2000/svg><path fill=#E4002B d="M60 0 L71 41 L112 30 L82 60 L112 90 L71 79 L60 120 L49 79 L8 90 L38 60 L8 30 L49 41 Z"/></svg><span class=brand-chicago>CHI</span><span class=brand-divider>|</span><span class=brand-title> Breed Outcomes </span></a></h1></div><nav class=nav-links><a href=./ class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=removed.html class="nav-link ">Removed</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link active">Breeds</a><a href=upload.html class="nav-link ">Upload</a></nav><div class=actions><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button><button class=mobile-menu-btn onclick=toggleMobileMenu()><i class="fas fa-bars"></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=./ class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=removed.html class="mobile-link "><i class="fas fa-clock-rotate-left" style=width:20px aria-hidden=true></i> Removed</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link active"><i class="fas fa-paw" style=width:20px></i> Breeds</a><a href=upload.html class="mobile-link "><i class="fas fa-camera" style=width:20px aria-hidden=true></i> Upload</a></div></header><script>
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
         const icon = document.querySelector('.theme-toggle i');
@@ -565,7 +589,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart role=img aria-label="Population by Breed doughnut chart. Detailed data is available in the Detailed Statistics table below."></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart role=img aria-label="Outcome Rates by Breed normalized 100% stacked bar chart. Detailed data is available in the Detailed Statistics table below."></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart role=img aria-label="Gender Distribution by Breed bar chart."></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart role=img aria-label="Intake Source by Breed bar chart."></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart role=img aria-label="Median Age by Breed bar chart."></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable() aria-expanded=false><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: August 12, 2026 12:31 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Legal><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart role=img aria-label="Population by Breed doughnut chart. Detailed data is available in the Detailed Statistics table below."></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart role=img aria-label="Outcome Rates by Breed normalized 100% stacked bar chart. Detailed data is available in the Detailed Statistics table below."></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart role=img aria-label="Gender Distribution by Breed bar chart."></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart role=img aria-label="Intake Source by Breed bar chart."></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart role=img aria-label="Median Age by Breed bar chart."></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable() aria-expanded=false><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: August 12, 2026 12:41 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Legal><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -575,6 +599,49 @@
                 timeout = setTimeout(() => func.apply(context, args), wait);
             };
         }
+
+        // --- Analytics ---
+        // Guarded wrapper around posthog.capture. PostHog only initializes on the
+        // production host (see partials/posthog.html), so this is a silent no-op on
+        // localhost and on saved file:// copies — call it without guarding each site.
+        //
+        // Custom events captured site-wide:
+        //   dog_view_clicked          outbound click to a 24petconnect profile  {dog_id, page}
+        //   media_link_opened         outbound click to a social post           {network, page}
+        //   chip_selected             dashboard filter chip                     {chip, active, filters}
+        //   sort_changed              sort <select> changed                     {mode, page}
+        //   search_performed          debounced search ran (never the query)    {q_len, results, page}
+        //   favorite_toggled          heart button on a dog card                {favorited}
+        //   share_clicked             share button on a dog card                {method}
+        //   legend_opened             dashboard legend modal opened             {}
+        //   location_report_submitted kennel-badge report or correction         {kind}
+        //   today_strip_clicked       "Today at CACC" pill                      {kind, count}
+        //   trends_card_clicked       trends KPI tile                           {card}
+        function track(event, props) {
+            try {
+                if (typeof posthog !== 'undefined' && typeof posthog.capture === 'function') {
+                    posthog.capture(event, props || {});
+                }
+            } catch (e) { /* analytics must never break the page */ }
+        }
+
+        // Outbound conversions. Document-level on purpose: index.html portals its media
+        // menus to <body>, so a container-scoped listener would miss every social link.
+        document.addEventListener('click', function (e) {
+            const a = e.target.closest('a');
+            if (!a || !a.href) return;
+            const href = a.href;
+            if (href.indexOf('24petconnect.com') !== -1) {
+                const m = href.match(/\/Details\/[^/]+\/([A-Za-z0-9]+)/);
+                track('dog_view_clicked', { dog_id: m ? m[1] : null, page: location.pathname });
+                return;
+            }
+            let network = null;
+            if (href.indexOf('facebook.com') !== -1) network = 'facebook';
+            else if (href.indexOf('instagram.com') !== -1) network = 'instagram';
+            else if (href.indexOf('youtube.com') !== -1 || href.indexOf('youtu.be') !== -1) network = 'youtube';
+            if (network) track('media_link_opened', { network: network, page: location.pathname });
+        });
 
         // --- Kennel-entry helpers (shared by upload.html admin panel and the
         // --- index.html report dialog) ---
@@ -1401,7 +1468,7 @@
             .slice(0, 15);
 
         const genderBarHeight = Math.max(300, (genderRows.length * 28) + 80);
-        document.getElementById('genderChart').parentElement.parentElement.style.height = genderBarHeight + 'px';
+        document.getElementById('genderChart').parentElement.parentElement.style.minHeight = genderBarHeight + 'px';
 
         charts.gender.data.labels = genderRows.map(r => r.breed);
         charts.gender.data.datasets = [
@@ -1423,7 +1490,7 @@
             .slice(0, 15);
 
         const strayBarHeight = Math.max(300, (strayRows.length * 28) + 80);
-        document.getElementById('strayChart').parentElement.parentElement.style.height = strayBarHeight + 'px';
+        document.getElementById('strayChart').parentElement.parentElement.style.minHeight = strayBarHeight + 'px';
 
         charts.stray.data.labels = strayRows.map(r => r.breed);
         const STRAY_STACK = 'StrayStack';
@@ -1457,7 +1524,7 @@
             .slice(0, 15);
 
         const ageBarHeight = Math.max(300, (ageRows.length * 28) + 80);
-        document.getElementById('ageChart').parentElement.parentElement.style.height = ageBarHeight + 'px';
+        document.getElementById('ageChart').parentElement.parentElement.style.minHeight = ageBarHeight + 'px';
 
         const ageValues = ageRows.map(r => r.medianAge);
         const minAge = ageValues.length ? Math.min(...ageValues) : 0;
