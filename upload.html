@@ -211,6 +211,16 @@
 .status { margin-top: 12px; font-size: 0.9rem; min-height: 1.2em; }
 .status.ok { color: var(--success-text); }
 .status.err { color: var(--danger-text); }
+/* Background-OCR job tracker: one row per queued sheet upload, updated by the
+   /upload-status poll. Terminal states reuse the status palette above. */
+#uploadJobs .jobs-title { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+.job-row { display: flex; align-items: baseline; gap: 8px; padding: 8px 0; font-size: 0.9rem; }
+.job-row + .job-row { border-top: 1px solid var(--border); }
+.job-row i { flex: 0 0 auto; }
+.job-row .job-state { flex: 1; min-width: 0; }
+.job-row.done { color: var(--success-text); }
+.job-row.failed { color: var(--danger-text); }
+.job-row.timeout { color: var(--text-muted); }
 .notice {
     background: var(--warning-bg); color: var(--warning-text); border: 1px solid var(--warning-border);
     border-radius: 8px; padding: 12px; margin-bottom: 18px; font-size: 0.9rem;
@@ -582,7 +592,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container id=main-content tabindex=-1><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Each pavilion shows its most recent sheet until a newer one replaces it, so re-upload whenever a sheet is rewritten to keep badges current. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet — the processing service hasn't been deployed. Please check back soon. </div><form id=uploadForm class=card-panel><label class=field for=passcode><span>Volunteer passcode</span><div class=password-wrapper><input type=password id=passcode name=passcode autocomplete=current-password required><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option><option value=E>E</option></select></label><div class=field id=sheetStatusField hidden><span>Last sheet uploaded</span><div id=sheetStatus class=sheet-status role=group aria-label="Last sheet upload per pavilion"></div></div><div class=field><span id=photoLabel>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* required class=visually-hidden aria-labelledby=photoLabel><div class=file-btn-group><button type=button id=snapBtn class=file-btn><i class="fas fa-camera" aria-hidden=true></i> Take photo </button><button type=button id=pickBtn class=file-btn><i class="fas fa-image" aria-hidden=true></i> Choose photo </button></div><span id=photoName class=muted></span></div><label class=agree id=agreeRow for=agreeTerms><input type=checkbox id=agreeTerms name=agreeTerms required><span>I have read and agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>.</span></label><p class="agreed-note muted" id=agreedNote hidden><span>By uploading, you agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a> (accepted <span id=agreedWhen></span>).</span><button type=button class=linklike id=reviewTerms>Review</button></p><div id=ts-upload class=ts-widget></div><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div></form><details class="card-panel admin-panel" id=adminPanel><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><div class=password-wrapper><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><div id=ts-admin class=ts-widget-admin></div><button type=button class=primary-btn id=adminUnlockBtn><i class="fas fa-lock-open" aria-hidden=true></i> Unlock </button><div id=adminGated hidden><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>E</code> plus a number (e.g. <code>C 70</code>), or clear it. Optionally pick the walker-level color matching the marker highlight on the sheet (yellow = intermediate, orange = advanced) — setting a kennel with "No color" removes any existing color. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div></div><div id=adminStatus class=status role=status aria-live=polite></div></details><dialog id=uploadSuccessModal class=success-modal closedby=any aria-labelledby=successThanks><div class=success-modal-header><button type=button class=close-modal-btn id=successCloseX aria-label="Close dialog">&times;</button></div><div class=success-modal-body><p class=success-emoji id=successEmoji aria-hidden=true></p><p class=success-thanks id=successThanks></p><p class=success-detail id=successDetail></p><p class=success-timing>Badges can take ~5 minutes to appear on the dashboard.</p><button type=button class=primary-btn id=successCloseBtn autofocus><i class="fas fa-paw" aria-hidden=true></i> Close </button></div></dialog></div><div class=footer><span>Last Updated: August 28, 2026 07:20 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Legal><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Each pavilion shows its most recent sheet until a newer one replaces it, so re-upload whenever a sheet is rewritten to keep badges current. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet — the processing service hasn't been deployed. Please check back soon. </div><form id=uploadForm class=card-panel><label class=field for=passcode><span>Volunteer passcode</span><div class=password-wrapper><input type=password id=passcode name=passcode autocomplete=current-password required><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option><option value=E>E</option></select></label><div class=field id=sheetStatusField hidden><span>Last sheet uploaded</span><div id=sheetStatus class=sheet-status role=group aria-label="Last sheet upload per pavilion"></div></div><div class=field><span id=photoLabel>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* required class=visually-hidden aria-labelledby=photoLabel><div class=file-btn-group><button type=button id=snapBtn class=file-btn><i class="fas fa-camera" aria-hidden=true></i> Take photo </button><button type=button id=pickBtn class=file-btn><i class="fas fa-image" aria-hidden=true></i> Choose photo </button></div><span id=photoName class=muted></span></div><label class=agree id=agreeRow for=agreeTerms><input type=checkbox id=agreeTerms name=agreeTerms required><span>I have read and agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>.</span></label><p class="agreed-note muted" id=agreedNote hidden><span>By uploading, you agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a> (accepted <span id=agreedWhen></span>).</span><button type=button class=linklike id=reviewTerms>Review</button></p><div id=ts-upload class=ts-widget></div><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div></form><div id=uploadJobs class=card-panel hidden><span class=jobs-title><i class="fas fa-list-check" aria-hidden=true></i> Sheet processing</span><div id=uploadJobsList role=status aria-live=polite></div></div><details class="card-panel admin-panel" id=adminPanel><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><div class=password-wrapper><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><div id=ts-admin class=ts-widget-admin></div><button type=button class=primary-btn id=adminUnlockBtn><i class="fas fa-lock-open" aria-hidden=true></i> Unlock </button><div id=adminGated hidden><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>E</code> plus a number (e.g. <code>C 70</code>), or clear it. Optionally pick the walker-level color matching the marker highlight on the sheet (yellow = intermediate, orange = advanced) — setting a kennel with "No color" removes any existing color. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div></div><div id=adminStatus class=status role=status aria-live=polite></div></details><dialog id=uploadSuccessModal class=success-modal closedby=any aria-labelledby=successThanks><div class=success-modal-header><button type=button class=close-modal-btn id=successCloseX aria-label="Close dialog">&times;</button></div><div class=success-modal-body><p class=success-emoji id=successEmoji aria-hidden=true></p><p class=success-thanks id=successThanks></p><p class=success-detail id=successDetail></p><p class=success-timing id=successTiming>Badges can take ~5 minutes to appear on the dashboard.</p><button type=button class=primary-btn id=successCloseBtn autofocus><i class="fas fa-paw" aria-hidden=true></i> Close </button></div></dialog></div><div class=footer><span>Last Updated: August 28, 2026 09:42 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Legal><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -617,10 +627,16 @@
         //   upload_nudge_shown        stale-sheet nudge dialog opened           {days_stale}
         //   upload_nudge_clicked      nudge CTA followed to upload.html         {days_stale}
         //   upload_nudge_dismissed    nudge closed without the CTA              {method, days_stale}
+        //   sheet_upload_queued       walk sheet accepted for background OCR    {pavilion, legacy?}
+        //   sheet_upload_result       background sheet OCR finished or gave up  {pavilion, state, kennels?, highlights?, model?, poll_ms, legacy?}
         // upload_nudge notes: days_stale is whole days since the newest sheet's
         // captured_at (null = no sheet has ever been uploaded); method is
         // not_now | x | light_dismiss (Esc and backdrop both funnel through the
         // dialog's close event and can't be told apart).
+        // sheet_upload notes: state is done | failed | timeout (timeout = the
+        // page's 9-min poll wall, not necessarily a server-side failure);
+        // legacy=true marks the pre-async worker's synchronous path, where
+        // queued+result fire together with poll_ms 0.
         function track(event, props) {
             try {
                 if (typeof posthog !== 'undefined' && typeof posthog.capture === 'function') {
@@ -1038,6 +1054,145 @@
         renderSheetStatus(sheetStatusData);
     }
 
+    // ---- Background-job tracker ---------------------------------------------
+    // The worker stages each upload and OCRs it in a background workflow
+    // (202 + job_id). Each queued job gets a tracker row and a chained
+    // setTimeout poll of /upload-status — 5 s for the first minute, then 10 s,
+    // giving up at a 9-minute wall (just past the worker's worst case of two
+    // models × three 75 s attempts + backoff ≈ 8.2 min). Pending jobs persist
+    // in sessionStorage so a reload resumes polling; a closed tab is fine —
+    // the workflow finishes server-side and the chips show it next visit.
+    const JOBS_KEY = 'pavilionPendingJobs';   // sessionStorage: [{id, pavilion, t}]
+    const POLL_FAST_MS = 5000, POLL_SLOW_MS = 10000, POLL_SLOW_AFTER_MS = 60000;
+    const POLL_WALL_MS = 9 * 60000;
+    const uploadJobsPanel = document.getElementById('uploadJobs');
+    const uploadJobsList = document.getElementById('uploadJobsList');
+
+    function readPendingJobs() {
+        // Must always return an array — a corrupted stored value throwing out
+        // of the resume block below would keep the rest of the page's script
+        // (including the submit handler) from ever binding.
+        try {
+            const jobs = JSON.parse(sessionStorage.getItem(JOBS_KEY) || '[]');
+            return Array.isArray(jobs) ? jobs : [];
+        } catch (e) { return []; }
+    }
+    function writePendingJobs(jobs) {
+        try { sessionStorage.setItem(JOBS_KEY, JSON.stringify(jobs)); } catch (e) {}
+    }
+    function removePendingJob(id) {
+        writePendingJobs(readPendingJobs().filter(j => !j || j.id !== id));
+    }
+
+    // One row per job, rebuilt in place on each state change. DOM APIs only —
+    // fetched data never reaches innerHTML (same posture as the sheet chips).
+    const JOB_ICONS = {
+        processing: 'fas fa-spinner fa-spin',
+        done: 'fas fa-circle-check',
+        failed: 'fas fa-triangle-exclamation',
+        timeout: 'fas fa-clock'
+    };
+    function renderJobRow(id, state, text) {
+        let row = uploadJobsList.querySelector(`[data-job="${CSS.escape(id)}"]`);
+        if (!row) {
+            row = document.createElement('div');
+            row.dataset.job = id;
+            uploadJobsList.appendChild(row);
+        }
+        row.className = `job-row ${state}`;
+        const icon = document.createElement('i');
+        icon.className = JOB_ICONS[state] || JOB_ICONS.processing;
+        icon.setAttribute('aria-hidden', 'true');
+        const msg = document.createElement('span');
+        msg.className = 'job-state';
+        msg.textContent = text;
+        row.replaceChildren(icon, msg);
+        uploadJobsPanel.hidden = false;
+    }
+
+    // Terminal state: stop polling, drop the sessionStorage entry, log it.
+    function finishJob(id, pavilion, state, text, props) {
+        removePendingJob(id);
+        renderJobRow(id, state, text);
+        if (state === 'done') markSheetUploaded(pavilion);
+        track('sheet_upload_result', Object.assign({ pavilion: pavilion, state: state }, props || {}));
+    }
+
+    function schedulePoll(id, pavilion, startedAt) {
+        const wait = (Date.now() - startedAt) > POLL_SLOW_AFTER_MS ? POLL_SLOW_MS : POLL_FAST_MS;
+        setTimeout(() => pollJob(id, pavilion, startedAt), wait);
+    }
+
+    function pollJob(id, pavilion, startedAt) {
+        const elapsed = Date.now() - startedAt;
+        if (elapsed > POLL_WALL_MS) {
+            // The workflow may still finish server-side — neutral copy; the
+            // freshness chips will show the sheet if it lands.
+            finishJob(id, pavilion, 'timeout',
+                `Pavilion ${pavilion} — still processing. Badges will appear once it finishes; no need to re-upload.`,
+                { poll_ms: elapsed });
+            return;
+        }
+        fetch(`${PAVILION_API_BASE}/upload-status?id=${encodeURIComponent(id)}`, {
+            // Passcode from localStorage, not the input — form.reset() and page
+            // reloads must not break an in-flight poll.
+            headers: { 'X-Volunteer-Passcode': localStorage.getItem(PASS_KEY) || '' },
+            signal: AbortSignal.timeout(15000)
+        }).then(r => {
+            if (r.status === 401) {
+                // Passcode rotated server-side — polling can never succeed.
+                finishJob(id, pavilion, 'failed',
+                    `Pavilion ${pavilion} — the passcode changed, so this upload can't be tracked. Refresh the page and re-enter it.`,
+                    { poll_ms: elapsed });
+                return null;
+            }
+            if (!r.ok) throw new Error(r.status);
+            return r.json();
+        }).then(data => {
+            if (!data) return; // 401 handled above
+            if (data.state === 'done') {
+                const n = typeof data.kennels === 'number' ? data.kennels : null;
+                const h = typeof data.highlights === 'number' ? data.highlights : 0;
+                const readout = n === null ? 'sheet processed'
+                    : `read ${n} kennel${n === 1 ? '' : 's'}${h ? ` (${h} highlighted)` : ''}`;
+                finishJob(id, pavilion, 'done', `Pavilion ${pavilion} — ${readout}.`, {
+                    kennels: n, highlights: h,
+                    model: typeof data.model === 'string' ? data.model : null,
+                    poll_ms: elapsed
+                });
+            } else if (data.state === 'failed') {
+                finishJob(id, pavilion, 'failed',
+                    `Pavilion ${pavilion} — we couldn't read that sheet. Try retaking the photo with more light and less glare, then upload it again.`,
+                    { poll_ms: elapsed });
+            } else {
+                // processing / unknown (instance not queryable yet) — keep going.
+                schedulePoll(id, pavilion, startedAt);
+            }
+        }).catch(() => { schedulePoll(id, pavilion, startedAt); }); // network blip — retry
+    }
+
+    // Queue a fresh upload's job: persist, render its row, start polling.
+    function addJob(id, pavilion) {
+        const jobs = readPendingJobs().filter(j => !j || j.id !== id);
+        jobs.push({ id: id, pavilion: pavilion, t: Date.now() });
+        writePendingJobs(jobs);
+        renderJobRow(id, 'processing', `Pavilion ${pavilion} — reading the sheet…`);
+        schedulePoll(id, pavilion, Date.now());
+    }
+
+    // Resume polling for jobs that were pending when the page was last closed
+    // or reloaded; expired (> wall cap) and junk entries are pruned silently.
+    if (PAVILION_API_BASE) {
+        const pending = readPendingJobs().filter(j =>
+            j && typeof j.id === 'string' && /^[A-E]$/.test(j.pavilion) &&
+            typeof j.t === 'number' && (Date.now() - j.t) < POLL_WALL_MS);
+        writePendingJobs(pending);
+        pending.forEach(j => {
+            renderJobRow(j.id, 'processing', `Pavilion ${j.pavilion} — reading the sheet…`);
+            pollJob(j.id, j.pavilion, j.t);
+        });
+    }
+
     passInput.value = localStorage.getItem(PASS_KEY) || '';
     passInput.addEventListener('change', () => localStorage.setItem(PASS_KEY, passInput.value));
 
@@ -1115,14 +1270,17 @@
     const pickRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
     const successModal = document.getElementById('uploadSuccessModal');
+    // Default (legacy sync) timing line; the async flow passes its own copy.
+    const DEFAULT_SUCCESS_TIMING = 'Badges can take ~5 minutes to appear on the dashboard.';
     function closeSuccessModal() {
         if (successModal) successModal.close();
     }
-    function openSuccessModal(detail) {
+    function openSuccessModal(detail, timing) {
         if (!successModal) return;
         document.getElementById('successEmoji').textContent = pickRandom(SUCCESS_EMOJI);
         document.getElementById('successThanks').textContent = pickRandom(SUCCESS_MESSAGES);
         document.getElementById('successDetail').textContent = detail;
+        document.getElementById('successTiming').textContent = timing || DEFAULT_SUCCESS_TIMING;
         successModal.showModal();
         document.body.style.overflow = 'hidden';
     }
@@ -1143,6 +1301,18 @@
         successModal.addEventListener('close', () => { document.body.style.overflow = ''; });
         document.getElementById('successCloseX').addEventListener('click', closeSuccessModal);
         document.getElementById('successCloseBtn').addEventListener('click', closeSuccessModal);
+    }
+
+    // Post-upload form reset shared by both success paths. form.reset()
+    // unchecks the (possibly hidden) Terms box — re-sync from the stored
+    // acceptance record so the next upload isn't blocked with no visible
+    // checkbox to tick.
+    function resetAfterUpload() {
+        form.reset();
+        photoName.textContent = '';
+        passInput.value = localStorage.getItem(PASS_KEY) || '';
+        const rec = readTermsAccepted();
+        if (rec && rec.v === TERMS_VERSION) showAgreed(rec.ts); else showAgreeCheckbox();
     }
 
     form.addEventListener('submit', async (e) => {
@@ -1214,7 +1384,7 @@
                     return;
                 }
             }
-            setStatus(uploadStatus, 'Reading the sheet… this can take a few seconds.', '');
+            setStatus(uploadStatus, 'Uploading photo…', '');
             const body = new FormData();
             body.append('pavilion', pavilion);
             body.append('image', blob, filename);
@@ -1225,9 +1395,10 @@
                     method: 'POST',
                     headers: { 'X-Volunteer-Passcode': passInput.value },
                     body,
-                    // OCR runs synchronously in the worker, so allow plenty —
-                    // but don't leave a flaky cellular request spinning forever.
-                    signal: AbortSignal.timeout(90000)
+                    // Bounds only the multipart body upload — the worker
+                    // enqueues OCR to a background workflow and returns
+                    // immediately (generous for a legacy sync worker too).
+                    signal: AbortSignal.timeout(60000)
                 });
             } catch (err) {
                 setStatus(uploadStatus, err && err.name === 'TimeoutError'
@@ -1249,24 +1420,39 @@
                 setStatus(uploadStatus,
                     `Upload failed (HTTP ${resp.status}${detail ? ': ' + detail : ''}). ` +
                     'Please try again in a moment.', 'err');
+            } else if (data.job_id) {
+                // New async worker: the sheet is staged and OCR runs in a
+                // background workflow — track the job and free the volunteer.
+                // (Branching on response SHAPE, not status code, keeps this
+                // page correct against either worker deploy.)
+                const detail = `Sheet received for Pavilion ${pavilion} — we're reading it now.`;
+                openSuccessModal(detail,
+                    "You're done — feel free to shoot the next pavilion. Badges usually appear within ~5 minutes.");
+                addJob(String(data.job_id), pavilion);
+                track('sheet_upload_queued', { pavilion: pavilion });
+                // Inline echo so a record remains after the dialog is dismissed
+                // (the chip refresh waits for the poll to confirm the read).
+                setStatus(uploadStatus, `Uploaded! 🐾 ${detail}`, 'ok');
+                resetAfterUpload();
             } else {
+                // Legacy sync worker (pre-async deploy): OCR already ran inside
+                // this request and the counts are in the response.
                 const n = data.kennels != null ? data.kennels : '';
                 const h = data.highlights;
                 const detail = `Read ${n} kennel row${n === 1 ? '' : 's'}` +
                     `${h ? ` (${h} highlighted)` : ''} for Pavilion ${pavilion}.`;
                 openSuccessModal(detail);
                 markSheetUploaded(pavilion);
+                track('sheet_upload_queued', { pavilion: pavilion, legacy: true });
+                track('sheet_upload_result', {
+                    pavilion: pavilion, state: 'done',
+                    kennels: data.kennels != null ? data.kennels : null,
+                    highlights: h || 0, poll_ms: 0, legacy: true
+                });
                 // Inline echo so a record remains after the dialog is dismissed.
                 setStatus(uploadStatus,
                     `Uploaded! 🐾 ${detail} Badges can take ~5 minutes to appear on the dashboard.`, 'ok');
-                form.reset();
-                photoName.textContent = '';
-                passInput.value = localStorage.getItem(PASS_KEY) || '';
-                // form.reset() unchecks the (possibly hidden) Terms box — re-sync
-                // from the stored acceptance record so the next upload isn't
-                // blocked with no visible checkbox to tick.
-                const rec = readTermsAccepted();
-                if (rec && rec.v === TERMS_VERSION) showAgreed(rec.ts); else showAgreeCheckbox();
+                resetAfterUpload();
             }
         } catch (err) {
             // Compression and network stages handle their own failures above;
