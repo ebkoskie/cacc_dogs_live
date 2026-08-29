@@ -1,0 +1,50 @@
+# robots.txt for cacc.dog
+#
+# Cloudflare serves a managed robots.txt for this zone (its Content Signals
+# Policy plus Disallow rules for known AI crawlers). Cloudflare PREPENDS that
+# managed block to this origin file and serves the two as a single response,
+# so the AI-crawler blocklist is unaffected by anything below.
+#
+# That prepended block opens with its own "User-agent: *" group containing
+# "Allow: /". A second "User-agent: *" group here is therefore a duplicate:
+# RFC 9309 crawlers merge duplicate groups (and "Disallow: /air.html" then wins
+# on longest-match over "Allow: /"), but parsers that simply take the first
+# matching group would never reach it. The named groups below sidestep that
+# entirely, because a specific user-agent token beats "*" under either rule.
+# Confirm the merged result at https://cacc.dog/robots.txt after a deploy.
+#
+# air.html ("Second Wind") is an unlisted volunteer explainer for a PROPOSED
+# initiative that CACC has not been asked about yet. It is shared by direct
+# link only and stays out of search until the proposal is approved.
+#
+# TO REVERSE once the initiative is approved in the corresponding documents,
+# both of these have to go, or the page stays out of search:
+#   1. every "Disallow: /air.html" line in this file
+#   2. the <meta name="robots" content="noindex, nofollow"> in templates/air.html
+
+User-agent: Googlebot
+Disallow: /air.html
+
+User-agent: Googlebot-Image
+Disallow: /air.html
+
+User-agent: Bingbot
+Disallow: /air.html
+
+User-agent: DuckDuckBot
+Disallow: /air.html
+
+User-agent: Slurp
+Disallow: /air.html
+
+User-agent: Applebot
+Disallow: /air.html
+
+User-agent: YandexBot
+Disallow: /air.html
+
+User-agent: Baiduspider
+Disallow: /air.html
+
+User-agent: *
+Disallow: /air.html

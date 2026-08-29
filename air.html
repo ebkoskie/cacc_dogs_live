@@ -1,0 +1,886 @@
+<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>Second Wind - CACC Dogs</title><link rel=preload href=https://cdn.jsdelivr.net/npm/@fontsource/big-shoulders-text@5.0.13/files/big-shoulders-text-latin-800-normal.woff2 as=font type=font/woff2 crossorigin><link rel=icon type=image/svg+xml href=favicon.svg><meta name=robots content="noindex, nofollow"><meta name=description content="Second Wind is a volunteer proposal to build box-fan air cleaners and add air-quality monitors in the dog pavilions at Chicago Animal Care and Control."><meta property=og:type content=website><meta property=og:title content="Second Wind: cleaner air for CACC's dogs"><meta property=og:description content="A box fan, one really good filter, and a little monitor that keeps score. A volunteer proposal for the dog pavilions at CACC."><meta property=og:url content=https://cacc.dog/air.html><link rel=preconnect href=https://us.i.posthog.com><script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group identify setPersonProperties setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags resetGroups onFeatureFlags addFeatureFlagsHandler onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    // Production hosts only. Saved copies opened from file:// and local previews were
+    // polluting the project with phantom entry pages ("/C:/Users/.../index.html") and
+    // are the likely source of the 0-duration session recordings.
+    // Skipping init() is enough to go fully inert: the loader above only injects
+    // array.js and stubs out capture/identify/etc. from *inside* init, so off-host
+    // `posthog` stays a bare array with no .capture — which is exactly the condition
+    // base.html's track() checks before firing.
+    if (/(^|\.)cacc\.dog$/.test(location.hostname)) {
+        posthog.init('phc_lza7BKDzKEmNeMw4V2psaoRFTDqKENUudMMrcp2pR2S', {
+            api_host: 'https://us.i.posthog.com',
+            defaults: '2026-01-30',
+            person_profiles: 'anonymous',
+            capture_pageview: true,
+            capture_pageleave: true,
+            session_recording: {
+                // Inputs carry no personal data here; the only sensitive fields site-wide
+                // are the volunteer passcodes, and those are type="password", which
+                // posthog masks unconditionally regardless of this setting.
+                maskAllInputs: false,
+                maskInputOptions: { password: true }
+            }
+        });
+    }
+</script><link rel=preconnect href=https://cdnjs.cloudflare.com><link rel=preconnect href=https://cdn.jsdelivr.net><link rel=preload as=font type=font/woff2 href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2 crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css><style>
+        /* Note: :root Variables are now in partials/navbar.html */
+
+        /* Base styles that don't belong in the navbar partial */
+        /* Reserve the scrollbar gutter so opening the legend modal (which locks body
+           scroll) doesn't shift the page horizontally. */
+        html { scrollbar-gutter: stable; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: var(--bg); color: var(--text);
+            margin: 0; padding: 0; line-height: 1.5;
+            padding-top: calc(var(--header-height) + 16px); /* Offset for fixed header */
+            transition: background 0.3s, color 0.3s; 
+        }
+        /* scroll-margin keeps the skip-link target clear of the fixed header */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; scroll-margin-top: calc(var(--header-height) + 8px); }
+        .container:focus { outline: none; }
+        
+        /* --- Global Utility Classes --- */
+
+        .tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; background: var(--border); transition: all 0.3s ease; }
+        .tag.male   { color: var(--gender-male-text); background: var(--gender-male-bg); border: 1px solid var(--gender-male-border); } 
+        .tag.female { color: var(--gender-female-text); background: var(--gender-female-bg); border: 1px solid var(--gender-female-border); }
+        .tag.stray  { color: var(--stray-text); background: var(--stray-bg); border: 1px solid var(--stray-border); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+        .tag.stray.chipped { border-style: dashed; }
+        .tag.return { color: var(--stray-text); background: var(--stray-bg); border: 1px solid var(--stray-border); cursor: help; }
+        .tag.hold { color: var(--hold-text); background: var(--hold-bg); border: 1px solid var(--hold-border); cursor: help; display: inline-flex; align-items: center; gap: 4px; }
+        .tag.rescue-only { color: var(--rescue-only-text); background: var(--rescue-only-bg); border: 1px solid var(--rescue-only-border); cursor: help; display: inline-flex; align-items: center; gap: 4px; }
+        .tag.altered { border-style: dashed; }
+        .tag.pavilion { color: var(--info-text); background: var(--info-bg); border: 1px solid var(--info-border); display: inline-flex; align-items: center; gap: 4px; }
+        /* Walker-level tint mirroring the sheet's marker highlight:
+           yellow = intermediate-level dog, orange = advanced-level dog. */
+        .tag.pavilion.hl-yellow { color: var(--warning-text); background: var(--warning-bg); border-color: var(--warning-border); }
+        .tag.pavilion.hl-orange { color: var(--hl-orange-text); background: var(--hl-orange-bg); border-color: var(--hl-orange-border); }
+        .tag.pavilion .pk-report { color: var(--text-muted); cursor: pointer; font-size: 0.85em; opacity: 0.7; margin-left: 2px; background: none; border: none; padding: 0; line-height: 1; }
+        .tag.pavilion .pk-report:hover { color: var(--danger-text); opacity: 1; }
+        /* A reported ("disputed") badge stays visible but dims and carries a
+           small warning mark — only consensus or an admin changes the value. */
+        .tag.pavilion.flagged { opacity: 0.65; }
+        /* A badge whose source sheet has gone stale dims the same way —
+           sheets persist until a newer upload replaces them. */
+        .tag.pavilion.pk-stale { opacity: 0.65; }
+        .tag.pavilion .pk-flag-mark { font-size: 0.8em; color: var(--warning-text); }
+
+        .tag.color { border: 1px solid transparent; }
+        .tag.color-black { background: rgba(100,100,100,0.15); color: #c9d1d9; border: 1px solid rgba(100,100,100,0.5); }
+        .tag.color-white { background: rgba(255,255,255,0.1); color: #f0f6fc; border: 1px solid rgba(255,255,255,0.3); }
+        .tag.color-brown { background: rgba(160, 82, 45, 0.15); color: #dcbfa3; border: 1px solid rgba(160, 82, 45, 0.4); }
+        .tag.color-tan   { background: rgba(210, 180, 140, 0.15); color: #e8d0a9; border: 1px solid rgba(210, 180, 140, 0.4); }
+        .tag.color-blue  { background: rgba(119, 136, 153, 0.15); color: #b0c4de; border: 1px solid rgba(119, 136, 153, 0.4); }
+        .tag.color-red   { background: rgba(205, 92, 92, 0.15); color: #f0a0a0; border: 1px solid rgba(205, 92, 92, 0.4); }
+        .tag.color-brindle { background: rgba(139, 69, 19, 0.15); color: #cdb499; border: 1px solid rgba(139, 69, 19, 0.4); }
+        .tag.color-merle { background: rgba(106, 90, 205, 0.15); color: #b8a9e8; border: 1px solid rgba(106, 90, 205, 0.4); }
+        .tag.color-sable { background: rgba(184, 134, 11, 0.15); color: #dab96f; border: 1px solid rgba(184, 134, 11, 0.4); }
+        .tag.color-tricolor { background: rgba(128, 128, 128, 0.15); color: #d0d0d0; border: 1px solid rgba(128, 128, 128, 0.4); }
+        .tag.color-default { background: rgba(128, 128, 128, 0.1); color: #8b949e; border: 1px solid rgba(128,128,128,0.3); }
+
+        body.light-mode .tag.color-black { background: #f6f8fa; color: #24292f; border-color: #d0d7de; }
+        body.light-mode .tag.color-white { background: #ffffff; color: #24292f; border-color: #d0d7de; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        body.light-mode .tag.color-brown { background: #fff8f2; color: #8c5e2a; border-color: #e6ccb3; }
+        body.light-mode .tag.color-tan   { background: #fffcf0; color: #9a6700; border-color: #e6ccb3; }
+        body.light-mode .tag.color-blue  { background: #f1f8ff; color: #0969da; border-color: #d0d7de; }
+        body.light-mode .tag.color-red   { background: #ffebe9; color: #cf222e; border-color: #ff8182; }
+        body.light-mode .tag.color-brindle { background: #fff8c5; color: #574619; border-color: #eac54f; }
+        body.light-mode .tag.color-merle { background: #f0eeff; color: #5b4db5; border-color: #c4b5f0; }
+        body.light-mode .tag.color-sable { background: #fef7e0; color: #806515; border-color: #e6cc80; }
+        body.light-mode .tag.color-tricolor { background: #f6f8fa; color: #57606a; border-color: #d0d7de; }
+        body.light-mode .tag.color-default { background: #f6f8fa; color: #57606a; border-color: #d0d7de; }
+
+        .status-badge { font-weight: 600; padding: 4px 8px; border-radius: 6px; font-size: 12px; display: inline-block; min-width: 60px; text-align: center; border: 1px solid transparent; }
+        .los-green  { color: var(--success-text); background: var(--success-bg); border-color: var(--success-border); }
+        .los-yellow { color: var(--warning-text); background: var(--warning-bg); border-color: var(--warning-border); }
+        .los-red    { color: var(--danger-text);  background: var(--danger-bg);  border-color: var(--danger-border); }
+        .status-rto     { color: var(--warning-text); background: var(--warning-bg); border-color: var(--warning-border); }
+        .status-rescue  { color: var(--info-text);    background: var(--info-bg);    border-color: var(--info-border); max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; cursor: pointer; }
+        .status-adopted { color: var(--success-text); background: var(--success-bg); border-color: var(--success-border); }
+
+        .stats { background: var(--row); padding: 15px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 30px; display: flex; gap: 20px; font-size: 1.1em; }
+        .table-container { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
+        th { background: var(--row); padding: 12px 15px; border-bottom: 2px solid var(--border); color: var(--text); white-space: nowrap; cursor: pointer; }
+        td { padding: 12px 15px; border-bottom: 1px solid var(--border); }
+        tr:nth-child(even) { background-color: var(--row); }
+        tr:hover { background-color: var(--row-hover); }
+        
+        .footer { margin-top: 60px; border-top: 1px solid var(--border); padding-top: 20px; color: var(--text-muted); font-size: 0.85rem; text-align: center; display: flex; flex-direction: column; gap: 8px; line-height: 1.4; }
+        .footer .disclaimer { font-size: 0.75rem; opacity: 0.8; max-width: 800px; margin: 0 auto; }
+        .footer .footer-links { display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap; font-size: 0.8rem; }
+        .footer .footer-links a { color: var(--text-muted); text-decoration: underline; }
+        .footer .footer-links a:hover { color: var(--text); }
+
+        /* Shared empty / no-data states */
+        .empty-state { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: 1.1rem; }
+        .empty-state i { font-size: 3rem; display: block; margin-bottom: 15px; opacity: 0.4; }
+        .table-empty { text-align: center; padding: 20px; color: var(--text-muted); }
+
+        /* Chart / section caption note */
+        .chart-note { font-size: 0.85rem; color: var(--text-muted); margin-top: 10px; }
+
+        /* Text color utilities (mapped to theme vars) */
+        .text-accent  { color: var(--accent); }
+        .text-success { color: var(--success-text); }
+        .text-warning { color: var(--warning-text); }
+        .text-danger  { color: var(--danger-text); }
+        .text-info    { color: var(--info-text); }
+        .text-muted   { color: var(--text-muted); }
+        .text-stray   { color: var(--stray-text); }
+        .text-male    { color: var(--gender-male-text); }
+
+        .cursor-help { cursor: help; }
+
+        /* Semantic date-range grouping (renders identically to loose control groups) */
+        .date-range { border: 0; padding: 0; margin: 0; min-width: 0; display: flex; gap: 15px; align-items: center; }
+        .date-range > legend { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+        /* Trend indicator badge (today-vs-yesterday arrow + hover tooltip) */
+        .trend-indicator { font-size: 0.9rem; cursor: help; position: relative; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); }
+        .trend-good { color: #4AA564; border-color: rgba(74, 165, 100, 0.3); }
+        .trend-bad { color: #CC393E; border-color: rgba(204, 57, 62, 0.3); }
+        .trend-neutral { color: var(--text-muted); }
+        .trend-indicator::after { content: attr(data-tooltip); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1f2428; color: #f0f6fc; padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.2s, transform 0.2s; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 20; font-weight: normal; }
+        .trend-indicator:hover::after { opacity: 1; transform: translateX(-50%) translateY(-2px); }
+
+        /* Date badge whose label can be tapped/clicked to swap for the exact local scrape time */
+        .ts-toggle { cursor: pointer; user-select: none; -webkit-user-select: none; }
+
+        /* Keyboard skip link: off-screen until focused, then above the fixed header (z 9999) */
+        .skip-link { position: absolute; left: 8px; top: -80px; z-index: 10000; background: var(--row); color: var(--accent); border: 1px solid var(--accent); border-radius: 8px; padding: 10px 16px; font-weight: 600; text-decoration: none; transition: top 0.15s; }
+        .skip-link:focus { top: 8px; }
+
+        
+/* --- Second Wind (air.html): unlisted volunteer explainer --- */
+.air-wrap { max-width: 860px; margin: 0 auto; }
+.air-wrap section { scroll-margin-top: calc(var(--header-height) + 16px); }
+.air-wrap p { line-height: 1.65; }
+.air-wrap .lede { font-size: 1rem; color: var(--text); }
+.air-wrap .muted { color: var(--text-muted); }
+
+/* Section headings: cloned from index.html's .section-title, plus an icon slot. */
+.air-wrap .section-title {
+    font-family: 'Big Shoulders Text', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 800;
+    font-size: 1.6rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-top: 44px;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+}
+.air-wrap .section-title i { color: var(--accent); font-size: 0.82em; }
+
+/* Section divider: cloned from trends.html. */
+.section-divider {
+    display: flex; align-items: center; gap: 15px;
+    margin: 34px 0 18px 0; color: var(--text-muted);
+    font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700;
+}
+.section-divider::before, .section-divider::after {
+    content: ""; flex: 1; height: 1px; background: var(--border); opacity: 0.5;
+}
+
+/* --- S1 Hero --- */
+.air-hero { text-align: center; padding: 6px 0 2px 0; }
+.air-hero h1 {
+    font-family: 'Big Shoulders Text', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 800; font-size: 2.1rem; letter-spacing: 0.05em; text-transform: uppercase;
+    margin: 0 0 10px 0; line-height: 1.1;
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+}
+.air-hero h1 .hero-fan { color: var(--accent); font-size: 0.8em; animation: heroSpin 12s linear infinite; }
+@keyframes heroSpin { to { transform: rotate(360deg); } }
+.air-standfirst { color: var(--text-muted); font-size: 1.02rem; max-width: 640px; margin: 0 auto; }
+.air-hero .proposal-line { color: var(--text-muted); font-size: 0.92rem; max-width: 640px; margin: 12px auto 0 auto; }
+.hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 20px; }
+.hero-chip {
+    display: inline-flex; align-items: center; gap: 7px; padding: 6px 14px; border-radius: 999px;
+    background: var(--row); border: 1px solid var(--border);
+    color: var(--text-muted); font-size: 0.85rem; font-weight: 600;
+}
+.hero-chip i { color: var(--accent); }
+
+/* --- Cards: cloned from upload.html's .card-panel --- */
+.card-panel { background: var(--row); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 18px; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; margin-bottom: 18px; }
+.card-grid .card-panel { margin-bottom: 0; }
+.card-panel h3 { margin: 0 0 8px 0; font-size: 1rem; display: flex; align-items: center; gap: 9px; }
+.card-panel h3 i { color: var(--accent); font-size: 0.95em; }
+.card-panel p { margin: 0 0 10px 0; color: var(--text-muted); font-size: 0.92rem; line-height: 1.65; }
+.card-panel p:last-child { margin-bottom: 0; }
+.card-panel ul { margin: 0 0 10px 0; padding-left: 20px; color: var(--text-muted); font-size: 0.92rem; line-height: 1.65; }
+.card-panel li { margin-bottom: 6px; }
+
+/* --- S3 fan diagram --- */
+.fan-figure { margin: 24px auto 0 auto; max-width: 460px; }
+.fan-figure svg { width: 100%; height: auto; display: block; color: var(--text); }
+.fan-figure figcaption { font-size: 0.85rem; color: var(--text-muted); margin-top: 12px; text-align: center; line-height: 1.55; }
+.sw-flow { fill: none; stroke: var(--text-muted); stroke-width: 2; stroke-linecap: round; }
+.sw-arrowhead { fill: var(--text-muted); }
+.sw-dust { fill: var(--warning-text); }
+.sw-grit { fill: var(--danger-text); }
+.sw-clean { fill: none; stroke: var(--success-text); stroke-width: 4; stroke-linecap: round; }
+.sw-clean-head { fill: var(--success-text); }
+.sw-panel { fill: var(--row); stroke: var(--border); stroke-width: 2; }
+.sw-panel-thick { fill: var(--row-hover); stroke: var(--border); stroke-width: 2; }
+.sw-hatch { fill: none; stroke: var(--text-muted); stroke-width: 1.1; opacity: 0.45; }
+.sw-pleat { fill: none; stroke: var(--text-muted); stroke-width: 1.2; opacity: 0.35; }
+.sw-air-arrow { fill: var(--accent); stroke: var(--accent); stroke-width: 1.6; }
+.sw-fan-body { fill: var(--row-hover); stroke: var(--border); stroke-width: 2; }
+.sw-fan-ring { fill: none; stroke: var(--border); stroke-width: 2; }
+.sw-blade { fill: var(--text-muted); opacity: 0.5; }
+.sw-hub { fill: var(--border); }
+.sw-strap { fill: var(--accent); opacity: 0.7; }
+.sw-tick { fill: none; stroke: var(--text-muted); stroke-width: 1; opacity: 0.5; }
+.sw-label { fill: currentColor; font-size: 11px; font-weight: 700; }
+.sw-sub { fill: var(--text-muted); font-size: 9.5px; }
+/* transform-box/origin are load-bearing: SVG rotation defaults to the user-space origin. */
+.fan-blades { transform-box: fill-box; transform-origin: center; animation: bladeSpin 3s linear infinite; }
+@keyframes bladeSpin { to { transform: rotate(360deg); } }
+.flow-dash { animation: flowMarch 1.4s linear infinite; }
+@keyframes flowMarch { to { stroke-dashoffset: -24; } }
+
+/* --- S3 cost cards: cloned from removed.html's .stat-card --- */
+.cost-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-top: 24px; }
+.stat-card {
+    background: var(--row); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 20px 16px 24px; position: relative; overflow: hidden;
+}
+.stat-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent); }
+.stat-card.diy::before { background: var(--success-text); }
+.stat-card.retail::before { background: var(--text-muted); }
+.stat-value { font-size: 1.75rem; font-weight: 700; color: var(--text); line-height: 1.1; margin-bottom: 5px; }
+.stat-label { color: var(--text-muted); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-sub { font-size: 0.82rem; color: var(--text-muted); margin-top: 8px; line-height: 1.55; }
+
+/* --- S4 capture bars --- */
+.bars { display: flex; flex-direction: column; gap: 16px; margin-top: 20px; }
+.bar-row { display: grid; grid-template-columns: minmax(130px, 180px) 1fr; gap: 14px; align-items: center; }
+@media (max-width: 600px) { .bar-row { grid-template-columns: 1fr; gap: 6px; } }
+.bar-label { font-size: 0.9rem; color: var(--text); font-weight: 700; }
+.bar-label span { display: block; font-weight: 400; font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+.bar-wrap { display: flex; align-items: center; gap: 12px; }
+.bar-track { flex: 1; height: 20px; border-radius: 999px; background: var(--border); overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 999px; background: var(--success-text); }
+.bar-fill.ultrafine { background: var(--info-text); }
+.bar-pct { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* --- S4 MERV table --- */
+.merv-table-wrap { margin-top: 4px; }
+.merv-table th { cursor: default; font-size: 0.8rem; }
+.merv-table td { font-size: 0.85rem; vertical-align: top; }
+.merv-table .rating { font-weight: 700; white-space: nowrap; }
+/* Beats the global tr:nth-child(even) and tr:hover backgrounds on specificity. */
+.merv-table tbody tr.is-merv13 { background-color: var(--success-bg); }
+.merv-table tbody tr.is-merv13 td { font-weight: 600; color: var(--text); }
+
+/* --- S5 roadmap timeline --- */
+.roadmap { list-style: none; padding: 0; margin: 22px 0 0 0; counter-reset: phase; }
+.roadmap li { position: relative; padding: 0 0 26px 48px; counter-increment: phase; }
+.roadmap li::before {
+    content: counter(phase); position: absolute; left: 0; top: 0;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--accent); color: var(--on-accent);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.9rem; font-variant-numeric: tabular-nums;
+}
+.roadmap li::after { content: ''; position: absolute; left: 14px; top: 36px; bottom: 0; width: 2px; background: var(--border); }
+.roadmap li:last-child { padding-bottom: 0; }
+.roadmap li:last-child::after { display: none; }
+.roadmap h3 { margin: 4px 0 6px 0; font-size: 1rem; }
+.roadmap p { margin: 0; color: var(--text-muted); font-size: 0.92rem; }
+
+/* Coverage row: the .tag.pavilion badge volunteers already know from the dashboard. */
+.coverage { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.coverage .tag.pavilion { font-size: 0.82rem; padding: 5px 12px; }
+.coverage .tag.pavilion i { font-size: 0.72em; opacity: 0.85; }
+.coverage-note { font-size: 0.82rem; color: var(--text-muted); margin-top: 12px; }
+
+/* --- S5 monitor legend: cloned from index.html's .legend-grid --- */
+.legend-grid { display: flex; flex-direction: column; gap: 16px; margin: 0; }
+.legend-item { display: grid; grid-template-columns: 180px 1fr; gap: 16px; align-items: start; }
+@media (max-width: 600px) { .legend-item { grid-template-columns: 1fr; gap: 6px; } }
+.legend-key { font-weight: 700; font-size: 0.92rem; display: flex; align-items: center; gap: 9px; }
+.legend-key i { color: var(--accent); width: 16px; text-align: center; }
+.legend-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.55; margin: 0; }
+
+.led-legend { display: flex; flex-wrap: wrap; gap: 10px 20px; margin: 14px 0 12px 0; padding: 0; list-style: none; }
+.led-legend li { display: inline-flex; align-items: center; gap: 8px; font-size: 0.88rem; color: var(--text-muted); }
+.led-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
+.led-dot.ok { background: var(--success-text); }
+.led-dot.watch { background: var(--warning-text); }
+.led-dot.worse { background: var(--hl-orange-text); }
+.led-dot.bad { background: var(--danger-text); }
+
+/* --- Notices --- */
+.status-block {
+    background: var(--info-bg); border: 1px solid var(--info-border); border-radius: 10px;
+    padding: 15px 17px; font-size: 0.9rem; color: var(--text); line-height: 1.65; margin-bottom: 20px;
+}
+.page-note {
+    background: var(--row); border: 1px solid var(--border); border-left: 3px solid var(--text-muted);
+    border-radius: 8px; padding: 14px 16px; font-size: 0.85rem; color: var(--text-muted);
+    line-height: 1.6; margin-top: 28px;
+}
+
+/* --- Accordions: cloned from upload.html's .admin-panel --- */
+.acc { transition: border-color 0.3s ease, box-shadow 0.3s ease; overflow: hidden; }
+.acc:hover { border-color: var(--accent); box-shadow: 0 2px 5px var(--card-shadow); }
+.acc summary {
+    cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 8px;
+    min-height: 48px; box-sizing: border-box;
+    /* Negative margins mirror .card-panel's 18px padding so the summary's
+       hover/focus background bleeds to the card edge. */
+    padding: 12px 18px; margin: -18px -18px 0 -18px;
+    border-radius: 12px; list-style: none;
+    transition: background-color 0.2s, color 0.2s; user-select: none;
+}
+.acc summary::-webkit-details-marker { display: none; }
+.acc summary::after {
+    content: "\f078";
+    font-family: "Font Awesome 6 Free"; font-weight: 900;
+    margin-left: auto; padding-left: 10px;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+.acc[open] summary::after { transform: rotate(180deg); color: var(--accent); }
+.acc summary:focus,
+.acc summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; background-color: var(--row-hover); }
+.acc summary:hover { background-color: var(--row-hover); }
+.acc[open] summary {
+    border-bottom: 1px solid var(--border);
+    border-bottom-left-radius: 0; border-bottom-right-radius: 0;
+    margin-bottom: 18px;
+}
+.acc > *:not(summary) { animation: slideDown 0.3s ease-out; }
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.acc p, .acc li { color: var(--text-muted); font-size: 0.92rem; line-height: 1.65; }
+.acc > p:last-child { margin-bottom: 0; }
+
+/* --- S8 sources --- */
+.source-list { list-style: none; padding: 0; margin: 0; }
+.source-list li { padding: 13px 0; border-bottom: 1px solid var(--border); }
+.source-list li:last-child { border-bottom: none; }
+.source-list a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.source-list a:hover { text-decoration: underline; }
+.source-list .src-note { display: block; color: var(--text-muted); font-size: 0.85rem; margin-top: 5px; line-height: 1.55; }
+
+/* Onward links: cloned from removed.html. */
+.banner-onward {
+    display: flex; flex-wrap: wrap; gap: 8px 14px; justify-content: center; align-items: center;
+    margin-top: 30px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 0.9rem;
+}
+.banner-onward a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.banner-onward a:hover { text-decoration: underline; }
+.banner-onward .onward-sep { opacity: 0.5; }
+
+/* upload.html's original accordion predates this guard; the clone adds it. */
+@media (prefers-reduced-motion: reduce) {
+    .air-hero h1 .hero-fan,
+    .fan-blades,
+    .flow-dash,
+    .acc > *:not(summary) { animation: none; }
+}
+
+    </style></head><body><a class=skip-link href=#main-content>Skip to main content</a><style>
+    @font-face {
+        font-family: 'Big Shoulders Text';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 800;
+        src: url('https://cdn.jsdelivr.net/npm/@fontsource/big-shoulders-text@5.0.13/files/big-shoulders-text-latin-800-normal.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    /* --- Global Theme Variables (Moved here to support Map Overlay) --- */
+    :root {
+        /* Core Colors */
+        --header-height: 64px;
+        --header-bg: rgba(13, 17, 23, 0.85);
+        --nav-item-hover: rgba(177, 186, 196, 0.12);
+        --accent: #41B6E6;
+        --on-accent: #0d1117; /* readable text/icon on a filled --accent surface */
+        --text: #c9d1d9;
+        --text-muted: #8b949e;
+        --border: #30363d;
+        --row: #161b22;
+        --bg: #0d1117;
+        --input-bg: #0d1117;
+        --card-shadow: rgba(0,0,0,0.3);
+
+        /* Chicago Design System brand hues (shared, theme-independent) */
+        --cds-flag-blue: #41B6E6; --cds-malibu-blue: #0075BB;
+        --cds-green: #2E8540; --cds-green-light: #4AA564; --cds-green-lightest: #E7F4E4;
+        --cds-gold: #FDB81E; --cds-gold-light: #F9C642;
+        --cds-red-dark: #CC393E; --cds-red-light: #E59393;
+
+        /* Badge & Status Colors (Dark Mode) — Chicago palette, lighter tints for dark bg */
+        --gender-male-text: #41B6E6; --gender-male-bg: rgba(65, 182, 230, 0.15); --gender-male-border: rgba(65, 182, 230, 0.4);
+        --gender-female-text: #ff7b72; --gender-female-bg: rgba(235, 87, 87, 0.15); --gender-female-border: rgba(235, 87, 87, 0.4);
+        --stray-text: #d2a8ff; --stray-bg: rgba(187, 128, 255, 0.15); --stray-border: rgba(187, 128, 255, 0.4);
+        --hold-text: #F9C642; --hold-bg: rgba(253, 184, 30, 0.15); --hold-border: rgba(253, 184, 30, 0.4);
+        --rescue-only-text: #e09070; --rescue-only-bg: rgba(224, 144, 112, 0.15); --rescue-only-border: rgba(224, 144, 112, 0.4);
+
+        --success-text: #4AA564; --success-bg: rgba(46, 133, 64, 0.15); --success-border: rgba(46, 133, 64, 0.4);
+        --warning-text: #F9C642; --warning-bg: rgba(253, 184, 30, 0.15);  --warning-border: rgba(253, 184, 30, 0.4);
+        --danger-text: #E59393;  --danger-bg: rgba(204, 57, 62, 0.15);  --danger-border: rgba(204, 57, 62, 0.4);
+        --info-text: #A4D5EE;    --info-bg: rgba(65, 182, 230, 0.15);   --info-border: rgba(65, 182, 230, 0.4);
+        --hl-orange-text: #F0883E; --hl-orange-bg: rgba(240, 136, 62, 0.15); --hl-orange-border: rgba(240, 136, 62, 0.4);
+        
+        --rto-text: var(--warning-text); --rto-bg: var(--warning-bg); --rto-border: var(--warning-border);
+        --rescue-text: var(--info-text); --rescue-bg: var(--info-bg); --rescue-border: var(--info-border);
+        --adopted-text: var(--success-text); --adopted-bg: var(--success-bg); --adopted-border: var(--success-border);
+        
+        --row-hover: #21262d;
+    }
+    
+    body.light-mode {
+        --header-bg: rgba(255, 255, 255, 0.85);
+        --nav-item-hover: rgba(0, 0, 0, 0.08);
+        --accent: #0075BB;
+        --on-accent: #ffffff;
+        --text: #24292f;
+        --text-muted: #57606a;
+        --border: #d0d7de;
+        --row: #f6f8fa;
+        --bg: #ffffff;
+        --input-bg: #ffffff;
+        --card-shadow: rgba(0,0,0,0.1);
+
+        --gender-male-text: #0075BB; --gender-male-bg: #E1F3F8; --gender-male-border: #A4D5EE;
+        --gender-female-text: #bf3989; --gender-female-bg: #ffeff7; --gender-female-border: #ff80c8;
+        --stray-text: #8250df; --stray-bg: #fbefff; --stray-border: #d4a7ff;
+        --hold-text: #8a6d3b; --hold-bg: #FFF1D2; --hold-border: #F9C642;
+        --rescue-only-text: #9a4a2a; --rescue-only-bg: #fdf0eb; --rescue-only-border: #e09070;
+
+        --success-text: #2E8540; --success-bg: #E7F4E4; --success-border: #94BFA2;
+        --warning-text: #9a6700; --warning-bg: #FFF1D2; --warning-border: #F9C642;
+        --danger-text: #CC393E; --danger-bg: #FBD9DF; --danger-border: #E59393;
+        --info-text: #0075BB;    --info-bg: #E1F3F8;    --info-border: #A4D5EE;
+        --hl-orange-text: #bc4c00; --hl-orange-bg: #FFF1E5; --hl-orange-border: #F0883E;
+        
+        --row-hover: #eaeef2;
+    }
+
+    .site-header {
+        position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+        background: var(--header-bg);
+        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        height: var(--header-height);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    .header-content {
+        max-width: 1200px; margin: 0 auto; height: 100%;
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 0 20px;
+    }
+
+    .brand-section h1 { 
+        margin: 0; font-size: 1.25rem; 
+        display: flex; align-items: center; white-space: nowrap; 
+    }
+    
+    .brand-link {
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        gap: 6px;
+    }
+    
+    .brand-blue-paw {
+        color: #41B6E6;
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    
+    .chistar-svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+    
+    .brand-chicago {
+        font-family: 'Big Shoulders Text', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-weight: 800;
+        font-size: 1.35rem;
+        letter-spacing: 0.04em;
+        color: #ffffff;
+        line-height: 1;
+        text-transform: uppercase;
+    }
+    
+    .brand-divider {
+        color: var(--border);
+        font-size: 1.35rem;
+        margin: 0 4px;
+        user-select: none;
+    }
+    
+    .brand-title {
+        font-family: 'Big Shoulders Text', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-weight: 800;
+        font-size: 1.1rem;
+        letter-spacing: 0.04em;
+        color: #D9D9D9;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        line-height: 1;
+        text-transform: uppercase;
+    }
+    
+    body.light-mode .brand-chicago {
+        color: #000000;
+    }
+    
+    body.light-mode .brand-title {
+        color: #4D4D4D;
+    }
+
+    /* Desktop Navigation */
+    .nav-links { display: flex; gap: 8px; align-items: center; }
+    .nav-link {
+        color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.95rem;
+        padding: 6px 12px; border-radius: 6px; transition: all 0.2s;
+    }
+    .nav-link:hover { color: var(--text); background: var(--nav-item-hover); }
+    .nav-link.active { color: var(--accent); background: var(--nav-item-hover); font-weight: 600; }
+
+    .actions { display: flex; align-items: center; gap: 10px; }
+    .theme-toggle, .mobile-menu-btn { 
+        background: transparent; border: 1px solid var(--border); color: var(--text-muted); 
+        width: 36px; height: 36px; border-radius: 50%; 
+        cursor: pointer; display: flex; align-items: center; justify-content: center; 
+        font-size: 1rem; transition: all 0.2s;
+    }
+    .theme-toggle:hover, .mobile-menu-btn:hover { color: var(--text); border-color: var(--text-muted); }
+    .mobile-menu-btn { display: none; border-radius: 6px; }
+
+    /* Mobile Drawer */
+    .mobile-nav-drawer {
+        display: none; position: fixed; top: var(--header-height); left: 0; right: 0; z-index: 9998;
+        background: var(--bg); border-bottom: 1px solid var(--border);
+        padding: 15px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .mobile-nav-drawer.open { display: flex; flex-direction: column; gap: 10px; }
+    
+    .mobile-link {
+        padding: 12px; border-radius: 8px; color: var(--text); text-decoration: none; font-weight: 600;
+        border: 1px solid transparent; display: flex; align-items: center; gap: 10px;
+    }
+    .mobile-link:hover { background: var(--row); }
+    .mobile-link.active { background: var(--nav-item-hover); border-color: var(--border); color: var(--accent); }
+
+    /* 950px, not 850: with 7 links the row needs ~946px before the brand
+       (longest: "PAVILION UPLOAD") and the nav start colliding. */
+    @media (max-width: 950px) {
+        .nav-links { display: none; }
+        .mobile-menu-btn { display: flex; }
+    }
+</style><header class=site-header><div class=header-content><div class=brand-section><h1><a href=./ class=brand-link><i class="fas fa-paw brand-blue-paw"></i><svg class=chistar-svg viewbox="0 0 120 120" xmlns=http://www.w3.org/2000/svg><path fill=#E4002B d="M60 0 L71 41 L112 30 L82 60 L112 90 L71 79 L60 120 L49 79 L8 90 L38 60 L8 30 L49 41 Z"/></svg><span class=brand-chicago>CHI</span><span class=brand-divider>|</span><span class=brand-title> Second Wind </span></a></h1></div><nav class=nav-links><a href=./ class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link ">Breeds</a><a href=upload.html class="nav-link ">Upload</a></nav><div class=actions><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button><button class=mobile-menu-btn onclick=toggleMobileMenu()><i class="fas fa-bars"></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=./ class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link "><i class="fas fa-paw" style=width:20px></i> Breeds</a><a href=upload.html class="mobile-link "><i class="fas fa-camera" style=width:20px aria-hidden=true></i> Upload</a></div></header><script>
+    function toggleTheme() {
+        document.body.classList.toggle('light-mode');
+        const icon = document.querySelector('.theme-toggle i');
+        if(icon) icon.className = document.body.classList.contains('light-mode') ? 'fas fa-sun' : 'fas fa-moon';
+        localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+    }
+    // Auto-init theme if localstorage is set
+    if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
+
+    function toggleMobileMenu() {
+        document.getElementById('mobileDrawer').classList.toggle('open');
+    }
+</script><div class=container id=main-content tabindex=-1><div class=air-wrap><header class=air-hero><h1><i class="fas fa-fan hero-fan" aria-hidden=true></i>Second Wind</h1><p class=air-standfirst>A box fan, one really good filter, and a little monitor that keeps score. Second Wind is a volunteer project to build the freshest air we can for the dogs in CACC's pavilions.</p><p class=proposal-line>Nothing has been built and nothing has been placed at the shelter. This page is the proposal, written down so you can read it and decide whether you want in.</p><div class=hero-chips><span class=hero-chip><i class="fas fa-fan" aria-hidden=true></i>20 inch box fan</span><span class=hero-chip><i class="fas fa-filter" aria-hidden=true></i>MERV 13 filter and prefilter</span><span class=hero-chip><i class="fas fa-gauge-high" aria-hidden=true></i>Air quality monitor</span></div></header><section id=why><h2 class=section-title><i class="fas fa-lungs" aria-hidden=true></i>Why air matters</h2><p class=lede>Dogs in any shelter spend most of the day breathing indoor air they share with a lot of neighbors. That is why ventilation and filtration turn up in every set of shelter care standards, and why the Association of Shelter Veterinarians' Guidelines for Standards of Care in Animal Shelters ask for roughly 10 to 20 fresh air changes an hour in animal housing. Good air is not a nice extra in that world. It is part of the standard.</p><div class=card-grid><div class=card-panel><h3><i class="fas fa-people-group" aria-hidden=true></i>Shared air</h3><p>Group housing means one room's air belongs to everybody in it. Whatever is floating in it gets shared too: dust, dander, and the fine particles that respiratory aerosols travel on. Pushing that air through a good filter pulls particles out of circulation instead of leaving them to settle and get stirred up again.</p></div><div class=card-panel><h3><i class="fas fa-paw" aria-hidden=true></i>Dander and dust</h3><p>Dogs shed. Fur, dander, and the fine dust that comes with bedding, food, and daily cleaning stay airborne for a long time before they land. Cleaning handles what settles on surfaces. Filtration is the part that works on what is still in the air.</p></div><div class=card-panel><h3><i class="fas fa-smog" aria-hidden=true></i>Smoke days</h3><p>Recent Chicago summers have brought stretches where wildfire smoke drifting in from far away pushes outdoor fine particle levels up for days at a time. On those days opening a window is not the answer, and indoor filtration is the tool that is left. The EPA studied that exact problem, and the design below is what came out of it.</p></div></div><p class=chart-note>Standards and research behind this section are listed under <a href=#sources>Sources</a>.</p></section><section id=fix><h2 class=section-title><i class="fas fa-fan" aria-hidden=true></i>The build</h2><p class=lede>It is deliberately boring. A 20 inch box fan. A 20 by 20 by 4 inch MERV 13 filter held against the intake side. A cheap 20 by 20 by 1 inch fiberglass prefilter in front of that, to catch fur and the big dust before it reaches the good filter. Two silicone straps hold the sandwich together, so there is no tape and swapping a filter takes seconds.</p><p>This is the EPA tested do-it-yourself air cleaner in its single filter form, a simpler sibling of the Corsi-Rosenthal box that a lot of people built in 2020. One small detail carries more weight than it looks: the airflow arrow printed on the filter frame has to point at the fan, so the fan pulls air through the filter rather than pushing against it.</p><p>We will build these the way the EPA describes on its DIY air cleaner research page, and that page is the instruction manual we follow. This page is the why. The EPA page is the how.</p><figure class=fan-figure><svg viewbox="0 0 460 260" aria-hidden=true focusable=false xmlns=http://www.w3.org/2000/svg><text class=sw-sub x=58 y=46 text-anchor=middle>dirty air in</text><g class=sw-flow><path class=flow-dash d="M12 84 H102" stroke-dasharray="7 5"/><path class=flow-dash d="M12 118 H102" stroke-dasharray="7 5"/><path class=flow-dash d="M12 152 H102" stroke-dasharray="7 5"/></g><g class=sw-arrowhead><polygon points="102,79 114,84 102,89"/><polygon points="102,113 114,118 102,123"/><polygon points="102,147 114,152 102,157"/></g><g class=sw-dust><circle cx=28 cy=84 r=3 /><circle cx=70 cy=84 r=2.2 /><circle cx=56 cy=118 r=2.6 /><circle cx=40 cy=152 r=2.2 /><circle cx=84 cy=152 r=2.4 /></g><g class=sw-grit><circle cx=46 cy=84 r=2.4 /><circle cx=30 cy=118 r=2.8 /><circle cx=78 cy=118 r=2.2 /><circle cx=62 cy=152 r=2.6 /></g><rect class=sw-panel x=126 y=58 width=16 height=120 rx=2 /><g class=sw-hatch><path d="M128 76 L140 64"/><path d="M128 100 L140 88"/><path d="M128 124 L140 112"/><path d="M128 148 L140 136"/><path d="M128 172 L140 160"/></g><rect class=sw-panel-thick x=166 y=50 width=40 height=136 rx=3 /><g class=sw-pleat><path d="M172 78 V104"/><path d="M179 78 V104"/><path d="M186 78 V104"/><path d="M193 78 V104"/><path d="M200 78 V104"/><path d="M172 130 V180"/><path d="M179 130 V180"/><path d="M186 130 V180"/><path d="M193 130 V180"/><path d="M200 130 V180"/></g><g class=sw-air-arrow><path d="M171 117 H195"/><polygon points="193,112.5 203,117 193,121.5"/></g><rect class=sw-fan-body x=250 y=52 width=130 height=130 rx=12 /><circle class=sw-fan-ring cx=315 cy=117 r=53 /><g class=fan-blades><g class=sw-blade><path d="M315 117 C332 97 356 99 361 112 C344 114 328 112 315 117 Z"/><path d="M315 117 C332 97 356 99 361 112 C344 114 328 112 315 117 Z" transform="rotate(90 315 117)"/><path d="M315 117 C332 97 356 99 361 112 C344 114 328 112 315 117 Z" transform="rotate(180 315 117)"/><path d="M315 117 C332 97 356 99 361 112 C344 114 328 112 315 117 Z" transform="rotate(270 315 117)"/></g><circle class=sw-hub cx=315 cy=117 r=8 /></g><rect class=sw-strap x=118 y=74 width=268 height=9 rx=4.5 /><rect class=sw-strap x=118 y=152 width=268 height=9 rx=4.5 /><path class=sw-tick d="M230 38 V72"/><text class=sw-sub x=230 y=32 text-anchor=middle>silicone straps</text><path class=sw-clean d="M392 117 H436"/><polygon class=sw-clean-head points="434,108 456,117 434,126"/><text class=sw-sub x=416 y=146 text-anchor=middle>cleaner air out</text><g class=sw-tick><path d="M132 180 L98 198"/><path d="M188 188 L200 198"/><path d="M330 184 V198"/></g><text class=sw-label x=92 y=211 text-anchor=middle>prefilter</text><text class=sw-sub x=92 y=224 text-anchor=middle>fur and big dust</text><text class=sw-label x=200 y=211 text-anchor=middle>MERV 13</text><text class=sw-sub x=200 y=224 text-anchor=middle>4 inch, pleated</text><text class=sw-label x=330 y=211 text-anchor=middle>20 inch box fan</text><text class=sw-sub x=330 y=224 text-anchor=middle>pulls air through</text></svg><figcaption>Side view of one unit. Room air enters through the thin fiberglass prefilter, passes through the 4 inch MERV 13 filter (its printed airflow arrow pointing at the fan), and leaves through the fan with fewer particles in it. Two silicone straps wrap the whole stack, so no tape is involved and either filter can be pulled and replaced by hand.</figcaption></figure><div class=cost-grid><div class="stat-card diy"><div class=stat-value>~$60 to $100</div><div class=stat-label>One complete unit</div><p class=stat-sub>Fan, MERV 13 filter, prefilter, and two straps, bought at ordinary retail prices.</p></div><div class="stat-card retail"><div class=stat-value>~$200 to $600</div><div class=stat-label>A commercial purifier</div><p class=stat-sub>Typical retail range for a unit sized to a large room, for similar clean air delivery in EPA lab testing.</p></div></div><p class=chart-note>The EPA measured several do-it-yourself designs in a smoke chamber and published a clean air delivery rate for each, including builds using a single 4 inch MERV 13 filter. Its own summary of that work reports that the multi-filter designs were more effective at removing particles than higher priced commercial units. The full table is on the EPA page under <a href=#sources>Sources</a>; the prices above are ours, and they move with the market.</p></section><section id=merv><h2 class=section-title><i class="fas fa-filter" aria-hidden=true></i>MERV 13, explained</h2><p class=lede>MERV is a filter's report card. The number says how much of the small stuff a filter catches as air passes through it. Higher is not automatically better: a filter that catches more also pushes back harder on the fan, so the trick is picking the highest rating a box fan can still move a useful amount of air through. That is MERV 13.</p><div class=bars><div class=bar-row><div class=bar-label>Ultrafine<span>0.3 to 1 micron: wildfire smoke</span></div><div class=bar-wrap><div class=bar-track><div class="bar-fill ultrafine" style="width: 50%;"></div></div><div class=bar-pct>~50%</div></div></div><div class=bar-row><div class=bar-label>Fine<span>1 to 3 microns: respiratory aerosols</span></div><div class=bar-wrap><div class=bar-track><div class=bar-fill style="width: 85%;"></div></div><div class=bar-pct>~85%</div></div></div><div class=bar-row><div class=bar-label>Coarse<span>3 to 10 microns: dust, pollen, kennel fluff</span></div><div class=bar-wrap><div class=bar-track><div class=bar-fill style="width: 90%;"></div></div><div class=bar-pct>~90%</div></div></div></div><p class=chart-note>These are the minimum capture rates a filter has to hit in each size band to earn a MERV 13 rating, as defined in ASHRAE Standard 52.2. They are per pass: one trip through the filter. A box fan cycles a room's air past that filter many times an hour, which is where the real work happens.</p><p>That middle band is the one worth pausing on. Respiratory aerosols travel on particles in these size ranges, and shelter medicine guidance points at the same filter tier: the Koret Shelter Medicine Program at UC Davis writes that a filter rated MERV 13 or better can capture most of the particles that carry pathogens in the air.</p><details class="card-panel acc" data-track=merv_table><summary><i class="fas fa-table-list" aria-hidden=true></i>The whole MERV scale, if you want it</summary><div class="table-container merv-table-wrap"><table class=merv-table><thead><tr><th scope=col>Rating</th><th scope=col>Where you normally meet it</th><th scope=col>0.3 to 1 micron</th><th scope=col>1 to 3 microns</th><th scope=col>3 to 10 microns</th></tr></thead><tbody><tr><td class=rating>MERV 1 to 4</td><td>Basic furnace filters, mostly there to keep lint out of the equipment</td><td>not rated</td><td>not rated</td><td>under 20%</td></tr><tr><td class=rating>MERV 5 to 8</td><td>Common household filters: pollen, dust mites, mold spores</td><td>not rated</td><td>up to about 20%</td><td>20% to 70%</td></tr><tr><td class=rating>MERV 9 to 12</td><td>Better household and light commercial filters, for finer dust</td><td>up to about 35%</td><td>35% to 80%</td><td>85% or more</td></tr><tr class=is-merv13><td class=rating>MERV 13</td><td>The tier shelter and public health guidance points at, and about as fine as a box fan can push air through</td><td>about 50%</td><td>about 85%</td><td>about 90%</td></tr><tr><td class=rating>MERV 14 to 16</td><td>Hospital and laboratory settings, where the equipment is built to force air through them</td><td>75% to 95%</td><td>90% to 95%</td><td>90% to 95%</td></tr></tbody></table></div><p class=chart-note>Capture percentages are the minimum efficiencies a filter must meet to earn each rating, as defined in ASHRAE Standard 52.2. The groupings and the plain-language descriptions are ours, written to be read rather than to be precise engineering.</p></details><details class="card-panel acc" data-track=merv_vs_hepa><summary><i class="fas fa-circle-question" aria-hidden=true></i>Why not just buy HEPA purifiers?</summary><p>Per pass, HEPA wins and it is not close: a true HEPA filter catches around 99.97% of particles at the hardest size to catch. The catch is what it costs to get air through it. HEPA media is dense, so the machine needs a stronger motor, and that combination is why a commercial unit sized for a big room costs several hundred dollars and takes proprietary filters at proprietary prices.</p><p>In a large open room, the number that matters is not per-pass efficiency but how much clean air you get per hour, and per dollar. A box fan moving a lot of air through a decent filter, several times over, can come out ahead of one expensive machine moving less air through a perfect one.</p><p>None of which makes HEPA wrong. For a small enclosed room, or somewhere a machine has to be quiet and out of the way, a HEPA unit is the better answer. For big open rooms on a volunteer budget, a fan and a MERV 13 filter is hard to beat.</p></details></section><section id=plan><h2 class=section-title><i class="fas fa-map" aria-hidden=true></i>What we are proposing</h2><p class=lede>Everything on this page is a proposal. It happens only in coordination with shelter staff, and only as CACC approves it. Nothing has been built, nothing has been placed, and the shelter decides what, if anything, ever happens.</p><ol class=roadmap><li><h3>Trial</h3><p>We are proposing to start small: one pavilion, two units, and one monitor. Run it for a few weeks with the shelter's approval, watch what the monitor says before and after, and find out what actually happens to a box fan in a busy room. If it is a nuisance, we learn that here rather than seven rooms later.</p></li><li><h3>Roll out</h3><p>If the trial goes well and the shelter wants more, the goal is two units for each dog pavilion, built and maintained by volunteers as CACC allows. Full coverage would look like this:</p><div class=coverage><span class="tag pavilion">Pavilion A <i class="fas fa-fan" aria-hidden=true></i><i class="fas fa-fan" aria-hidden=true></i></span><span class="tag pavilion">Pavilion B <i class="fas fa-fan" aria-hidden=true></i><i class="fas fa-fan" aria-hidden=true></i></span><span class="tag pavilion">Pavilion C <i class="fas fa-fan" aria-hidden=true></i><i class="fas fa-fan" aria-hidden=true></i></span><span class="tag pavilion">Pavilion D <i class="fas fa-fan" aria-hidden=true></i><i class="fas fa-fan" aria-hidden=true></i></span><span class="tag pavilion">Pavilion E <i class="fas fa-fan" aria-hidden=true></i><i class="fas fa-fan" aria-hidden=true></i></span><span class="tag pavilion">Pavilion F <i class="fas fa-fan" aria-hidden=true></i><i class="fas fa-fan" aria-hidden=true></i></span><span class="tag pavilion">Pavilion G <i class="fas fa-fan" aria-hidden=true></i><i class="fas fa-fan" aria-hidden=true></i></span></div><p class=coverage-note>Two fan icons per badge, for the two units per pavilion. How each room is served, and by whom, would be the shelter's call.</p></li><li><h3>Keep score</h3><p>The monitors are the honest part. They may rotate between pavilions as the shelter allows, so each room gets a real before and after instead of a guess. If the shelter is comfortable with it, we may chart the numbers here someday.</p></li></ol><h3 class=section-divider>What the monitor tells us</h3><dl class=legend-grid><div class=legend-item><dt class=legend-key><i class="fas fa-smog" aria-hidden=true></i>PM2.5</dt><dd class=legend-desc>Fine particles: the smoke and dust that stays in the air longest. This is the number the filters are aimed at, and the one that should move when a unit is running.</dd></div><div class=legend-item><dt class=legend-key><i class="fas fa-wind" aria-hidden=true></i>CO2</dt><dd class=legend-desc>Really a stand-in for fresh air. When a room's carbon dioxide climbs, its air is being rebreathed rather than replaced. The Koret Shelter Medicine Program at UC Davis suggests keeping it at or below 800 parts per million. A filter does not change this number at all, which is exactly why it is useful: it tells us when the answer is ventilation, not filtration.</dd></div><div class=legend-item><dt class=legend-key><i class="fas fa-flask" aria-hidden=true></i>TVOC and NOx</dt><dd class=legend-desc>Rough indicators for gases and odors: cleaning products, off-gassing, traffic fumes drifting in. Not precision instruments, but good at showing that something changed.</dd></div><div class=legend-item><dt class=legend-key><i class="fas fa-temperature-half" aria-hidden=true></i>Temperature and humidity</dt><dd class=legend-desc>Comfort, and physics. Very dry and very damp air behave differently, and somewhere in the 40 to 60 percent relative humidity band is the usual guidance for indoor spaces.</dd></div></dl><ul class=led-legend><li><span class="led-dot ok" aria-hidden=true></span>Green: everyday</li><li><span class="led-dot watch" aria-hidden=true></span>Yellow: worth a look</li><li><span class="led-dot worse" aria-hidden=true></span>Orange: climbing</li><li><span class="led-dot bad" aria-hidden=true></span>Red: something is going on</li></ul><p class=chart-note>The monitor carries a strip of light on its face that changes color with the current particle reading, so anyone walking past can read the room without opening anything. The thresholds behind those colors live in the device's firmware and can be changed, so treat the light as a glance rather than a measurement.</p><p>If you have not seen one: it is a small box that mounts on a wall, with a little screen and that light strip along the front. The monitors report over their own connection.</p><p class=muted>We use AirGradient ONE monitors, bought at retail. We have no connection to the company; it is just the monitor we picked.</p><p class=page-note>Second Wind is a volunteer project, and this page is for general information only. If you build or run a fan and filter unit anywhere, follow the fan manufacturer's instructions and the EPA's published guidance, and use a UL or ETL certified box fan made in 2012 or later. Anything placed at CACC goes through the official volunteer program and happens only with the shelter's approval.</p></section><section id=faq><h2 class=section-title><i class="fas fa-circle-question" aria-hidden=true></i>Questions</h2><details class="card-panel acc" data-track=faq_fan_safety><summary><i class="fas fa-plug-circle-check" aria-hidden=true></i>What about fan safety?</summary><p>In testing by the EPA and UL's Chemical Insights Research Institute, five models of box fan were run with clean filters, with smoke loaded and dust loaded filters, and in an extreme scenario where the front and back of the fan were both blocked for seven hours. Throughout that testing, component temperatures stayed below recognized temperature safety standards, and none of the scenarios tested posed any observable fire hazards.</p><p>The EPA is careful about what that does and does not mean. It notes it cannot assure those results are representative of every do-it-yourself air cleaner in every scenario, because builds and materials vary so widely, and that operating any electrical device carries inherent risk.</p><p>So we follow its precautions rather than our own judgment: UL or ETL certified box fans made in 2012 or later, which have fused plugs and thermal cutoffs; nothing blocking either side of the fan; and filters changed on a schedule instead of run until they clog.</p></details><details class="card-panel acc" data-track=faq_cords><summary><i class="fas fa-bolt" aria-hidden=true></i>What about cords, around dogs?</summary><p>Cords are the part we take most seriously. A unit would go where staff want it, with the cord routed and secured out of dogs' reach and clear of walkways, and nothing set up where it could be knocked over.</p><p>Placement would be the shelter's call in every case. If staff wanted a unit moved, turned off, or taken out entirely, it would be moved, turned off, or taken out, without a conversation about it.</p></details><details class="card-panel acc" data-track=faq_noise><summary><i class="fas fa-volume-low" aria-hidden=true></i>Will they be noisy?</summary><p>A box fan on a low setting is steady white noise, nearer a bathroom fan than a hair dryer. It does not start, stop, chime, or cycle, and steady sound is generally less startling than sudden sound.</p><p>That said, a pavilion is a loud room already, and how a fan lands in one is exactly the kind of thing we would rather learn from a trial than assume. If a unit turns out to be a problem in a particular room, it comes out of that room.</p></details><details class="card-panel acc" data-track=faq_filters><summary><i class="fas fa-rotate" aria-hidden=true></i>How often do the filters get changed?</summary><p>The cheap fiberglass prefilter is the sacrificial layer. It catches fur and the big dust for a dollar or two and gets swapped often. The 4 inch MERV 13 behind it stays cleaner because of that, and should last months rather than weeks.</p><p>The plan is to check monthly and replace when a filter looks visibly dirty. A gray filter is a filter that has been working. This is not optional maintenance, either: the EPA's testing found that do-it-yourself air cleaners were almost completely ineffective with dirty filters.</p><p>The silicone straps exist for this reason. Every swap is tool free and takes seconds, which is the difference between maintenance that happens and maintenance that does not.</p></details><details class="card-panel acc" data-track=faq_monitor><summary><i class="fas fa-lightbulb" aria-hidden=true></i>What do the lights on the monitor mean?</summary><p>The light strip tracks the current fine particle reading. Green is the everyday state and the warmer colors mean the number is climbing. Because the thresholds are set in firmware and can be adjusted, the colors are a glance and not a measurement.</p><p>There is more about each reading, and what it would and would not tell us, in <a href=#plan>What we are proposing</a>.</p></details><details class="card-panel acc" data-track=faq_hepa><summary><i class="fas fa-wind" aria-hidden=true></i>Why not HEPA purifiers instead?</summary><p>Short version: HEPA catches more per pass, but costs far more per unit of air moved, and in a big open room the total air cleaned per hour matters more than the percentage caught on any single pass. HEPA is still the better answer for a small enclosed space.</p><p>The longer version, with the tradeoffs laid out, is in <a href=#merv>MERV 13, explained</a>.</p></details><details class="card-panel acc" data-track=faq_sick><summary><i class="fas fa-shield-dog" aria-hidden=true></i>Will this stop dogs from getting sick?</summary><p>No single thing does. Respiratory bugs (what shelter folks call kennel cough) spread more easily anywhere many dogs share air; that is true of every shelter on earth. They also spread through contact, not just air, which is why the layers that do the heavy lifting are ventilation, cleaning protocols, vaccination, and housing practices, the shelter's programs, run by its staff.</p><p>What filtration adds is fewer airborne particles for germs to ride on, and we will let the monitor numbers speak for themselves. The EPA says much the same about its own design: portable air cleaners are one part of an indoor air quality strategy, and do not replace the need for ventilation.</p></details></section><section id=help><h2 class=section-title><i class="fas fa-hand-holding-heart" aria-hidden=true></i>How you can help</h2><p class=status-block>Second Wind is an informal project run by CACC volunteers. It is not a charity, a nonprofit, or a program of CACC, the City of Chicago, or any other organization. Anything you chip in is a personal gift toward parts and is not tax deductible.</p><div class=card-grid><div class=card-panel><h3><i class="fas fa-box-open" aria-hidden=true></i>Sponsor the parts</h3><p>The best way to sponsor is to buy the parts yourself and bring them to a build day. Ask in the volunteer channels and we will tell you exactly what to get. If buying and hauling is not your thing, a few of us split costs informally; ask in the channel and we will sort it out.</p><p>What that covers is short and specific: box fans, MERV 13 filters, fiberglass prefilters, silicone straps, and monitors. Nothing else.</p><p>Sponsor a fan, cover a round of filters, chip in on a monitor. Whatever size fits.</p></div><div class=card-panel><h3><i class="fas fa-screwdriver-wrench" aria-hidden=true></i>Lend your hands</h3><p>When builds happen we will need hands, and none of it is skilled work:</p><ul><li><strong>Build days.</strong> Strapping filters to fans. About five minutes a unit once you have done one.</li><li><strong>Filter swaps.</strong> Pulling a dirty prefilter and sliding a clean one in, during a shift you are already working.</li><li><strong>Monitor glances.</strong> Reading a number off a small screen and passing it along.</li></ul><p>Right now we are gauging interest rather than building a schedule, so simply knowing you would be up for it is genuinely useful.</p></div></div><p class=muted>Either way: say so in the volunteer channels you already use. Whoever shared this link with you can point you at the right thread.</p></section><section id=sources><h3 class=section-divider>Sources and further reading</h3><ul class=source-list id=source-list><li><a href=https://www.epa.gov/air-research/research-diy-air-cleaners-reduce-wildfire-smoke-indoors target=_blank rel=noopener data-resource=epa_diy>US EPA: Research on DIY Air Cleaners to Reduce Wildfire Smoke Indoors</a><span class=src-note>The design itself, the chamber measurements of how much air each version actually cleans, the safety testing done with UL's Chemical Insights Research Institute, and the build guidance we follow.</span></li><li><a href=https://www.sheltermedicine.com/library/resources/clear-the-air-practical-methods-for-assessing-and-improving-indoor-air-quality-in-animal-shelters target=_blank rel=noopener data-resource=clear_air_guide>Koret Shelter Medicine Program, UC Davis: Clear the Air, practical methods for assessing and improving indoor air quality in animal shelters</a><span class=src-note>Shelter-specific air quality guidance. The same program's <a href=https://www.sheltermedicine.com/three-steps-to-healthier-air-and-animals/ target=_blank rel=noopener data-resource=clear_air_guide>Three Steps to Healthier Air and Animals</a> is where the MERV 13 recommendation and the 800 parts per million carbon dioxide figure on this page come from.</span></li><li><a href=https://www.airgradient.com/documentation/kb/one-v9 target=_blank rel=noopener data-resource=airgradient_one>AirGradient ONE documentation</a><span class=src-note>Specifications for the monitor we picked: what it measures, how it reports, and what the light strip is doing.</span></li><li><a href=https://www.cambridge.org/core/journals/infection-control-and-hospital-epidemiology/article/effectiveness-of-commercial-portable-air-cleaners-and-a-doityourself-minimum-efficiency-reporting-value-merv13-filter-box-fan-air-cleaner-in-reducing-aerosolized-bacteriophage-ms2/A9F120459EFED7572840C8700C3B7DCB target=_blank rel=noopener data-resource=merv13_study>Infection Control and Hospital Epidemiology: MERV 13 filter box fan air cleaners and aerosolized bacteriophage MS2</a><span class=src-note>Peer-reviewed work on box fan filter cleaners against an aerosolized test virus in an unventilated room. The build tested there was the multi-filter box, not the single filter version described above.</span></li></ul><div class=banner-onward><span class=muted>While you're here:</span><a href=./ >🐕 Meet the dogs</a><span class=onward-sep aria-hidden=true>·</span><a href=trends.html>📈 Trends</a></div></section></div><div class=footer><span>Last Updated: August 29, 2026 02:45 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Legal><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a></nav></div></div><script>
+        // Optimization: Global Debounce Utility
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
+
+        // --- Analytics ---
+        // Guarded wrapper around posthog.capture. PostHog only initializes on the
+        // production host (see partials/posthog.html), so this is a silent no-op on
+        // localhost and on saved file:// copies — call it without guarding each site.
+        //
+        // Custom events captured site-wide:
+        //   dog_view_clicked          outbound click to a 24petconnect profile  {dog_id, page}
+        //   media_link_opened         outbound click to a social post           {network, page}
+        //   chip_selected             dashboard filter chip                     {chip, active, filters}
+        //   filters_cleared           "Clear filters" reset to the All view     {source}
+        //   sort_changed              sort <select> changed                     {mode, page}
+        //   search_performed          debounced search ran (never the query)    {q_len, results, page}
+        //   search_suggestion_clicked did-you-mean tap on a zero-result search  {distance, page}
+        //   favorite_toggled          heart button on a dog card                {favorited}
+        //   share_clicked             share button on a dog card                {method, dog_id}
+        //   legend_opened             dashboard legend modal opened             {}
+        //   location_report_submitted kennel-badge report or correction         {kind}
+        //   today_strip_clicked       "Today at CACC" pill                      {kind, count}
+        //   freshness_time_toggled    "Today" label tapped to show/hide time    {shown}
+        //   trends_card_clicked       trends KPI tile                           {card}
+        //   data_loaded               index payload fetched + first render      {total_ms, fetch_ms, transfer_kb, dogs}
+        //   upload_nudge_shown        stale-sheet nudge dialog opened           {days_stale}
+        //   upload_nudge_clicked      nudge CTA followed to upload.html         {days_stale}
+        //   upload_nudge_dismissed    nudge closed without the CTA              {method, days_stale}
+        //   sheet_upload_queued       walk sheet accepted for background OCR    {pavilion, legacy?}
+        //   sheet_upload_result       background sheet OCR finished or gave up  {pavilion, state, kennels?, highlights?, matched?, low_rows?, rejected?, detected?, model?, poll_ms, legacy?}
+        //   air_section_toggled       air.html accordion opened or closed       {section, open}
+        //   air_resource_clicked      outbound source link on air.html          {resource}
+        // upload_nudge notes: days_stale is whole days since the newest sheet's
+        // captured_at (null = no sheet has ever been uploaded); method is
+        // not_now | x | light_dismiss (Esc and backdrop both funnel through the
+        // dialog's close event and can't be told apart).
+        // sheet_upload notes: state is done | failed | timeout (timeout = the
+        // page's 9-min poll wall, not necessarily a server-side failure);
+        // legacy=true marks the pre-async worker's synchronous path, where
+        // queued+result fire together with poll_ms 0. rejected (fires with
+        // state=failed) is the worker's persist-guard verdict —
+        // no_rows | stale_date | pavilion_mismatch — with detected = the
+        // pavilion letter the sheet actually belongs to on a mismatch;
+        // low_rows=true marks an accepted sheet with far fewer rows than the
+        // one it replaced.
+        function track(event, props) {
+            try {
+                if (typeof posthog !== 'undefined' && typeof posthog.capture === 'function') {
+                    posthog.capture(event, props || {});
+                }
+            } catch (e) { /* analytics must never break the page */ }
+        }
+
+        // Outbound conversions. Document-level on purpose: index.html portals its media
+        // menus to <body>, so a container-scoped listener would miss every social link.
+        document.addEventListener('click', function (e) {
+            const a = e.target.closest('a');
+            if (!a || !a.href) return;
+            const href = a.href;
+            if (href.indexOf('24petconnect.com') !== -1) {
+                const m = href.match(/\/Details\/[^/]+\/([A-Za-z0-9]+)/);
+                track('dog_view_clicked', { dog_id: m ? m[1] : null, page: location.pathname });
+                return;
+            }
+            let network = null;
+            if (href.indexOf('facebook.com') !== -1) network = 'facebook';
+            else if (href.indexOf('instagram.com') !== -1) network = 'instagram';
+            else if (href.indexOf('youtube.com') !== -1 || href.indexOf('youtu.be') !== -1) network = 'youtube';
+            if (network) track('media_link_opened', { network: network, page: location.pathname });
+        });
+
+        // Pavilion sheets persist until a newer upload replaces them; data whose
+        // source sheet is older than this many days counts as stale. Shared by
+        // the dashboard (badge dimming, upload nudge) and upload.html (freshness
+        // chips, admin roster notes) — declared once here so it can't drift.
+        const PK_STALE_DAYS = 2;
+
+        // --- Kennel-entry helpers (shared by upload.html admin panel and the
+        // --- index.html report dialog) ---
+        // Canonical kennel display format: pavilion letter, space, 1-3 digits.
+        const KENNEL_CANON_RE = /^[A-E] \d{1,3}$/;
+        // Uppercase the pavilion letter, hyphens -> spaces, collapse runs, and
+        // slip a space between letter and digit: "c70" / "c-70" become "C 70".
+        function formatKennelInline(val) {
+            if (/^[a-e]/i.test(val)) val = val.charAt(0).toUpperCase() + val.slice(1);
+            val = val.replace(/-/g, ' ').replace(/\s+/g, ' ');
+            if (/^[A-E]\d/.test(val)) val = val.charAt(0) + ' ' + val.slice(1);
+            return val;
+        }
+        // Canonicalize any reasonable kennel entry ("c-70", " C70 ") to the
+        // display form ("C 70"), or null when it doesn't parse.
+        function canonicalizeKennel(raw) {
+            const m = String(raw || '').trim().toUpperCase().match(/^([A-E])[\s-]*(\d{1,3})$/);
+            return m ? `${m[1]} ${m[2]}` : null;
+        }
+        // Parse any reasonable kennel entry to the stored "<A-E>-<digits>" form.
+        function kennelToPk(raw) {
+            const canon = canonicalizeKennel(raw);
+            return canon ? canon.replace(' ', '-') : null;
+        }
+        // Set a status line's text and ok/err state, preserving base classes.
+        function setStatus(el, msg, kind) {
+            el.textContent = msg;
+            el.classList.remove('ok', 'err');
+            if (kind) el.classList.add(kind);
+        }
+        // Single source of truth for a kennel input's is-valid/is-invalid classes
+        // and its submit button's disabled state. Returns the validity.
+        function applyKennelValidity(input, submitBtn) {
+            if (!input) return false;
+            const isValid = KENNEL_CANON_RE.test(input.value);
+            input.classList.toggle('is-valid', isValid);
+            input.classList.toggle('is-invalid', !isValid && input.value !== '');
+            if (submitBtn) submitBtn.disabled = !isValid;
+            return isValid;
+        }
+
+        // --- Site-wide Date/Timezone Utilities ---
+        // Canonical tz is America/Chicago. Dates are stored as date-only "YYYY-MM-DD".
+        // The ES spec parses bare "YYYY-MM-DD" as UTC midnight, so we treat EVERY date
+        // (including "today") as a UTC-midnight calendar date — making comparisons and
+        // day-diffs timezone-stable regardless of the viewer's browser timezone.
+        const SITE_TZ = "America/Chicago";
+        const MS_PER_DAY = 86400000;
+
+        // "Today" in site tz as "YYYY-MM-DD" (en-CA => ISO order across all locales).
+        function siteToday() {
+            return new Date().toLocaleDateString("en-CA", { timeZone: SITE_TZ });
+        }
+
+        // Parse a date-only "YYYY-MM-DD" string to a Date at UTC midnight (null if invalid).
+        function parseSiteDate(str) {
+            if (!str) return null;
+            const d = new Date(str);            // bare ISO date => UTC midnight
+            return isNaN(d.getTime()) ? null : d;
+        }
+
+        // Epoch ms at UTC midnight for a "YYYY-MM-DD" string (or null).
+        function siteDateTs(str) {
+            const d = parseSiteDate(str);
+            return d ? d.getTime() : null;
+        }
+
+        // Day-of-week (0=Sun..6=Sat) of a "YYYY-MM-DD" date. getUTCDay can't drift
+        // across the local-midnight boundary.
+        function siteDayOfWeek(str) {
+            const d = parseSiteDate(str);
+            return d ? d.getUTCDay() : null;
+        }
+
+        // Whole calendar days between two "YYYY-MM-DD" strings (b - a), or null.
+        function siteDayDiff(aStr, bStr) {
+            const a = siteDateTs(aStr), b = siteDateTs(bStr);
+            if (a === null || b === null) return null;
+            return Math.round((b - a) / MS_PER_DAY);
+        }
+
+        // Format a "YYYY-MM-DD" string for display. timeZone:'UTC' forces the formatter
+        // to read back the same UTC-midnight calendar date so the shown day never drifts.
+        function formatSiteDate(str, opts) {
+            const d = parseSiteDate(str);
+            if (!d) return "";
+            return d.toLocaleDateString("en-US",
+                Object.assign({ timeZone: "UTC" }, opts || { month: "short", day: "numeric" }));
+        }
+
+        // "YYYY-MM-DD" for N days before site-today (N>=0). siteDateNDaysAgo(0) === siteToday().
+        function siteDateNDaysAgo(n) {
+            return new Date(siteDateTs(siteToday()) - n * MS_PER_DAY).toISOString().split("T")[0];
+        }
+
+        // Format a scrape timecode for display. A number is epoch-ms → rendered as
+        // a viewer-LOCAL date+time ("Jun 2, 2026, 2:31 PM"). A "YYYY-MM-DD" string
+        // is the date-only fallback (older dogs, no time-of-day) → rendered as a
+        // plain date ("Jun 2, 2026"). Returns "" for falsy/missing values.
+        function formatLocalTimecode(v) {
+            if (!v) return "";
+            if (typeof v === "number") {
+                return new Date(v).toLocaleString(undefined,
+                    { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
+            }
+            return formatSiteDate(v, { month: "short", day: "numeric", year: "numeric" });
+        }
+
+        // Date badges carrying a known scrape timecode (data-ts) swap their label for
+        // the exact local time on tap/click, and back again. Mobile-first: identical
+        // behavior on touch and desktop, no hover required. The original markup is
+        // stashed lazily so any badge (icon + text) round-trips cleanly.
+        document.addEventListener("click", function (e) {
+            const el = e.target.closest(".ts-toggle");
+            if (!el || !el.getAttribute("data-ts")) return;
+            if (el.dataset.showing === "ts") {
+                el.innerHTML = el.dataset.tsOrig;
+                el.dataset.showing = "orig";
+            } else {
+                if (el.dataset.tsOrig == null) el.dataset.tsOrig = el.innerHTML;
+                el.innerHTML = `<i class="fas fa-clock"></i> ${el.getAttribute("data-ts")}`;
+                el.dataset.showing = "ts";
+            }
+        });
+
+        // --- Trend Indicator ---
+        // Renders an up/down/flat arrow + tooltip into elId comparing today vs yesterday.
+        // lowerIsBetter flips the good/bad coloring (e.g. fewer removals is "good").
+        function setTrendIndicator(elId, today, yesterday, lowerIsBetter) {
+            const el = document.getElementById(elId);
+            if (!el || yesterday === null || yesterday === undefined) return;
+            if (today < yesterday) {
+                el.innerHTML = '<i class="fas fa-arrow-down"></i>';
+                el.className = 'trend-indicator ' + (lowerIsBetter ? 'trend-good' : 'trend-bad');
+                el.setAttribute('data-tooltip', 'Was ' + yesterday + ' yesterday');
+            } else if (today > yesterday) {
+                el.innerHTML = '<i class="fas fa-arrow-up"></i>';
+                el.className = 'trend-indicator ' + (lowerIsBetter ? 'trend-bad' : 'trend-good');
+                el.setAttribute('data-tooltip', 'Was ' + yesterday + ' yesterday');
+            } else {
+                el.innerHTML = '<i class="fas fa-minus" style="font-size:0.7em;"></i>';
+                el.className = 'trend-indicator trend-neutral';
+                el.setAttribute('data-tooltip', 'No change from yesterday');
+            }
+        }
+
+        // Optimization: "Just-in-Time" Connection Warmer
+        // Triggers preconnect on Hover (Desktop) or TouchStart (Mobile)
+        // Works for both Facebook (needs crossorigin) and 24PetConnect (navigation only)
+        (function() {
+            let warmed = { fb: false, pc: false };
+
+            function warm(url, key, crossOrigin) {
+                if (warmed[key]) return;
+                const link = document.createElement('link');
+                link.rel = 'preconnect';
+                link.href = url;
+                if (crossOrigin) link.crossOrigin = 'anonymous';
+                document.head.appendChild(link);
+                warmed[key] = true;
+            }
+
+            const handleInteraction = (e) => {
+                const a = e.target.closest('a');
+                if (!a || !a.href) return;
+                
+                if (!warmed.fb && a.href.includes('facebook.com')) {
+                    warm('https://www.facebook.com', 'fb', true);
+                } else if (!warmed.pc && a.href.includes('24petconnect.com')) {
+                    warm('https://24petconnect.com', 'pc', false);
+                }
+            };
+
+            document.addEventListener('mouseover', handleInteraction, { passive: true });
+            document.addEventListener('touchstart', handleInteraction, { passive: true });
+        })();
+    </script><script>
+    // Accordion opens/closes. `toggle` does not bubble, so each <details> binds
+    // its own listener rather than one delegated handler on the container.
+    document.querySelectorAll('details[data-track]').forEach(function (d) {
+        d.addEventListener('toggle', function () {
+            track('air_section_toggled', { section: d.dataset.track, open: d.open });
+        });
+    });
+
+    // Outbound source links. These hosts are not covered by base.html's
+    // document-level outbound tracker, so the sources list handles its own.
+    var sourceList = document.getElementById('source-list');
+    if (sourceList) {
+        sourceList.addEventListener('click', function (e) {
+            var a = e.target.closest('a[data-resource]');
+            if (a) track('air_resource_clicked', { resource: a.dataset.resource });
+        });
+    }
+</script></body></html>
