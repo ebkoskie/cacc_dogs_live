@@ -221,6 +221,14 @@
 .job-row.done { color: var(--success-text); }
 .job-row.failed { color: var(--danger-text); }
 .job-row.timeout { color: var(--text-muted); }
+/* Admin "Pavilion sheets" restore list: one row per pavilion, the earlier
+   sheets (from /admin/history) expand beneath it. */
+.sheet-admin-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px 0; font-size: 0.9rem; }
+.sheet-admin-row + .sheet-admin-row { border-top: 1px solid var(--border); }
+.sheet-admin-row .sheet-admin-info { flex: 1; min-width: 12em; }
+.sheet-admin-row .ghost-btn { min-height: 44px; }
+.sheet-admin-hist { flex-basis: 100%; padding-left: 12px; }
+.sheet-admin-hist .sheet-admin-row { font-size: 0.85rem; }
 .notice {
     background: var(--warning-bg); color: var(--warning-text); border: 1px solid var(--warning-border);
     border-radius: 8px; padding: 12px; margin-bottom: 18px; font-size: 0.9rem;
@@ -333,7 +341,7 @@
 .agreed-note a { color: var(--accent); }
 .linklike { background: none; border: none; padding: 0; font: inherit; color: var(--accent); text-decoration: underline; cursor: pointer; }
 /* The flex rules above override the UA [hidden] rule, so restore it explicitly. */
-.agree[hidden], .agreed-note[hidden] { display: none; }
+.agree[hidden], .agreed-note[hidden], .field[hidden], .primary-btn[hidden] { display: none; }
 .password-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
 .password-wrapper input { padding-right: 42px; }
 .password-toggle {
@@ -592,7 +600,7 @@
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container id=main-content tabindex=-1><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Each pavilion shows its most recent sheet until a newer one replaces it, so re-upload whenever a sheet is rewritten to keep badges current. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet — the processing service hasn't been deployed. Please check back soon. </div><form id=uploadForm class=card-panel><label class=field for=passcode><span>Volunteer passcode</span><div class=password-wrapper><input type=password id=passcode name=passcode autocomplete=current-password required><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option><option value=E>E</option></select></label><div class=field id=sheetStatusField hidden><span>Last sheet uploaded</span><div id=sheetStatus class=sheet-status role=group aria-label="Last sheet upload per pavilion"></div></div><div class=field><span id=photoLabel>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* required class=visually-hidden aria-labelledby=photoLabel><div class=file-btn-group><button type=button id=snapBtn class=file-btn><i class="fas fa-camera" aria-hidden=true></i> Take photo </button><button type=button id=pickBtn class=file-btn><i class="fas fa-image" aria-hidden=true></i> Choose photo </button></div><span id=photoName class=muted></span></div><label class=agree id=agreeRow for=agreeTerms><input type=checkbox id=agreeTerms name=agreeTerms required><span>I have read and agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>.</span></label><p class="agreed-note muted" id=agreedNote hidden><span>By uploading, you agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a> (accepted <span id=agreedWhen></span>).</span><button type=button class=linklike id=reviewTerms>Review</button></p><div id=ts-upload class=ts-widget></div><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div></form><div id=uploadJobs class=card-panel hidden><span class=jobs-title><i class="fas fa-list-check" aria-hidden=true></i> Sheet processing</span><div id=uploadJobsList role=status aria-live=polite></div></div><details class="card-panel admin-panel" id=adminPanel><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><div class=password-wrapper><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><div id=ts-admin class=ts-widget-admin></div><button type=button class=primary-btn id=adminUnlockBtn><i class="fas fa-lock-open" aria-hidden=true></i> Unlock </button><div id=adminGated hidden><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>E</code> plus a number (e.g. <code>C 70</code>), or clear it. Optionally pick the walker-level color matching the marker highlight on the sheet (yellow = intermediate, orange = advanced) — setting a kennel with "No color" removes any existing color. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div></div><div id=adminStatus class=status role=status aria-live=polite></div></details><dialog id=uploadSuccessModal class=success-modal closedby=any aria-labelledby=successThanks><div class=success-modal-header><button type=button class=close-modal-btn id=successCloseX aria-label="Close dialog">&times;</button></div><div class=success-modal-body><p class=success-emoji id=successEmoji aria-hidden=true></p><p class=success-thanks id=successThanks></p><p class=success-detail id=successDetail></p><p class=success-timing id=successTiming>Badges can take ~5 minutes to appear on the dashboard.</p><button type=button class=primary-btn id=successCloseBtn autofocus><i class="fas fa-paw" aria-hidden=true></i> Close </button></div></dialog></div><div class=footer><span>Last Updated: October 23, 2026 05:32 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Legal><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Each pavilion shows its most recent sheet until a newer one replaces it, so re-upload whenever a sheet is rewritten to keep badges current. No passcode needed. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet — the processing service hasn't been deployed. Please check back soon. </div><form id=uploadForm class=card-panel><label class=field for=passcode id=passcodeField hidden><span>Volunteer passcode <small class=muted>(temporarily required)</small></span><div class=password-wrapper><input type=password id=passcode name=passcode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option><option value=E>E</option></select></label><div class=field id=sheetStatusField hidden><span>Last sheet uploaded</span><div id=sheetStatus class=sheet-status role=group aria-label="Last sheet upload per pavilion"></div></div><div class=field><span id=photoLabel>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* required class=visually-hidden aria-labelledby=photoLabel><div class=file-btn-group><button type=button id=snapBtn class=file-btn><i class="fas fa-camera" aria-hidden=true></i> Take photo </button><button type=button id=pickBtn class=file-btn><i class="fas fa-image" aria-hidden=true></i> Choose photo </button></div><span id=photoName class=muted></span></div><label class=agree id=agreeRow for=agreeTerms><input type=checkbox id=agreeTerms name=agreeTerms required><span>I have read and agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>.</span></label><p class="agreed-note muted" id=agreedNote hidden><span>By uploading, you agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a> (accepted <span id=agreedWhen></span>).</span><button type=button class=linklike id=reviewTerms>Review</button></p><div id=ts-upload class=ts-widget></div><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div></form><div id=uploadJobs class=card-panel hidden><span class=jobs-title><i class="fas fa-list-check" aria-hidden=true></i> Sheet processing</span><div id=uploadJobsList role=status aria-live=polite></div></div><details class="card-panel admin-panel" id=adminPanel><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><div class=password-wrapper><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><div id=ts-admin class=ts-widget-admin></div><button type=button class=primary-btn id=adminUnlockBtn><i class="fas fa-lock-open" aria-hidden=true></i> Unlock </button><div id=adminGated hidden><div class=field><span>Pavilion sheets</span><p class=muted> Uploads don't need a passcode, so check replaced sheets. If a bad upload replaced a good sheet, open History and restore the earlier one (up to five are kept per pavilion). </p><div id=adminSheets><p class=muted>Loading sheets…</p></div></div><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>E</code> plus a number (e.g. <code>C 70</code>), or clear it. Optionally pick the walker-level color matching the marker highlight on the sheet (yellow = intermediate, orange = advanced) — setting a kennel with "No color" removes any existing color. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div></div><div id=adminStatus class=status role=status aria-live=polite></div></details><dialog id=uploadSuccessModal class=success-modal closedby=any aria-labelledby=successThanks><div class=success-modal-header><button type=button class=close-modal-btn id=successCloseX aria-label="Close dialog">&times;</button></div><div class=success-modal-body><p class=success-emoji id=successEmoji aria-hidden=true></p><p class=success-thanks id=successThanks></p><p class=success-detail id=successDetail></p><p class=success-timing id=successTiming>Badges can take ~5 minutes to appear on the dashboard.</p><button type=button class=primary-btn id=successCloseBtn autofocus><i class="fas fa-paw" aria-hidden=true></i> Close </button></div></dialog></div><div class=footer><span>Last Updated: October 23, 2026 06:12 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Legal><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -629,6 +637,7 @@
         //   upload_nudge_dismissed    nudge closed without the CTA              {method, days_stale}
         //   sheet_upload_queued       walk sheet accepted for background OCR    {pavilion, legacy?}
         //   sheet_upload_result       background sheet OCR finished or gave up  {pavilion, state, kennels?, highlights?, matched?, low_rows?, rejected?, detected?, model?, poll_ms, legacy?}
+        //   admin_sheet_restored      admin restored an earlier pavilion sheet  {pavilion}
         //   air_section_toggled       air.html accordion opened or closed       {section, open}
         //   air_resource_clicked      outbound source link on air.html          {resource}
         // upload_nudge notes: days_stale is whole days since the newest sheet's
@@ -640,7 +649,9 @@
         // legacy=true marks the pre-async worker's synchronous path, where
         // queued+result fire together with poll_ms 0. rejected (fires with
         // state=failed) is the worker's persist-guard verdict —
-        // no_rows | stale_date | pavilion_mismatch — with detected = the
+        // no_rows | stale_date | pavilion_mismatch | unverified_names (too few
+        // rows anchor to the roster) | verify_unavailable (roster fetch
+        // failed) — with detected = the
         // pavilion letter the sheet actually belongs to on a mismatch;
         // low_rows=true marks an accepted sheet with far fewer rows than the
         // one it replaced.
@@ -891,14 +902,17 @@
     // Passcode caching trade-off (both are shared secrets, not per-user creds):
     // the low-stakes volunteer passcode is cached in localStorage for convenience
     // across visits; the more sensitive admin passcode uses sessionStorage so it
-    // is not persisted on the device beyond the current tab/session.
+    // is not persisted on the device beyond the current tab/session. Uploads no
+    // longer need the volunteer passcode — it is sent only when one is saved,
+    // and its field only appears if the worker's kill switch answers 401.
+    // index.html's correction dialog reads the same key.
     const PASS_KEY = 'pavilionVolunteerPass';   // localStorage
     const ADMIN_KEY = 'pavilionAdminPass';      // sessionStorage
     // Remember Terms acceptance per-version (Pattern C): once a volunteer agrees,
     // suppress the checkbox until the Terms' effective date changes. Keep
     // TERMS_VERSION in sync with the "Effective date" in templates/terms.html and
     // templates/privacy.html so a Terms change automatically re-prompts everyone.
-    const TERMS_VERSION = '2026-06-09';
+    const TERMS_VERSION = '2026-10-23';
     const TERMS_KEY = 'pavilionTermsAccepted';  // localStorage: {v, ts}
     function readTermsAccepted() {
         try { return JSON.parse(localStorage.getItem(TERMS_KEY) || 'null'); }
@@ -953,6 +967,7 @@
     // ---- Volunteer upload --------------------------------------------------
     const form = document.getElementById('uploadForm');
     const passInput = document.getElementById('passcode');
+    const passcodeField = document.getElementById('passcodeField');
     const submitBtn = document.getElementById('submitBtn');
     const uploadStatus = document.getElementById('uploadStatus');
 
@@ -1035,11 +1050,15 @@
         sheetStatusEl.replaceChildren(
             ...['A', 'B', 'C', 'D', 'E'].map(p => buildSheetChip(p, pavilions[p])));
         sheetStatusField.hidden = false;
+        if (adminUnlocked) renderAdminSheets();
     }
 
     let sheetStatusData = null;  // kept so a successful upload can refresh its chip
-    if (PAVILION_API_BASE) {
-        fetch(`${PAVILION_API_BASE}/sheet-status`)
+    // noStore bypasses the endpoint's 60 s private cache — used right after an
+    // admin restore, when the cached answer is known to be stale.
+    function loadSheetStatus(noStore) {
+        if (!PAVILION_API_BASE) return Promise.resolve();
+        return fetch(`${PAVILION_API_BASE}/sheet-status`, noStore ? { cache: 'no-store' } : undefined)
             .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
             .then(data => {
                 const pavs = data && typeof data.pavilions === 'object' && !Array.isArray(data.pavilions)
@@ -1050,6 +1069,7 @@
             })
             .catch(() => { /* freshness is a nicety — fail silently, stay hidden */ });
     }
+    loadSheetStatus(false);
 
     // Reflect a successful upload immediately ("just now") without refetching
     // (a refetch within 60 s would hit the endpoint's Cache-Control anyway).
@@ -1057,7 +1077,12 @@
     // shows only the upload time until the next page load.
     function markSheetUploaded(pav) {
         if (!sheetStatusData) return;  // strip never rendered (old worker / fetch failed)
-        sheetStatusData[pav] = { captured_at: new Date().toISOString(), sheet_date: null };
+        const prev = sheetStatusData[pav];
+        // The replaced sheet went onto the worker's restore history.
+        sheetStatusData[pav] = {
+            captured_at: new Date().toISOString(), sheet_date: null,
+            restorable: !!(prev && (prev.captured_at || prev.restorable)), city: null
+        };
         renderSheetStatus(sheetStatusData);
     }
 
@@ -1140,16 +1165,17 @@
                 { poll_ms: elapsed });
             return;
         }
+        // No passcode: the unguessable job id is the capability. A saved
+        // passcode still rides along so a pre-change worker keeps answering.
+        const saved = localStorage.getItem(PASS_KEY) || '';
         fetch(`${PAVILION_API_BASE}/upload-status?id=${encodeURIComponent(id)}`, {
-            // Passcode from localStorage, not the input — form.reset() and page
-            // reloads must not break an in-flight poll.
-            headers: { 'X-Volunteer-Passcode': localStorage.getItem(PASS_KEY) || '' },
+            headers: saved ? { 'X-Volunteer-Passcode': saved } : {},
             signal: AbortSignal.timeout(15000)
         }).then(r => {
             if (r.status === 401) {
-                // Passcode rotated server-side — polling can never succeed.
+                // Only a pre-change worker gates polling — it can never succeed.
                 finishJob(id, pavilion, 'failed',
-                    `Pavilion ${pavilion} — the passcode changed, so this upload can't be tracked. Refresh the page and re-enter it.`,
+                    `Pavilion ${pavilion} — this upload can't be tracked right now. Refresh the page to check the sheet's status.`,
                     { poll_ms: elapsed });
                 return null;
             }
@@ -1173,6 +1199,10 @@
                             : `Pavilion ${pavilion} — this looks like a different pavilion's sheet, so nothing was changed. Double-check the pavilion and upload again.`;
                     } else if (rejected === 'stale_date') {
                         msg = `Pavilion ${pavilion} — the sheet already on file is newer than this one, so nothing was changed. If this really is the current sheet, photograph today's page and upload again.`;
+                    } else if (rejected === 'unverified_names') {
+                        msg = `Pavilion ${pavilion} — we couldn't match enough names to dogs currently at CACC, so the previous sheet was kept. Retake the photo with the whole sheet flat, in focus and well lit, then upload again.`;
+                    } else if (rejected === 'verify_unavailable') {
+                        msg = `Pavilion ${pavilion} — we couldn't check the sheet against the current roster just now, so nothing was changed. Please upload it again in a few minutes.`;
                     } else {
                         msg = `Pavilion ${pavilion} — no kennel rows could be read, so the previous sheet was kept. Retake the photo with the whole sheet in frame and upload again.`;
                     }
@@ -1231,7 +1261,9 @@
     }
 
     passInput.value = localStorage.getItem(PASS_KEY) || '';
-    passInput.addEventListener('change', () => localStorage.setItem(PASS_KEY, passInput.value));
+    passInput.addEventListener('change', () => {
+        if (passInput.value) localStorage.setItem(PASS_KEY, passInput.value);
+    });
 
     // --- Terms acceptance UI (version-keyed remember) ----------------------
     // If the volunteer already accepted the current Terms version, hide the
@@ -1357,7 +1389,7 @@
         if (!PAVILION_API_BASE) return;
         const pavilion = document.getElementById('pavilion').value;
         const file = document.getElementById('photo').files[0];
-        if (!pavilion || !file || !passInput.value) {
+        if (!pavilion || !file || (!passcodeField.hidden && !passInput.value)) {
             setStatus(uploadStatus, 'Please fill in every field.', 'err');
             return;
         }
@@ -1384,7 +1416,7 @@
         if (!priorAccept || priorAccept.v !== TERMS_VERSION) {
             try { localStorage.setItem(TERMS_KEY, JSON.stringify({ v: TERMS_VERSION, ts: Date.now() })); } catch (e) {}
         }
-        localStorage.setItem(PASS_KEY, passInput.value);
+        if (passInput.value) localStorage.setItem(PASS_KEY, passInput.value);
         // Verify Turnstile up front — before the (mobile-expensive) image
         // compression — so we don't burn battery/CPU on a request the worker
         // would reject anyway.
@@ -1434,7 +1466,9 @@
             try {
                 resp = await fetch(`${PAVILION_API_BASE}/upload`, {
                     method: 'POST',
-                    headers: { 'X-Volunteer-Passcode': passInput.value },
+                    // Uploads are open; a saved passcode is sent only so the
+                    // kill switch (or a pre-change worker) still lets it in.
+                    headers: passInput.value ? { 'X-Volunteer-Passcode': passInput.value } : {},
                     body,
                     // Bounds only the multipart body upload — the worker
                     // enqueues OCR to a background workflow and returns
@@ -1449,7 +1483,17 @@
             }
             const data = await resp.json().catch(() => ({}));
             if (resp.status === 401) {
-                setStatus(uploadStatus, 'Passcode rejected. Please check it and try again.', 'err');
+                // The worker's kill switch is on: reveal the passcode field.
+                const wasHidden = passcodeField.hidden;
+                passcodeField.hidden = false;
+                passInput.focus();
+                setStatus(uploadStatus, wasHidden || !passInput.value
+                    ? 'Uploads temporarily need the volunteer passcode. Enter it above and upload again.'
+                    : 'Passcode rejected. Please check it and try again.', 'err');
+            } else if (resp.status === 413) {
+                setStatus(uploadStatus, 'That photo is too large to process — please retake it or pick a smaller one.', 'err');
+            } else if (resp.status === 415) {
+                setStatus(uploadStatus, "That file isn't a supported photo — please take or choose a JPEG, PNG or HEIC image.", 'err');
             } else if (resp.status === 403) {
                 // Turnstile tokens expire after a few minutes.
                 setStatus(uploadStatus, 'Security check expired — please redo it and try again.', 'err');
@@ -1641,6 +1685,7 @@
             adminGated.hidden = false;
             setStatus(adminStatus, '', '');
             loadRoster();
+            renderAdminSheets();
         } finally {
             // Token is single-use — refresh for the next admin action.
             if (TURNSTILE_SITE_KEY && window.turnstile && tsAdminId !== null) window.turnstile.reset(tsAdminId);
@@ -1882,5 +1927,170 @@
             if (TURNSTILE_SITE_KEY && window.turnstile && tsAdminId !== null) window.turnstile.reset(tsAdminId);
         }
     }
+
+    // ---- Admin: pavilion sheet history + restore ----------------------------
+    // Uploads need no passcode, so a bad sheet can replace a good one; the
+    // worker keeps up to five replaced sheets per pavilion. Rows come from the
+    // public /sheet-status data (restorable + network tag); History loads the
+    // admin-gated /admin/history summaries, Restore posts /admin/restore with
+    // the live sheet's captured_at so a fresh upload in between is a 409, not
+    // a silent clobber. DOM APIs only — fetched data never reaches innerHTML.
+    const adminSheets = document.getElementById('adminSheets');
+    const openHistory = new Map();  // pavilion -> rendered history container
+
+    function sheetLabel(info) {
+        const parts = [];
+        if (info && info.captured_at && isFinite(Date.parse(info.captured_at))) {
+            parts.push(`uploaded ${relAge(info.captured_at)}`);
+        } else {
+            parts.push('no sheet on file');
+        }
+        if (info && /^\d{4}-\d{2}-\d{2}$/.test(info.sheet_date || '')) parts.push(`dated ${formatSiteDate(info.sheet_date)}`);
+        if (info && typeof info.rows === 'number') parts.push(`${info.rows} row${info.rows === 1 ? '' : 's'}`);
+        if (info && info.city === true) parts.push('shelter WiFi');
+        else if (info && info.city === false) parts.push('off-network');
+        return parts.join(' · ');
+    }
+
+    function renderAdminSheets() {
+        if (!adminSheets) return;
+        if (!sheetStatusData) {
+            adminSheets.replaceChildren(Object.assign(document.createElement('p'),
+                { className: 'muted', textContent: 'Sheet status unavailable — reload the page to retry.' }));
+            return;
+        }
+        adminSheets.replaceChildren(...['A', 'B', 'C', 'D', 'E'].map(pav => {
+            const info = sheetStatusData[pav];
+            const row = document.createElement('div');
+            row.className = 'sheet-admin-row';
+            row.dataset.pav = pav;
+            const label = document.createElement('span');
+            label.className = 'sheet-admin-info';
+            const letter = document.createElement('b');
+            letter.textContent = `Pavilion ${pav}`;
+            label.append(letter, ` — ${sheetLabel(info)}`);
+            row.append(label);
+            if (info && info.restorable === true) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'ghost-btn';
+                btn.dataset.action = 'history';
+                btn.textContent = openHistory.has(pav) ? 'Hide history' : 'History';
+                row.append(btn);
+            }
+            if (openHistory.has(pav)) row.append(openHistory.get(pav));
+            return row;
+        }));
+    }
+
+    // Shared admin POST: Turnstile token + admin passcode, serialized on the
+    // same chain as Set/Clear (single-use tokens). Resolves the parsed JSON
+    // on success, or null after reporting the failure in the status line.
+    function adminSheetPost(path, payload) {
+        const run = async () => {
+            let tsToken = '';
+            if (TURNSTILE_SITE_KEY) {
+                if (turnstileBlocked()) {
+                    setStatus(adminStatus, 'Security check failed to load — please disable any adblocker/privacy shield and refresh.', 'err');
+                    return null;
+                }
+                tsToken = await getAdminToken();
+                if (!tsToken) { setStatus(adminStatus, 'Please complete the security check, then retry.', 'err'); return null; }
+            }
+            try {
+                const resp = await fetch(`${PAVILION_API_BASE}${path}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-Admin-Passcode': adminPass.value },
+                    body: JSON.stringify(Object.assign({}, payload, { 'cf-turnstile-response': tsToken || undefined })),
+                    signal: AbortSignal.timeout(30000)
+                });
+                const data = await resp.json().catch(() => ({}));
+                if (resp.status === 401) {
+                    lockAdmin();
+                    setStatus(adminStatus, 'Admin passcode rejected — the panel is locked. Re-enter the passcode and unlock.', 'err');
+                    return null;
+                }
+                if (resp.status === 403) { setStatus(adminStatus, 'Security check failed. Please retry.', 'err'); return null; }
+                if (!resp.ok) {
+                    const detail = typeof data.error === 'string' ? data.error.slice(0, 140) : '';
+                    setStatus(adminStatus, `Request failed (HTTP ${resp.status}${detail ? ': ' + detail : ''}).`, 'err');
+                    return null;
+                }
+                return data;
+            } catch (e) {
+                setStatus(adminStatus, e && e.name === 'TimeoutError'
+                    ? 'Request timed out — try again.' : 'Request failed — check your connection and try again.', 'err');
+                return null;
+            } finally {
+                if (TURNSTILE_SITE_KEY && window.turnstile && tsAdminId !== null) window.turnstile.reset(tsAdminId);
+            }
+        };
+        const p = adminChain.then(run);
+        adminChain = p.catch(() => {});
+        return p;
+    }
+
+    function buildHistoryList(pav, data) {
+        const box = document.createElement('div');
+        box.className = 'sheet-admin-hist';
+        const live = data && data.live;
+        const hist = Array.isArray(data && data.history) ? data.history : [];
+        if (!hist.length) {
+            box.append(Object.assign(document.createElement('p'), { className: 'muted', textContent: 'No earlier sheets kept.' }));
+            return box;
+        }
+        hist.forEach(entry => {
+            if (!entry || typeof entry.captured_at !== 'string') return;
+            const row = document.createElement('div');
+            row.className = 'sheet-admin-row';
+            const label = document.createElement('span');
+            label.className = 'sheet-admin-info';
+            label.textContent = sheetLabel(entry);
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'ghost-btn';
+            btn.dataset.action = 'restore';
+            btn.dataset.target = entry.captured_at;
+            btn.dataset.expect = live && typeof live.captured_at === 'string' ? live.captured_at : '';
+            btn.textContent = 'Restore';
+            row.append(label, btn);
+            box.append(row);
+        });
+        return box;
+    }
+
+    if (adminSheets) adminSheets.addEventListener('click', async (e) => {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn || !adminUnlocked) return;
+        const pav = btn.closest('[data-pav]').dataset.pav;
+        if (btn.dataset.action === 'history') {
+            if (openHistory.has(pav)) { openHistory.delete(pav); renderAdminSheets(); return; }
+            btn.disabled = true;
+            setStatus(adminStatus, `Loading Pavilion ${pav} history…`, '');
+            const data = await adminSheetPost('/admin/history', { pavilion: pav });
+            btn.disabled = false;
+            if (!data) return;
+            setStatus(adminStatus, '', '');
+            openHistory.set(pav, buildHistoryList(pav, data));
+            renderAdminSheets();
+            return;
+        }
+        if (btn.dataset.action === 'restore') {
+            if (!confirm(`Restore the earlier Pavilion ${pav} sheet? The current sheet stays in the history, so this can be undone.`)) return;
+            btn.disabled = true;
+            setStatus(adminStatus, `Restoring Pavilion ${pav}…`, '');
+            const data = await adminSheetPost('/admin/restore', {
+                pavilion: pav,
+                expect_captured_at: btn.dataset.expect || null,
+                target_captured_at: btn.dataset.target
+            });
+            btn.disabled = false;
+            if (!data) return;
+            track('admin_sheet_restored', { pavilion: pav });
+            openHistory.delete(pav);
+            setStatus(adminStatus, `Restored Pavilion ${pav}. Badges update after the rebuild (~5 minutes).`, 'ok');
+            loadSheetStatus(true);
+        }
+    });
 
 </script></body></html>
