@@ -1,0 +1,901 @@
+<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>Feedback — CACC Dogs</title><link rel=preload href=https://cdn.jsdelivr.net/npm/@fontsource/big-shoulders-text@5.0.13/files/big-shoulders-text-latin-800-normal.woff2 as=font type=font/woff2 crossorigin><link rel=icon type=image/svg+xml href=favicon.svg><link rel=preconnect href=https://us.i.posthog.com><script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group identify setPersonProperties setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags resetGroups onFeatureFlags addFeatureFlagsHandler onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    // Production hosts only. Saved copies opened from file:// and local previews were
+    // polluting the project with phantom entry pages ("/C:/Users/.../index.html") and
+    // are the likely source of the 0-duration session recordings.
+    // Skipping init() is enough to go fully inert: the loader above only injects
+    // array.js and stubs out capture/identify/etc. from *inside* init, so off-host
+    // `posthog` stays a bare array with no .capture — which is exactly the condition
+    // base.html's track() checks before firing.
+    if (/(^|\.)cacc\.dog$/.test(location.hostname)) {
+        posthog.init('phc_lza7BKDzKEmNeMw4V2psaoRFTDqKENUudMMrcp2pR2S', {
+            api_host: 'https://us.i.posthog.com',
+            defaults: '2026-01-30',
+            person_profiles: 'anonymous',
+            capture_pageview: true,
+            capture_pageleave: true,
+            session_recording: {
+                // Inputs carry no personal data here; the only sensitive fields site-wide
+                // are the volunteer passcodes, and those are type="password", which
+                // posthog masks unconditionally regardless of this setting.
+                maskAllInputs: false,
+                maskInputOptions: { password: true }
+            }
+        });
+    }
+</script><link rel=preconnect href=https://cdnjs.cloudflare.com><link rel=preconnect href=https://cdn.jsdelivr.net><link rel=preload as=font type=font/woff2 href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2 crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css><style>
+        /* Note: :root Variables are now in partials/navbar.html */
+
+        /* Base styles that don't belong in the navbar partial */
+        /* Reserve the scrollbar gutter so opening the legend modal (which locks body
+           scroll) doesn't shift the page horizontally. */
+        html { scrollbar-gutter: stable; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: var(--bg); color: var(--text);
+            margin: 0; padding: 0; line-height: 1.5;
+            padding-top: calc(var(--header-height) + 16px); /* Offset for fixed header */
+            transition: background 0.3s, color 0.3s; 
+        }
+        /* scroll-margin keeps the skip-link target clear of the fixed header */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; scroll-margin-top: calc(var(--header-height) + 8px); }
+        .container:focus { outline: none; }
+        
+        /* --- Global Utility Classes --- */
+
+        .tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; background: var(--border); transition: all 0.3s ease; }
+        .tag.male   { color: var(--gender-male-text); background: var(--gender-male-bg); border: 1px solid var(--gender-male-border); } 
+        .tag.female { color: var(--gender-female-text); background: var(--gender-female-bg); border: 1px solid var(--gender-female-border); }
+        .tag.stray  { color: var(--stray-text); background: var(--stray-bg); border: 1px solid var(--stray-border); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+        .tag.stray.chipped { border-style: dashed; }
+        .tag.return { color: var(--stray-text); background: var(--stray-bg); border: 1px solid var(--stray-border); cursor: help; }
+        .tag.hold { color: var(--hold-text); background: var(--hold-bg); border: 1px solid var(--hold-border); cursor: help; display: inline-flex; align-items: center; gap: 4px; }
+        .tag.rescue-only { color: var(--rescue-only-text); background: var(--rescue-only-bg); border: 1px solid var(--rescue-only-border); cursor: help; display: inline-flex; align-items: center; gap: 4px; }
+        .tag.altered { border-style: dashed; }
+        .tag.pavilion { color: var(--info-text); background: var(--info-bg); border: 1px solid var(--info-border); display: inline-flex; align-items: center; gap: 4px; }
+        /* Walker-level tint mirroring the sheet's marker highlight:
+           yellow = intermediate-level dog, orange = advanced-level dog. */
+        .tag.pavilion.hl-yellow { color: var(--warning-text); background: var(--warning-bg); border-color: var(--warning-border); }
+        .tag.pavilion.hl-orange { color: var(--hl-orange-text); background: var(--hl-orange-bg); border-color: var(--hl-orange-border); }
+        .tag.pavilion .pk-report { color: var(--text-muted); cursor: pointer; font-size: 0.85em; opacity: 0.7; margin-left: 2px; background: none; border: none; padding: 0; line-height: 1; }
+        .tag.pavilion .pk-report:hover { color: var(--danger-text); opacity: 1; }
+        /* A reported ("disputed") badge stays visible but dims and carries a
+           small warning mark — only consensus or an admin changes the value. */
+        .tag.pavilion.flagged { opacity: 0.65; }
+        /* A badge whose source sheet has gone stale dims the same way —
+           sheets persist until a newer upload replaces them. */
+        .tag.pavilion.pk-stale { opacity: 0.65; }
+        .tag.pavilion .pk-flag-mark { font-size: 0.8em; color: var(--warning-text); }
+
+        .tag.color { border: 1px solid transparent; }
+        .tag.color-black { background: rgba(100,100,100,0.15); color: #c9d1d9; border: 1px solid rgba(100,100,100,0.5); }
+        .tag.color-white { background: rgba(255,255,255,0.1); color: #f0f6fc; border: 1px solid rgba(255,255,255,0.3); }
+        .tag.color-brown { background: rgba(160, 82, 45, 0.15); color: #dcbfa3; border: 1px solid rgba(160, 82, 45, 0.4); }
+        .tag.color-tan   { background: rgba(210, 180, 140, 0.15); color: #e8d0a9; border: 1px solid rgba(210, 180, 140, 0.4); }
+        .tag.color-blue  { background: rgba(119, 136, 153, 0.15); color: #b0c4de; border: 1px solid rgba(119, 136, 153, 0.4); }
+        .tag.color-red   { background: rgba(205, 92, 92, 0.15); color: #f0a0a0; border: 1px solid rgba(205, 92, 92, 0.4); }
+        .tag.color-brindle { background: rgba(139, 69, 19, 0.15); color: #cdb499; border: 1px solid rgba(139, 69, 19, 0.4); }
+        .tag.color-merle { background: rgba(106, 90, 205, 0.15); color: #b8a9e8; border: 1px solid rgba(106, 90, 205, 0.4); }
+        .tag.color-sable { background: rgba(184, 134, 11, 0.15); color: #dab96f; border: 1px solid rgba(184, 134, 11, 0.4); }
+        .tag.color-tricolor { background: rgba(128, 128, 128, 0.15); color: #d0d0d0; border: 1px solid rgba(128, 128, 128, 0.4); }
+        .tag.color-default { background: rgba(128, 128, 128, 0.1); color: #8b949e; border: 1px solid rgba(128,128,128,0.3); }
+
+        body.light-mode .tag.color-black { background: #f6f8fa; color: #24292f; border-color: #d0d7de; }
+        body.light-mode .tag.color-white { background: #ffffff; color: #24292f; border-color: #d0d7de; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        body.light-mode .tag.color-brown { background: #fff8f2; color: #8c5e2a; border-color: #e6ccb3; }
+        body.light-mode .tag.color-tan   { background: #fffcf0; color: #9a6700; border-color: #e6ccb3; }
+        body.light-mode .tag.color-blue  { background: #f1f8ff; color: #0969da; border-color: #d0d7de; }
+        body.light-mode .tag.color-red   { background: #ffebe9; color: #cf222e; border-color: #ff8182; }
+        body.light-mode .tag.color-brindle { background: #fff8c5; color: #574619; border-color: #eac54f; }
+        body.light-mode .tag.color-merle { background: #f0eeff; color: #5b4db5; border-color: #c4b5f0; }
+        body.light-mode .tag.color-sable { background: #fef7e0; color: #806515; border-color: #e6cc80; }
+        body.light-mode .tag.color-tricolor { background: #f6f8fa; color: #57606a; border-color: #d0d7de; }
+        body.light-mode .tag.color-default { background: #f6f8fa; color: #57606a; border-color: #d0d7de; }
+
+        .status-badge { font-weight: 600; padding: 4px 8px; border-radius: 6px; font-size: 12px; display: inline-block; min-width: 60px; text-align: center; border: 1px solid transparent; }
+        .los-green  { color: var(--success-text); background: var(--success-bg); border-color: var(--success-border); }
+        .los-yellow { color: var(--warning-text); background: var(--warning-bg); border-color: var(--warning-border); }
+        .los-red    { color: var(--danger-text);  background: var(--danger-bg);  border-color: var(--danger-border); }
+        .status-rto     { color: var(--warning-text); background: var(--warning-bg); border-color: var(--warning-border); }
+        .status-rescue  { color: var(--info-text);    background: var(--info-bg);    border-color: var(--info-border); max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; cursor: pointer; }
+        .status-adopted { color: var(--success-text); background: var(--success-bg); border-color: var(--success-border); }
+
+        .stats { background: var(--row); padding: 15px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 30px; display: flex; gap: 20px; font-size: 1.1em; }
+        .table-container { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
+        th { background: var(--row); padding: 12px 15px; border-bottom: 2px solid var(--border); color: var(--text); white-space: nowrap; cursor: pointer; }
+        td { padding: 12px 15px; border-bottom: 1px solid var(--border); }
+        tr:nth-child(even) { background-color: var(--row); }
+        tr:hover { background-color: var(--row-hover); }
+        
+        .footer { margin-top: 60px; border-top: 1px solid var(--border); padding-top: 20px; color: var(--text-muted); font-size: 0.85rem; text-align: center; display: flex; flex-direction: column; gap: 8px; line-height: 1.4; }
+        .footer .disclaimer { font-size: 0.75rem; opacity: 0.8; max-width: 800px; margin: 0 auto; }
+        .footer .footer-links { display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap; font-size: 0.8rem; }
+        .footer .footer-links a { color: var(--text-muted); text-decoration: underline; }
+        .footer .footer-links a:hover { color: var(--text); }
+
+        /* Shared empty / no-data states */
+        .empty-state { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: 1.1rem; }
+        .empty-state i { font-size: 3rem; display: block; margin-bottom: 15px; opacity: 0.4; }
+        .table-empty { text-align: center; padding: 20px; color: var(--text-muted); }
+
+        /* Chart / section caption note */
+        .chart-note { font-size: 0.85rem; color: var(--text-muted); margin-top: 10px; }
+
+        /* Text color utilities (mapped to theme vars) */
+        .text-accent  { color: var(--accent); }
+        .text-success { color: var(--success-text); }
+        .text-warning { color: var(--warning-text); }
+        .text-danger  { color: var(--danger-text); }
+        .text-info    { color: var(--info-text); }
+        .text-muted   { color: var(--text-muted); }
+        .text-stray   { color: var(--stray-text); }
+        .text-male    { color: var(--gender-male-text); }
+
+        .cursor-help { cursor: help; }
+
+        /* Semantic date-range grouping (renders identically to loose control groups) */
+        .date-range { border: 0; padding: 0; margin: 0; min-width: 0; display: flex; gap: 15px; align-items: center; }
+        .date-range > legend { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+        /* Trend indicator badge (today-vs-yesterday arrow + hover tooltip) */
+        .trend-indicator { font-size: 0.9rem; cursor: help; position: relative; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); }
+        .trend-good { color: #4AA564; border-color: rgba(74, 165, 100, 0.3); }
+        .trend-bad { color: #CC393E; border-color: rgba(204, 57, 62, 0.3); }
+        .trend-neutral { color: var(--text-muted); }
+        .trend-indicator::after { content: attr(data-tooltip); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1f2428; color: #f0f6fc; padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.2s, transform 0.2s; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 20; font-weight: normal; }
+        .trend-indicator:hover::after { opacity: 1; transform: translateX(-50%) translateY(-2px); }
+
+        /* Date badge whose label can be tapped/clicked to swap for the exact local scrape time */
+        .ts-toggle { cursor: pointer; user-select: none; -webkit-user-select: none; }
+
+        /* Keyboard skip link: off-screen until focused, then above the fixed header (z 9999) */
+        .skip-link { position: absolute; left: 8px; top: -80px; z-index: 10000; background: var(--row); color: var(--accent); border: 1px solid var(--accent); border-radius: 8px; padding: 10px 16px; font-weight: 600; text-decoration: none; transition: top 0.15s; }
+        .skip-link:focus { top: 8px; }
+
+        
+.feedback-wrap { max-width: 640px; margin: 0 auto; }
+.feedback-title { font-size: 1.4rem; display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.feedback-intro { color: var(--text-muted); margin-top: 0; }
+
+.card-panel { background: var(--row); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 18px; }
+.field { position: relative; display: block; margin-bottom: 14px; border: 0; padding: 0; min-width: 0; }
+.field > span, .field > legend { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; padding: 0; }
+.field input[type="text"], .field textarea {
+    width: 100%; box-sizing: border-box; padding: 12px; font-size: 16px; min-height: 48px;
+    background: var(--input-bg); color: var(--text); font-family: inherit;
+    border: 1px solid var(--border); border-radius: 8px; appearance: none;
+}
+.field textarea { resize: vertical; line-height: 1.45; }
+.primary-btn {
+    width: 100%; padding: 14px; font-size: 1rem; font-weight: 700; cursor: pointer;
+    background: var(--accent); color: var(--on-accent); border: none; border-radius: 8px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+}
+.primary-btn:disabled { opacity: 0.6; cursor: progress; }
+.status { margin-top: 12px; font-size: 0.9rem; min-height: 1.2em; }
+.status.ok { color: var(--success-text); }
+.status.err { color: var(--danger-text); }
+.notice {
+    background: var(--warning-bg); color: var(--warning-text); border: 1px solid var(--warning-border);
+    border-radius: 8px; padding: 12px; margin-bottom: 18px; font-size: 0.9rem;
+}
+.muted { color: var(--text-muted); font-size: 0.85rem; }
+.muted a { color: var(--accent); }
+.agree { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; line-height: 1.45; }
+.agree input[type="checkbox"] { width: 18px; height: 18px; min-height: 0; margin: 2px 0 0; flex: 0 0 auto; accent-color: var(--accent); cursor: pointer; }
+.agree span { font-size: 0.9rem; color: var(--text); }
+.agree a { color: var(--accent); }
+.ts-widget { margin-bottom: 14px; }
+/* Category radios styled as chips (derived from upload.html's .sheet-chip):
+   the radio is visually hidden and the checked chip takes the accent. */
+.cat-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.cat-chip {
+    display: inline-flex; align-items: center; gap: 6px; min-height: 44px; box-sizing: border-box;
+    padding: 8px 14px; font-size: 0.9rem; cursor: pointer; border-radius: 22px;
+    background: transparent; color: var(--text); border: 1px solid var(--border);
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+.cat-chip:hover { background: var(--row-hover); }
+.cat-chip input {
+    position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+    overflow: hidden; clip: rect(0, 0, 0, 0); clip-path: inset(50%); border: 0;
+}
+.cat-chip:has(input:checked) { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.cat-chip:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+.count { display: block; text-align: right; margin-top: 4px; }
+
+    </style></head><body><a class=skip-link href=#main-content>Skip to main content</a><style>
+    @font-face {
+        font-family: 'Big Shoulders Text';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 800;
+        src: url('https://cdn.jsdelivr.net/npm/@fontsource/big-shoulders-text@5.0.13/files/big-shoulders-text-latin-800-normal.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    /* --- Global Theme Variables (Moved here to support Map Overlay) --- */
+    :root {
+        /* Core Colors */
+        --header-height: 64px;
+        --header-bg: rgba(13, 17, 23, 0.85);
+        --nav-item-hover: rgba(177, 186, 196, 0.12);
+        --accent: #41B6E6;
+        --on-accent: #0d1117; /* readable text/icon on a filled --accent surface */
+        --text: #c9d1d9;
+        --text-muted: #8b949e;
+        --border: #30363d;
+        --row: #161b22;
+        --bg: #0d1117;
+        --input-bg: #0d1117;
+        --card-shadow: rgba(0,0,0,0.3);
+
+        /* Chicago Design System brand hues (shared, theme-independent) */
+        --cds-flag-blue: #41B6E6; --cds-malibu-blue: #0075BB;
+        --cds-green: #2E8540; --cds-green-light: #4AA564; --cds-green-lightest: #E7F4E4;
+        --cds-gold: #FDB81E; --cds-gold-light: #F9C642;
+        --cds-red-dark: #CC393E; --cds-red-light: #E59393;
+
+        /* Badge & Status Colors (Dark Mode) — Chicago palette, lighter tints for dark bg */
+        --gender-male-text: #41B6E6; --gender-male-bg: rgba(65, 182, 230, 0.15); --gender-male-border: rgba(65, 182, 230, 0.4);
+        --gender-female-text: #ff7b72; --gender-female-bg: rgba(235, 87, 87, 0.15); --gender-female-border: rgba(235, 87, 87, 0.4);
+        --stray-text: #d2a8ff; --stray-bg: rgba(187, 128, 255, 0.15); --stray-border: rgba(187, 128, 255, 0.4);
+        --hold-text: #F9C642; --hold-bg: rgba(253, 184, 30, 0.15); --hold-border: rgba(253, 184, 30, 0.4);
+        --rescue-only-text: #e09070; --rescue-only-bg: rgba(224, 144, 112, 0.15); --rescue-only-border: rgba(224, 144, 112, 0.4);
+
+        --success-text: #4AA564; --success-bg: rgba(46, 133, 64, 0.15); --success-border: rgba(46, 133, 64, 0.4);
+        --warning-text: #F9C642; --warning-bg: rgba(253, 184, 30, 0.15);  --warning-border: rgba(253, 184, 30, 0.4);
+        --danger-text: #E59393;  --danger-bg: rgba(204, 57, 62, 0.15);  --danger-border: rgba(204, 57, 62, 0.4);
+        --info-text: #A4D5EE;    --info-bg: rgba(65, 182, 230, 0.15);   --info-border: rgba(65, 182, 230, 0.4);
+        --hl-orange-text: #F0883E; --hl-orange-bg: rgba(240, 136, 62, 0.15); --hl-orange-border: rgba(240, 136, 62, 0.4);
+        
+        --rto-text: var(--warning-text); --rto-bg: var(--warning-bg); --rto-border: var(--warning-border);
+        --rescue-text: var(--info-text); --rescue-bg: var(--info-bg); --rescue-border: var(--info-border);
+        --adopted-text: var(--success-text); --adopted-bg: var(--success-bg); --adopted-border: var(--success-border);
+        
+        --row-hover: #21262d;
+    }
+    
+    body.light-mode {
+        --header-bg: rgba(255, 255, 255, 0.85);
+        --nav-item-hover: rgba(0, 0, 0, 0.08);
+        --accent: #0075BB;
+        --on-accent: #ffffff;
+        --text: #24292f;
+        --text-muted: #57606a;
+        --border: #d0d7de;
+        --row: #f6f8fa;
+        --bg: #ffffff;
+        --input-bg: #ffffff;
+        --card-shadow: rgba(0,0,0,0.1);
+
+        --gender-male-text: #0075BB; --gender-male-bg: #E1F3F8; --gender-male-border: #A4D5EE;
+        --gender-female-text: #bf3989; --gender-female-bg: #ffeff7; --gender-female-border: #ff80c8;
+        --stray-text: #8250df; --stray-bg: #fbefff; --stray-border: #d4a7ff;
+        --hold-text: #8a6d3b; --hold-bg: #FFF1D2; --hold-border: #F9C642;
+        --rescue-only-text: #9a4a2a; --rescue-only-bg: #fdf0eb; --rescue-only-border: #e09070;
+
+        --success-text: #2E8540; --success-bg: #E7F4E4; --success-border: #94BFA2;
+        --warning-text: #9a6700; --warning-bg: #FFF1D2; --warning-border: #F9C642;
+        --danger-text: #CC393E; --danger-bg: #FBD9DF; --danger-border: #E59393;
+        --info-text: #0075BB;    --info-bg: #E1F3F8;    --info-border: #A4D5EE;
+        --hl-orange-text: #bc4c00; --hl-orange-bg: #FFF1E5; --hl-orange-border: #F0883E;
+        
+        --row-hover: #eaeef2;
+    }
+
+    .site-header {
+        position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+        background: var(--header-bg);
+        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        height: var(--header-height);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    .header-content {
+        max-width: 1200px; margin: 0 auto; height: 100%;
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 0 20px;
+    }
+
+    .brand-section h1 { 
+        margin: 0; font-size: 1.25rem; 
+        display: flex; align-items: center; white-space: nowrap; 
+    }
+    
+    .brand-link {
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        gap: 6px;
+    }
+    
+    .brand-blue-paw {
+        color: #41B6E6;
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    
+    .chistar-svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+    
+    .brand-chicago {
+        font-family: 'Big Shoulders Text', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-weight: 800;
+        font-size: 1.35rem;
+        letter-spacing: 0.04em;
+        color: #ffffff;
+        line-height: 1;
+        text-transform: uppercase;
+    }
+    
+    .brand-divider {
+        color: var(--border);
+        font-size: 1.35rem;
+        margin: 0 4px;
+        user-select: none;
+    }
+    
+    .brand-title {
+        font-family: 'Big Shoulders Text', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-weight: 800;
+        font-size: 1.1rem;
+        letter-spacing: 0.04em;
+        color: #D9D9D9;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        line-height: 1;
+        text-transform: uppercase;
+    }
+    
+    body.light-mode .brand-chicago {
+        color: #000000;
+    }
+    
+    body.light-mode .brand-title {
+        color: #4D4D4D;
+    }
+
+    /* Desktop Navigation */
+    .nav-links { display: flex; gap: 8px; align-items: center; }
+    .nav-link {
+        color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.95rem;
+        padding: 6px 12px; border-radius: 6px; transition: all 0.2s;
+    }
+    .nav-link:hover { color: var(--text); background: var(--nav-item-hover); }
+    .nav-link.active { color: var(--accent); background: var(--nav-item-hover); font-weight: 600; }
+
+    .actions { display: flex; align-items: center; gap: 10px; }
+    .theme-toggle, .mobile-menu-btn { 
+        background: transparent; border: 1px solid var(--border); color: var(--text-muted); 
+        width: 36px; height: 36px; border-radius: 50%; 
+        cursor: pointer; display: flex; align-items: center; justify-content: center; 
+        font-size: 1rem; transition: all 0.2s;
+    }
+    .theme-toggle:hover, .mobile-menu-btn:hover { color: var(--text); border-color: var(--text-muted); }
+    .mobile-menu-btn { display: none; border-radius: 6px; }
+
+    /* Mobile Drawer */
+    .mobile-nav-drawer {
+        display: none; position: fixed; top: var(--header-height); left: 0; right: 0; z-index: 9998;
+        background: var(--bg); border-bottom: 1px solid var(--border);
+        padding: 15px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .mobile-nav-drawer.open { display: flex; flex-direction: column; gap: 10px; }
+    
+    .mobile-link {
+        padding: 12px; border-radius: 8px; color: var(--text); text-decoration: none; font-weight: 600;
+        border: 1px solid transparent; display: flex; align-items: center; gap: 10px;
+    }
+    .mobile-link:hover { background: var(--row); }
+    .mobile-link.active { background: var(--nav-item-hover); border-color: var(--border); color: var(--accent); }
+
+    /* 950px, not 850: with 7 links the row needs ~946px before the brand
+       (longest: "PAVILION UPLOAD") and the nav start colliding. */
+    @media (max-width: 950px) {
+        .nav-links { display: none; }
+        .mobile-menu-btn { display: flex; }
+    }
+</style><header class=site-header><div class=header-content><div class=brand-section><h1><a href=./ class=brand-link><i class="fas fa-paw brand-blue-paw"></i><svg class=chistar-svg viewbox="0 0 120 120" xmlns=http://www.w3.org/2000/svg><path fill=#E4002B d="M60 0 L71 41 L112 30 L82 60 L112 90 L71 79 L60 120 L49 79 L8 90 L38 60 L8 30 L49 41 Z"/></svg><span class=brand-chicago>CHI</span><span class=brand-divider>|</span><span class=brand-title> Feedback </span></a></h1></div><nav class=nav-links><a href=./ class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link ">Breeds</a><a href=upload.html class="nav-link ">Upload</a></nav><div class=actions><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button><button class=mobile-menu-btn onclick=toggleMobileMenu()><i class="fas fa-bars"></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=./ class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link "><i class="fas fa-paw" style=width:20px></i> Breeds</a><a href=upload.html class="mobile-link "><i class="fas fa-camera" style=width:20px aria-hidden=true></i> Upload</a><a href=feedback.html class="mobile-link active"><i class="fas fa-comment-dots" style=width:20px aria-hidden=true></i> Feedback</a></div></header><script>
+    function toggleTheme() {
+        document.body.classList.toggle('light-mode');
+        const icon = document.querySelector('.theme-toggle i');
+        if(icon) icon.className = document.body.classList.contains('light-mode') ? 'fas fa-sun' : 'fas fa-moon';
+        localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+    }
+    // Auto-init theme if localstorage is set
+    if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
+
+    function toggleMobileMenu() {
+        document.getElementById('mobileDrawer').classList.toggle('open');
+    }
+</script><div class=container id=main-content tabindex=-1><div class=feedback-wrap><h1 class=feedback-title><i class="fas fa-comment-dots" aria-hidden=true></i> Feedback</h1><p class=feedback-intro> Spotted a bug, a wrong detail about a dog, or have an idea for the site? Tell us here. Notes are anonymous and go straight to the maintainer. </p><form id=feedbackForm class=card-panel novalidate><fieldset class=field><legend>What kind of note is this?</legend><div class=cat-chips><label class=cat-chip><input type=radio name=type value=idea><i class="fas fa-lightbulb" aria-hidden=true></i> Idea</label><label class=cat-chip><input type=radio name=type value=bug><i class="fas fa-bug" aria-hidden=true></i> Bug</label><label class=cat-chip><input type=radio name=type value=data><i class="fas fa-database" aria-hidden=true></i> Data error</label><label class=cat-chip><input type=radio name=type value=other><i class="fas fa-ellipsis-h" aria-hidden=true></i> Other</label></div></fieldset><label class=field for=fbTitle><span>Summary</span><input type=text id=fbTitle name=title maxlength=120 autocomplete=off placeholder='One line, e.g. "Map won&#39;t load on my phone"' required></label><label class=field for=fbBody><span>Details</span><textarea id=fbBody name=body rows=6 maxlength=2000 placeholder="What happened, which dog or page, what you expected…" required></textarea><small id=fbCount class="count muted" aria-live=polite>0 / 2000</small></label><label class=agree for=fbVolunteer><input type=checkbox id=fbVolunteer name=volunteer><span>I'm a CACC volunteer <small class=muted>(optional)</small></span></label><p class=muted> Please don't include your name or contact details. Your note is stored as a private GitHub issue for the maintainer; see the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>. </p><div id=ts-feedback class=ts-widget></div><button type=submit id=submitBtn class=primary-btn><i class="fas fa-paper-plane" aria-hidden=true></i> Send feedback </button><div id=feedbackStatus class=status role=status aria-live=polite></div></form></div><div class=footer><span>Last Updated: October 27, 2026 05:07 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a></nav></div></div><script>
+        // Optimization: Global Debounce Utility
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
+
+        // --- Analytics ---
+        // Guarded wrapper around posthog.capture. PostHog only initializes on the
+        // production host (see partials/posthog.html), so this is a silent no-op on
+        // localhost and on saved file:// copies — call it without guarding each site.
+        //
+        // Custom events captured site-wide:
+        //   dog_view_clicked          outbound click to a 24petconnect profile  {dog_id, page}
+        //   media_link_opened         outbound click to a social post           {network, page}
+        //   chip_selected             dashboard filter chip                     {chip, active, filters}
+        //   filters_cleared           "Clear filters" reset to the All view     {source}
+        //   sort_changed              sort <select> changed                     {mode, page}
+        //   search_performed          debounced search ran (never the query)    {q_len, n_len, words, trail, ws, it, multi, del, sugg?, results, page}
+        //   search_suggestion_clicked did-you-mean tap on a zero-result search  {distance, page}
+        //   favorite_toggled          heart button on a dog card                {favorited}
+        //   share_clicked             share button on a dog card                {method, dog_id}
+        //   legend_opened             dashboard legend modal opened             {}
+        //   location_report_submitted kennel-badge report or correction         {kind}
+        //   today_strip_clicked       "Today at CACC" pill                      {kind, count}
+        //   freshness_time_toggled    "Today" label tapped to show/hide time    {shown}
+        //   trends_card_clicked       trends KPI tile                           {card}
+        //   data_loaded               index payload fetched + first render      {total_ms, fetch_ms, transfer_kb, dogs}
+        //   upload_nudge_shown        stale-sheet nudge dialog opened           {days_stale}
+        //   upload_nudge_clicked      nudge CTA followed to upload.html         {days_stale}
+        //   upload_nudge_dismissed    nudge closed without the CTA              {method, days_stale}
+        //   sheet_upload_queued       walk sheet accepted for background OCR    {pavilion, legacy?}
+        //   sheet_upload_result       background sheet OCR finished or gave up  {pavilion, state, kennels?, highlights?, matched?, low_rows?, throttled?, overlap?, kept?, city?, rejected?, detected?, model?, poll_ms, legacy?}
+        //   admin_sheet_restored      admin restored an earlier pavilion sheet  {pavilion}
+        //   air_section_toggled       air.html accordion opened or closed       {section, open}
+        //   air_resource_clicked      outbound source link on air.html          {resource}
+        //   feedback_submitted        feedback form sent to the worker          {type, volunteer, ok, status}
+        // upload_nudge notes: days_stale is whole days since the newest sheet's
+        // captured_at (null = no sheet has ever been uploaded); method is
+        // not_now | x | light_dismiss (Esc and backdrop both funnel through the
+        // dialog's close event and can't be told apart).
+        // search_performed notes (index + removed): q_len is the raw input
+        // length, unchanged since 2026-08 so it stays comparable with earlier
+        // analyses. n_len = normalized query length (searchTokens joined by
+        // single spaces); words = token count after stop-words (mix/and/&) are
+        // dropped; trail = raw input ends in whitespace or "." (the iOS
+        // predictive-text trailing-space hypothesis); ws = leading or doubled
+        // whitespace; it = inputType of the last input event before the
+        // debounced search (null for programmatic runs: suggestion tap, ?q=);
+        // multi = that input inserted more than one character (predictive tap
+        // or paste, not typing); del = a deletion happened since the previous
+        // search_performed (typo-and-fix sequences). sugg is index-only: null
+        // when the query isn't did-you-mean eligible or there were results,
+        // else the number of suggestions shown. A query of only spaces or
+        // punctuation matches nothing and fires no event.
+        // sheet_upload notes: state is done | failed | timeout (timeout = the
+        // page's 9-min poll wall, not necessarily a server-side failure);
+        // legacy=true marks the pre-async worker's synchronous path, where
+        // queued+result fire together with poll_ms 0. rejected (fires with
+        // state=failed) is the worker's persist-guard verdict —
+        // no_rows | stale_date | pavilion_mismatch | unverified_names (too few
+        // rows anchor to the roster) | verify_unavailable (roster fetch
+        // failed) — with detected = the
+        // pavilion letter the sheet actually belongs to on a mismatch;
+        // low_rows=true marks an accepted sheet with far fewer rows than the
+        // one it replaced.
+        // feedback_submitted notes: type is idea | bug | data | other;
+        // volunteer is the self-reported checkbox; status is the worker's HTTP
+        // status (null on a network error or timeout). The note's title and
+        // text are never sent.
+        function track(event, props) {
+            try {
+                if (typeof posthog !== 'undefined' && typeof posthog.capture === 'function') {
+                    posthog.capture(event, props || {});
+                }
+            } catch (e) { /* analytics must never break the page */ }
+        }
+
+        // Outbound conversions. Document-level on purpose: index.html portals its media
+        // menus to <body>, so a container-scoped listener would miss every social link.
+        document.addEventListener('click', function (e) {
+            const a = e.target.closest('a');
+            if (!a || !a.href) return;
+            const href = a.href;
+            if (href.indexOf('24petconnect.com') !== -1) {
+                const m = href.match(/\/Details\/[^/]+\/([A-Za-z0-9]+)/);
+                track('dog_view_clicked', { dog_id: m ? m[1] : null, page: location.pathname });
+                return;
+            }
+            let network = null;
+            if (href.indexOf('facebook.com') !== -1) network = 'facebook';
+            else if (href.indexOf('instagram.com') !== -1) network = 'instagram';
+            else if (href.indexOf('youtube.com') !== -1 || href.indexOf('youtu.be') !== -1) network = 'youtube';
+            if (network) track('media_link_opened', { network: network, page: location.pathname });
+        });
+
+        // Pavilion sheets persist until a newer upload replaces them; data whose
+        // source sheet is older than this many days counts as stale. Shared by
+        // the dashboard (badge dimming, upload nudge) and upload.html (freshness
+        // chips, admin roster notes) — declared once here so it can't drift.
+        const PK_STALE_DAYS = 2;
+
+        // --- Kennel-entry helpers (shared by upload.html admin panel and the
+        // --- index.html report dialog) ---
+        // Canonical kennel display format: pavilion letter, space, 1-3 digits.
+        const KENNEL_CANON_RE = /^[A-E] \d{1,3}$/;
+        // Uppercase the pavilion letter, hyphens -> spaces, collapse runs, and
+        // slip a space between letter and digit: "c70" / "c-70" become "C 70".
+        function formatKennelInline(val) {
+            if (/^[a-e]/i.test(val)) val = val.charAt(0).toUpperCase() + val.slice(1);
+            val = val.replace(/-/g, ' ').replace(/\s+/g, ' ');
+            if (/^[A-E]\d/.test(val)) val = val.charAt(0) + ' ' + val.slice(1);
+            return val;
+        }
+        // Canonicalize any reasonable kennel entry ("c-70", " C70 ") to the
+        // display form ("C 70"), or null when it doesn't parse.
+        function canonicalizeKennel(raw) {
+            const m = String(raw || '').trim().toUpperCase().match(/^([A-E])[\s-]*(\d{1,3})$/);
+            return m ? `${m[1]} ${m[2]}` : null;
+        }
+        // Parse any reasonable kennel entry to the stored "<A-E>-<digits>" form.
+        function kennelToPk(raw) {
+            const canon = canonicalizeKennel(raw);
+            return canon ? canon.replace(' ', '-') : null;
+        }
+        // Escape a string for HTML element or quoted-attribute context. Every
+        // scraped or third-party string (dog name, aka, age, color, rescue
+        // partner, social URL) that is interpolated into innerHTML /
+        // insertAdjacentHTML markup MUST pass through this: 24petconnect text
+        // is attacker-controlled from this site's point of view, and the
+        // cacc.dog origin holds the volunteer passcode (tests/test_template_escaping.py).
+        function escapeHtml(s) {
+            return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
+                ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+        // --- search helpers ---
+        // Shared by the index, removed and rescues searches. A query matches
+        // when every word appears somewhere in the dog's haystack, so trailing
+        // spaces, iOS's double-space ". ", accents, curly quotes and word order
+        // no longer zero out a search. tests/test_search_normalize.py runs this
+        // fenced block under node: keep it self-contained.
+        const SEARCH_STOP_WORDS = new Set(['mix', 'mixed', 'and', '&']);
+        const SEARCH_EDGE_PUNCT_RE = /^[.,;:!?]+|[.,;:!?]+$/g;
+        // Accent-fold, straighten curly quotes, lowercase, collapse whitespace.
+        function searchNormalize(s) {
+            return String(s ?? '')
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[\u2019\u2018]/g, "'").replace(/[\u201c\u201d]/g, '"')
+                .toLowerCase()
+                .replace(/\s+/g, ' ').trim();
+        }
+        // Query words: normalized, edge punctuation stripped ("luna. " -> luna;
+        // names never contain "."), empties dropped, and stop-words dropped
+        // only when other words remain ("lab mix" -> lab, "mix" -> mix).
+        function searchTokens(raw) {
+            const words = searchNormalize(raw).split(' ')
+                .map(w => w.replace(SEARCH_EDGE_PUNCT_RE, ''))
+                .filter(Boolean);
+            const kept = words.filter(w => !SEARCH_STOP_WORDS.has(w));
+            return kept.length ? kept : words;
+        }
+        // One searchable string per dog. Fields are joined with a space, and a
+        // word never contains one, so no single word can match across fields.
+        function searchHaystack(fields) {
+            return fields
+                .map(f => searchNormalize(f).split(' ')
+                    .map(w => w.replace(SEARCH_EDGE_PUNCT_RE, '')).filter(Boolean).join(' '))
+                .filter(Boolean)
+                .join(' ');
+        }
+        function searchMatches(tokens, hay) {
+            return tokens.every(t => hay.includes(t));
+        }
+        // search_performed shape props (see "search_performed notes" above
+        // track()). Lengths and flags only: the query text is never sent.
+        function searchQueryProps(raw, tokens) {
+            const s = String(raw ?? '');
+            return {
+                q_len: s.length,
+                n_len: tokens.join(' ').length,
+                words: tokens.length,
+                trail: /[\s.]$/.test(s),
+                ws: /^\s|\s\s/.test(s),
+            };
+        }
+        // Records how the search box was last edited, for search_performed's
+        // it/multi/del props. take() returns them and resets, so a later
+        // programmatic search (suggestion tap, ?q=) reports it: null.
+        function searchInputSignals(input) {
+            let it = null, multi = false, del = false;
+            input.addEventListener('input', e => {
+                it = e.inputType || null;
+                const data = e.data ?? (e.dataTransfer ? e.dataTransfer.getData('text/plain') : null);
+                multi = typeof data === 'string' && data.length > 1;
+                if (it && it.startsWith('delete')) del = true;
+            });
+            return {
+                take() {
+                    const out = { it: it, multi: multi, del: del };
+                    it = null; multi = false; del = false;
+                    return out;
+                },
+            };
+        }
+        // --- end search helpers ---
+        // Set a status line's text and ok/err state, preserving base classes.
+        function setStatus(el, msg, kind) {
+            el.textContent = msg;
+            el.classList.remove('ok', 'err');
+            if (kind) el.classList.add(kind);
+        }
+        // Single source of truth for a kennel input's is-valid/is-invalid classes
+        // and its submit button's disabled state. Returns the validity.
+        function applyKennelValidity(input, submitBtn) {
+            if (!input) return false;
+            const isValid = KENNEL_CANON_RE.test(input.value);
+            input.classList.toggle('is-valid', isValid);
+            input.classList.toggle('is-invalid', !isValid && input.value !== '');
+            if (submitBtn) submitBtn.disabled = !isValid;
+            return isValid;
+        }
+
+        // --- Site-wide Date/Timezone Utilities ---
+        // Canonical tz is America/Chicago. Dates are stored as date-only "YYYY-MM-DD".
+        // The ES spec parses bare "YYYY-MM-DD" as UTC midnight, so we treat EVERY date
+        // (including "today") as a UTC-midnight calendar date — making comparisons and
+        // day-diffs timezone-stable regardless of the viewer's browser timezone.
+        const SITE_TZ = "America/Chicago";
+        const MS_PER_DAY = 86400000;
+
+        // "Today" in site tz as "YYYY-MM-DD" (en-CA => ISO order across all locales).
+        function siteToday() {
+            return new Date().toLocaleDateString("en-CA", { timeZone: SITE_TZ });
+        }
+
+        // Parse a date-only "YYYY-MM-DD" string to a Date at UTC midnight (null if invalid).
+        function parseSiteDate(str) {
+            if (!str) return null;
+            const d = new Date(str);            // bare ISO date => UTC midnight
+            return isNaN(d.getTime()) ? null : d;
+        }
+
+        // Epoch ms at UTC midnight for a "YYYY-MM-DD" string (or null).
+        function siteDateTs(str) {
+            const d = parseSiteDate(str);
+            return d ? d.getTime() : null;
+        }
+
+        // Day-of-week (0=Sun..6=Sat) of a "YYYY-MM-DD" date. getUTCDay can't drift
+        // across the local-midnight boundary.
+        function siteDayOfWeek(str) {
+            const d = parseSiteDate(str);
+            return d ? d.getUTCDay() : null;
+        }
+
+        // Whole calendar days between two "YYYY-MM-DD" strings (b - a), or null.
+        function siteDayDiff(aStr, bStr) {
+            const a = siteDateTs(aStr), b = siteDateTs(bStr);
+            if (a === null || b === null) return null;
+            return Math.round((b - a) / MS_PER_DAY);
+        }
+
+        // Format a "YYYY-MM-DD" string for display. timeZone:'UTC' forces the formatter
+        // to read back the same UTC-midnight calendar date so the shown day never drifts.
+        function formatSiteDate(str, opts) {
+            const d = parseSiteDate(str);
+            if (!d) return "";
+            return d.toLocaleDateString("en-US",
+                Object.assign({ timeZone: "UTC" }, opts || { month: "short", day: "numeric" }));
+        }
+
+        // "YYYY-MM-DD" for N days before site-today (N>=0). siteDateNDaysAgo(0) === siteToday().
+        function siteDateNDaysAgo(n) {
+            return new Date(siteDateTs(siteToday()) - n * MS_PER_DAY).toISOString().split("T")[0];
+        }
+
+        // Format a scrape timecode for display. A number is epoch-ms → rendered as
+        // a viewer-LOCAL date+time ("Jun 2, 2026, 2:31 PM"). A "YYYY-MM-DD" string
+        // is the date-only fallback (older dogs, no time-of-day) → rendered as a
+        // plain date ("Jun 2, 2026"). Returns "" for falsy/missing values.
+        function formatLocalTimecode(v) {
+            if (!v) return "";
+            if (typeof v === "number") {
+                return new Date(v).toLocaleString(undefined,
+                    { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
+            }
+            return formatSiteDate(v, { month: "short", day: "numeric", year: "numeric" });
+        }
+
+        // Date badges carrying a known scrape timecode (data-ts) swap their label for
+        // the exact local time on tap/click, and back again. Mobile-first: identical
+        // behavior on touch and desktop, no hover required. The original markup is
+        // stashed lazily so any badge (icon + text) round-trips cleanly.
+        document.addEventListener("click", function (e) {
+            const el = e.target.closest(".ts-toggle");
+            if (!el || !el.getAttribute("data-ts")) return;
+            if (el.dataset.showing === "ts") {
+                el.innerHTML = el.dataset.tsOrig;
+                el.dataset.showing = "orig";
+            } else {
+                if (el.dataset.tsOrig == null) el.dataset.tsOrig = el.innerHTML;
+                el.innerHTML = `<i class="fas fa-clock"></i> ${el.getAttribute("data-ts")}`;
+                el.dataset.showing = "ts";
+            }
+        });
+
+        // --- Trend Indicator ---
+        // Renders an up/down/flat arrow + tooltip into elId comparing today vs yesterday.
+        // lowerIsBetter flips the good/bad coloring (e.g. fewer removals is "good").
+        function setTrendIndicator(elId, today, yesterday, lowerIsBetter) {
+            const el = document.getElementById(elId);
+            if (!el || yesterday === null || yesterday === undefined) return;
+            if (today < yesterday) {
+                el.innerHTML = '<i class="fas fa-arrow-down"></i>';
+                el.className = 'trend-indicator ' + (lowerIsBetter ? 'trend-good' : 'trend-bad');
+                el.setAttribute('data-tooltip', 'Was ' + yesterday + ' yesterday');
+            } else if (today > yesterday) {
+                el.innerHTML = '<i class="fas fa-arrow-up"></i>';
+                el.className = 'trend-indicator ' + (lowerIsBetter ? 'trend-bad' : 'trend-good');
+                el.setAttribute('data-tooltip', 'Was ' + yesterday + ' yesterday');
+            } else {
+                el.innerHTML = '<i class="fas fa-minus" style="font-size:0.7em;"></i>';
+                el.className = 'trend-indicator trend-neutral';
+                el.setAttribute('data-tooltip', 'No change from yesterday');
+            }
+        }
+
+        // Optimization: "Just-in-Time" Connection Warmer
+        // Triggers preconnect on Hover (Desktop) or TouchStart (Mobile)
+        // Works for both Facebook (needs crossorigin) and 24PetConnect (navigation only)
+        (function() {
+            let warmed = { fb: false, pc: false };
+
+            function warm(url, key, crossOrigin) {
+                if (warmed[key]) return;
+                const link = document.createElement('link');
+                link.rel = 'preconnect';
+                link.href = url;
+                if (crossOrigin) link.crossOrigin = 'anonymous';
+                document.head.appendChild(link);
+                warmed[key] = true;
+            }
+
+            const handleInteraction = (e) => {
+                const a = e.target.closest('a');
+                if (!a || !a.href) return;
+                
+                if (!warmed.fb && a.href.includes('facebook.com')) {
+                    warm('https://www.facebook.com', 'fb', true);
+                } else if (!warmed.pc && a.href.includes('24petconnect.com')) {
+                    warm('https://24petconnect.com', 'pc', false);
+                }
+            };
+
+            document.addEventListener('mouseover', handleInteraction, { passive: true });
+            document.addEventListener('touchstart', handleInteraction, { passive: true });
+        })();
+    </script><script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad" async defer></script><script>
+    const PAVILION_API_BASE = "https://pavilion-worker.caccdog.workers.dev";
+    // Public Turnstile site key (safe to expose).
+    const TURNSTILE_SITE_KEY = "0x4AAAAAADg9jPJwIBGf1aqy";
+    const PAGE_RE = /^\/(?!\/)[\w\-./]*$/;   // mirrors FEEDBACK_PAGE_RE in the worker
+    const BODY_MAX = 2000;
+
+    let tsFeedbackId = null;
+    window.onTurnstileLoad = function () {
+        if (!window.turnstile) return;
+        const el = document.getElementById('ts-feedback');
+        // `action` must match what the worker expects (verifyTurnstile).
+        if (el) tsFeedbackId = window.turnstile.render(el, { sitekey: TURNSTILE_SITE_KEY, action: 'feedback' });
+    };
+    // True when Turnstile's script failed to load (e.g. blocked by an
+    // adblocker/privacy shield) — used to give the user an actionable message.
+    function turnstileBlocked() { return TURNSTILE_SITE_KEY && !window.turnstile; }
+
+    // The page the visitor came from on this site: a validated ?from= path,
+    // else the same-origin referrer's path. Context only; never required.
+    function pageContext() {
+        const from = new URLSearchParams(location.search).get('from') || '';
+        if (from.length <= 200 && PAGE_RE.test(from)) return from;
+        try {
+            const ref = new URL(document.referrer);
+            if (ref.origin === location.origin && ref.pathname.length <= 200 && PAGE_RE.test(ref.pathname)) {
+                return ref.pathname;
+            }
+        } catch (e) {}
+        return '';
+    }
+
+    const form = document.getElementById('feedbackForm');
+    const titleInput = document.getElementById('fbTitle');
+    const bodyInput = document.getElementById('fbBody');
+    const volunteerBox = document.getElementById('fbVolunteer');
+    const countEl = document.getElementById('fbCount');
+    const submitBtn = document.getElementById('submitBtn');
+    const statusEl = document.getElementById('feedbackStatus');
+
+    function updateCount() { countEl.textContent = `${bodyInput.value.length} / ${BODY_MAX}`; }
+    bodyInput.addEventListener('input', updateCount);
+    updateCount();
+
+    // Map a worker response to user-facing copy (branch on status, then error text).
+    function failureMessage(status, error) {
+        const err = String(error || '');
+        if (status === 400) return `Please check the form: ${err || 'invalid input'}.`;
+        if (status === 403) return err.includes('outside the US')
+            ? 'Feedback is only available from inside the US.'
+            : 'Security check expired — please redo it and try again.';
+        if (status === 413) return "That's a bit long — please shorten your note and try again.";
+        if (status === 429) return err.includes('daily')
+            ? 'Feedback is paused for today — please try again tomorrow.'
+            : 'Too many notes in a row — please wait a minute and try again.';
+        if (status === 502) return "Couldn't record your feedback right now — please try again in a few minutes.";
+        if (status === 503) return "Feedback isn't switched on right now, so your note was not recorded. Please try again later.";
+        return `Could not send (HTTP ${status}: ${err.slice(0, 140) || 'unknown error'}).`;
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const checked = form.querySelector('input[name="type"]:checked');
+        const type = checked ? checked.value : '';
+        const title = titleInput.value.trim();
+        const body = bodyInput.value.trim();
+        const volunteer = volunteerBox.checked;
+        if (!type) { setStatus(statusEl, 'Please choose what kind of note this is.', 'err'); return; }
+        if (title.length < 3) { setStatus(statusEl, 'Please add a short summary (at least 3 characters).', 'err'); titleInput.focus(); return; }
+        if (body.length < 10) { setStatus(statusEl, 'Please add a few more details (at least 10 characters).', 'err'); bodyInput.focus(); return; }
+        if (turnstileBlocked()) {
+            setStatus(statusEl, 'Security check failed to load — please disable any adblocker/privacy shield and refresh.', 'err');
+            return;
+        }
+        const token = (window.turnstile && window.turnstile.getResponse(tsFeedbackId)) || '';
+        if (!token) { setStatus(statusEl, 'Please complete the security check, then send.', 'err'); return; }
+
+        submitBtn.disabled = true;
+        setStatus(statusEl, 'Sending…', '');
+        let ok = false, status = null;
+        try {
+            let resp;
+            try {
+                resp = await fetch(`${PAVILION_API_BASE}/feedback`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        type, title, body, page: pageContext(), volunteer,
+                        'cf-turnstile-response': token,
+                    }),
+                    signal: AbortSignal.timeout(30000),
+                });
+            } catch (err) {
+                setStatus(statusEl, err && err.name === 'TimeoutError'
+                    ? 'The request timed out — check your signal and try again.'
+                    : 'Network problem — check your connection and try again.', 'err');
+                return;
+            }
+            status = resp.status;
+            const data = await resp.json().catch(() => ({}));
+            if (resp.status === 201 && data.ok) {
+                ok = true;
+                setStatus(statusEl, typeof data.number === 'number'
+                    ? `Thanks! Your note was recorded (#${data.number}).`
+                    : 'Thanks! Your note was recorded.', 'ok');
+                form.reset();
+                updateCount();
+            } else {
+                setStatus(statusEl, failureMessage(resp.status, data.error), 'err');
+            }
+        } finally {
+            // Never the note's text: category, volunteer flag and outcome only.
+            track('feedback_submitted', { type, volunteer, ok, status });
+            if (window.turnstile && tsFeedbackId !== null) window.turnstile.reset(tsFeedbackId);
+            submitBtn.disabled = false;
+        }
+    });
+</script></body></html>
