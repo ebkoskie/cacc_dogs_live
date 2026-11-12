@@ -59,6 +59,12 @@
         .tag.pavilion.hl-orange { color: var(--hl-orange-text); background: var(--hl-orange-bg); border-color: var(--hl-orange-border); }
         .tag.pavilion .pk-report { color: var(--text-muted); cursor: pointer; font-size: 0.85em; opacity: 0.7; margin-left: 2px; background: none; border: none; padding: 0; line-height: 1; }
         .tag.pavilion .pk-report:hover { color: var(--danger-text); opacity: 1; }
+        /* A bigger invisible hit area for the ~10px flag, bounded to the badge
+           row: it reaches into the gaps above and below and the card's right
+           padding, but not over the badge's own text, the name row or the
+           attribute tags, which keep their taps (and the notes double-tap). */
+        .tag.pavilion .pk-report { position: relative; }
+        .tag.pavilion .pk-report::after { content: ""; position: absolute; inset: -13px -22px -13px -3px; }
         /* A reported ("disputed") badge stays visible but dims and carries a
            small warning mark — only consensus or an admin changes the value. */
         .tag.pavilion.flagged { opacity: 0.65; }
@@ -436,7 +442,7 @@
     .actions { display: flex; align-items: center; gap: 10px; }
     .theme-toggle, .mobile-menu-btn { 
         background: transparent; border: 1px solid var(--border); color: var(--text-muted); 
-        width: 36px; height: 36px; border-radius: 50%; 
+        width: 44px; height: 44px; border-radius: 50%; /* 44px: minimum touch target */
         cursor: pointer; display: flex; align-items: center; justify-content: center; 
         font-size: 1rem; transition: all 0.2s;
     }
@@ -464,7 +470,7 @@
         .nav-links { display: none; }
         .mobile-menu-btn { display: flex; }
     }
-</style><header class=site-header><div class=header-content><div class=brand-section><h1><a href=./ class=brand-link><i class="fas fa-paw brand-blue-paw"></i><svg class=chistar-svg viewbox="0 0 120 120" xmlns=http://www.w3.org/2000/svg><path fill=#E4002B d="M60 0 L71 41 L112 30 L82 60 L112 90 L71 79 L60 120 L49 79 L8 90 L38 60 L8 30 L49 41 Z"/></svg><span class=brand-chicago>CHI</span><span class=brand-divider>|</span><span class=brand-title> Removed Dogs </span></a></h1></div><nav class=nav-links><a href=./ class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link ">Breeds</a><a href=upload.html class="nav-link ">Upload</a></nav><div class=actions><button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button><button class=mobile-menu-btn onclick=toggleMobileMenu()><i class="fas fa-bars"></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=./ class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link "><i class="fas fa-paw" style=width:20px></i> Breeds</a><a href=upload.html class="mobile-link "><i class="fas fa-camera" style=width:20px aria-hidden=true></i> Upload</a><a href=notes.html class="mobile-link "><i class="fas fa-clipboard-list" style=width:20px aria-hidden=true></i> Log a visit</a><a href=feedback.html class="mobile-link "><i class="fas fa-comment-dots" style=width:20px aria-hidden=true></i> Feedback</a></div></header><script>
+</style><header class=site-header><div class=header-content><div class=brand-section><h1><a href=./ class=brand-link><i class="fas fa-paw brand-blue-paw"></i><svg class=chistar-svg viewbox="0 0 120 120" xmlns=http://www.w3.org/2000/svg><path fill=#E4002B d="M60 0 L71 41 L112 30 L82 60 L112 90 L71 79 L60 120 L49 79 L8 90 L38 60 L8 30 L49 41 Z"/></svg><span class=brand-chicago>CHI</span><span class=brand-divider>|</span><span class=brand-title> Removed Dogs </span></a></h1></div><nav class=nav-links><a href=./ class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link ">Breeds</a><a href=upload.html class="nav-link ">Upload</a></nav><div class=actions><button type=button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode" aria-label="Toggle dark or light mode"><i class="fas fa-moon" aria-hidden=true></i></button><button type=button class=mobile-menu-btn id=mobileMenuBtn onclick=toggleMobileMenu() aria-label=Menu aria-expanded=false aria-controls=mobileDrawer><i class="fas fa-bars" aria-hidden=true></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=./ class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link "><i class="fas fa-paw" style=width:20px></i> Breeds</a><a href=upload.html class="mobile-link "><i class="fas fa-camera" style=width:20px aria-hidden=true></i> Upload</a><a href=notes.html class="mobile-link "><i class="fas fa-clipboard-list" style=width:20px aria-hidden=true></i> Log a visit</a><a href=feedback.html class="mobile-link "><i class="fas fa-comment-dots" style=width:20px aria-hidden=true></i> Feedback</a></div></header><script>
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
         const icon = document.querySelector('.theme-toggle i');
@@ -474,10 +480,22 @@
     // Auto-init theme if localstorage is set (blocked storage throws on access)
     try { if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode'); } catch (e) { /* storage blocked */ }
 
-    function toggleMobileMenu() {
-        document.getElementById('mobileDrawer').classList.toggle('open');
+    function toggleMobileMenu(force) {
+        const open = document.getElementById('mobileDrawer').classList.toggle('open', force);
+        const btn = document.getElementById('mobileMenuBtn');
+        if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        return open;
     }
-</script><div class=container id=main-content tabindex=-1><div class=info-banner><i class="fas fa-info-circle"></i> These dogs were removed from the public listing without a confirmed Adoption, Rescue, or RTO event. <br><small>They may have been euthanized, died in care, or were lost. Removal can also be a temporary state — for example a doggy day out (DDO) or a medical situation — after which a dog may return to the listing. Data is limited to what is publicly available.</small><nav class=banner-onward aria-label="Happier outcomes"><span>Looking for happier endings?</span><a href="./?filter=adopted">🏠 Adopted</a><span class=onward-sep aria-hidden=true>·</span><a href=rescues.html>🚑 Rescues</a><span class=onward-sep aria-hidden=true>·</span><a href=trends.html>📈 Trends</a></nav></div><div class=stats-container><div class=stats-grid><div class="stat-card removed"><span class=stat-date>Today</span><div class=stat-value><span id=todayRemoved>--</span> <span id=removedIndicator></span></div><div class=stat-label><i class="fas fa-times-circle"></i> Removed</div><div class=stat-sub id=removedSub></div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=medianLOS>--</span></div><div class=stat-label><i class="fas fa-hourglass-half"></i> Median Stay</div><div class=stat-sub>days until removal</div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=avgLOS>--</span></div><div class=stat-label><i class="fas fa-clock"></i> Average Stay</div><div class=stat-sub>days until removal</div></div></div></div><div class=controls-bar><div class=search-container><i class="fas fa-search search-icon"></i><input type=search id=mainSearch class=search-input placeholder="Search Removed Dogs..." aria-label="Search removed dogs by name, ID, or breed" autocomplete=off autocorrect=off autocapitalize=none spellcheck=false enterkeyhint=search><button type=button class=search-clear id=searchClear onclick=clearSearch() aria-label="Clear search" hidden><i class="fas fa-times" aria-hidden=true></i></button></div><select id=sortSelect class=sort-select aria-label="Sort removed dogs" onchange=handleSortChange()><option value=recent>Date Removed (Recent First)</option><option value=oldest>Date Removed (Oldest First)</option><option value=name>Name (A ➝ Z)</option><option value=los>Length of Stay (Longest First)</option></select></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Loading historical records...</p></div><div id=main-view style=display:none;><h2 style="margin: 30px 0 10px 0; font-size:1.2rem; color:var(--text-muted);"><span id=count>0</span> Records Found </h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel style="height: 50px; margin-top: 20px;"></div></div><div class=footer><span>Last Updated: November 12, 2026 03:01 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a></nav></div></div><script>
+    // Esc closes the drawer, but only when no <dialog> is open: then Esc
+    // belongs to the dialog, and the drawer stays as it was underneath.
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape' || document.querySelector('dialog[open]')) return;
+        if (!document.getElementById('mobileDrawer').classList.contains('open')) return;
+        toggleMobileMenu(false);
+        const btn = document.getElementById('mobileMenuBtn');
+        if (btn) btn.focus();
+    });
+</script><div class=container id=main-content tabindex=-1><div class=info-banner><i class="fas fa-info-circle"></i> These dogs were removed from the public listing without a confirmed Adoption, Rescue, or RTO event. <br><small>They may have been euthanized, died in care, or were lost. Removal can also be a temporary state — for example a doggy day out (DDO) or a medical situation — after which a dog may return to the listing. Data is limited to what is publicly available.</small><nav class=banner-onward aria-label="Happier outcomes"><span>Looking for happier endings?</span><a href="./?filter=adopted">🏠 Adopted</a><span class=onward-sep aria-hidden=true>·</span><a href=rescues.html>🚑 Rescues</a><span class=onward-sep aria-hidden=true>·</span><a href=trends.html>📈 Trends</a></nav></div><div class=stats-container><div class=stats-grid><div class="stat-card removed"><span class=stat-date>Today</span><div class=stat-value><span id=todayRemoved>--</span> <span id=removedIndicator></span></div><div class=stat-label><i class="fas fa-times-circle"></i> Removed</div><div class=stat-sub id=removedSub></div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=medianLOS>--</span></div><div class=stat-label><i class="fas fa-hourglass-half"></i> Median Stay</div><div class=stat-sub>days until removal</div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=avgLOS>--</span></div><div class=stat-label><i class="fas fa-clock"></i> Average Stay</div><div class=stat-sub>days until removal</div></div></div></div><div class=controls-bar><div class=search-container><i class="fas fa-search search-icon"></i><input type=search id=mainSearch class=search-input placeholder="Search Removed Dogs..." aria-label="Search removed dogs by name, ID, or breed" autocomplete=off autocorrect=off autocapitalize=none spellcheck=false enterkeyhint=search><button type=button class=search-clear id=searchClear onclick=clearSearch() aria-label="Clear search" hidden><i class="fas fa-times" aria-hidden=true></i></button></div><select id=sortSelect class=sort-select aria-label="Sort removed dogs" onchange=handleSortChange()><option value=recent>Date Removed (Recent First)</option><option value=oldest>Date Removed (Oldest First)</option><option value=name>Name (A ➝ Z)</option><option value=los>Length of Stay (Longest First)</option></select></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Loading historical records...</p></div><div id=main-view style=display:none;><h2 style="margin: 30px 0 10px 0; font-size:1.2rem; color:var(--text-muted);"><span id=count>0</span> Records Found </h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel style="height: 50px; margin-top: 20px;"></div></div><div class=footer><span>Last Updated: November 12, 2026 03:10 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -501,6 +519,7 @@
         //   sort_changed              sort <select> changed                     {mode, page}
         //   search_performed          debounced search ran (never the query)    {q_len, n_len, words, trail, ws, it, multi, del, sugg?, results, page}
         //   search_suggestion_clicked did-you-mean tap on a zero-result search  {distance, page}
+        //   removed_handoff_clicked   removed.html zero-result link to the dashboard search {matches}
         //   favorite_toggled          heart button on a dog card                {favorited}
         //   share_clicked             share button on a dog card                {method, dog_id}
         //   legend_opened             dashboard legend modal opened             {}
@@ -901,6 +920,10 @@
     const BATCH_SIZE = 48;
     let observer = null;
     let META = null;
+    // Every dog in site_data.json (not just this page's removed ones), kept so a
+    // zero-result search can say how many the dashboard's search would find.
+    let ALL_DOGS = [];
+    let allDogsHay = null; // built lazily, like _hay, on the first zero-result search
     const TODAY_STR = siteToday();
     // Arriving from the trends "Removed" tile: highlight today's removals
     const IS_TODAY_VIEW = new URLSearchParams(window.location.search).get('view') === 'today';
@@ -937,6 +960,7 @@
     fetch('site_data.json').then(r => r.json()).then(payload => {
         const { meta, dogs: data } = payload;
         META = meta;
+        ALL_DOGS = data;
 
         // 1. Filter AND Hydrate only "Other" status dogs
         const OTHER_STATUS_IDX = meta.s.indexOf("Other");
@@ -1093,9 +1117,18 @@
             const q = document.getElementById('mainSearch').value.trim();
             // The handoff carries the normalized words ("luna. " -> "luna").
             const handoff = searchTokens(q).join(' ').slice(0, 40);
+            // How many dogs the dashboard's search finds for the same words. Only a
+            // number reaches innerHTML; the query text itself is never echoed here.
+            const matches = q ? dashboardMatchCount(searchTokens(handoff)) : 0;
+            const matchLine = matches === 1 ? '1 dog on the dashboard matches this search.'
+                : matches > 1 ? matches + ' dogs on the dashboard match this search.'
+                : 'No dog on the dashboard matches it either; its search can suggest close spellings.';
+            const linkText = matches === 1 ? 'See it on the dashboard'
+                : matches > 1 ? 'See all ' + matches + ' on the dashboard' : 'Search all dogs';
             document.getElementById('dog-grid').innerHTML = '<div class="empty-state"><i class="fas fa-magnifying-glass"></i>No records found.'
                 + (q ? '<div style="margin-top:10px; font-size:0.9rem; color:var(--text-muted);">Only dogs removed without a recorded adoption, rescue, or return are listed here.</div>'
-                    + '<div style="margin-top:16px;"><a class="btn-clear-search" href="./?q=' + encodeURIComponent(handoff) + '"><i class="fas fa-search" aria-hidden="true"></i> Search all dogs</a> '
+                    + '<div style="margin-top:6px; font-size:0.9rem;">' + matchLine + '</div>'
+                    + '<div style="margin-top:16px;"><a class="btn-clear-search" id="dashboardHandoff" data-matches="' + matches + '" href="./?q=' + encodeURIComponent(handoff) + '"><i class="fas fa-search" aria-hidden="true"></i> ' + linkText + '</a> '
                     + '<button type="button" class="btn-clear-search" onclick="clearSearch()"><i class="fas fa-times" aria-hidden="true"></i> Clear search</button></div>'
                     : '')
                 + '</div>';
@@ -1103,6 +1136,25 @@
         }
         renderNextBatch();
     }
+
+    // Same haystack fields as the dashboard's ensureHaystacks() (name, former
+    // name, ID, breed, kennel), over every dog in the payload.
+    function dashboardMatchCount(tokens) {
+        if (!tokens.length) return 0;
+        if (!allDogsHay) {
+            allDogsHay = ALL_DOGS.map(item => searchHaystack(
+                [item.n, item.k, item.id, (META && META.b[item.b]) || 'Unknown', item.pk || null]));
+        }
+        return allDogsHay.filter(h => searchMatches(tokens, h)).length;
+    }
+
+    // The zero-result handoff to the dashboard. Its own event, so the
+    // dashboard's search_suggestion_clicked ratio stays comparable.
+    document.getElementById('dog-grid').addEventListener('click', function (e) {
+        const link = e.target.closest('#dashboardHandoff');
+        if (!link) return;
+        track('removed_handoff_clicked', { matches: Number(link.dataset.matches) || 0 });
+    });
 
     function renderNextBatch() {
         if (displayedCount >= currentDisplayList.length) return;
