@@ -377,6 +377,44 @@ body.light-mode .today-label.fresh .status-dot {
     overflow-y: auto;
 }
 
+/* --- Handling-notes Dialog (reuses the legend-modal chrome) ---
+   The flip/zoom is driven from JS (Web Animations), so the inherited
+   modalShow keyframes must not run underneath it. */
+.notes-modal { max-width: 520px; transform-origin: center center; backface-visibility: hidden; }
+.notes-modal[open] { animation: none; }
+.notes-modal .legend-modal-header { gap: 12px; }
+.notes-title-wrap { display: flex; align-items: baseline; gap: 10px; min-width: 0; flex-wrap: wrap; }
+.notes-title-wrap h2 { overflow-wrap: anywhere; }
+.notes-modal .legend-modal-body { max-height: min(62vh, 560px); padding: 8px 24px 16px; overscroll-behavior: contain; }
+.notes-visit { padding: 16px 0; border-bottom: 1px solid var(--border); }
+.notes-visit:last-child { border-bottom: none; }
+.notes-date {
+    margin: 0 0 10px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent);
+}
+.notes-fields { display: grid; grid-template-columns: max-content 1fr; gap: 8px 14px; margin: 0; align-items: baseline; }
+.notes-fields dt { font-size: 0.8rem; color: var(--text-muted); white-space: nowrap; }
+.notes-fields dd { margin: 0; display: flex; flex-wrap: wrap; gap: 5px; }
+.notes-chip {
+    font-size: 0.8rem; line-height: 1.3; padding: 2px 9px; border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    color: var(--text);
+}
+.notes-text { margin: 12px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.55; font-size: 0.95rem; }
+.notes-empty { margin: 16px 0; color: var(--text-muted); }
+.notes-footer {
+    padding: 10px 24px 12px; border-top: 1px solid var(--border); background: var(--bg);
+    font-size: 0.78rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px;
+}
+@media (max-width: 480px) {
+    .notes-modal { width: calc(100% - 24px); }
+    .notes-modal .legend-modal-body { padding: 4px 16px 12px; }
+    .notes-modal .legend-modal-header, .notes-footer { padding-left: 16px; padding-right: 16px; }
+    .notes-fields { grid-template-columns: 1fr; gap: 4px; }
+    .notes-fields dt { margin-top: 6px; }
+}
+
 /* --- Report-wrong-location Dialog (reuses the legend-modal chrome) --- */
 .report-modal { max-width: 420px; }
 .report-modal-body { padding: 20px 24px 24px; }
@@ -593,6 +631,40 @@ vertical-align: bottom;
 }
 
 .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.card-header-meta { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+
+/* Handling-notes cue: a quiet accent pill (not a status tag) plus a folded
+   page corner on the card. Opens on tap/keyboard, or a double-tap on the card. */
+.dog-card.has-notes { position: relative; touch-action: manipulation; }
+.dog-card.has-notes::after {
+    content: ""; position: absolute; top: -1px; right: -1px; width: 18px; height: 18px;
+    border-top-right-radius: 12px; border-bottom-left-radius: 5px; pointer-events: none;
+    background: linear-gradient(225deg, var(--bg) 0 50%, color-mix(in srgb, var(--accent) 45%, var(--row)) 50% 100%);
+    box-shadow: -1px 1px 2px var(--card-shadow);
+}
+.notes-cue {
+    position: relative; overflow: hidden; display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px 3px 8px; border-radius: 999px; cursor: pointer;
+    font: inherit; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em; line-height: 1.4;
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+.notes-cue svg { width: 12px; height: 12px; flex-shrink: 0; }
+.notes-cue:hover { background: color-mix(in srgb, var(--accent) 18%, transparent); border-color: var(--accent); }
+.notes-cue:active { transform: scale(0.96); }
+.notes-cue:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.notes-cue.cue-shimmer::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(105deg, transparent 30%, color-mix(in srgb, var(--accent) 35%, transparent) 50%, transparent 70%);
+    transform: translateX(-120%);
+    animation: notesShimmer 1.4s ease-in-out 0.6s 1 forwards;
+}
+@keyframes notesShimmer { to { transform: translateX(120%); } }
+@media (prefers-reduced-motion: reduce) {
+    .notes-cue.cue-shimmer::before { animation: none; display: none; }
+}
 
 /* Name & ID Styling */
 .dog-name { font-size: 1.4rem; font-weight: 700; color: var(--text); margin: 0; line-height: 1.2; }
@@ -980,7 +1052,7 @@ opacity: 0;
     function toggleMobileMenu() {
         document.getElementById('mobileDrawer').classList.toggle('open');
     }
-</script><div class=container id=main-content tabindex=-1><div class=page-meta><div class=freshness-bar><nav class=today-strip id=todayStrip aria-label="Today at CACC"><button class=today-label id=todayLabel type=button data-updated="November 12, 2026 01:01 PM" aria-expanded=false aria-controls=updatedText aria-describedby=updatedText title="Updated November 12, 2026 01:01 PM"><span class=status-dot aria-hidden=true></span>Today</button><span class=updated-text id=updatedText hidden>Updated November 12, 2026 01:01 PM</span><a class=today-pill data-kind=new href="./?filter=new" hidden><b>0</b> new</a><a class=today-pill data-kind=adopted href="./?filter=adopted" hidden><b>0</b> adopted</a><a class=today-pill data-kind=rto href="./?filter=rto" hidden><b>0</b> RTO</a><a class=today-pill data-kind=rescued href="rescues.html?view=today" hidden><b>0</b> rescued</a><a class=today-pill data-kind=removed href="removed.html?view=today" hidden><b>0</b> removed</a><span class=today-empty id=todayEmpty hidden>No changes recorded yet.</span></nav><button class=legend-toggle onclick=openLegendModal() aria-label="Dashboard legend & guide"><i class="fas fa-circle-info" aria-hidden=true></i> <span class=legend-label>Guide</span></button></div><dialog id=legendModal class=legend-modal><div class=legend-modal-header><h2>Dashboard Legend & Guide</h2><button class=close-modal-btn onclick=closeLegendModal() aria-label="Close modal">&times;</button></div><div class=legend-modal-body><div class=legend-grid><div class=legend-group-title>Status & Stay Badges</div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge los-green">5 Days</span><span class="status-badge los-yellow">18 Days</span><span class="status-badge los-red">35 Days</span></div><div class=legend-desc><strong>Time at CACC / Stay Duration:</strong> Shows how many days the dog has been at the shelter. Mapped to filters: <span class=los-detail><span class=text-success>Green</span> (0-14 days; matches <strong>Fresh In</strong> for under 7 days), <span class=text-warning>Yellow</span> (15-29 days), and <span class=text-danger>Red</span> (30+ days; matches <strong>Long Stays</strong>). <em>Tapping or clicking the badge reveals the exact date and time they were first listed.</em></span></div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge los-green">Available</span></div><div class=legend-desc><strong>Available Status:</strong> Dogs currently at the shelter that are ready for adoption. Aligns with the <strong>Available</strong> filter. </div></div><div class=legend-group-title>Holds & Rescue Indicators</div><div class=legend-item><div class=legend-badge-wrapper><span class="tag hold"><i class="fas fa-clock"></i> Hold for 3 days</span></div><div class=legend-desc><strong>Stray Hold:</strong> The mandatory holding period to give owners time to locate and reclaim their lost pet. The hold is 3 days for unchipped dogs and 7 days for chipped dogs. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag hold"><i class="fas fa-ban"></i> Unavailable</span></div><div class=legend-desc><strong>Unavailable:</strong> The dog is newly arrived and undergoing intake processing, medical checks, or observation, and is not yet ready for adoption. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag rescue-only"><i class="fas fa-hands-helping"></i> Rescue Only</span></div><div class=legend-desc><strong>Rescue Only:</strong> The dog can only be transferred to approved rescue organizations (not directly adopted by the public), usually due to special medical or behavioral needs. </div></div><div class=legend-group-title>Stray & Location Indicators</div><div class=legend-item><div class=legend-badge-wrapper><span class="tag stray"><i class="fas fa-map-marker-alt"></i> Stray</span></div><div class=legend-desc><strong>Stray Status:</strong> Found as a stray. Aligns with the <strong>Strays</strong> filter. If a location was recorded, you can click this tag to see where they were found on the map. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag stray chipped"><i class="fas fa-map-marker-alt"></i> <i class="fas fa-microchip"></i> Stray</span></div><div class=legend-desc><strong>Chipped Stray:</strong> Found as a stray with a microchip. The dashed border simply highlights that a chip was detected (which gives them a 7-day holding period instead of 3 days). </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag pavilion"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span><span class="tag pavilion hl-yellow"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span><span class="tag pavilion hl-orange"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span><span class="tag pavilion flagged"><i class="fas fa-warehouse" aria-hidden=true></i> <i class="fas fa-triangle-exclamation pk-flag-mark" aria-hidden=true></i> C-70</span><span class="tag pavilion pk-stale"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span></div><div class=legend-desc><strong>Pavilion Location:</strong> Where the dog was last housed, read from the most recent handwritten walk sheet (pavilion letter + kennel number). A yellow or orange tint mirrors a marker highlight on the sheet — CACC's walker levels: yellow = intermediate-level dog, orange = advanced-level dog. Sheets are uploaded by onsite volunteers; each badge shows the pavilion's latest sheet and stays until a newer one replaces it. A dimmed badge means its sheet is more than a couple of days old — hover or tap for the sheet date. Spot a wrong one? Tap the small flag to report it — the badge stays visible with a warning mark (like the example with the triangle) until volunteers or an admin confirm the right kennel. </div></div><div class=legend-group-title>Special Profile Indicators</div><div class=legend-item><div class=legend-badge-wrapper><span class="tag return"><i class="fas fa-undo-alt"></i> Return</span></div><div class=legend-desc><strong>Return Guest:</strong> This dog has been at CACC before. We detect this automatically by matching their intake ID against past shelter records. Aligns with the <strong>Returns</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><h3 class="dog-name has-aka" style="margin:0; font-size:1.15rem; display:inline-block;">Dog Name</h3></div><div class=legend-desc><strong>FKA (Formerly Known As):</strong> Underlined names mean the dog has a known previous name. Tap or click the name on their card to switch between their current and past name. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class=fav-btn style="border-color:var(--danger-text); color:var(--danger-text); padding:4px 8px; border-radius:6px; font-size:0.9rem; pointer-events:none;"><i class="fas fa-heart"></i> Favorite</span></div><div class=legend-desc><strong>Favorites:</strong> Click the heart icon on any dog's card to save them. View your saved list anytime by clicking the <strong>Favorites</strong> filter. </div></div><div class=legend-group-title>Demographics & Attributes</div><div class=legend-item><div class=legend-badge-wrapper style=gap:4px;><span class="tag male altered"><i class="fas fa-scissors"></i> ♂️ Male</span><span class="tag female">♀️ Female</span></div><div class=legend-desc><strong>Gender & Altered Status:</strong> Shows the dog's gender. A dashed border and scissors icon mean the dog is spayed or neutered. A solid border means CACC hasn't listed them as altered — not necessarily that they are unaltered. Aligns with the <strong>Male</strong>, <strong>Female</strong>, and <strong>S/N</strong> filters. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag age">2 Years</span></div><div class=legend-desc><strong>Age:</strong> Approximate age. Aligns with the <strong>Puppies</strong> (under 12 months) and <strong>Seniors</strong> (5 years and older) filters. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class=chip style="pointer-events:none; padding:4px 10px; font-size:0.8rem; height: auto;">Small</span></div><div class=legend-desc><strong>Small Dog Filter:</strong> Filters for breeds that typically weigh 25 lbs or less when fully grown. Aligns with the <strong>Small</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag color color-black">Black</span><span class="tag color color-tan">Tan</span><span class="tag color color-brindle">Brindle</span></div><div class=legend-desc><strong>Color Pills:</strong> Show the primary colors of the dog's coat. </div></div><div class=legend-group-title>Outcome Badges & Today's Activity</div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-adopted"><i class="fas fa-heart"></i> Adopted: Date</span></div><div class=legend-desc><strong>Adopted:</strong> The dog has been adopted and has left the shelter! Aligns with the <strong>Adopted</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-rto"><i class="fas fa-home"></i> Returned: Date</span></div><div class=legend-desc><strong>Returned to Owner (RTO):</strong> Reunited with their family! Aligns with the <strong>RTO</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-rescue"><i class="fas fa-ambulance"></i> Rescue Partner</span></div><div class=legend-desc><strong>Rescued:</strong> Transferred to an approved rescue group. Tap or click to see the exact transfer date and time. Aligns with the <strong>Rescued</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><div class="dog-card highlight-today" style="border: 1px solid #F9C642; background: rgba(253, 184, 30, 0.05); padding: 8px 12px; border-radius: 8px; display:flex; flex-direction:column; gap:4px; width:100%; box-sizing:border-box; max-width: 150px;"><span class=rescue-today-pill style=align-self:flex-start;><i class="fas fa-star" style=font-size:0.65rem></i> Today</span></div></div><div class=legend-desc><strong>Today's Activity:</strong> A card highlighted with a gold border and a "Today" badge means their adoption or rescue happened today. </div></div></div></div></dialog><dialog id=reportModal class="legend-modal report-modal"><div class=legend-modal-header><h2><i class="fas fa-flag" aria-hidden=true></i> Wrong location?</h2><button type=button class=close-modal-btn id=reportCloseBtn aria-label="Close dialog">&times;</button></div><div class=report-modal-body><p class=report-context id=reportContext></p><div id=ts-report></div><button type=button class=report-remove-btn id=reportRemoveBtn><i class="fas fa-flag" aria-hidden=true></i> Flag this badge as wrong </button><p class=report-hint>The badge stays visible with a warning mark so others know it was reported, and it's queued for admin review. No passcode needed.</p><div class=report-divider><span>or, volunteers</span></div><form id=reportMoveForm><label class=report-field for=reportKennel><span>It moved — the correct kennel is</span><input type=text id=reportKennel autocomplete=off placeholder="e.g. C 70"></label><p class=report-saved-pass id=reportSavedPass hidden><i class="fas fa-key" aria-hidden=true></i> Using your saved volunteer passcode. <button type=button id=reportChangePass>Change</button></p><label class=report-field for=reportPasscode id=reportPassField><span>Volunteer passcode</span><input type=password id=reportPasscode autocomplete=current-password></label><button type=submit class=report-submit-btn id=reportMoveBtn disabled><i class="fas fa-paper-plane" aria-hidden=true></i> Submit correction </button><p class=report-hint>When enough people report the same kennel, the badge updates automatically.</p></form><div id=reportStatus class=report-status role=status aria-live=polite></div></div></dialog><dialog id=uploadNudgeModal class="legend-modal nudge-modal" closedby=any aria-labelledby=nudgeTitle><div class=nudge-clip><div class=legend-modal-header><h2 id=nudgeTitle><i class="fas fa-paw" aria-hidden=true></i> The trail's gone cold</h2><button type=button class=close-modal-btn id=nudgeCloseX aria-label="Close dialog">&times;</button></div><div class=nudge-modal-body><p class=nudge-lede id=nudgeLede></p><p class=nudge-age id=nudgeAge hidden>Last sheet uploaded <b id=nudgeAgeDays></b> (<span id=nudgeAgeDate></span>).</p><ol class=nudge-steps><li><i class="fas fa-clipboard-list" aria-hidden=true></i><span>Pick the pavilion you're standing in</span></li><li><i class="fas fa-camera" aria-hidden=true></i><span>Tap <b>Take photo</b> and snap the walk sheet &mdash; right from the page</span></li><li><i class="fas fa-location-dot" aria-hidden=true></i><span>Kennel badges refresh for everyone in minutes</span></li></ol><a class=nudge-cta id=nudgeCtaLink href=upload.html autofocus><i class="fas fa-camera" aria-hidden=true></i> Upload a walk sheet </a><button type=button class=nudge-later-btn id=nudgeLaterBtn>Not now</button><p class=nudge-foot id=nudgeFoot></p></div></div><div class=nudge-callout id=nudgeCallout><i class="fas fa-arrow-up nudge-callout-arrow" aria-hidden=true></i><span class=nudge-callout-pill id=nudgeCalloutPill></span></div></dialog></div><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=search id=mainSearch class=search-input placeholder="Name, ID, or breed" aria-label="Search dogs by name, ID, or breed" autocomplete=off autocorrect=off autocapitalize=none spellcheck=false enterkeyhint=search><button type=button class=search-clear id=searchClear onclick=clearSearch() aria-label="Clear search" hidden><i class="fas fa-times" aria-hidden=true></i></button></div><select id=sortSelect class=sort-select aria-label="Sort dogs" onchange=handleSortChange()><option value=longest>Longest stay</option><option value=newest>Newest arrival</option><option value=age_young>Youngest first</option><option value=age_old>Oldest first</option><option value=name_asc>Name A–Z</option><option value=breed_asc>Breed A–Z</option><option value=id_asc>ID A–Z</option></select></div><div class=filter-chips role=toolbar aria-label="Filter dogs"><div class="chip active" id=chip-all role=button tabindex=0 aria-pressed=true onclick="filterByChip('all')">All</div><div class=chip id=chip-favorites role=button tabindex=0 aria-pressed=false onclick="filterByChip('favorites')">Favorites <span class=chip-badge id=fav-count>0</span> <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted role=button tabindex=0 aria-pressed=false onclick="filterByChip('adopted')">Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-new role=button tabindex=0 aria-pressed=false onclick="filterByChip('new')">Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued role=button tabindex=0 aria-pressed=false onclick="filterByChip('rescued')">Rescued <span class=chip-close>&times;</span></div><div class=chip id=chip-rto role=button tabindex=0 aria-pressed=false onclick="filterByChip('rto')">RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-fixed role=button tabindex=0 aria-pressed=false aria-label="Spayed or Neutered" onclick="filterByChip('fixed')">S/N <span class=chip-close>&times;</span></div><div class=chip id=chip-available role=button tabindex=0 aria-pressed=false onclick="filterByChip('available')">Available <span class=chip-close>&times;</span></div><div class=chip id=chip-return_guest role=button tabindex=0 aria-pressed=false onclick="filterByChip('return_guest')">Returns <span class=chip-close>&times;</span></div><div class=chip id=chip-non_pit role=button tabindex=0 aria-pressed=false onclick="filterByChip('non_pit')">Non-Pit <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy role=button tabindex=0 aria-pressed=false onclick="filterByChip('puppy')">Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-female role=button tabindex=0 aria-pressed=false onclick="filterByChip('female')">Female <span class=chip-close>&times;</span></div><div class=chip id=chip-senior role=button tabindex=0 aria-pressed=false onclick="filterByChip('senior')">Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-male role=button tabindex=0 aria-pressed=false onclick="filterByChip('male')">Male <span class=chip-close>&times;</span></div><div class=chip id=chip-small role=button tabindex=0 aria-pressed=false onclick="filterByChip('small')">Small <span class=chip-close>&times;</span></div><div class=chip id=chip-stray role=button tabindex=0 aria-pressed=false onclick="filterByChip('stray')">Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay role=button tabindex=0 aria-pressed=false onclick="filterByChip('long_stay')">Long Stays <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><div class=view-title-row><h2 class=section-title id=view-title aria-live=polite>📋 Active Dogs</h2><button type=button class=clear-filters-btn id=clearFiltersBtn onclick="resetAllFilters('view_title')" hidden><i class="fas fa-times" aria-hidden=true></i> Clear filters</button></div><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: November 12, 2026 01:01 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><div class=page-meta><div class=freshness-bar><nav class=today-strip id=todayStrip aria-label="Today at CACC"><button class=today-label id=todayLabel type=button data-updated="November 12, 2026 01:26 PM" aria-expanded=false aria-controls=updatedText aria-describedby=updatedText title="Updated November 12, 2026 01:26 PM"><span class=status-dot aria-hidden=true></span>Today</button><span class=updated-text id=updatedText hidden>Updated November 12, 2026 01:26 PM</span><a class=today-pill data-kind=new href="./?filter=new" hidden><b>0</b> new</a><a class=today-pill data-kind=adopted href="./?filter=adopted" hidden><b>0</b> adopted</a><a class=today-pill data-kind=rto href="./?filter=rto" hidden><b>0</b> RTO</a><a class=today-pill data-kind=rescued href="rescues.html?view=today" hidden><b>0</b> rescued</a><a class=today-pill data-kind=removed href="removed.html?view=today" hidden><b>0</b> removed</a><span class=today-empty id=todayEmpty hidden>No changes recorded yet.</span></nav><button class=legend-toggle onclick=openLegendModal() aria-label="Dashboard legend & guide"><i class="fas fa-circle-info" aria-hidden=true></i> <span class=legend-label>Guide</span></button></div><dialog id=legendModal class=legend-modal><div class=legend-modal-header><h2>Dashboard Legend & Guide</h2><button class=close-modal-btn onclick=closeLegendModal() aria-label="Close modal">&times;</button></div><div class=legend-modal-body><div class=legend-grid><div class=legend-group-title>Status & Stay Badges</div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge los-green">5 Days</span><span class="status-badge los-yellow">18 Days</span><span class="status-badge los-red">35 Days</span></div><div class=legend-desc><strong>Time at CACC / Stay Duration:</strong> Shows how many days the dog has been at the shelter. Mapped to filters: <span class=los-detail><span class=text-success>Green</span> (0-14 days; matches <strong>Fresh In</strong> for under 7 days), <span class=text-warning>Yellow</span> (15-29 days), and <span class=text-danger>Red</span> (30+ days; matches <strong>Long Stays</strong>). <em>Tapping or clicking the badge reveals the exact date and time they were first listed.</em></span></div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge los-green">Available</span></div><div class=legend-desc><strong>Available Status:</strong> Dogs currently at the shelter that are ready for adoption. Aligns with the <strong>Available</strong> filter. </div></div><div class=legend-group-title>Holds & Rescue Indicators</div><div class=legend-item><div class=legend-badge-wrapper><span class="tag hold"><i class="fas fa-clock"></i> Hold for 3 days</span></div><div class=legend-desc><strong>Stray Hold:</strong> The mandatory holding period to give owners time to locate and reclaim their lost pet. The hold is 3 days for unchipped dogs and 7 days for chipped dogs. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag hold"><i class="fas fa-ban"></i> Unavailable</span></div><div class=legend-desc><strong>Unavailable:</strong> The dog is newly arrived and undergoing intake processing, medical checks, or observation, and is not yet ready for adoption. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag rescue-only"><i class="fas fa-hands-helping"></i> Rescue Only</span></div><div class=legend-desc><strong>Rescue Only:</strong> The dog can only be transferred to approved rescue organizations (not directly adopted by the public), usually due to special medical or behavioral needs. </div></div><div class=legend-group-title>Stray & Location Indicators</div><div class=legend-item><div class=legend-badge-wrapper><span class="tag stray"><i class="fas fa-map-marker-alt"></i> Stray</span></div><div class=legend-desc><strong>Stray Status:</strong> Found as a stray. Aligns with the <strong>Strays</strong> filter. If a location was recorded, you can click this tag to see where they were found on the map. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag stray chipped"><i class="fas fa-map-marker-alt"></i> <i class="fas fa-microchip"></i> Stray</span></div><div class=legend-desc><strong>Chipped Stray:</strong> Found as a stray with a microchip. The dashed border simply highlights that a chip was detected (which gives them a 7-day holding period instead of 3 days). </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag pavilion"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span><span class="tag pavilion hl-yellow"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span><span class="tag pavilion hl-orange"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span><span class="tag pavilion flagged"><i class="fas fa-warehouse" aria-hidden=true></i> <i class="fas fa-triangle-exclamation pk-flag-mark" aria-hidden=true></i> C-70</span><span class="tag pavilion pk-stale"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span></div><div class=legend-desc><strong>Pavilion Location:</strong> Where the dog was last housed, read from the most recent handwritten walk sheet (pavilion letter + kennel number). A yellow or orange tint mirrors a marker highlight on the sheet — CACC's walker levels: yellow = intermediate-level dog, orange = advanced-level dog. Sheets are uploaded by onsite volunteers; each badge shows the pavilion's latest sheet and stays until a newer one replaces it. A dimmed badge means its sheet is more than a couple of days old — hover or tap for the sheet date. Spot a wrong one? Tap the small flag to report it — the badge stays visible with a warning mark (like the example with the triangle) until volunteers or an admin confirm the right kennel. </div></div><div class=legend-group-title>Special Profile Indicators</div><div class=legend-item><div class=legend-badge-wrapper><span class="tag return"><i class="fas fa-undo-alt"></i> Return</span></div><div class=legend-desc><strong>Return Guest:</strong> This dog has been at CACC before. We detect this automatically by matching their intake ID against past shelter records. Aligns with the <strong>Returns</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><h3 class="dog-name has-aka" style="margin:0; font-size:1.15rem; display:inline-block;">Dog Name</h3></div><div class=legend-desc><strong>FKA (Formerly Known As):</strong> Underlined names mean the dog has a known previous name. Tap or click the name on their card to switch between their current and past name. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class=notes-cue style=pointer-events:none;><svg viewbox="0 0 16 16" aria-hidden=true><path fill=none stroke=currentColor stroke-width=1.5 stroke-linejoin=round d="M3 1.5h6.5L13 5v9.5H3z"/><path fill=currentColor fill-opacity=0.35 stroke=currentColor stroke-width=1.5 stroke-linejoin=round d="M9.5 1.5V5H13"/></svg>Notes</span></div><div class=legend-desc><strong>Handling Notes:</strong> Volunteers who walk this dog at the shelter logged how it handles: leash manners, energy, interests, commands and how it reacts to other dogs. Tap <strong>Notes</strong>, or double-tap the card, to read them. Cards with notes also show a folded top corner. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class=fav-btn style="border-color:var(--danger-text); color:var(--danger-text); padding:4px 8px; border-radius:6px; font-size:0.9rem; pointer-events:none;"><i class="fas fa-heart"></i> Favorite</span></div><div class=legend-desc><strong>Favorites:</strong> Click the heart icon on any dog's card to save them. View your saved list anytime by clicking the <strong>Favorites</strong> filter. </div></div><div class=legend-group-title>Demographics & Attributes</div><div class=legend-item><div class=legend-badge-wrapper style=gap:4px;><span class="tag male altered"><i class="fas fa-scissors"></i> ♂️ Male</span><span class="tag female">♀️ Female</span></div><div class=legend-desc><strong>Gender & Altered Status:</strong> Shows the dog's gender. A dashed border and scissors icon mean the dog is spayed or neutered. A solid border means CACC hasn't listed them as altered — not necessarily that they are unaltered. Aligns with the <strong>Male</strong>, <strong>Female</strong>, and <strong>S/N</strong> filters. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag age">2 Years</span></div><div class=legend-desc><strong>Age:</strong> Approximate age. Aligns with the <strong>Puppies</strong> (under 12 months) and <strong>Seniors</strong> (5 years and older) filters. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class=chip style="pointer-events:none; padding:4px 10px; font-size:0.8rem; height: auto;">Small</span></div><div class=legend-desc><strong>Small Dog Filter:</strong> Filters for breeds that typically weigh 25 lbs or less when fully grown. Aligns with the <strong>Small</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag color color-black">Black</span><span class="tag color color-tan">Tan</span><span class="tag color color-brindle">Brindle</span></div><div class=legend-desc><strong>Color Pills:</strong> Show the primary colors of the dog's coat. </div></div><div class=legend-group-title>Outcome Badges & Today's Activity</div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-adopted"><i class="fas fa-heart"></i> Adopted: Date</span></div><div class=legend-desc><strong>Adopted:</strong> The dog has been adopted and has left the shelter! Aligns with the <strong>Adopted</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-rto"><i class="fas fa-home"></i> Returned: Date</span></div><div class=legend-desc><strong>Returned to Owner (RTO):</strong> Reunited with their family! Aligns with the <strong>RTO</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-rescue"><i class="fas fa-ambulance"></i> Rescue Partner</span></div><div class=legend-desc><strong>Rescued:</strong> Transferred to an approved rescue group. Tap or click to see the exact transfer date and time. Aligns with the <strong>Rescued</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><div class="dog-card highlight-today" style="border: 1px solid #F9C642; background: rgba(253, 184, 30, 0.05); padding: 8px 12px; border-radius: 8px; display:flex; flex-direction:column; gap:4px; width:100%; box-sizing:border-box; max-width: 150px;"><span class=rescue-today-pill style=align-self:flex-start;><i class="fas fa-star" style=font-size:0.65rem></i> Today</span></div></div><div class=legend-desc><strong>Today's Activity:</strong> A card highlighted with a gold border and a "Today" badge means their adoption or rescue happened today. </div></div></div></div></dialog><dialog id=notesModal class="legend-modal notes-modal" aria-labelledby=notesTitle><div class=legend-modal-header><div class=notes-title-wrap><h2 id=notesTitle>Handling notes</h2><span class="tag id" id=notesId></span></div><button type=button class=close-modal-btn id=notesCloseBtn aria-label="Close handling notes">&times;</button></div><div class=legend-modal-body id=notesBody tabindex=0 aria-live=polite></div><div class=notes-footer><i class="fas fa-paw" aria-hidden=true></i> Volunteer observations from shelter walks</div></dialog><dialog id=reportModal class="legend-modal report-modal"><div class=legend-modal-header><h2><i class="fas fa-flag" aria-hidden=true></i> Wrong location?</h2><button type=button class=close-modal-btn id=reportCloseBtn aria-label="Close dialog">&times;</button></div><div class=report-modal-body><p class=report-context id=reportContext></p><div id=ts-report></div><button type=button class=report-remove-btn id=reportRemoveBtn><i class="fas fa-flag" aria-hidden=true></i> Flag this badge as wrong </button><p class=report-hint>The badge stays visible with a warning mark so others know it was reported, and it's queued for admin review. No passcode needed.</p><div class=report-divider><span>or, volunteers</span></div><form id=reportMoveForm><label class=report-field for=reportKennel><span>It moved — the correct kennel is</span><input type=text id=reportKennel autocomplete=off placeholder="e.g. C 70"></label><p class=report-saved-pass id=reportSavedPass hidden><i class="fas fa-key" aria-hidden=true></i> Using your saved volunteer passcode. <button type=button id=reportChangePass>Change</button></p><label class=report-field for=reportPasscode id=reportPassField><span>Volunteer passcode</span><input type=password id=reportPasscode autocomplete=current-password></label><button type=submit class=report-submit-btn id=reportMoveBtn disabled><i class="fas fa-paper-plane" aria-hidden=true></i> Submit correction </button><p class=report-hint>When enough people report the same kennel, the badge updates automatically.</p></form><div id=reportStatus class=report-status role=status aria-live=polite></div></div></dialog><dialog id=uploadNudgeModal class="legend-modal nudge-modal" closedby=any aria-labelledby=nudgeTitle><div class=nudge-clip><div class=legend-modal-header><h2 id=nudgeTitle><i class="fas fa-paw" aria-hidden=true></i> The trail's gone cold</h2><button type=button class=close-modal-btn id=nudgeCloseX aria-label="Close dialog">&times;</button></div><div class=nudge-modal-body><p class=nudge-lede id=nudgeLede></p><p class=nudge-age id=nudgeAge hidden>Last sheet uploaded <b id=nudgeAgeDays></b> (<span id=nudgeAgeDate></span>).</p><ol class=nudge-steps><li><i class="fas fa-clipboard-list" aria-hidden=true></i><span>Pick the pavilion you're standing in</span></li><li><i class="fas fa-camera" aria-hidden=true></i><span>Tap <b>Take photo</b> and snap the walk sheet &mdash; right from the page</span></li><li><i class="fas fa-location-dot" aria-hidden=true></i><span>Kennel badges refresh for everyone in minutes</span></li></ol><a class=nudge-cta id=nudgeCtaLink href=upload.html autofocus><i class="fas fa-camera" aria-hidden=true></i> Upload a walk sheet </a><button type=button class=nudge-later-btn id=nudgeLaterBtn>Not now</button><p class=nudge-foot id=nudgeFoot></p></div></div><div class=nudge-callout id=nudgeCallout><i class="fas fa-arrow-up nudge-callout-arrow" aria-hidden=true></i><span class=nudge-callout-pill id=nudgeCalloutPill></span></div></dialog></div><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=search id=mainSearch class=search-input placeholder="Name, ID, or breed" aria-label="Search dogs by name, ID, or breed" autocomplete=off autocorrect=off autocapitalize=none spellcheck=false enterkeyhint=search><button type=button class=search-clear id=searchClear onclick=clearSearch() aria-label="Clear search" hidden><i class="fas fa-times" aria-hidden=true></i></button></div><select id=sortSelect class=sort-select aria-label="Sort dogs" onchange=handleSortChange()><option value=longest>Longest stay</option><option value=newest>Newest arrival</option><option value=age_young>Youngest first</option><option value=age_old>Oldest first</option><option value=name_asc>Name A–Z</option><option value=breed_asc>Breed A–Z</option><option value=id_asc>ID A–Z</option></select></div><div class=filter-chips role=toolbar aria-label="Filter dogs"><div class="chip active" id=chip-all role=button tabindex=0 aria-pressed=true onclick="filterByChip('all')">All</div><div class=chip id=chip-favorites role=button tabindex=0 aria-pressed=false onclick="filterByChip('favorites')">Favorites <span class=chip-badge id=fav-count>0</span> <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted role=button tabindex=0 aria-pressed=false onclick="filterByChip('adopted')">Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-new role=button tabindex=0 aria-pressed=false onclick="filterByChip('new')">Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued role=button tabindex=0 aria-pressed=false onclick="filterByChip('rescued')">Rescued <span class=chip-close>&times;</span></div><div class=chip id=chip-rto role=button tabindex=0 aria-pressed=false onclick="filterByChip('rto')">RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-fixed role=button tabindex=0 aria-pressed=false aria-label="Spayed or Neutered" onclick="filterByChip('fixed')">S/N <span class=chip-close>&times;</span></div><div class=chip id=chip-available role=button tabindex=0 aria-pressed=false onclick="filterByChip('available')">Available <span class=chip-close>&times;</span></div><div class=chip id=chip-return_guest role=button tabindex=0 aria-pressed=false onclick="filterByChip('return_guest')">Returns <span class=chip-close>&times;</span></div><div class=chip id=chip-non_pit role=button tabindex=0 aria-pressed=false onclick="filterByChip('non_pit')">Non-Pit <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy role=button tabindex=0 aria-pressed=false onclick="filterByChip('puppy')">Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-female role=button tabindex=0 aria-pressed=false onclick="filterByChip('female')">Female <span class=chip-close>&times;</span></div><div class=chip id=chip-senior role=button tabindex=0 aria-pressed=false onclick="filterByChip('senior')">Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-male role=button tabindex=0 aria-pressed=false onclick="filterByChip('male')">Male <span class=chip-close>&times;</span></div><div class=chip id=chip-small role=button tabindex=0 aria-pressed=false onclick="filterByChip('small')">Small <span class=chip-close>&times;</span></div><div class=chip id=chip-stray role=button tabindex=0 aria-pressed=false onclick="filterByChip('stray')">Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay role=button tabindex=0 aria-pressed=false onclick="filterByChip('long_stay')">Long Stays <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><div class=view-title-row><h2 class=section-title id=view-title aria-live=polite>📋 Active Dogs</h2><button type=button class=clear-filters-btn id=clearFiltersBtn onclick="resetAllFilters('view_title')" hidden><i class="fas fa-times" aria-hidden=true></i> Clear filters</button></div><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: November 12, 2026 01:26 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -1007,6 +1079,7 @@ opacity: 0;
         //   favorite_toggled          heart button on a dog card                {favorited}
         //   share_clicked             share button on a dog card                {method, dog_id}
         //   legend_opened             dashboard legend modal opened             {}
+        //   handling_notes_opened     volunteer handling-notes dialog opened    {dog_id, method: cue|double_tap}
         //   location_report_submitted kennel-badge report or correction         {kind}
         //   today_strip_clicked       "Today at CACC" pill                      {kind, count}
         //   freshness_time_toggled    "Today" label tapped to show/hide time    {shown}
@@ -1625,7 +1698,9 @@ opacity: 0;
                 fl: Number(item.fl) || 0,
                 // Walker-level highlight from the sheet; the allowlist map is
                 // the XSS guard (only these two literals ever reach the DOM).
-                hl: item.hl === 'y' ? 'yellow' : (item.hl === 'o' ? 'orange' : null)
+                hl: item.hl === 'y' ? 'yellow' : (item.hl === 'o' ? 'orange' : null),
+                // Volunteer handling notes exist in handling_notes.json.
+                hn: !!item.hn
             };
 
             dog.ageMonths = parseAgeToMonths(dog.age);
@@ -2292,6 +2367,261 @@ opacity: 0;
 
     document.addEventListener('DOMContentLoaded', () => {
         bindLightDismiss(document.getElementById('legendModal'));
+    });
+
+    // --- Handling notes (volunteer sheet; built by src/handling.py) ---
+    // Cards with `hn` carry a .notes-cue button and data-id. One delegated
+    // listener on the static #dog-grid opens the dialog from the cue, or from
+    // a double-tap on the card (ids are compared, since cards are rebuilt).
+    // Notes come from handling_notes.json on first open and are rendered with
+    // textContent only: the sheet is free text typed by volunteers.
+    const NOTES_CUE_ICON = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1.5h6.5L13 5v9.5H3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9.5 1.5V5H13" fill="currentColor" fill-opacity="0.35" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+    const NOTES_DBL_TAP_MS = 350;
+    const NOTES_ANIM_MS = 450;
+    const NOTES_PARAGRAPH_LABEL = 'Additional information';
+    const NOTES_TAP_IGNORE = 'a, button, .ts-toggle, .has-aka, .media-wrapper, .tag, .dog-name';
+    let notesCueShimmerDone = false;
+    let notesShimmerTimer = null;
+    let notesCache = null;        // set only by a successful fetch, so a failure retries
+    let notesOpenSeq = 0;         // guards late fetches against a newer open
+    let notesCard = null;         // card the dialog flew out of
+    let notesCardRect = null;     // its rect measured before showModal()
+    let notesCardAnim = null;
+    let notesClosing = false;
+    let notesLastTap = { id: null, t: 0 };
+
+    // The cue shimmers once per page view: only cards built in the first
+    // couple of seconds get the class.
+    function scheduleNotesShimmerEnd() {
+        if (notesShimmerTimer) return;
+        notesShimmerTimer = setTimeout(() => { notesCueShimmerDone = true; }, 2500);
+    }
+
+    function notesReducedMotion() {
+        return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    function loadHandlingNotes() {
+        if (notesCache) return Promise.resolve(notesCache);
+        return fetch('handling_notes.json')
+            .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+            .then(data => {
+                if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('bad payload');
+                notesCache = data;
+                return data;
+            });
+    }
+
+    function notesMessage(text) {
+        const p = document.createElement('p');
+        p.className = 'notes-empty';
+        p.textContent = text;
+        return p;
+    }
+
+    function renderHandlingNotes(body, entries) {
+        body.replaceChildren();
+        if (!Array.isArray(entries) || !entries.length) {
+            body.append(notesMessage("Notes aren't available right now."));
+            return;
+        }
+        entries.forEach(entry => {
+            if (!entry || typeof entry !== 'object') return;
+            const visit = document.createElement('section');
+            visit.className = 'notes-visit';
+            const date = document.createElement('h3');
+            date.className = 'notes-date';
+            const d = typeof entry.d === 'string' ? entry.d : '';
+            date.textContent = /^\d{4}-\d{2}-\d{2}$/.test(d)
+                ? formatSiteDate(d, { month: 'short', day: 'numeric', year: 'numeric' })
+                : (d || 'Visit');
+            visit.append(date);
+            const fields = document.createElement('dl');
+            fields.className = 'notes-fields';
+            let paragraph = '';
+            (Array.isArray(entry.f) ? entry.f : []).forEach(pair => {
+                if (!Array.isArray(pair) || pair.length < 2) return;
+                const label = String(pair[0]);
+                const value = String(pair[1]);
+                if (label === NOTES_PARAGRAPH_LABEL) { paragraph = value; return; }
+                const chips = value.split(',').map(s => s.trim()).filter(Boolean);
+                if (!chips.length) return;
+                const dt = document.createElement('dt');
+                dt.textContent = label;
+                const dd = document.createElement('dd');
+                chips.forEach(text => {
+                    const chip = document.createElement('span');
+                    chip.className = 'notes-chip';
+                    chip.textContent = text;
+                    dd.append(chip);
+                });
+                fields.append(dt, dd);
+            });
+            if (fields.childElementCount) visit.append(fields);
+            if (paragraph) {
+                const p = document.createElement('p');
+                p.className = 'notes-text';
+                p.textContent = paragraph;
+                visit.append(p);
+            }
+            body.append(visit);
+        });
+        if (!body.childElementCount) body.append(notesMessage("Notes aren't available right now."));
+    }
+
+    // FLIP keyframes: the dialog starts edge-on (rotateY -90deg) over the
+    // card's rect and turns face-on as it grows into its centred place.
+    // perspective() lives inside the transform: a top-layer dialog inherits
+    // no perspective from an ancestor.
+    function notesFlipFrames(modal, rect) {
+        const to = modal.getBoundingClientRect();
+        const dx = (rect.left + rect.width / 2) - (to.left + to.width / 2);
+        const dy = (rect.top + rect.height / 2) - (to.top + to.height / 2);
+        const sx = Math.max(rect.width / to.width, 0.05);
+        const sy = Math.max(rect.height / to.height, 0.05);
+        const card = `perspective(1400px) translate(${dx}px, ${dy}px) scale(${sx}, ${sy}) rotateY(-90deg)`;
+        return [
+            { transform: card, offset: 0 },
+            { transform: card, offset: 0.45, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)' },
+            { transform: 'perspective(1400px) translate(0px, 0px) scale(1, 1) rotateY(0deg)', offset: 1 },
+        ];
+    }
+
+    function notesCanFlip(card, rect) {
+        return !notesReducedMotion() && card && card.isConnected && rect && rect.width > 0
+            && typeof card.animate === 'function';
+    }
+
+    function animateNotesBackdrop(modal, from, to, duration) {
+        try {
+            modal.animate([{ opacity: from }, { opacity: to }],
+                { duration, fill: 'forwards', pseudoElement: '::backdrop' });
+        } catch (e) { /* ::backdrop animation unsupported: it just snaps */ }
+    }
+
+    function openHandlingNotes(id, card, method) {
+        const modal = document.getElementById('notesModal');
+        if (!modal || modal.open || notesClosing || !id) return;
+        const dog = fullDataset.find(d => d.id === id);
+        const sel = window.getSelection && window.getSelection();
+        if (sel) sel.removeAllRanges();
+
+        document.getElementById('notesTitle').textContent = dog ? dog.name : 'Handling notes';
+        document.getElementById('notesId').textContent = id;
+        const body = document.getElementById('notesBody');
+        body.replaceChildren(notesMessage('Loading notes…'));
+        body.scrollTop = 0;
+
+        // Measure BEFORE showModal(): the scroll lock can shift the layout.
+        notesCard = card || null;
+        notesCardRect = card ? card.getBoundingClientRect() : null;
+        modal.showModal();
+        document.body.style.overflow = 'hidden';
+        track('handling_notes_opened', { dog_id: id, method: method });
+
+        if (notesCanFlip(notesCard, notesCardRect)) {
+            notesCardAnim = notesCard.animate(
+                [{ transform: 'perspective(1400px) rotateY(0deg)' }, { transform: 'perspective(1400px) rotateY(90deg)' }],
+                { duration: NOTES_ANIM_MS * 0.45, easing: 'ease-in', fill: 'forwards' });
+            modal.animate(notesFlipFrames(modal, notesCardRect), { duration: NOTES_ANIM_MS });
+            animateNotesBackdrop(modal, 0, 1, NOTES_ANIM_MS);
+        } else {
+            modal.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 160, easing: 'ease-out' });
+            animateNotesBackdrop(modal, 0, 1, 160);
+        }
+
+        const seq = ++notesOpenSeq;
+        loadHandlingNotes()
+            .then(data => { if (seq === notesOpenSeq) renderHandlingNotes(body, data[id]); })
+            .catch(() => { if (seq === notesOpenSeq) renderHandlingNotes(body, null); });
+    }
+
+    // Idempotent: also runs from the dialog's close event (a browser may
+    // force-close on a repeated Esc without our animation).
+    function resetHandlingNotesState() {
+        if (notesCardAnim) { notesCardAnim.cancel(); notesCardAnim = null; }
+        notesCard = null;
+        notesCardRect = null;
+        notesClosing = false;
+        document.body.style.overflow = '';
+    }
+
+    function closeHandlingNotes() {
+        const modal = document.getElementById('notesModal');
+        if (!modal || !modal.open || notesClosing) return;
+        notesClosing = true;
+        notesOpenSeq++;
+        let finished = false;
+        const finish = () => {
+            if (finished) return;
+            finished = true;
+            modal.getAnimations({ subtree: true }).forEach(a => a.cancel());
+            modal.close();
+            resetHandlingNotesState();
+        };
+        // Measure the resting dialog, not a half-played open animation.
+        modal.getAnimations().forEach(a => a.cancel());
+        if (notesCanFlip(notesCard, notesCardRect)) {
+            // Reverse flip: the dialog shrinks back onto the card and turns
+            // edge-on, then the card turns face-on again.
+            const frames = notesFlipFrames(modal, notesCardRect);
+            const shrinkMs = NOTES_ANIM_MS * 0.55;
+            modal.animate([{ transform: frames[2].transform }, { transform: frames[0].transform }],
+                { duration: shrinkMs, easing: 'cubic-bezier(0.6, 0, 0.8, 0.4)', fill: 'forwards' });
+            animateNotesBackdrop(modal, 1, 0, shrinkMs);
+            if (notesCardAnim) {
+                notesCardAnim.cancel();
+                notesCardAnim = null; // the turn-back below plays out after close
+                notesCard.animate(
+                    [{ transform: 'perspective(1400px) rotateY(90deg)' }, { transform: 'perspective(1400px) rotateY(0deg)' }],
+                    { duration: NOTES_ANIM_MS * 0.45, delay: shrinkMs, easing: 'ease-out', fill: 'backwards' });
+            }
+            setTimeout(finish, shrinkMs + 20);
+        } else {
+            const fade = modal.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 140, easing: 'ease-in', fill: 'forwards' });
+            animateNotesBackdrop(modal, 1, 0, 140);
+            fade.finished.then(finish, finish);
+        }
+        // Safety net: never leave the page scroll-locked if animations stall.
+        setTimeout(finish, NOTES_ANIM_MS + 250);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('notesModal');
+        const grid = document.getElementById('dog-grid');
+        if (!modal || !grid) return;
+        document.getElementById('notesCloseBtn').addEventListener('click', closeHandlingNotes);
+        modal.addEventListener('cancel', (event) => { event.preventDefault(); closeHandlingNotes(); });
+        modal.addEventListener('close', resetHandlingNotesState);
+        modal.addEventListener('click', (event) => {
+            if (event.target !== modal) return; // clicks inside the content land on children
+            const rect = modal.getBoundingClientRect();
+            const inside = rect.top <= event.clientY && event.clientY <= rect.bottom
+                && rect.left <= event.clientX && event.clientX <= rect.right;
+            if (!inside) closeHandlingNotes();
+        });
+
+        grid.addEventListener('click', (event) => {
+            const cue = event.target.closest('.notes-cue');
+            if (cue) {
+                notesLastTap = { id: null, t: 0 };
+                openHandlingNotes(cue.dataset.id, cue.closest('.dog-card'), 'cue');
+                return;
+            }
+            const card = event.target.closest('.dog-card.has-notes');
+            if (!card || event.target.closest(NOTES_TAP_IGNORE)) {
+                notesLastTap = { id: null, t: 0 };
+                return;
+            }
+            const now = performance.now();
+            const id = card.dataset.id;
+            if (id && notesLastTap.id === id && now - notesLastTap.t <= NOTES_DBL_TAP_MS) {
+                notesLastTap = { id: null, t: 0 };
+                openHandlingNotes(id, card, 'double_tap');
+            } else {
+                notesLastTap = { id, t: now };
+            }
+        });
     });
 
     function resetGrid() {
@@ -3017,11 +3347,24 @@ opacity: 0;
 
         const extraClass = isToday ? ' highlight-today' : (isTodayMuted ? ' highlight-muted' : '');
 
+        // Handling-notes cue: a real button (tap/keyboard/screen reader); the
+        // grid's delegated listener opens the dialog from data-id. favName is
+        // already escaped.
+        let idHtml = `<span class="tag id">${dog.id}</span>`;
+        let notesAttrs = '';
+        if (dog.hn) {
+            const shimmer = notesCueShimmerDone ? '' : ' cue-shimmer';
+            scheduleNotesShimmerEnd();
+            idHtml = `<div class="card-header-meta"><button type="button" class="notes-cue${shimmer}" data-id="${dog.id}" aria-haspopup="dialog" aria-label="Handling notes for ${favName}">${NOTES_CUE_ICON}Notes</button>${idHtml}</div>`;
+            notesAttrs = ` data-id="${dog.id}"`;
+        }
+        const notesClass = dog.hn ? ' has-notes' : '';
+
         return `
-            <div class="dog-card${extraClass}">
+            <div class="dog-card${extraClass}${notesClass}"${notesAttrs}>
                 <div class="card-header">
                     ${nameHtml}
-                    <span class="tag id">${dog.id}</span>
+                    ${idHtml}
                 </div>
                 <div class="breed-info">
                     <span>${escapeHtml(dog.breed)}</span>
