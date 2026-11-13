@@ -29,15 +29,79 @@
        page toasts (rescues.html, map.html: bottom 40px) and the map footer, so they
        never cover the sticky search bars under the header. */
     .pwa-updated-pill, .pwa-notice {
-        position: fixed; bottom: 96px; left: 50%; transform: translateX(-50%);
+        /* --announce-offset: an announcement card's height above the viewport
+           bottom (partials/announce.html), so the pill stays clear of it. */
+        position: fixed; bottom: max(96px, calc(var(--announce-offset, 0px) + 12px)); left: 50%; transform: translateX(-50%);
         z-index: 10001; padding: 8px 16px; border-radius: 999px; max-width: 90vw;
-        font: 600 0.9rem -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        font: 600 14.4px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         border: 1px solid var(--border, #30363d); box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
     .pwa-updated-pill { cursor: pointer; background: var(--accent, #41B6E6); color: var(--on-accent, #0d1117); }
     .pwa-notice { pointer-events: none; background: var(--row, #161b22); color: var(--text, #c9d1d9); }
     /* While Reload's connection probe is in flight. */
     .pwa-reload[disabled], .pwa-reload-link[disabled], .pwa-updated-pill[disabled] { opacity: 0.6; cursor: progress; }
+
+    /* "Install app" steps (pwaOpenInstall). Lives here because the map's drawer
+       carries the link too, and the map loads Bootstrap's reset and an older
+       Font Awesome (and its html font-size is 10px, so sizes here are px and
+       em, never rem): box-sizing, margins and font are set explicitly and the
+       glyphs are inline SVG. A small dialog on wide screens; on phones a bottom
+       sheet with a clear backdrop, so the browser's own buttons stay in view. */
+    .pwa-sheet {
+        box-sizing: border-box; margin: auto; padding: 0; width: min(400px, calc(100vw - 32px));
+        max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); overflow: auto; overscroll-behavior: contain;
+        background: var(--bg, #0d1117); color: var(--text, #c9d1d9);
+        border: 1px solid var(--border, #30363d); border-top: 3px solid var(--accent, #41B6E6); border-radius: 14px;
+        box-shadow: 0 16px 48px rgba(0,0,0,0.45);
+        font: 400 15px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        text-align: left; opacity: 1; transform: none;
+        transition: opacity 0.22s ease-out, transform 0.22s ease-out;
+    }
+    @starting-style { .pwa-sheet[open] { opacity: 0; transform: translateY(16px); } }
+    .pwa-sheet *, .pwa-sheet *::before, .pwa-sheet *::after { box-sizing: border-box; }
+    .pwa-sheet::backdrop { background: rgba(0,0,0,0.4); overflow: hidden; overscroll-behavior: contain; }
+    .pwa-sheet-in { padding: 16px 16px 14px; }
+    .pwa-sheet-head { display: flex; align-items: flex-start; gap: 8px; margin: 0 0 10px; }
+    .pwa-sheet-head h2 { flex: 1; margin: 10px 0 0; padding: 0; font-family: inherit; font-weight: 700; font-size: 1.1em; line-height: 1.3; color: var(--text, #c9d1d9); letter-spacing: normal; text-transform: none; }
+    .pwa-sheet-x {
+        flex: none; width: 44px; height: 44px; margin: -2px -8px 0 0; padding: 0; display: flex; align-items: center; justify-content: center;
+        background: none; border: 0; border-radius: 8px; color: var(--text-muted, #8b949e); cursor: pointer;
+    }
+    .pwa-sheet-x:hover { color: var(--text, #c9d1d9); background: var(--nav-item-hover, rgba(177,186,196,0.12)); }
+    .pwa-sheet p { margin: 0 0 10px; }
+    .pwa-sheet-steps { list-style: none; margin: 0 0 12px; padding: 0; counter-reset: pwastep; }
+    .pwa-sheet-steps li { counter-increment: pwastep; display: flex; align-items: baseline; gap: 10px; margin: 0 0 10px; padding: 0; }
+    .pwa-sheet-steps li::before {
+        content: counter(pwastep); flex: none; width: 24px; height: 24px; border-radius: 50%;
+        display: inline-flex; align-items: center; justify-content: center; transform: translateY(-1px);
+        background: var(--row, #161b22); border: 1px solid var(--border, #30363d); font-weight: 700; font-size: 0.8em;
+    }
+    .pwa-glyph { display: inline-flex; align-items: center; justify-content: center; vertical-align: -0.2em; width: 1.6em; height: 1.4em; margin: 0 1px; border-radius: 6px; background: var(--row, #161b22); border: 1px solid var(--border, #30363d); color: var(--accent, #41B6E6); }
+    .pwa-glyph svg { width: 1em; height: 1em; display: block; }
+    .pwa-sheet-note { color: var(--text-muted, #8b949e); font-size: 0.9em; }
+    .pwa-sheet-qa { color: var(--warning-text, #F9C642); font-size: 0.85em; }
+    .pwa-sheet-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; margin: 14px 0 0; }
+    .pwa-sheet-btn {
+        min-height: 44px; padding: 0 16px; margin: 0; border-radius: 10px; cursor: pointer;
+        font-family: inherit; font-weight: 700; font-size: 1em; line-height: 1; border: 1px solid var(--border, #30363d);
+        background: var(--row, #161b22); color: var(--text, #c9d1d9);
+    }
+    .pwa-sheet-btn.primary { background: var(--accent, #41B6E6); border-color: var(--accent, #41B6E6); color: var(--on-accent, #0d1117); }
+    .pwa-sheet-copy { width: 100%; margin: 0 0 10px; padding: 8px 10px; font: inherit; font-size: 0.9em; color: var(--text, #c9d1d9); background: var(--input-bg, #0d1117); border: 1px solid var(--border, #30363d); border-radius: 8px; }
+    .pwa-sheet-x:focus-visible, .pwa-sheet-btn:focus-visible { outline: 2px solid var(--accent, #41B6E6); outline-offset: 2px; }
+    @media (max-width: 600px) {
+        .pwa-sheet {
+            width: 100%; max-width: 100%; margin: auto 0 0; border-radius: 16px 16px 0 0; border-bottom: 0;
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+        .pwa-sheet::backdrop { background: transparent; }
+        .pwa-sheet-actions { justify-content: stretch; }
+        .pwa-sheet-btn { flex: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .pwa-sheet { transition: opacity 0.15s; }
+        @starting-style { .pwa-sheet[open] { transform: none; } }
+    }
 </style><script>
     // map.html has no base.html track(); this fallback has the same guard. On
     // base.html pages the real function declaration later replaces it.
@@ -178,12 +242,331 @@
         if (document.visibilityState === 'hidden') pwaOnHidden(); else pwaOnVisible();
     });
 
+    // --- Install help: "Install app" in the footer, the drawer and the Guide,
+    // and the Install announcement (partials/announce.html). ---------------
+    // One entry per browser. card: 'yes' = the announcement card may offer
+    // installing; 'prompt' = only once the browser's own prompt
+    // (beforeinstallprompt) is available; 'no' = the links only. family picks
+    // the wording. steps show only once `verified` is true (the owner checked
+    // them on a real device), or under the ?pwaTarget=<id> preview; every
+    // other visitor sees the family's generic sentence. [name] in a step is an
+    // inline icon from PWA_GLYPHS. Copy never says "installed" and never
+    // names the host.
+    const PWA_INSTALL_STEPS = {
+        'ios-safari-26': { card: 'yes', family: 'phone', verified: false,
+            steps: ['Tap [more] next to the address bar, then tap [share]',
+                    'Scroll down and tap Add to Home Screen', 'Tap Add'],
+            notes: ['No Add to Home Screen in the list? Open this page in Safari first.',
+                    'Favorites saved in Safari stay in Safari. Save them again in the app.'] },
+        'ios-safari': { card: 'yes', family: 'phone', verified: false,
+            steps: ['Tap [share] in the toolbar', 'Scroll down and tap Add to Home Screen', 'Tap Add'],
+            notes: ['No Add to Home Screen in the list? Open this page in Safari first.',
+                    'Favorites saved in Safari stay in Safari. Save them again in the app.'] },
+        'ios-chrome': { card: 'yes', family: 'phone', verified: false,
+            steps: ['Tap [share] in the address bar', 'Scroll down and tap Add to Home Screen', 'Tap Add'],
+            notes: ['Favorites saved in Chrome stay in Chrome. Save them again in the app.'] },
+        'android-chrome': { card: 'yes', family: 'phone', verified: false,
+            steps: ['Tap [menu] at the top right', 'Tap Add to Home screen', 'Tap Install'] },
+        'samsung': { card: 'prompt', family: 'phone', verified: false,
+            steps: ['Tap [lines] at the bottom right', 'Tap Add page to, then Home screen'] },
+        'edge-android': { card: 'prompt', family: 'phone', verified: false,
+            steps: ['Tap [lines] at the bottom', 'Tap Add to phone'] },
+        'mac-safari': { card: 'yes', family: 'mac', verified: false,
+            steps: ['In the menu bar, choose File, then Add to Dock', 'Click Add'],
+            notes: ['Favorites saved in Safari stay in Safari. Save them again in the app.'] },
+        'desktop-chrome': { card: 'prompt', family: 'desktop', verified: false,
+            steps: ['Click [install] at the right end of the address bar', 'Click Install'] },
+        'desktop-edge': { card: 'prompt', family: 'desktop', verified: false,
+            steps: ['Click [more] at the top right, then Apps', 'Click Install this site as an app'] },
+        // In-app browsers (Facebook, Instagram and the like) cannot add pages:
+        // the sheet says to open the page in the real browser, with Copy link.
+        'ios-inapp': { card: 'no', family: 'phone', inapp: 'Safari' },
+        'android-inapp': { card: 'no', family: 'phone', inapp: 'Chrome' },
+        'ios-other': { card: 'no', family: 'phone',
+            notes: ['No Add to Home Screen in the list? Open this page in Safari first.'] },
+        'android-other': { card: 'no', family: 'phone' },
+        // lede replaces the generic sentence where that would send the visitor
+        // looking for a menu item their browser does not have.
+        'mac-safari-old': { card: 'no', family: 'mac',
+            lede: 'On macOS Sonoma or later, look for Add to Dock in Safari’s File menu. On an older Mac, Chrome or Edge can add CACC Dogs instead.' },
+        'other': { card: 'no', family: 'desktop',
+            lede: 'Some browsers can’t add sites as apps. If yours has no Install option in its menu, try Chrome, Edge or Safari.' },
+    };
+    const PWA_INSTALL_WORDS = {
+        phone: { title: 'Add CACC Dogs to your Home Screen', done: 'CACC Dogs will appear on your Home Screen.',
+                 generic: 'Open your browser’s menu and look for Install or Add to Home Screen.' },
+        mac: { title: 'Add CACC Dogs to your Dock', done: 'CACC Dogs will appear in your Dock.',
+               generic: 'Open your browser’s menu and look for Add to Dock or Install.' },
+        desktop: { title: 'Install CACC Dogs on this computer', done: 'CACC Dogs will open in its own window.',
+                   generic: 'Open your browser’s menu and look for Install.' },
+    };
+    // 16x16 line icons that match the browsers' own buttons. Static markup.
+    const PWA_GLYPHS = {
+        share: { label: 'Share', svg: '<path d="M8 1.75v8.5M5.25 4.5 8 1.75l2.75 2.75M5.5 6.5H3.75v7.75h8.5V6.5H10.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>' },
+        more: { label: 'More', svg: '<circle cx="3" cy="8" r="1.4" fill="currentColor"/><circle cx="8" cy="8" r="1.4" fill="currentColor"/><circle cx="13" cy="8" r="1.4" fill="currentColor"/>' },
+        menu: { label: 'Menu', svg: '<circle cx="8" cy="3" r="1.4" fill="currentColor"/><circle cx="8" cy="8" r="1.4" fill="currentColor"/><circle cx="8" cy="13" r="1.4" fill="currentColor"/>' },
+        lines: { label: 'Menu', svg: '<path d="M2.5 4h11M2.5 8h11M2.5 12h11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>' },
+        install: { label: 'Install', svg: '<rect x="1.75" y="2.5" width="12.5" height="8.5" rx="1.25" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 4.5v4M6.25 7 8 8.75 9.75 7M5.5 13.5h5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>' },
+        close: { label: 'Close', svg: '<path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>' },
+    };
+
+    // Which browser this is (a pure function of the UA, for the tests). iOS
+    // without a Safari/ token is a webview; iPadOS asks for the Mac page, so
+    // touch points tell it apart from a Mac.
+    function pwaDetectInstallTarget(ua, platform, touchPoints) {
+        ua = ua || '';
+        const ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && platform === 'MacIntel' && touchPoints > 1);
+        const inapp = /FBAN|FBAV|FB_IAB|FBIOS|Instagram|LinkedInApp|Snapchat|Pinterest|TikTok|musical_ly|Line\/|GSA\/|Twitter/.test(ua);
+        let v;
+        if (ios) {
+            if (inapp || !/Safari\//.test(ua)) return 'ios-inapp';
+            if (/CriOS\//.test(ua)) return 'ios-chrome';
+            if (/FxiOS|EdgiOS|OPiOS|OPT\/|YaBrowser|DuckDuckGo/.test(ua)) return 'ios-other';
+            v = /Version\/(\d+)/.exec(ua);
+            if (!v) return 'ios-other';
+            return Number(v[1]) >= 26 ? 'ios-safari-26' : 'ios-safari';
+        }
+        if (/Android/.test(ua)) {
+            if (inapp || /; wv\)/.test(ua)) return 'android-inapp';
+            if (/SamsungBrowser\//.test(ua)) return 'samsung';
+            if (/EdgA\//.test(ua)) return 'edge-android';
+            if (/Firefox\/|OPR\/|Opera|YaBrowser|UCBrowser|Vivaldi|DuckDuckGo/.test(ua)) return 'android-other';
+            return /Chrome\//.test(ua) ? 'android-chrome' : 'android-other';
+        }
+        if (/Edg\//.test(ua)) return 'desktop-edge';
+        if (/OPR\/|Opera|Firefox\/|YaBrowser|Vivaldi/.test(ua)) return 'other';
+        if (/Chrome\/|Chromium\//.test(ua)) return 'desktop-chrome';
+        // Other WebKit browsers on the Mac keep Safari's shape plus a token of
+        // their own, and have no Add to Dock.
+        if (/Ddg\/|DuckDuckGo|Orion\/|Epiphany/.test(ua)) return 'other';
+        if (/Macintosh/.test(ua) && /Safari\//.test(ua)) {
+            v = /Version\/(\d+)/.exec(ua);
+            return v && Number(v[1]) >= 26 ? 'mac-safari' : 'mac-safari-old';
+        }
+        return 'other';
+    }
+    // ?pwaTarget=<id> previews any target's sheet: no writes, no tracking.
+    // Read once at load, since pages rewrite their own query string.
+    const PWA_QA_TARGET = (function () {
+        try {
+            const t = new URLSearchParams(location.search || '').get('pwaTarget');
+            return t && Object.prototype.hasOwnProperty.call(PWA_INSTALL_STEPS, t) ? t : null;
+        } catch (e) { return null; }
+    })();
+    function pwaQaTarget() { return PWA_QA_TARGET; }
+    // Either QA override (this one or the announcement's ?announce=) keeps
+    // the install flow silent.
+    function pwaInstallQA() {
+        return !!pwaQaTarget() || (typeof announceQaId === 'function' && !!announceQaId());
+    }
+    function pwaInstallTarget() {
+        return pwaQaTarget() || pwaDetectInstallTarget(navigator.userAgent, navigator.platform, navigator.maxTouchPoints);
+    }
+
+    // Remembered once the app was added (appinstalled, an accepted prompt, or
+    // any load in an installed window), so the announcement never offers it again.
+    const PWA_INSTALLED_KEY = 'caccPwaInstalled';
+    function pwaMarkInstalled() {
+        try { localStorage.setItem(PWA_INSTALLED_KEY, '1'); } catch (e) { /* storage blocked */ }
+    }
+    function pwaWasInstalled() {
+        try { return localStorage.getItem(PWA_INSTALLED_KEY) === '1'; } catch (e) { return false; }
+    }
+
+    // The browser's own install prompt (Chrome, Edge, Samsung Internet). The
+    // event is always kept, but its default (Chrome's own install promotion)
+    // is prevented only while the Install card would show for this visitor:
+    // otherwise the browser's behaviour is left alone.
+    let pwaDeferredPrompt = null;
+    function pwaInstallPromptReady() { return !!pwaDeferredPrompt; }
+    // Relabels a showing Install card, or lets a prompt-only browser's card
+    // show after all when the prompt arrived after the first pick.
+    function pwaInstallChanged() {
+        if (typeof announceRefresh === 'function') announceRefresh();
+        if (typeof announceRetry === 'function') announceRetry();
+    }
+    window.addEventListener('beforeinstallprompt', function (e) {
+        if (typeof announceEntryLive === 'function' && announceEntryLive('install')) e.preventDefault();
+        pwaDeferredPrompt = e;
+        pwaInstallChanged();
+    });
+    // Single use: the event is dropped before awaiting the answer.
+    function pwaPromptInstall(source) {
+        const ev = pwaDeferredPrompt;
+        if (!ev) return Promise.resolve(null);
+        pwaDeferredPrompt = null;
+        pwaInstallChanged();
+        let shown;
+        try { shown = Promise.resolve(ev.prompt()); } catch (err) { return Promise.resolve(null); }
+        return shown.then(function () { return ev.userChoice; }).then(function (choice) {
+            const outcome = choice && choice.outcome === 'accepted' ? 'accepted' : 'dismissed';
+            if (outcome === 'accepted') pwaMarkInstalled();
+            if (!pwaInstallQA()) track('pwa_install_prompt', { outcome: outcome, source: source, page: location.pathname });
+            return outcome;
+        }, function () { return null; });
+    }
+
+    // May the Install announcement show? assumePrompt answers "would it, once
+    // the browser's prompt arrives" (used before preventing its default).
+    function pwaInstallCardEligible(assumePrompt) {
+        if (pwaIsStandalone() || pwaWasInstalled()) return false;
+        const info = PWA_INSTALL_STEPS[pwaInstallTarget()];
+        if (!info || info.card === 'no') return false;
+        return info.card === 'yes' || !!assumePrompt || !!pwaDeferredPrompt;
+    }
+    function pwaInstallFamily() {
+        const info = PWA_INSTALL_STEPS[pwaInstallTarget()] || PWA_INSTALL_STEPS.other;
+        return info.family;
+    }
+
+    // Entry point for every "Install app" control and the announcement.
+    // source: announcement | footer | drawer | guide. Where the browser can
+    // install directly this opens its prompt in the same tap; otherwise the
+    // steps sheet. Opening it from a link also retires the Install card.
+    function pwaOpenInstall(source) {
+        const target = pwaInstallTarget();
+        if (!pwaInstallQA()) {
+            track('pwa_install_opened', { source: source, target: target, page: location.pathname });
+            if (source !== 'announcement' && typeof announceMarkDone === 'function') announceMarkDone('install');
+        }
+        if (pwaDeferredPrompt && !pwaQaTarget()) return pwaPromptInstall(source);
+        pwaShowInstallSheet(target, source);
+        return Promise.resolve(null);
+    }
+
+    function pwaEl(tag, className, text) {
+        const el = document.createElement(tag);
+        if (className) el.className = className;
+        if (text) el.textContent = text;
+        return el;
+    }
+    function pwaGlyph(name) {
+        const g = PWA_GLYPHS[name];
+        const span = pwaEl('span', 'pwa-glyph');
+        span.setAttribute('role', 'img');
+        span.setAttribute('aria-label', g.label);
+        span.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">' + g.svg + '</svg>';
+        return span;
+    }
+    // "Tap [share] in the toolbar" -> text and icon nodes.
+    function pwaStepNodes(step) {
+        return String(step).split(/\[(\w+)\]/).map(function (part, i) {
+            if (i % 2 === 1 && PWA_GLYPHS[part]) return pwaGlyph(part);
+            return document.createTextNode(part);
+        });
+    }
+    // Copy link for in-app browsers: the clipboard, then execCommand on a
+    // field inside the dialog (outside it the page is inert), then a selected
+    // read-only field to copy by hand. Further taps reuse that one field.
+    function pwaCopyLink(btn, box) {
+        const url = location.href;
+        const done = function () { btn.textContent = 'Link copied'; };
+        const fallback = function () {
+            let field = box.pwaCopyField;
+            if (!field) {
+                field = pwaEl('input', 'pwa-sheet-copy');
+                field.type = 'text';
+                field.readOnly = true;
+                field.value = url;
+                field.setAttribute('aria-label', 'Link to this page');
+                box.insertBefore(field, btn.parentNode);
+                box.pwaCopyField = field;
+            }
+            field.focus();
+            field.select();
+            let ok = false;
+            try { ok = document.execCommand('copy'); } catch (e) { /* unsupported */ }
+            if (ok) { field.remove(); box.pwaCopyField = null; done(); } else btn.textContent = 'Copy the link above';
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, fallback);
+        else fallback();
+    }
+
+    function pwaShowInstallSheet(target, source) {
+        const info = PWA_INSTALL_STEPS[target] || PWA_INSTALL_STEPS.other;
+        const words = PWA_INSTALL_WORDS[info.family] || PWA_INSTALL_WORDS.desktop;
+        const qa = pwaQaTarget();
+        const old = document.getElementById('pwaInstallSheet');
+        if (old) { if (old.open) old.close(); old.remove(); }
+
+        const dlg = pwaEl('dialog', 'pwa-sheet');
+        dlg.id = 'pwaInstallSheet';
+        dlg.setAttribute('aria-labelledby', 'pwaSheetTitle');
+        dlg.setAttribute('closedby', 'any');
+        const box = pwaEl('div', 'pwa-sheet-in');
+        const head = pwaEl('div', 'pwa-sheet-head');
+        const title = pwaEl('h2', '', words.title);
+        title.id = 'pwaSheetTitle';
+        const x = pwaEl('button', 'pwa-sheet-x');
+        x.type = 'button';
+        x.setAttribute('aria-label', 'Close');
+        x.innerHTML = '<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">' + PWA_GLYPHS.close.svg + '</svg>';
+        x.addEventListener('click', function () { dlg.close(); });
+        head.appendChild(title);
+        head.appendChild(x);
+        box.appendChild(head);
+
+        if (info.inapp) {
+            box.appendChild(pwaEl('p', '', 'This app’s built-in browser can’t add pages to your Home Screen. Copy the link and open it in ' + info.inapp + '.'));
+        } else if (info.steps && (info.verified || qa)) {
+            const ol = pwaEl('ol', 'pwa-sheet-steps');
+            info.steps.slice(0, 3).forEach(function (step) {
+                const li = pwaEl('li');
+                const span = pwaEl('span');
+                pwaStepNodes(step).forEach(function (n) { span.appendChild(n); });
+                li.appendChild(span);
+                ol.appendChild(li);
+            });
+            box.appendChild(ol);
+            box.appendChild(pwaEl('p', '', words.done));
+        } else {
+            box.appendChild(pwaEl('p', '', info.lede || words.generic));
+        }
+        (info.notes || []).forEach(function (note) { box.appendChild(pwaEl('p', 'pwa-sheet-note', note)); });
+        if (qa) box.appendChild(pwaEl('p', 'pwa-sheet-qa', 'Preview of ' + qa + (info.verified ? '.' : ': not yet checked on a device.')));
+
+        const actions = pwaEl('div', 'pwa-sheet-actions');
+        let primary = null;
+        if (pwaDeferredPrompt) {
+            primary = pwaEl('button', 'pwa-sheet-btn primary', 'Install');
+            primary.addEventListener('click', function () { dlg.close(); pwaPromptInstall(source); });
+        } else if (info.inapp) {
+            primary = pwaEl('button', 'pwa-sheet-btn primary', 'Copy link');
+            primary.addEventListener('click', function () { pwaCopyLink(primary, box); });
+        }
+        const ok = pwaEl('button', 'pwa-sheet-btn' + (primary ? '' : ' primary'), primary ? 'Not now' : 'Done');
+        ok.addEventListener('click', function () { dlg.close(); });
+        [ok, primary].forEach(function (b) { if (b) { b.type = 'button'; actions.appendChild(b); } });
+        (primary || ok).setAttribute('autofocus', '');
+        box.appendChild(actions);
+        dlg.appendChild(box);
+        dlg.addEventListener('close', function () { dlg.remove(); });
+        // closedby="any" light dismiss where it is missing (Safari): press and
+        // release both outside the box.
+        if (typeof HTMLDialogElement !== 'undefined' && !('closedBy' in HTMLDialogElement.prototype)) {
+            const outside = function (e) {
+                const r = dlg.getBoundingClientRect();
+                return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+            };
+            let pressedOutside = false;
+            dlg.addEventListener('pointerdown', function (e) { pressedOutside = outside(e); });
+            dlg.addEventListener('pointerup', function (e) { if (pressedOutside && outside(e)) dlg.close(); });
+        }
+        document.body.appendChild(dlg);
+        dlg.showModal();
+        return dlg;
+    }
+
     // Install and launch analytics, fired after PostHog's stub exists.
     window.addEventListener('appinstalled', function () {
+        pwaMarkInstalled();
+        pwaDeferredPrompt = null;
+        pwaInstallChanged();
         track('pwa_installed', { page: location.pathname });
     });
     function pwaOnLoad() {
         if (!pwaIsStandalone()) return;
+        pwaMarkInstalled();
         let first = true;
         try {
             first = sessionStorage.getItem('caccPwaLaunched') !== '1';
@@ -193,6 +576,482 @@
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', pwaOnLoad);
     else pwaOnLoad();
+</script><style>
+    /* Keeps focused elements clear of the card while it shows. */
+    html { scroll-padding-bottom: var(--announce-offset, 0px); }
+    .announce-card {
+        position: fixed; z-index: 9990; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+        box-sizing: border-box; width: min(380px, calc(100vw - 32px)); min-height: 64px;
+        max-height: min(45vh, 240px); overflow-y: auto; overscroll-behavior: contain;
+        display: flex; align-items: center; gap: 10px; padding: 8px 2px 8px 12px; margin: 0;
+        background: var(--bg, #0d1117); color: var(--text, #c9d1d9);
+        border: 1px solid var(--border, #30363d); border-left: 3px solid var(--accent, #41B6E6); border-radius: 12px;
+        box-shadow: 0 12px 32px rgba(0,0,0,0.35), 0 2px 6px rgba(0,0,0,0.2);
+        font: 400 0.9rem/1.35 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        opacity: 1; transform: none; transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+    }
+    @starting-style { .announce-card { opacity: 0; transform: translateY(14px); } }
+    .announce-card.announce-out { opacity: 0; transform: translateY(10px); }
+    /* Taps in the first moments go to the page under it, never to the card. */
+    .announce-card.announce-arming { pointer-events: none; }
+    .announce-icon { flex: none; display: flex; align-items: center; justify-content: center; width: 34px; min-height: 34px; }
+    .announce-icon img { width: 32px; height: 32px; border-radius: 8px; display: block; }
+    .announce-icon .notes-ear-sample { transform: scale(0.74); margin: -4px -6px; }
+    .announce-text { flex: 1 1 auto; min-width: 0; margin: 0; padding: 0; }
+    .announce-text strong { font-weight: 700; }
+    .announce-cta, .announce-x {
+        flex: none; min-height: 44px; margin: 0; border: 0; border-radius: 8px; cursor: pointer;
+        background: none; font: inherit; -webkit-tap-highlight-color: transparent;
+    }
+    .announce-cta { padding: 0 8px; color: var(--accent, #41B6E6); font-weight: 700; white-space: nowrap; }
+    .announce-x { width: 44px; padding: 0; display: flex; align-items: center; justify-content: center; color: var(--text-muted, #8b949e); }
+    .announce-x svg { width: 14px; height: 14px; display: block; }
+    .announce-cta:hover, .announce-x:hover { background: var(--nav-item-hover, rgba(177,186,196,0.12)); }
+    .announce-x:hover { color: var(--text, #c9d1d9); }
+    .announce-cta:focus-visible, .announce-x:focus-visible { outline: 2px solid var(--accent, #41B6E6); outline-offset: -2px; }
+    .announce-card.announce-later { min-height: 0; padding: 12px 14px; cursor: default; }
+    .announce-later .announce-text { color: var(--text-muted, #8b949e); }
+    /* Phones: one row of about 64-72px, so the text column gets every spare pixel. */
+    @media (max-width: 600px) {
+        .announce-card { left: 16px; right: 16px; width: auto; max-width: 480px; margin: 0 auto; gap: 6px; padding-left: 10px; }
+        .announce-icon { width: 30px; }
+        .announce-icon .notes-ear-sample { transform: scale(0.66); margin: -6px -8px; }
+        .announce-cta { padding: 0 6px; }
+    }
+    @media (max-width: 360px) {
+        .announce-card { font-size: 0.85rem; padding-top: 6px; padding-bottom: 6px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .announce-card { transition: opacity 0.2s; }
+        @starting-style { .announce-card { transform: none; } }
+        .announce-card.announce-out { transform: none; }
+    }
+    @media print { .announce-card { display: none !important; } }
+</style><script>
+    // --- Registry -------------------------------------------------------------
+    // In priority order. Each entry: id; icon (static markup, or a function
+    // returning it); optional title
+    // (bold lead-in); text (title + text: one sentence of 60 characters or
+    // fewer, a string or a function); optional cta {label, run} (label may be a
+    // function); eligible(opts) (opts.assumePrompt: see announceEntryLive);
+    // from and until ('YYYY-MM-DD' in the visitor's own calendar; until is
+    // required, and an entry without from is switched off); optional pages
+    // (basenames, a subset of ANNOUNCE_PAGES); minDays (distinct days this
+    // visitor has been seen, default 0); later (required: the line shown after
+    // closing it, saying where to find the thing again, so every announcement
+    // has a permanent home).
+    const ANNOUNCE_PAGES = ['index', 'rescues', 'breeds', 'trends'];
+    // The real folded corner: index.html's NOTES_CUE_ICON in its legend-sample
+    // frame, read at show time so a redesign of the cue reaches the card too.
+    function announceNotesIcon() {
+        return typeof NOTES_CUE_ICON === 'string'
+            ? '<span class="notes-ear-sample"><span class="notes-ear-fold">' + NOTES_CUE_ICON + '</span></span>' : '';
+    }
+    function announceDrawerShown() {
+        const btn = document.getElementById('mobileMenuBtn');
+        return !!btn && btn.offsetParent !== null;
+    }
+    const ANNOUNCEMENTS = [
+        {
+            id: 'notes',
+            pages: ['index'],
+            icon: announceNotesIcon,
+            title: 'New:',
+            text: 'a folded corner means volunteer notes.',
+            cta: { label: 'Show me', run: function () { if (typeof notesSpotlight === 'function') notesSpotlight(); } },
+            eligible: function () { return typeof notesAnnounceEligible === 'function' && notesAnnounceEligible(); },
+            from: '2026-11-13',
+            until: '2027-01-15',
+            later: 'The Guide explains the folded corner any time.',
+        },
+        {
+            // Switched off (no `from`) until the owner checks the install steps
+            // on real devices; the links and the sheet are live meanwhile.
+            id: 'install',
+            icon: '<img src="assets/icons/apple-touch-icon.png" alt="" width="32" height="32">',
+            text: function () {
+                const fam = typeof pwaInstallFamily === 'function' ? pwaInstallFamily() : 'phone';
+                return typeof PWA_INSTALL_WORDS !== 'undefined' ? PWA_INSTALL_WORDS[fam].title : '';
+            },
+            cta: {
+                label: function () {
+                    return typeof pwaInstallPromptReady === 'function' && pwaInstallPromptReady() ? 'Install' : 'Show me how';
+                },
+                run: function () { if (typeof pwaOpenInstall === 'function') pwaOpenInstall('announcement'); },
+            },
+            eligible: function (opts) {
+                return typeof pwaInstallCardEligible === 'function' && pwaInstallCardEligible(!!(opts && opts.assumePrompt));
+            },
+            from: null,
+            until: '2027-02-28',
+            minDays: 2,
+            later: function () {
+                return announceDrawerShown() ? 'It’s in the menu under Install app.' : 'It’s at the bottom of the page under Install app.';
+            },
+        },
+    ];
+
+    // --- Pacing ---------------------------------------------------------------
+    const ANNOUNCE_KEY = 'caccAnnounce';      // localStorage {v:1, day, days, seen:{id:{n, ts, day, done}}}
+    const ANNOUNCE_MAX_SHOWS = 2;             // an untouched card returns once on a later day, then retires
+    const ANNOUNCE_FIRST_DELAY_MS = 4000;     // never in the first seconds of a page
+    const ANNOUNCE_CALM_MS = 800;             // then this long with no scroll, touch or key
+    const ANNOUNCE_GIVE_UP_MS = 15000;        // no calm moment by then: skip this page view
+    const ANNOUNCE_ARM_MS = 400;              // taps ignored while it slides in
+    const ANNOUNCE_LATER_MS = 4500;           // how long the "where to find it" line stays
+
+    // Set by pages that call announceSchedule() themselves (index.html, after
+    // its data loads); read at DOMContentLoaded.
+    let announceManual = false;
+    // index.html's upload nudge holds the card while it decides, and the card
+    // and the nudge never share a page view (announceRelease, announceShownThisView).
+    let announceHeld = false;
+    let announceShownThisView = false;
+    let announceScheduled = false;
+    let announceWaiting = false;   // an attempt parked by the hold
+    let announceCurrent = null;    // entry on screen
+    let announceCard = null;
+    let announceReturnFocus = null;
+
+    function announceText(v) { return typeof v === 'function' ? v() : (v || ''); }
+    function announceToday() {
+        const d = new Date();
+        const p = function (n) { return String(n).padStart(2, '0'); };
+        return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+    }
+    function announcePage() {
+        const base = String(location.pathname || '').split('/').pop().replace(/\.html$/, '');
+        return base || 'index';
+    }
+    // ?announce=<id> shows that entry, bypassing every gate; writes nothing,
+    // tracks nothing. Read once at load: pages rewrite their own query string
+    // (filters), which would otherwise turn a later dismiss into a real one.
+    const ANNOUNCE_QA_ID = (function () {
+        try {
+            const id = new URLSearchParams(location.search || '').get('announce');
+            return id && ANNOUNCEMENTS.some(function (e) { return e.id === id; }) ? id : null;
+        } catch (e) { return null; }
+    })();
+    function announceQaId() { return ANNOUNCE_QA_ID; }
+    function announceEntry(id) {
+        for (let i = 0; i < ANNOUNCEMENTS.length; i++) if (ANNOUNCEMENTS[i].id === id) return ANNOUNCEMENTS[i];
+        return null;
+    }
+
+    // The one read-modify-write on the stored state (a single synchronous
+    // read and write, so two tabs cannot interleave inside it). mutate is
+    // optional; returns the state, or null when storage is blocked or full,
+    // which callers treat as "show nothing" (fail closed).
+    function announceStore(mutate) {
+        try {
+            let s = null;
+            try { s = JSON.parse(localStorage.getItem(ANNOUNCE_KEY) || 'null'); } catch (e) {
+                if (!(e instanceof SyntaxError)) throw e;
+            }
+            if (!s || typeof s !== 'object' || s.v !== 1 || !s.seen || typeof s.seen !== 'object' || Array.isArray(s.seen)) {
+                s = { v: 1, day: null, days: 0, seen: {} };
+            }
+            if (mutate) {
+                mutate(s);
+                localStorage.setItem(ANNOUNCE_KEY, JSON.stringify(s));
+            }
+            return s;
+        } catch (e) { return null; }
+    }
+    function announceRecordVisit(s) {
+        const today = announceToday();
+        if (s.day !== today) { s.day = today; s.days = (Number(s.days) || 0) + 1; }
+    }
+
+    // The first live, eligible, not-done entry for this page, or null. At
+    // most one card per calendar day, across all entries.
+    function announcePick(state, opts) {
+        if (!state) return null;
+        const today = announceToday();
+        const page = announcePage();
+        if (ANNOUNCE_PAGES.indexOf(page) === -1) return null;
+        const seen = state.seen;
+        if (Object.keys(seen).some(function (k) { return seen[k] && seen[k].day === today; })) return null;
+        for (let i = 0; i < ANNOUNCEMENTS.length; i++) {
+            const e = ANNOUNCEMENTS[i];
+            if (!e.from || !e.until || today < e.from || today > e.until) continue;
+            if (e.pages && e.pages.indexOf(page) === -1) continue;
+            const rec = seen[e.id] || {};
+            if (rec.done || (Number(rec.n) || 0) >= ANNOUNCE_MAX_SHOWS) continue;
+            if ((Number(state.days) || 0) < (e.minDays || 0)) continue;
+            let ok = false;
+            try { ok = !!e.eligible(opts || {}); } catch (err) { ok = false; }
+            if (ok) return e;
+        }
+        return null;
+    }
+    // Would this entry be the one shown on this page view (assuming the
+    // browser's install prompt arrives)? pwa.html asks before preventing
+    // Chrome's own install promotion.
+    function announceEntryLive(id) {
+        const qa = announceQaId();
+        if (qa) return qa === id;
+        if (announceCurrent) return announceCurrent.id === id;
+        if (announceShownThisView) return false;
+        // Records today's visit first: the browser's prompt can fire before
+        // announceSchedule() has, and day 2 must already count as day 2.
+        const e = announcePick(announceStore(announceRecordVisit), { assumePrompt: true });
+        return !!e && e.id === id;
+    }
+
+    // --- Scheduling -----------------------------------------------------------
+    // Idempotent. Records the visit day, then after ANNOUNCE_FIRST_DELAY_MS
+    // waits for the first calm moment.
+    function announceSchedule() {
+        if (announceScheduled) return;
+        announceScheduled = true;
+        const qa = announceQaId();
+        if (qa) { setTimeout(function () { announceShow(qa); }, 600); return; }
+        if (!announceStore(announceRecordVisit)) return; // storage blocked: fail closed
+        setTimeout(announceAttempt, ANNOUNCE_FIRST_DELAY_MS);
+    }
+    function announceRelease() {
+        announceHeld = false;
+        if (announceWaiting) { announceWaiting = false; announceAttempt(); }
+    }
+    function announceCalmNow() {
+        if (document.visibilityState === 'hidden') return false;
+        if (document.querySelector('dialog[open]')) return false;
+        const drawer = document.getElementById('mobileDrawer');
+        if (drawer && drawer.classList.contains('open')) return false;
+        const a = document.activeElement;
+        return !(a && (['INPUT', 'TEXTAREA', 'SELECT'].indexOf(a.tagName) !== -1 || a.isContentEditable));
+    }
+    let announceFoundNothing = false; // the last attempt had nothing to show (announceRetry may run)
+    let announceBusy = false;         // a calm wait, or a wait for the tab to show, is running
+    function announceAttempt() {
+        announceFoundNothing = false;
+        if (announceShownThisView || announceCurrent || announceBusy) return;
+        if (announceHeld) { announceWaiting = true; return; }
+        if (!announcePick(announceStore(null))) { announceFoundNothing = true; return; }
+        announceBusy = true;
+        if (document.visibilityState === 'hidden') {
+            // A background tab waits until it is looked at.
+            const onVisible = function () {
+                if (document.visibilityState === 'hidden') return;
+                document.removeEventListener('visibilitychange', onVisible);
+                announceBusy = false;
+                announceAttempt();
+            };
+            document.addEventListener('visibilitychange', onVisible);
+            return;
+        }
+        announceWaitForCalm();
+    }
+    // Eligibility changed later in the view (pwa.html: the browser's install
+    // prompt arrived after the first pick found nothing). Runs only after a
+    // pick that found nothing: never before the first delay, never alongside
+    // a wait already running, and never reviving a view that gave up on a
+    // calm moment or already showed a card.
+    function announceRetry() {
+        if (announceFoundNothing && !announceQaId()) announceAttempt();
+    }
+    const ANNOUNCE_BUSY_EVENTS = ['scroll', 'wheel', 'touchstart', 'touchmove', 'pointerdown', 'keydown'];
+    function announceWaitForCalm() {
+        let calmTimer = null;
+        let finished = false;
+        const stop = function () {
+            finished = true;
+            announceBusy = false;
+            clearTimeout(calmTimer);
+            clearTimeout(giveUp);
+            ANNOUNCE_BUSY_EVENTS.forEach(function (t) { window.removeEventListener(t, poke, true); });
+            document.removeEventListener('visibilitychange', onHidden);
+        };
+        const ready = function () {
+            if (finished) return;
+            if (!announceCalmNow()) { poke(); return; }
+            stop();
+            if (announceHeld) { announceWaiting = true; return; }
+            const e = announcePick(announceStore(null));
+            if (e) announceShow(e.id);
+        };
+        const poke = function () { clearTimeout(calmTimer); calmTimer = setTimeout(ready, ANNOUNCE_CALM_MS); };
+        const onHidden = function () {
+            if (document.visibilityState !== 'hidden') return;
+            stop();
+            announceAttempt(); // waits for visible, then starts a fresh calm window
+        };
+        const giveUp = setTimeout(stop, ANNOUNCE_GIVE_UP_MS);
+        ANNOUNCE_BUSY_EVENTS.forEach(function (t) { window.addEventListener(t, poke, { capture: true, passive: true }); });
+        document.addEventListener('visibilitychange', onHidden);
+        poke();
+    }
+
+    // --- The card -------------------------------------------------------------
+    function announceStatusNode() {
+        let node = document.getElementById('announceStatus');
+        if (!node && document.body) {
+            node = document.createElement('div');
+            node.id = 'announceStatus';
+            node.className = 'visually-hidden';
+            node.setAttribute('role', 'status');
+            document.body.appendChild(node);
+        }
+        return node;
+    }
+    function announceSetOffset() {
+        const root = document.documentElement;
+        if (!announceCard) { root.style.removeProperty('--announce-offset'); return; }
+        // offsetTop is the layout position, unaffected by the slide-in transform
+        // (a fixed element's is relative to the viewport).
+        root.style.setProperty('--announce-offset', Math.max(0, Math.ceil(window.innerHeight - announceCard.offsetTop)) + 'px');
+    }
+    function announceBuildRow(card, entry) {
+        const icon = document.createElement('span');
+        icon.className = 'announce-icon';
+        icon.setAttribute('aria-hidden', 'true');
+        icon.innerHTML = announceText(entry.icon); // static markup only, never visitor text
+        const p = document.createElement('p');
+        p.className = 'announce-text';
+        if (entry.title) {
+            const b = document.createElement('strong');
+            b.textContent = entry.title;
+            p.appendChild(b);
+            p.appendChild(document.createTextNode(' '));
+        }
+        p.appendChild(document.createTextNode(announceText(entry.text)));
+        card.appendChild(icon);
+        card.appendChild(p);
+        if (entry.cta) {
+            const cta = document.createElement('button');
+            cta.type = 'button';
+            cta.className = 'announce-cta';
+            cta.textContent = announceText(entry.cta.label);
+            cta.addEventListener('click', announceClick);
+            card.appendChild(cta);
+        }
+        const x = document.createElement('button');
+        x.type = 'button';
+        x.className = 'announce-x';
+        x.setAttribute('aria-label', 'Dismiss');
+        x.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+        x.addEventListener('click', function () { announceDismiss('x'); });
+        card.appendChild(x);
+        return (entry.title ? entry.title + ' ' : '') + announceText(entry.text);
+    }
+    // Shows an entry now (the engine calls it at a calm moment; QA and the
+    // preview pane call it directly). Never takes focus.
+    function announceShow(id) {
+        const entry = announceEntry(id);
+        if (!entry || announceCurrent) return null;
+        const qa = announceQaId() === id;
+        let n = 1;
+        if (!qa) {
+            const s = announceStore(function (st) {
+                const rec = st.seen[id] || (st.seen[id] = { n: 0 });
+                rec.n = (Number(rec.n) || 0) + 1;
+                rec.ts = Date.now();
+                rec.day = announceToday();
+                n = rec.n;
+            });
+            if (!s) return null;
+        }
+        announceShownThisView = true;
+        announceCurrent = entry;
+        const card = document.createElement('section');
+        card.className = 'announce-card announce-arming';
+        card.setAttribute('aria-label', 'Announcement');
+        card.dataset.id = id;
+        const said = announceBuildRow(card, entry);
+        card.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') { e.stopPropagation(); announceDismiss('esc'); }
+        });
+        // Where focus came from, to put it back if the card closes under it.
+        card.addEventListener('focusin', function (e) {
+            if (e.relatedTarget && !card.contains(e.relatedTarget)) announceReturnFocus = e.relatedTarget;
+        });
+        // Right after the skip link, so it is the second tab stop rather than
+        // the last one after the whole dog grid; it stays fixed at the bottom.
+        const skip = document.querySelector('.skip-link');
+        if (skip && skip.parentNode) skip.parentNode.insertBefore(card, skip.nextSibling);
+        else document.body.appendChild(card);
+        announceCard = card;
+        setTimeout(function () { card.classList.remove('announce-arming'); }, ANNOUNCE_ARM_MS);
+        announceSetOffset();
+        const status = announceStatusNode();
+        if (status) status.textContent = said + (entry.cta ? ' Actions available.' : '');
+        if (!qa) track('announcement_shown', { id: id, n: n, page: announcePage() });
+        return card;
+    }
+    function announceMarkDone(id) {
+        if (announceQaId()) { if (announceCurrent && announceCurrent.id === id) announceRemove(); return; }
+        announceStore(function (st) {
+            const rec = st.seen[id] || (st.seen[id] = { n: 0 });
+            rec.done = true;
+        });
+        if (announceCurrent && announceCurrent.id === id) announceRemove();
+    }
+    function announceRemove() {
+        const card = announceCard;
+        const hadFocus = !!card && card.contains(document.activeElement);
+        announceCard = null;
+        announceCurrent = null;
+        announceSetOffset();
+        if (card) card.remove();
+        if (hadFocus) announceRestoreFocus();
+    }
+    function announceRestoreFocus() {
+        const back = announceReturnFocus;
+        announceReturnFocus = null;
+        const target = back && back.isConnected ? back : document.getElementById('main-content');
+        if (target && typeof target.focus === 'function') target.focus({ preventScroll: true });
+    }
+    function announceClick() {
+        const entry = announceCurrent;
+        if (!entry) return;
+        if (!announceQaId()) track('announcement_clicked', { id: entry.id, page: announcePage() });
+        // Removes the card (and puts focus back if it was inside) before the
+        // action runs, on the QA path too; announceDismiss relies on the same.
+        announceMarkDone(entry.id);
+        if (entry.cta && typeof entry.cta.run === 'function') entry.cta.run();
+    }
+    // x or Esc: then a short line says where to find it again.
+    function announceDismiss(method) {
+        const entry = announceCurrent;
+        const card = announceCard;
+        if (!entry || !card) return;
+        if (!announceQaId()) track('announcement_dismissed', { id: entry.id, method: method, page: announcePage() });
+        announceMarkDone(entry.id); // removes the card, putting focus back if it was inside
+        const later = announceText(entry.later);
+        if (!later) return;
+        const note = document.createElement('section');
+        note.className = 'announce-card announce-later';
+        note.setAttribute('aria-label', 'Announcement');
+        const p = document.createElement('p');
+        p.className = 'announce-text';
+        p.textContent = later;
+        note.appendChild(p);
+        document.body.appendChild(note);
+        const status = announceStatusNode();
+        if (status) status.textContent = later;
+        const fade = function () {
+            note.classList.add('announce-out');
+            setTimeout(function () { note.remove(); }, 300);
+        };
+        note.addEventListener('click', fade);
+        setTimeout(fade, ANNOUNCE_LATER_MS);
+    }
+    // pwa.html calls this when the browser's install prompt arrives or is
+    // used up, so the Install card's button says Install or Show me how.
+    function announceRefresh() {
+        if (!announceCard || !announceCurrent || !announceCurrent.cta) return;
+        const cta = announceCard.querySelector('.announce-cta');
+        if (cta) cta.textContent = announceText(announceCurrent.cta.label);
+    }
+
+    function announceInit() {
+        announceStatusNode(); // present, and empty, before anything is announced
+        window.addEventListener('resize', function () { if (announceCard) announceSetOffset(); });
+        if (!announceManual) announceSchedule();
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', announceInit);
+    else announceInit();
 </script><link rel=preconnect href=https://cdnjs.cloudflare.com><link rel=preconnect href=https://cdn.jsdelivr.net><link rel=preload as=font type=font/woff2 href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2 crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css><style>
         /* Note: :root Variables are now in partials/navbar.html */
 
@@ -289,6 +1148,12 @@
         .footer .footer-links { display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap; font-size: 0.8rem; }
         .footer .footer-links a { color: var(--text-muted); text-decoration: underline; }
         .footer .footer-links a:hover { color: var(--text); }
+        /* "Install app" (partials/pwa.html pwaOpenInstall): a button styled as
+           its sibling links; hidden inside an installed window. */
+        .footer .pwa-install-item { display: inline-flex; gap: 10px; align-items: center; }
+        .footer .pwa-install-link { background: none; border: 0; padding: 0; font: inherit; color: var(--text-muted); text-decoration: underline; cursor: pointer; }
+        .footer .pwa-install-link:hover { color: var(--text); }
+        .pwa-standalone .footer .pwa-install-item { display: none; }
 
         /* Shared empty / no-data states */
         .empty-state { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: 1.1rem; }
@@ -530,6 +1395,12 @@
     .theme-toggle.pwa-reload, .mobile-link.pwa-reload-link { display: none; }
     .pwa-standalone .theme-toggle.pwa-reload, .pwa-standalone .mobile-link.pwa-reload-link { display: flex; }
     .mobile-link.pwa-reload-link { background: none; font-family: inherit; font-size: inherit; line-height: inherit; width: 100%; text-align: left; cursor: pointer; }
+    /* "Install app" (partials/pwa.html pwaOpenInstall): the inverse, shown in
+       a browser tab and hidden in an installed window. Inline SVG icon, since
+       the map loads an older Font Awesome. */
+    .mobile-link.pwa-install-drawer { background: none; font-family: inherit; font-size: inherit; line-height: inherit; width: 100%; text-align: left; cursor: pointer; margin: 0; }
+    .mobile-link.pwa-install-drawer .pwa-install-icon { flex: none; display: block; }
+    .pwa-standalone .mobile-link.pwa-install-drawer { display: none; }
 
     /* Mobile Drawer */
     .mobile-nav-drawer {
@@ -556,7 +1427,7 @@
         .mobile-menu-btn { display: flex; }
         .pwa-standalone .theme-toggle.pwa-reload { display: none; }
     }
-</style><header class=site-header><div class=header-content><div class=brand-section><h1><a href=./ class=brand-link><i class="fas fa-paw brand-blue-paw"></i><svg class=chistar-svg viewbox="0 0 120 120" xmlns=http://www.w3.org/2000/svg><path fill=#E4002B d="M60 0 L71 41 L112 30 L82 60 L112 90 L71 79 L60 120 L49 79 L8 90 L38 60 L8 30 L49 41 Z"/></svg><span class=brand-chicago>CHI</span><span class=brand-divider>|</span><span class=brand-title> Terms of Use </span></a></h1></div><nav class=nav-links><a href=./ class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link ">Breeds</a><a href=upload.html class="nav-link ">Upload</a></nav><div class=actions><button type=button class="theme-toggle pwa-reload" onclick="pwaReload('manual')" title=Reload aria-label="Reload this page"><i class="fas fa-rotate-right" aria-hidden=true></i></button><button type=button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode" aria-label="Toggle dark or light mode"><i class="fas fa-moon" aria-hidden=true></i></button><button type=button class=mobile-menu-btn id=mobileMenuBtn onclick=toggleMobileMenu() aria-label=Menu aria-expanded=false aria-controls=mobileDrawer><i class="fas fa-bars" aria-hidden=true></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=./ class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link "><i class="fas fa-paw" style=width:20px></i> Breeds</a><a href=upload.html class="mobile-link "><i class="fas fa-camera" style=width:20px aria-hidden=true></i> Upload</a><a href=notes.html class="mobile-link "><i class="fas fa-clipboard-list" style=width:20px aria-hidden=true></i> Log a visit</a><a href=feedback.html class="mobile-link "><i class="fas fa-comment-dots" style=width:20px aria-hidden=true></i> Feedback</a><button type=button class="mobile-link pwa-reload-link" onclick="pwaReload('manual')"><i class="fas fa-rotate-right" style=width:20px aria-hidden=true></i> Reload</button></div></header><script>
+</style><header class=site-header><div class=header-content><div class=brand-section><h1><a href=./ class=brand-link><i class="fas fa-paw brand-blue-paw"></i><svg class=chistar-svg viewbox="0 0 120 120" xmlns=http://www.w3.org/2000/svg><path fill=#E4002B d="M60 0 L71 41 L112 30 L82 60 L112 90 L71 79 L60 120 L49 79 L8 90 L38 60 L8 30 L49 41 Z"/></svg><span class=brand-chicago>CHI</span><span class=brand-divider>|</span><span class=brand-title> Terms of Use </span></a></h1></div><nav class=nav-links><a href=./ class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link ">Breeds</a><a href=upload.html class="nav-link ">Upload</a></nav><div class=actions><button type=button class="theme-toggle pwa-reload" onclick="pwaReload('manual')" title=Reload aria-label="Reload this page"><i class="fas fa-rotate-right" aria-hidden=true></i></button><button type=button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode" aria-label="Toggle dark or light mode"><i class="fas fa-moon" aria-hidden=true></i></button><button type=button class=mobile-menu-btn id=mobileMenuBtn onclick=toggleMobileMenu() aria-label=Menu aria-expanded=false aria-controls=mobileDrawer><i class="fas fa-bars" aria-hidden=true></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=./ class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link "><i class="fas fa-paw" style=width:20px></i> Breeds</a><a href=upload.html class="mobile-link "><i class="fas fa-camera" style=width:20px aria-hidden=true></i> Upload</a><a href=notes.html class="mobile-link "><i class="fas fa-clipboard-list" style=width:20px aria-hidden=true></i> Log a visit</a><a href=feedback.html class="mobile-link "><i class="fas fa-comment-dots" style=width:20px aria-hidden=true></i> Feedback</a><button type=button class="mobile-link pwa-install-drawer" onclick="toggleMobileMenu(false); pwaOpenInstall('drawer')"><svg class=pwa-install-icon viewbox="0 0 16 16" width=20 height=16 aria-hidden=true focusable=false><rect x=4 y=1.5 width=8 height=13 rx=1.5 fill=none stroke=currentColor stroke-width=1.3 /><path fill=none stroke=currentColor stroke-width=1.3 stroke-linecap=round stroke-linejoin=round d="M8 4.5v5M6 7.75 8 9.75l2-2"/></svg> Install app</button><button type=button class="mobile-link pwa-reload-link" onclick="pwaReload('manual')"><i class="fas fa-rotate-right" style=width:20px aria-hidden=true></i> Reload</button></div></header><script>
     // Keeps <meta name="theme-color"> (partials/pwa.html) in step with the
     // theme, so Android's status bar follows the visitor's choice. Reads --bg
     // from body, where body.light-mode sets the light value.
@@ -593,7 +1464,7 @@
         const btn = document.getElementById('mobileMenuBtn');
         if (btn) btn.focus();
     });
-</script><div class=container id=main-content tabindex=-1><article class=legal><h1>Terms of Use</h1><p class=effective>Effective date: October 23, 2026</p><p class=intro> Please read these Terms of Use ("Terms") carefully before using this website (the "Site"). By accessing or using the Site, you agree to be bound by these Terms. If you do not agree, please do not use the Site. </p><h2>1. About this Site</h2><p> This Site is an independent, non-commercial project developed and maintained by a volunteer at Chicago Animal Care &amp; Control ("CACC") residing in Chicago, Illinois (the "Maintainer"). It aggregates and re-displays information drawn from publicly available records and sources to help the public follow dogs in CACC's care. </p><p> The Site is <strong>not</strong> officially affiliated with, endorsed by, sponsored by, or a representative of CACC, the City of Chicago, or any other government agency. References to CACC and the City of Chicago are for identification and informational purposes only. All trademarks, names, and logos are the property of their respective owners. </p><h2>2. No Official or Professional Advice</h2><p> Content on the Site is provided for general informational purposes only and is not official guidance from CACC or the City of Chicago, nor legal, veterinary, or other professional advice. The Site is not a channel for adopting, reclaiming, surrendering, or reporting an animal. For any official action or information, contact CACC directly. </p><h2>3. Accuracy and No Reliance</h2><p> Information on the Site is gathered from third-party and public sources by automated means, may be incomplete or out of date, and is refreshed only periodically. The Maintainer does <strong>not</strong> guarantee the accuracy, completeness, currency, or availability of any information, including a dog's status, location, breed, behavior, availability, or whether it remains in CACC's care. </p><p><strong>Do not rely on the Site as a substitute for contacting CACC.</strong> Before making any decision or taking any action — including travel to a facility or any decision relating to adoption, rescue, transfer, or an animal's welfare — independently verify the information directly with CACC. You are solely responsible for any decision you make based on the Site. </p><h2>4. Disclaimer of Warranties</h2><p> THE SITE AND ALL CONTENT ARE PROVIDED "AS IS" AND "AS AVAILABLE," WITH ALL FAULTS AND WITHOUT WARRANTY OF ANY KIND. TO THE FULLEST EXTENT PERMITTED BY LAW, THE MAINTAINER DISCLAIMS ALL WARRANTIES, WHETHER EXPRESS, IMPLIED, OR STATUTORY, INCLUDING ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, ACCURACY, AND ANY WARRANTIES ARISING FROM COURSE OF DEALING OR USAGE OF TRADE. The Maintainer does not warrant that the Site will be uninterrupted, secure, or error-free. </p><h2>5. Limitation of Liability</h2><p> TO THE FULLEST EXTENT PERMITTED BY LAW, IN NO EVENT WILL THE MAINTAINER BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES, OR FOR ANY LOSS OF PROFITS, DATA, GOODWILL, OR OTHER INTANGIBLE LOSSES, ARISING OUT OF OR RELATING TO YOUR ACCESS TO OR USE OF (OR INABILITY TO USE) THE SITE OR ANY CONTENT, WHETHER BASED IN CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY, OR ANY OTHER LEGAL THEORY, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. </p><p> BECAUSE THE SITE IS PROVIDED FREE OF CHARGE, THE MAINTAINER'S TOTAL AGGREGATE LIABILITY ARISING OUT OF OR RELATING TO THE SITE WILL NOT EXCEED ONE HUNDRED U.S. DOLLARS ($100). Nothing in these Terms excludes or limits liability that cannot be excluded or limited under applicable law, including liability for willful and wanton misconduct. Some jurisdictions do not allow certain limitations, so some of the above may not apply to you. </p><h2>6. Third-Party Links and Services</h2><p> The Site links to and incorporates content and services operated by third parties (for example, social-media posts, adoption listings, mapping tiles, and analytics). The Maintainer does not control and is not responsible for the content, accuracy, availability, or practices of any third-party site or service. Your use of any third-party service is governed by that party's own terms and policies. </p><h2>7. Volunteer Uploads</h2><p> Walk-sheet uploads are open to visitors and are meant only for clear photos of current CACC pavilion walk sheets; uploads may be checked automatically, rejected, or reverted, and a volunteer passcode may be temporarily required. Other features (such as volunteer kennel corrections and administrator corrections) are intended only for authorized volunteers using a valid passcode. If you submit any content, you represent that you are authorized to do so and that the content does not infringe any rights or violate any law. You grant the Maintainer a non-exclusive, royalty-free license to use the submitted content to operate and improve the Site. Do not upload sensitive personal information. Do not attempt to access these features without authorization. </p><h2>8. Acceptable Use</h2><p>You agree not to:</p><ul><li>use the Site for any unlawful purpose or in violation of these Terms;</li><li>attempt to gain unauthorized access to the Site, its data, or any related systems;</li><li>interfere with or disrupt the Site, including through excessive automated requests; or</li><li>misrepresent the Site as being affiliated with or endorsed by CACC or the City of Chicago.</li></ul><h2>9. Intellectual Property and Trademarks</h2><p> Underlying factual data is sourced from public records and is presented for informational use. The Site's original design, layout, and code remain the property of the Maintainer. Trademarks, names, and logos referenced on the Site belong to their respective owners and are used only to identify the underlying public information. </p><p> "Chicago Animal Care &amp; Control," "City of Chicago," and any related municipal flag, star, or color iconography are the property of their respective owners and are used nominatively, for identification and civic-reference purposes only. Their use does not imply — and should not be read to imply — any ownership claim, affiliation, sponsorship, or endorsement, all of which are expressly disclaimed (see Section 1). </p><h2>10. Changes to These Terms</h2><p> The Maintainer may update these Terms at any time by posting a revised version on this page with a new effective date. Your continued use of the Site after changes take effect constitutes acceptance of the revised Terms. </p><h2>11. Governing Law and Venue</h2><p> These Terms and any dispute arising out of or relating to them or the Site are governed by the laws of the State of Illinois, without regard to its conflict-of-laws rules. You agree that the exclusive venue for any such dispute will be the state or federal courts located in Cook County, Illinois, and you consent to their personal jurisdiction. </p><h2>12. Severability</h2><p> If any provision of these Terms is held unenforceable, that provision will be limited or severed to the minimum extent necessary, and the remaining provisions will remain in full force and effect. </p><h2>13. Contact</h2><p> Questions about these Terms can be directed to the Site's maintainer. </p></article><div class=footer><span>Last Updated: November 13, 2026 12:18 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><article class=legal><h1>Terms of Use</h1><p class=effective>Effective date: October 23, 2026</p><p class=intro> Please read these Terms of Use ("Terms") carefully before using this website (the "Site"). By accessing or using the Site, you agree to be bound by these Terms. If you do not agree, please do not use the Site. </p><h2>1. About this Site</h2><p> This Site is an independent, non-commercial project developed and maintained by a volunteer at Chicago Animal Care &amp; Control ("CACC") residing in Chicago, Illinois (the "Maintainer"). It aggregates and re-displays information drawn from publicly available records and sources to help the public follow dogs in CACC's care. </p><p> The Site is <strong>not</strong> officially affiliated with, endorsed by, sponsored by, or a representative of CACC, the City of Chicago, or any other government agency. References to CACC and the City of Chicago are for identification and informational purposes only. All trademarks, names, and logos are the property of their respective owners. </p><h2>2. No Official or Professional Advice</h2><p> Content on the Site is provided for general informational purposes only and is not official guidance from CACC or the City of Chicago, nor legal, veterinary, or other professional advice. The Site is not a channel for adopting, reclaiming, surrendering, or reporting an animal. For any official action or information, contact CACC directly. </p><h2>3. Accuracy and No Reliance</h2><p> Information on the Site is gathered from third-party and public sources by automated means, may be incomplete or out of date, and is refreshed only periodically. The Maintainer does <strong>not</strong> guarantee the accuracy, completeness, currency, or availability of any information, including a dog's status, location, breed, behavior, availability, or whether it remains in CACC's care. </p><p><strong>Do not rely on the Site as a substitute for contacting CACC.</strong> Before making any decision or taking any action — including travel to a facility or any decision relating to adoption, rescue, transfer, or an animal's welfare — independently verify the information directly with CACC. You are solely responsible for any decision you make based on the Site. </p><h2>4. Disclaimer of Warranties</h2><p> THE SITE AND ALL CONTENT ARE PROVIDED "AS IS" AND "AS AVAILABLE," WITH ALL FAULTS AND WITHOUT WARRANTY OF ANY KIND. TO THE FULLEST EXTENT PERMITTED BY LAW, THE MAINTAINER DISCLAIMS ALL WARRANTIES, WHETHER EXPRESS, IMPLIED, OR STATUTORY, INCLUDING ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, ACCURACY, AND ANY WARRANTIES ARISING FROM COURSE OF DEALING OR USAGE OF TRADE. The Maintainer does not warrant that the Site will be uninterrupted, secure, or error-free. </p><h2>5. Limitation of Liability</h2><p> TO THE FULLEST EXTENT PERMITTED BY LAW, IN NO EVENT WILL THE MAINTAINER BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES, OR FOR ANY LOSS OF PROFITS, DATA, GOODWILL, OR OTHER INTANGIBLE LOSSES, ARISING OUT OF OR RELATING TO YOUR ACCESS TO OR USE OF (OR INABILITY TO USE) THE SITE OR ANY CONTENT, WHETHER BASED IN CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY, OR ANY OTHER LEGAL THEORY, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. </p><p> BECAUSE THE SITE IS PROVIDED FREE OF CHARGE, THE MAINTAINER'S TOTAL AGGREGATE LIABILITY ARISING OUT OF OR RELATING TO THE SITE WILL NOT EXCEED ONE HUNDRED U.S. DOLLARS ($100). Nothing in these Terms excludes or limits liability that cannot be excluded or limited under applicable law, including liability for willful and wanton misconduct. Some jurisdictions do not allow certain limitations, so some of the above may not apply to you. </p><h2>6. Third-Party Links and Services</h2><p> The Site links to and incorporates content and services operated by third parties (for example, social-media posts, adoption listings, mapping tiles, and analytics). The Maintainer does not control and is not responsible for the content, accuracy, availability, or practices of any third-party site or service. Your use of any third-party service is governed by that party's own terms and policies. </p><h2>7. Volunteer Uploads</h2><p> Walk-sheet uploads are open to visitors and are meant only for clear photos of current CACC pavilion walk sheets; uploads may be checked automatically, rejected, or reverted, and a volunteer passcode may be temporarily required. Other features (such as volunteer kennel corrections and administrator corrections) are intended only for authorized volunteers using a valid passcode. If you submit any content, you represent that you are authorized to do so and that the content does not infringe any rights or violate any law. You grant the Maintainer a non-exclusive, royalty-free license to use the submitted content to operate and improve the Site. Do not upload sensitive personal information. Do not attempt to access these features without authorization. </p><h2>8. Acceptable Use</h2><p>You agree not to:</p><ul><li>use the Site for any unlawful purpose or in violation of these Terms;</li><li>attempt to gain unauthorized access to the Site, its data, or any related systems;</li><li>interfere with or disrupt the Site, including through excessive automated requests; or</li><li>misrepresent the Site as being affiliated with or endorsed by CACC or the City of Chicago.</li></ul><h2>9. Intellectual Property and Trademarks</h2><p> Underlying factual data is sourced from public records and is presented for informational use. The Site's original design, layout, and code remain the property of the Maintainer. Trademarks, names, and logos referenced on the Site belong to their respective owners and are used only to identify the underlying public information. </p><p> "Chicago Animal Care &amp; Control," "City of Chicago," and any related municipal flag, star, or color iconography are the property of their respective owners and are used nominatively, for identification and civic-reference purposes only. Their use does not imply — and should not be read to imply — any ownership claim, affiliation, sponsorship, or endorsement, all of which are expressly disclaimed (see Section 1). </p><h2>10. Changes to These Terms</h2><p> The Maintainer may update these Terms at any time by posting a revised version on this page with a new effective date. Your continued use of the Site after changes take effect constitutes acceptance of the revised Terms. </p><h2>11. Governing Law and Venue</h2><p> These Terms and any dispute arising out of or relating to them or the Site are governed by the laws of the State of Illinois, without regard to its conflict-of-laws rules. You agree that the exclusive venue for any such dispute will be the state or federal courts located in Cook County, Illinois, and you consent to their personal jurisdiction. </p><h2>12. Severability</h2><p> If any provision of these Terms is held unenforceable, that provision will be limited or severed to the minimum extent necessary, and the remaining provisions will remain in full force and effect. </p><h2>13. Contact</h2><p> Questions about these Terms can be directed to the Site's maintainer. </p></article><div class=footer><span>Last Updated: November 13, 2026 12:23 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -620,7 +1491,7 @@
         //   removed_handoff_clicked   removed.html zero-result link to the dashboard search {matches}
         //   favorite_toggled          heart button on a dog card                {favorited}
         //   share_clicked             share button on a dog card                {method, dog_id}
-        //   legend_opened             dashboard legend modal opened             {}
+        //   legend_opened             dashboard legend modal opened             {source?: announcement}
         //   handling_notes_opened     volunteer handling-notes dialog opened    {dog_id, method: cue|add_cue|double_tap, has_notes}
         //   handling_add_clicked      link out to the volunteer visit form      {dog_id, source: dialog|empty|page, has_notes}
         //   volunteer_mode_changed    "＋ Notes on every card" switched         {on, source: page|dialog}
@@ -644,9 +1515,19 @@
         //   pwa_installed             browser's appinstalled event (Chrome/Edge) {page}
         //   pwa_launched              first page load of a session in an installed window {platform: ios|android|other, page}
         //   pwa_refresh_clicked       Reload control or "Updated · Refresh" pill {reason: manual|new_build, page}
+        //   pwa_install_opened        "Install app" link or Install card used   {source: announcement|footer|drawer|guide, target, page}
+        //   pwa_install_prompt        browser's own install prompt answered     {outcome: accepted|dismissed, source, page}
+        //   announcement_shown        corner announcement card shown            {id, n, page}
+        //   announcement_clicked      its action (Show me, Install...) used     {id, page}
+        //   announcement_dismissed    closed with x or Esc                      {id, method: x|esc, page}
         // pwa notes (partials/pwa.html, also on map.html): iOS has no install
         // event, so pwa_launched is its only signal. Every page view also
         // carries the session property display_mode (standalone | browser).
+        // target is pwaInstallTarget()'s browser id (ios-safari-26,
+        // android-chrome, ios-inapp...); pwa_install_opened fires whether the
+        // browser's prompt or the steps sheet opened. announcement notes
+        // (partials/announce.html): n is the show count for that id (2 = the
+        // one return visit); ?announce= and ?pwaTarget= previews track nothing.
         // data_loaded notes: restored=true marks a Back restore, where the event
         // fires before any render, so total_ms there excludes the first render;
         // payload-cost analyses filter on restored = false.
