@@ -597,6 +597,7 @@
     .announce-icon { flex: none; display: flex; align-items: center; justify-content: center; width: 34px; min-height: 34px; }
     .announce-icon img { width: 32px; height: 32px; border-radius: 8px; display: block; }
     .announce-icon .notes-ear-sample { transform: scale(0.74); margin: -4px -6px; }
+    .announce-icon .menu-bone-svg { width: 28px; height: 28px; }
     .announce-text { flex: 1 1 auto; min-width: 0; margin: 0; padding: 0; }
     .announce-text strong { font-weight: 700; }
     .announce-cta, .announce-x {
@@ -648,6 +649,10 @@
         return typeof NOTES_CUE_ICON === 'string'
             ? '<span class="notes-ear-sample"><span class="notes-ear-fold">' + NOTES_CUE_ICON + '</span></span>' : '';
     }
+    // The bone burger: navbar.html's MENU_BONE_ICON, read at show time.
+    function announceMenuIcon() {
+        return typeof MENU_BONE_ICON === 'string' ? MENU_BONE_ICON : '';
+    }
     function announceDrawerShown() {
         const btn = document.getElementById('mobileMenuBtn');
         return !!btn && btn.offsetParent !== null;
@@ -691,6 +696,25 @@
             later: function () {
                 return announceDrawerShown() ? 'It’s in the menu under Install app.' : 'It’s at the bottom of the page under Install app.';
             },
+        },
+        {
+            // Last, with no `after` and no `pages`. Array order puts it behind
+            // Notes and Install only on the dashboard; on Rescues, Breeds and
+            // Trends (no Notes there, Install waiting on Notes) it would be a
+            // phone visitor's first card, so minDays: 2 keeps it off day 1
+            // and Notes keeps the first-day slot (the owner's call). `after:
+            // 'install'` would hide it from every visitor who is never
+            // offered Install. Phones only (the button shows at 950px and
+            // below); opening the menu retires it.
+            id: 'menu',
+            icon: announceMenuIcon,
+            text: 'The bone opens the menu: Trends, Map, Rescues and more.',
+            cta: { label: 'Show me', run: function () { if (typeof menuSpotlight === 'function') menuSpotlight(); } },
+            eligible: function () { return typeof menuAnnounceEligible === 'function' && menuAnnounceEligible(); },
+            from: '2026-11-13',
+            until: '2027-02-28',
+            minDays: 2, // never on a visitor's first day
+            later: 'It’s the Menu button, top right, with the bone.',
         },
     ];
 
@@ -1483,8 +1507,13 @@
         --adopted-text: var(--success-text); --adopted-bg: var(--success-bg); --adopted-border: var(--success-border);
         
         --row-hover: #21262d;
+
+        /* Menu button's "bone burger" (MENU_BONE_ICON): a white bone between
+           two flag-blue bars; light mode outlines it so it shows on white. */
+        --menu-bone: #ffffff;
+        --menu-bone-edge: transparent;
     }
-    
+
     body.light-mode {
         --header-bg: rgba(255, 255, 255, 0.85);
         --nav-item-hover: rgba(0, 0, 0, 0.08);
@@ -1511,6 +1540,8 @@
         --hl-orange-text: #bc4c00; --hl-orange-bg: #FFF1E5; --hl-orange-border: #F0883E;
         
         --row-hover: #eaeef2;
+
+        --menu-bone-edge: var(--text-muted);
     }
 
     .site-header {
@@ -1614,6 +1645,34 @@
     .theme-toggle:hover, .mobile-menu-btn:hover { color: var(--text); border-color: var(--text-muted); }
     .mobile-menu-btn { display: none; border-radius: 6px; }
 
+    /* The "bone burger" (MENU_BONE_ICON, below). px only: map.html sets
+       html { font-size: 10px }. The bone wags once per page view until the
+       visitor first opens the menu (caccMenuFound), and the Menu
+       announcement's "Show me" (menuSpotlight) rings the button. */
+    .menu-bone-svg { width: 20px; height: 20px; display: block; overflow: visible; }
+    .menu-bone-bar { stroke: var(--accent); stroke-width: 2px; stroke-linecap: round; fill: none; }
+    .menu-bone { transform-box: view-box; transform-origin: 10px 10px; }
+    .menu-bone-edge { fill: var(--menu-bone-edge); stroke: var(--menu-bone-edge); stroke-width: 1.5px; }
+    .menu-bone-fill { fill: var(--menu-bone); }
+    .mobile-menu-btn.bone-spotlight { outline: 2px solid var(--accent); outline-offset: 2px; border-color: var(--accent); }
+    /* The strokes are fixed colours, so hover thickens the bars instead of
+       brightening them (the theme toggle beside it brightens). */
+    @media (hover: hover) {
+        .mobile-menu-btn:hover .menu-bone-bar { stroke-width: 2.5px; }
+    }
+    @keyframes menuBoneWag {
+        0%, 100% { transform: rotate(0deg); }
+        20% { transform: rotate(-12deg); }
+        40% { transform: rotate(10deg); }
+        60% { transform: rotate(-7deg); }
+        80% { transform: rotate(3deg); }
+    }
+    @keyframes menuBoneSpot { 0%, 100% { transform: scale(1); } 25%, 65% { transform: scale(1.25); } 45% { transform: scale(1.05); } }
+    @media (prefers-reduced-motion: no-preference) {
+        .mobile-menu-btn.bone-wag .menu-bone { animation: menuBoneWag 0.9s ease-in-out 0.6s 1; }
+        .mobile-menu-btn.bone-spotlight .menu-bone { animation: menuBoneSpot 0.9s ease-in-out 1; }
+    }
+
     /* Reload controls: an installed copy (html.pwa-standalone, set by
        partials/pwa.html) has no browser reload button. The header one shows
        only where the drawer is hidden; the drawer one covers phones. */
@@ -1652,7 +1711,7 @@
         .mobile-menu-btn { display: flex; }
         .pwa-standalone .theme-toggle.pwa-reload { display: none; }
     }
-</style><header class=site-header><div class=header-content><div class=brand-section><h1><a href=./ class=brand-link><i class="fas fa-paw brand-blue-paw"></i><svg class=chistar-svg viewbox="0 0 120 120" xmlns=http://www.w3.org/2000/svg><path fill=#E4002B d="M60 0 L71 41 L112 30 L82 60 L112 90 L71 79 L60 120 L49 79 L8 90 L38 60 L8 30 L49 41 Z"/></svg><span class=brand-chicago>CHI</span><span class=brand-divider>|</span><span class=brand-title> Breed Outcomes </span></a></h1></div><nav class=nav-links><a href=./ class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link active">Breeds</a><a href=upload.html class="nav-link ">Upload</a></nav><div class=actions><button type=button class="theme-toggle pwa-reload" onclick="pwaReload('manual')" title=Reload aria-label="Reload this page"><i class="fas fa-rotate-right" aria-hidden=true></i></button><button type=button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode" aria-label="Toggle dark or light mode"><i class="fas fa-moon" aria-hidden=true></i></button><button type=button class=mobile-menu-btn id=mobileMenuBtn onclick=toggleMobileMenu() aria-label=Menu aria-expanded=false aria-controls=mobileDrawer><i class="fas fa-bars" aria-hidden=true></i></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=./ class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link active"><i class="fas fa-paw" style=width:20px></i> Breeds</a><a href=upload.html class="mobile-link "><i class="fas fa-camera" style=width:20px aria-hidden=true></i> Upload</a><a href=notes.html class="mobile-link "><i class="fas fa-clipboard-list" style=width:20px aria-hidden=true></i> Log a visit</a><a href=feedback.html class="mobile-link "><i class="fas fa-comment-dots" style=width:20px aria-hidden=true></i> Feedback</a><button type=button class="mobile-link pwa-install-drawer" onclick="toggleMobileMenu(false); pwaOpenInstall('drawer')"><svg class=pwa-install-icon viewbox="0 0 16 16" width=20 height=16 aria-hidden=true focusable=false><rect x=4 y=1.5 width=8 height=13 rx=1.5 fill=none stroke=currentColor stroke-width=1.3 /><path fill=none stroke=currentColor stroke-width=1.3 stroke-linecap=round stroke-linejoin=round d="M8 4.5v5M6 7.75 8 9.75l2-2"/></svg> Install app</button><button type=button class="mobile-link pwa-reload-link" onclick="pwaReload('manual')"><i class="fas fa-rotate-right" style=width:20px aria-hidden=true></i> Reload</button></div></header><script>
+</style><header class=site-header><div class=header-content><div class=brand-section><h1><a href=./ class=brand-link><i class="fas fa-paw brand-blue-paw"></i><svg class=chistar-svg viewbox="0 0 120 120" xmlns=http://www.w3.org/2000/svg><path fill=#E4002B d="M60 0 L71 41 L112 30 L82 60 L112 90 L71 79 L60 120 L49 79 L8 90 L38 60 L8 30 L49 41 Z"/></svg><span class=brand-chicago>CHI</span><span class=brand-divider>|</span><span class=brand-title> Breed Outcomes </span></a></h1></div><nav class=nav-links><a href=./ class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link active">Breeds</a><a href=upload.html class="nav-link ">Upload</a></nav><div class=actions><button type=button class="theme-toggle pwa-reload" onclick="pwaReload('manual')" title=Reload aria-label="Reload this page"><i class="fas fa-rotate-right" aria-hidden=true></i></button><button type=button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode" aria-label="Toggle dark or light mode"><i class="fas fa-moon" aria-hidden=true></i></button><button type=button class=mobile-menu-btn id=mobileMenuBtn onclick=toggleMobileMenu() aria-label=Menu aria-expanded=false aria-controls=mobileDrawer></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=./ class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link active"><i class="fas fa-paw" style=width:20px></i> Breeds</a><a href=upload.html class="mobile-link "><i class="fas fa-camera" style=width:20px aria-hidden=true></i> Upload</a><a href=notes.html class="mobile-link "><i class="fas fa-clipboard-list" style=width:20px aria-hidden=true></i> Log a visit</a><a href=feedback.html class="mobile-link "><i class="fas fa-comment-dots" style=width:20px aria-hidden=true></i> Feedback</a><button type=button class="mobile-link pwa-install-drawer" onclick="toggleMobileMenu(false); pwaOpenInstall('drawer')"><svg class=pwa-install-icon viewbox="0 0 16 16" width=20 height=16 aria-hidden=true focusable=false><rect x=4 y=1.5 width=8 height=13 rx=1.5 fill=none stroke=currentColor stroke-width=1.3 /><path fill=none stroke=currentColor stroke-width=1.3 stroke-linecap=round stroke-linejoin=round d="M8 4.5v5M6 7.75 8 9.75l2-2"/></svg> Install app</button><button type=button class="mobile-link pwa-reload-link" onclick="pwaReload('manual')"><i class="fas fa-rotate-right" style=width:20px aria-hidden=true></i> Reload</button></div></header><script>
     // Keeps <meta name="theme-color"> (partials/pwa.html) in step with the
     // theme, so Android's status bar follows the visitor's choice. Reads --bg
     // from body, where body.light-mode sets the light value.
@@ -1674,11 +1733,89 @@
     try { if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode'); } catch (e) { /* storage blocked */ }
     syncThemeColor();
 
-    function toggleMobileMenu(force) {
-        const open = document.getElementById('mobileDrawer').classList.toggle('open', force);
+    // The menu button's icon, and the Menu announcement's (announce.html
+    // reads it behind a typeof guard, so this is the only copy). Inline SVG:
+    // the map loads an older Font Awesome. The bone is drawn twice, an
+    // outline layer (--menu-bone-edge, light mode only) under the fill, so
+    // the outline traces the whole shape rather than each knob.
+    const MENU_BONE_ICON = (function () {
+        const bone = '<rect x="5.5" y="8.9" width="9" height="2.2"/>'
+            + '<circle cx="5.4" cy="8.5" r="1.7"/><circle cx="5.4" cy="11.5" r="1.7"/>'
+            + '<circle cx="14.6" cy="8.5" r="1.7"/><circle cx="14.6" cy="11.5" r="1.7"/>';
+        return '<svg class="menu-bone-svg" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false">'
+            + '<path class="menu-bone-bar" d="M3 3.5h14M3 16.5h14"/>'
+            + '<g class="menu-bone"><g class="menu-bone-edge">' + bone + '</g><g class="menu-bone-fill">' + bone + '</g></g>'
+            + '</svg>';
+    })();
+    const MENU_FOUND_KEY = 'caccMenuFound'; // localStorage: the visitor has opened the menu
+    function menuFound() {
+        try { return !!localStorage.getItem(MENU_FOUND_KEY); } catch (e) { return false; }
+    }
+    (function () {
+        const btn = document.getElementById('mobileMenuBtn');
+        if (!btn) return;
+        btn.innerHTML = MENU_BONE_ICON;
+        // One wag per page view until the menu has been opened once
+        // (blocked storage: every view, which is harmless).
+        if (!menuFound()) btn.classList.add('bone-wag');
+    })();
+
+    // Page basename, as announce.html's announcePage() reports it, so
+    // menu_opened lines up with the announcement events (also on the map,
+    // which has no announce.html).
+    function menuPage() {
+        return String(location.pathname || '').split('/').pop().replace(/\.html$/, '') || 'index';
+    }
+    // After "Show me" opens the drawer, a tap on the button (plain toggle,
+    // no force) is ignored for this long, so it cannot close the menu the
+    // visitor was just shown. Esc and the drawer's own links still close it.
+    const MENU_CLOSE_GUARD_MS = 1500;
+    let menuCloseGuardUntil = 0;
+    // source: 'button' (default) or 'announcement'. The flag, the event and
+    // retiring the Menu card happen only on a closed-to-open transition.
+    // Under ?announce= QA nothing is written or tracked.
+    function toggleMobileMenu(force, source) {
+        const drawer = document.getElementById('mobileDrawer');
+        const was = drawer.classList.contains('open');
+        if (force === undefined && was && Date.now() < menuCloseGuardUntil) return true;
+        const open = drawer.classList.toggle('open', force);
         const btn = document.getElementById('mobileMenuBtn');
         if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (open && !was) {
+            const qa = typeof announceQaId === 'function' && !!announceQaId();
+            if (btn) btn.classList.remove('bone-wag');
+            if (typeof announceMarkDone === 'function') announceMarkDone('menu'); // a no-op write under QA
+            if (!qa) {
+                try { localStorage.setItem(MENU_FOUND_KEY, '1'); } catch (e) { /* storage blocked */ }
+                if (typeof track === 'function') track('menu_opened', { source: source || 'button', page: menuPage() });
+            }
+        }
         return open;
+    }
+    // The Menu announcement's eligibility: the button is showing (950px and
+    // below) and the visitor has never opened the menu.
+    function menuAnnounceEligible() {
+        return typeof announceDrawerShown === 'function' && announceDrawerShown() && !menuFound();
+    }
+    // The Menu announcement's "Show me": rings the button and pulses the
+    // bone, then opens the drawer and drops the ring. Reduced motion: the
+    // drawer at once, with the ring left on the button for a moment. Either
+    // way a tap on the button right after cannot close the drawer.
+    function menuSpotlight() {
+        const btn = document.getElementById('mobileMenuBtn');
+        if (!btn || btn.offsetParent === null) return;
+        btn.classList.remove('bone-wag', 'bone-spotlight');
+        void btn.offsetWidth; // restart the pulse
+        btn.classList.add('bone-spotlight');
+        const reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+        if (reduce) setTimeout(function () { btn.classList.remove('bone-spotlight'); }, MENU_CLOSE_GUARD_MS);
+        const openIt = function () {
+            if (!reduce) btn.classList.remove('bone-spotlight');
+            toggleMobileMenu(true, 'announcement');
+            menuCloseGuardUntil = Date.now() + MENU_CLOSE_GUARD_MS;
+            btn.focus({ preventScroll: true });
+        };
+        if (reduce) openIt(); else setTimeout(openIt, 900);
     }
     // Esc closes the drawer, but only when no <dialog> is open: then Esc
     // belongs to the dialog, and the drawer stays as it was underneath.
@@ -1689,7 +1826,7 @@
         const btn = document.getElementById('mobileMenuBtn');
         if (btn) btn.focus();
     });
-</script><div class=container id=main-content tabindex=-1><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart role=img aria-label="Population by Breed doughnut chart. Detailed data is available in the Detailed Statistics table below."></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart role=img aria-label="Outcome Rates by Breed normalized 100% stacked bar chart. Detailed data is available in the Detailed Statistics table below."></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart role=img aria-label="Gender Distribution by Breed bar chart."></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart role=img aria-label="Intake Source by Breed bar chart."></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart role=img aria-label="Median Age by Breed bar chart."></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable() aria-expanded=false><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: November 13, 2026 12:48 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart role=img aria-label="Population by Breed doughnut chart. Detailed data is available in the Detailed Statistics table below."></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart role=img aria-label="Outcome Rates by Breed normalized 100% stacked bar chart. Detailed data is available in the Detailed Statistics table below."></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart role=img aria-label="Gender Distribution by Breed bar chart."></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart role=img aria-label="Intake Source by Breed bar chart."></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart role=img aria-label="Median Age by Breed bar chart."></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable() aria-expanded=false><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: November 13, 2026 01:08 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -1745,6 +1882,7 @@
         //   announcement_shown        corner announcement card shown            {id, n, page}
         //   announcement_clicked      its action (Show me, Install...) used     {id, page}
         //   announcement_dismissed    closed with x or Esc                      {id, method: x|esc, page}
+        //   menu_opened               mobile menu drawer opened (closed to open) {source: button|announcement, page}
         // pwa notes (partials/pwa.html, also on map.html): iOS has no install
         // event, so pwa_launched is its only signal. Every page view also
         // carries the session property display_mode (standalone | browser).
