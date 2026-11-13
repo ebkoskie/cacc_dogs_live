@@ -637,7 +637,8 @@
     // from and until ('YYYY-MM-DD' in the visitor's own calendar; until is
     // required, and an entry without from is switched off); optional pages
     // (basenames, a subset of ANNOUNCE_PAGES); minDays (distinct days this
-    // visitor has been seen, default 0); later (required: the line shown after
+    // visitor has been seen, default 0); optional after (another entry's id:
+    // see announceAfterMet); later (required: the line shown after
     // closing it, saying where to find the thing again, so every announcement
     // has a permanent home).
     const ANNOUNCE_PAGES = ['index', 'rescues', 'breeds', 'trends'];
@@ -665,8 +666,9 @@
             later: 'The Guide explains the folded corner any time.',
         },
         {
-            // Switched off (no `from`) until the owner checks the install steps
-            // on real devices; the links and the sheet are live meanwhile.
+            // On since 2026-11-13, at the owner's call, before the real-device
+            // checks: until a target is marked verified in PWA_INSTALL_STEPS,
+            // "Show me how" opens the generic sentence for that browser.
             id: 'install',
             icon: '<img src="assets/icons/apple-touch-icon.png" alt="" width="32" height="32">',
             text: function () {
@@ -682,9 +684,10 @@
             eligible: function (opts) {
                 return typeof pwaInstallCardEligible === 'function' && pwaInstallCardEligible(!!(opts && opts.assumePrompt));
             },
-            from: null,
+            from: '2026-11-13',
             until: '2027-02-28',
-            minDays: 2,
+            after: 'notes', // on a later visit than the one that showed the Notes card
+            minDays: 2,     // when Notes is no longer live
             later: function () {
                 return announceDrawerShown() ? 'It’s in the menu under Install app.' : 'It’s at the bottom of the page under Install app.';
             },
@@ -763,6 +766,17 @@
         if (s.day !== today) { s.day = today; s.days = (Number(s.days) || 0) + 1; }
     }
 
+    // `after: id`: this entry waits for a later visit than the one that last
+    // showed `id` (with one card a day, a later day). Waived once `id` is no
+    // longer live (expired or switched off), so the wait cannot outlast it;
+    // minDays still applies then.
+    function announceAfterMet(id, seen, today) {
+        const first = announceEntry(id);
+        if (!first || !first.from || !first.until || today < first.from || today > first.until) return true;
+        const rec = seen[id];
+        return !!rec && !!rec.day && rec.day < today;
+    }
+
     // The first live, eligible, not-done entry for this page, or null. At
     // most one card per calendar day, across all entries.
     function announcePick(state, opts) {
@@ -779,6 +793,7 @@
             const rec = seen[e.id] || {};
             if (rec.done || (Number(rec.n) || 0) >= ANNOUNCE_MAX_SHOWS) continue;
             if ((Number(state.days) || 0) < (e.minDays || 0)) continue;
+            if (e.after && !announceAfterMet(e.after, seen, today)) continue;
             let ok = false;
             try { ok = !!e.eligible(opts || {}); } catch (err) { ok = false; }
             if (ok) return e;
@@ -1505,7 +1520,7 @@
         const btn = document.getElementById('mobileMenuBtn');
         if (btn) btn.focus();
     });
-</script><div class=container id=main-content tabindex=-1><div class=feedback-wrap><h1 class=feedback-title><i class="fas fa-comment-dots" aria-hidden=true></i> Feedback</h1><p class=feedback-intro> Spotted a bug, a wrong detail about a dog, or have an idea for the site? Tell us here. Notes are anonymous and go straight to the maintainer. </p><form id=feedbackForm class=card-panel novalidate><fieldset class=field><legend>What kind of note is this?</legend><div class=cat-chips><label class=cat-chip><input type=radio name=type value=idea><i class="fas fa-lightbulb" aria-hidden=true></i> Idea</label><label class=cat-chip><input type=radio name=type value=bug><i class="fas fa-bug" aria-hidden=true></i> Bug</label><label class=cat-chip><input type=radio name=type value=data><i class="fas fa-database" aria-hidden=true></i> Data error</label><label class=cat-chip><input type=radio name=type value=other><i class="fas fa-ellipsis-h" aria-hidden=true></i> Other</label></div></fieldset><label class=field for=fbTitle><span>Summary</span><input type=text id=fbTitle name=title maxlength=120 autocomplete=off placeholder='One line, e.g. "Map won&#39;t load on my phone"' required></label><label class=field for=fbBody><span>Details</span><textarea id=fbBody name=body rows=6 maxlength=2000 placeholder="What happened, which dog or page, what you expected…" required></textarea><small id=fbCount class="count muted" aria-live=polite>0 / 2000</small></label><label class=agree for=fbVolunteer><input type=checkbox id=fbVolunteer name=volunteer><span>I'm a CACC volunteer <small class=muted>(optional)</small></span></label><p class=muted> Please don't include your name or contact details. Your note is stored as a private GitHub issue for the maintainer; see the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>. </p><div id=ts-feedback class=ts-widget></div><button type=submit id=submitBtn class=primary-btn><i class="fas fa-paper-plane" aria-hidden=true></i> Send feedback </button><div id=feedbackStatus class=status role=status aria-live=polite></div></form></div><div class=footer><span>Last Updated: November 13, 2026 12:31 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><div class=feedback-wrap><h1 class=feedback-title><i class="fas fa-comment-dots" aria-hidden=true></i> Feedback</h1><p class=feedback-intro> Spotted a bug, a wrong detail about a dog, or have an idea for the site? Tell us here. Notes are anonymous and go straight to the maintainer. </p><form id=feedbackForm class=card-panel novalidate><fieldset class=field><legend>What kind of note is this?</legend><div class=cat-chips><label class=cat-chip><input type=radio name=type value=idea><i class="fas fa-lightbulb" aria-hidden=true></i> Idea</label><label class=cat-chip><input type=radio name=type value=bug><i class="fas fa-bug" aria-hidden=true></i> Bug</label><label class=cat-chip><input type=radio name=type value=data><i class="fas fa-database" aria-hidden=true></i> Data error</label><label class=cat-chip><input type=radio name=type value=other><i class="fas fa-ellipsis-h" aria-hidden=true></i> Other</label></div></fieldset><label class=field for=fbTitle><span>Summary</span><input type=text id=fbTitle name=title maxlength=120 autocomplete=off placeholder='One line, e.g. "Map won&#39;t load on my phone"' required></label><label class=field for=fbBody><span>Details</span><textarea id=fbBody name=body rows=6 maxlength=2000 placeholder="What happened, which dog or page, what you expected…" required></textarea><small id=fbCount class="count muted" aria-live=polite>0 / 2000</small></label><label class=agree for=fbVolunteer><input type=checkbox id=fbVolunteer name=volunteer><span>I'm a CACC volunteer <small class=muted>(optional)</small></span></label><p class=muted> Please don't include your name or contact details. Your note is stored as a private GitHub issue for the maintainer; see the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>. </p><div id=ts-feedback class=ts-widget></div><button type=submit id=submitBtn class=primary-btn><i class="fas fa-paper-plane" aria-hidden=true></i> Send feedback </button><div id=feedbackStatus class=status role=status aria-live=polite></div></form></div><div class=footer><span>Last Updated: November 13, 2026 12:48 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
