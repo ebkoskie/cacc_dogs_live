@@ -255,38 +255,58 @@
     // iPhone and iPad have no menu item for this: Add to Home Screen is in
     // the Share sheet, so every iOS target carries a lede that says so (the
     // generic "browser's menu" sentence sent visitors looking in the wrong
-    // place). Share is the only button a lede draws: where it hides differs
-    // by iOS version and toolbar layout (Safari 26 puts it behind "...",
-    // Safari 27 is reported to use a page menu instead, Safari 18 and older
-    // only hide the whole toolbar on scroll), so the fallback names no other
-    // icon. None of this is checked on a device yet; the exact steps still
-    // wait for `verified`, one target per Safari generation.
-    // No punctuation directly after an icon: it would wrap to the next line
-    // on its own.
-    const PWA_IOS_SAFARI_LEDE = 'Tap [share] and then Add to Home Screen (scroll down or tap View More if you don’t see it). If [share] is not showing, it is inside a menu button next to the address bar.';
-    const PWA_IOS_SAFARI_OLD_LEDE = 'Tap [share] and then Add to Home Screen (scroll down if you don’t see it). If [share] is not showing, tap the address bar to bring the toolbar back.';
-    const PWA_IOS_OTHER_LEDE = 'Tap [share] and then Add to Home Screen (scroll down or tap View More if you don’t see it). If [share] is not showing, open your browser’s menu and tap Share.';
+    // place).
+    //
+    // What each lede rests on (researched 2026-11-14; docs/frontend.md has the
+    // sources). A lede must be true on every toolbar layout of its browser,
+    // because the page cannot tell which layout a visitor uses.
+    // - Safari 26, default Compact layout: Share is behind "..." next to the
+    //   address bar. Bottom and Top layouts show a Share button. Seen on the
+    //   owner's iPhone (Safari 26.6.1, 2026-11-13): "...", Share, View More,
+    //   then Add to Home Screen; the last tap was not made.
+    // - Safari 27, default Compact layout: Apple's guide puts Share inside
+    //   the Page Menu button at the left of the address bar ("..." became a
+    //   Tabs button); touch and hold on the address bar also offers Share.
+    //   Bottom and Top layouts show a Share button. NOT checked on a device.
+    // - Since iOS 26 the share sheet opens collapsed: Add to Home Screen is
+    //   behind its fourth button ("View More" from 26.3, "More" before) or a
+    //   swipe up. iOS 18 and older: one scrolling list.
+    // - Safari 18 and older: Share is in the toolbar, which hides on scroll.
+    // - iPad: Share is in the toolbar at the top.
+    // - Chrome on iPhone (from its source): Share at the right of the address
+    //   bar in portrait, and always "Share..." in the "..." menu.
+    // - Brave on iPhone has no Add to Home Screen at all (from its source).
+    // An icon is drawn only where a device check or the vendor's own text
+    // backs it; Safari 27's Page Menu icon is unsettled, so it is described
+    // by position. No punctuation directly after an icon: it would wrap to
+    // the next line on its own.
+    const PWA_NOTE_FIND = 'Can’t find Add to Home Screen? Swipe the list up, or scroll to its end and tap Edit Actions.';
+    const PWA_NOTE_FIND_OLD = 'Can’t find Add to Home Screen? Scroll to the end of the list and tap Edit Actions.';
+    const PWA_NOTE_SAFARI_FAVS = 'Favorites saved in Safari stay in Safari. Save them again in the app.';
+    const PWA_IOS_OTHER_LEDE = 'Tap [share] if your browser shows it, or open its menu and choose Share. Then tap Add to Home Screen, which may be under View More.';
     const PWA_INSTALL_STEPS = {
-        // Drafted from secondhand descriptions of Safari 27's default (Compact)
-        // toolbar, which agree that Share is inside the Page Menu button to
-        // the left of the address bar. Not checked on a device.
-        'ios-safari-27': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_SAFARI_LEDE,
-            steps: ['Tap the Page Menu button left of the address bar, then tap [share]',
-                    'Scroll down or tap View More, then tap Add to Home Screen', 'Tap Add'],
-            notes: ['No Add to Home Screen in the list? Open this page in Safari first.',
-                    'Favorites saved in Safari stay in Safari. Save them again in the app.'] },
-        'ios-safari-26': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_SAFARI_LEDE,
+        'ios-safari-27': { card: 'yes', family: 'phone', verified: false,
+            lede: 'Tap the button at the left of the address bar and choose Share (or tap [share] if your toolbar shows it). Then tap View More and Add to Home Screen.',
+            steps: ['Tap the button at the left of the address bar, then tap Share',
+                    'Tap View More, then tap Add to Home Screen', 'Tap Add'],
+            notes: ['No button there? Touch and hold the address bar and choose Share.', PWA_NOTE_FIND, PWA_NOTE_SAFARI_FAVS] },
+        'ios-safari-26': { card: 'yes', family: 'phone', verified: false,
+            lede: 'Tap [more] next to the address bar and choose Share (or tap [share] if your toolbar shows it). Then tap View More and Add to Home Screen.',
             steps: ['Tap [more] next to the address bar, then tap [share]',
-                    'Scroll down and tap Add to Home Screen', 'Tap Add'],
-            notes: ['No Add to Home Screen in the list? Open this page in Safari first.',
-                    'Favorites saved in Safari stay in Safari. Save them again in the app.'] },
-        'ios-safari': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_SAFARI_OLD_LEDE,
+                    'Tap View More, then tap Add to Home Screen', 'Tap Add'],
+            notes: [PWA_NOTE_FIND, PWA_NOTE_SAFARI_FAVS] },
+        'ios-safari': { card: 'yes', family: 'phone', verified: false,
+            lede: 'Tap [share] in Safari’s toolbar. Then scroll down the list and tap Add to Home Screen.',
             steps: ['Tap [share] in the toolbar', 'Scroll down and tap Add to Home Screen', 'Tap Add'],
-            notes: ['No Add to Home Screen in the list? Open this page in Safari first.',
-                    'Favorites saved in Safari stay in Safari. Save them again in the app.'] },
-        'ios-chrome': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_OTHER_LEDE,
+            notes: ['Toolbar hidden? Scroll up a little or tap the address bar.', PWA_NOTE_FIND_OLD, PWA_NOTE_SAFARI_FAVS] },
+        'ipad-safari': { card: 'yes', family: 'phone', verified: false,
+            lede: 'Tap [share] in the toolbar at the top of the screen. Then tap Add to Home Screen, which may be under View More.',
+            steps: ['Tap [share] in the toolbar at the top', 'Tap View More, then tap Add to Home Screen', 'Tap Add'],
+            notes: [PWA_NOTE_FIND_OLD, PWA_NOTE_SAFARI_FAVS] },
+        'ios-chrome': { card: 'yes', family: 'phone', verified: false,
+            lede: 'Tap [share] at the right of the address bar, or open the [more] menu and choose Share. Then tap Add to Home Screen, which may be under View More.',
             steps: ['Tap [share] in the address bar', 'Scroll down and tap Add to Home Screen', 'Tap Add'],
-            notes: ['Favorites saved in Chrome stay in Chrome. Save them again in the app.'] },
+            notes: [PWA_NOTE_FIND, 'Favorites saved in Chrome stay in Chrome. Save them again in the app.'] },
         'android-chrome': { card: 'yes', family: 'phone', verified: false,
             steps: ['Tap [menu] at the top right', 'Tap Add to Home screen', 'Tap Install'] },
         'samsung': { card: 'prompt', family: 'phone', verified: false,
@@ -305,7 +325,9 @@
         'ios-inapp': { card: 'no', family: 'phone', inapp: 'Safari' },
         'android-inapp': { card: 'no', family: 'phone', inapp: 'Chrome' },
         'ios-other': { card: 'no', family: 'phone', lede: PWA_IOS_OTHER_LEDE,
-            notes: ['No Add to Home Screen in the list? Open this page in Safari first.'] },
+            notes: ['No Add to Home Screen in the list? Open this page in Safari.'] },
+        'ios-brave': { card: 'no', family: 'phone',
+            lede: 'Brave on iPhone and iPad can’t add pages to the Home Screen. Open this page in Safari to add it.' },
         'android-other': { card: 'no', family: 'phone' },
         // lede replaces the generic sentence where that would send the visitor
         // looking for a menu item their browser does not have.
@@ -332,20 +354,29 @@
         close: { label: 'Close', svg: '<path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>' },
     };
 
-    // Which browser this is (a pure function of the UA, for the tests). iOS
-    // without a Safari/ token is a webview; iPadOS asks for the Mac page, so
-    // touch points tell it apart from a Mac.
-    function pwaDetectInstallTarget(ua, platform, touchPoints) {
+    // Which browser this is (a pure function of its arguments, for the
+    // tests). iOS without a Safari/ token is a webview, though newer Meta
+    // webviews carry one, hence the app tokens; iPadOS asks for the Mac page,
+    // so touch points tell it apart from a Mac. Browsers that add their own
+    // token to Safari's UA (Brave, DuckDuckGo, Ecosia, Edge, Firefox, Opera)
+    // are tested before Safari. brave is navigator.brave, which older Brave
+    // builds have while still sending Safari's exact UA. A Safari view inside
+    // another app, and Firefox on iPad, send Safari's UA and cannot be told
+    // apart; Safari views have offered Add to Home Screen since iOS 17.
+    function pwaDetectInstallTarget(ua, platform, touchPoints, brave) {
         ua = ua || '';
-        const ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && platform === 'MacIntel' && touchPoints > 1);
-        const inapp = /FBAN|FBAV|FB_IAB|FBIOS|Instagram|LinkedInApp|Snapchat|Pinterest|TikTok|musical_ly|Line\/|GSA\/|Twitter/.test(ua);
+        const ipad = /iPad/.test(ua) || (/Macintosh/.test(ua) && platform === 'MacIntel' && touchPoints > 1);
+        const ios = ipad || /iPhone|iPod/.test(ua);
+        const inapp = /FBAN|FBAV|FB_IAB|FBIOS|MetaIAB|Instagram|LinkedInApp|Snapchat|Pinterest|TikTok|musical_ly|BytedanceWebview|MicroMessenger|Line\/|GSA\/|Twitter/.test(ua);
         let v;
         if (ios) {
             if (inapp || !/Safari\//.test(ua)) return 'ios-inapp';
+            if (brave || /\bBrave\b/.test(ua)) return 'ios-brave';
             if (/CriOS\//.test(ua)) return 'ios-chrome';
-            if (/FxiOS|EdgiOS|OPiOS|OPT\/|YaBrowser|DuckDuckGo/.test(ua)) return 'ios-other';
+            if (/FxiOS|EdgiOS|OPiOS|OPT\/|YaBrowser|DuckDuckGo|Ddg\/|Ecosia/.test(ua)) return 'ios-other';
             v = /Version\/(\d+)/.exec(ua);
             if (!v) return 'ios-other';
+            if (ipad) return 'ipad-safari';
             // One target per Safari generation whose toolbar differs, so the
             // owner can verify each one's steps separately.
             if (Number(v[1]) >= 27) return 'ios-safari-27';
@@ -385,7 +416,7 @@
         return !!pwaQaTarget() || (typeof announceQaId === 'function' && !!announceQaId());
     }
     function pwaInstallTarget() {
-        return pwaQaTarget() || pwaDetectInstallTarget(navigator.userAgent, navigator.platform, navigator.maxTouchPoints);
+        return pwaQaTarget() || pwaDetectInstallTarget(navigator.userAgent, navigator.platform, navigator.maxTouchPoints, !!navigator.brave);
     }
 
     // Remembered once the app was added (appinstalled, an accepted prompt, or
@@ -1708,7 +1739,7 @@
         const btn = document.getElementById('mobileMenuBtn');
         if (btn) btn.focus();
     });
-</script><div class=container id=main-content tabindex=-1><article class=guide><h1><i class="fas fa-clipboard-list" aria-hidden=true></i> Log a handling visit</h1><p class=lede> Walked or handled an adoptable dog at CACC? Log it on the volunteer team's handling form. Your notes help other volunteers, staff and adopters know how the dog does on leash, around people and around other dogs. </p><section class=guide-hero aria-label=Start><a class=guide-cta id=openForm href=https://docs.google.com/forms/d/e/1FAIpQLSewSDIB4-pA6KDs07Z7Lz6sUsWw0O_C68Fj1u5Pt3ZGSzkOWQ/viewform target=_blank rel=noopener><i class="fas fa-pen" aria-hidden=true></i> Open the visit form<span class=visually-hidden> (opens in a new tab)</span></a><p class=guide-fine>Opens the CACC volunteer Google Form in a new tab. You need to be signed in to Google.</p><p class=tip><strong>Tip:</strong> start from a dog's notes on the <a href=./ >dashboard</a> instead. The form then opens with the dog's name and ID already filled in.</p></section><h2 id=how-it-works>How it works</h2><ol class=steps><li>After your visit, open the dog's notes on the dashboard and tap <strong>Add your visit</strong> (for a dog without notes, turn on <a href=#volunteer-mode>＋ Notes</a> below), or use the blank form above.</li><li>The volunteer team reviews new visits before they are published.</li><li>Reviewed visits appear in the dog's notes on cacc.dog the next time the site updates, so yours won't show right away.</li></ol><h2 id=what-to-log>What to log</h2><p>The form asks about:</p><ul class=log-list><li>Activities you did together (walk, playgroup, adoption showing, and so on)</li><li>Leash manners</li><li>Energy level</li><li>How the dog took to being handled (interactions with you)</li><li>Interests: toys, treats, cuddling, fetch, sniffing</li><li>Commands or tricks the dog knows</li><li>Reaction to other dogs</li><li>Adoption showings</li><li>Whether the dog was cat tested</li><li>Any concerning behaviours</li><li>A free-text note in your own words</li><li>Your name and the date of the visit</li></ul><h2 id=what-shows>What shows on cacc.dog</h2><div class=vis-grid><div class="vis-card shown"><h3><i class="fas fa-eye" aria-hidden=true></i> Shown publicly</h3><ul><li>Date of the visit</li><li>Activities</li><li>Leash manners</li><li>Energy level</li><li>Handling interactions</li><li>Interests</li><li>Commands or tricks</li><li>Reaction to other dogs</li><li>Cat tested</li><li>Your free-text note</li></ul></div><div class="vis-card hidden-list"><h3><i class="fas fa-eye-slash" aria-hidden=true></i> Never shown</h3><ul><li>Your name</li><li>Your email address</li><li>Adoption showing answers</li><li>Concerning behaviours</li></ul></div></div><p>Notes appear only after the volunteer team reviews them. Anything in the free-text note is public, so keep names, phone numbers and other personal details out of it.</p><p>For a dog with two or more visits, an automated summary may be shown above the reviewed notes. It is generated from those notes by software and is not itself reviewed; the notes below it are the record.</p><h2 id=volunteer-mode>Show ＋ Notes on every card</h2><p>Turn this on and every dog without notes gets a dashed <strong>＋</strong> corner on the dashboard, and double-tapping any card opens its notes, so you can start a visit for any dog in one tap. The setting is kept in this browser only.</p><div class=vm-row><label for=vmSwitch><input type=checkbox role=switch id=vmSwitch class=vm-switch> Show ＋ Notes on every card </label><span class=vm-state id=vmState aria-hidden=true>Off</span></div><p class=vm-msg id=vmMsg role=status></p><h2 id=form-paused>If the form won't open</h2><div class=note-box><p style=margin:0>If the form says it is no longer accepting responses, it has been paused by the volunteer team. Contact your volunteer coordinator.</p></div></article><div class=footer><span>Last Updated: November 14, 2026 06:19 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><article class=guide><h1><i class="fas fa-clipboard-list" aria-hidden=true></i> Log a handling visit</h1><p class=lede> Walked or handled an adoptable dog at CACC? Log it on the volunteer team's handling form. Your notes help other volunteers, staff and adopters know how the dog does on leash, around people and around other dogs. </p><section class=guide-hero aria-label=Start><a class=guide-cta id=openForm href=https://docs.google.com/forms/d/e/1FAIpQLSewSDIB4-pA6KDs07Z7Lz6sUsWw0O_C68Fj1u5Pt3ZGSzkOWQ/viewform target=_blank rel=noopener><i class="fas fa-pen" aria-hidden=true></i> Open the visit form<span class=visually-hidden> (opens in a new tab)</span></a><p class=guide-fine>Opens the CACC volunteer Google Form in a new tab. You need to be signed in to Google.</p><p class=tip><strong>Tip:</strong> start from a dog's notes on the <a href=./ >dashboard</a> instead. The form then opens with the dog's name and ID already filled in.</p></section><h2 id=how-it-works>How it works</h2><ol class=steps><li>After your visit, open the dog's notes on the dashboard and tap <strong>Add your visit</strong> (for a dog without notes, turn on <a href=#volunteer-mode>＋ Notes</a> below), or use the blank form above.</li><li>The volunteer team reviews new visits before they are published.</li><li>Reviewed visits appear in the dog's notes on cacc.dog the next time the site updates, so yours won't show right away.</li></ol><h2 id=what-to-log>What to log</h2><p>The form asks about:</p><ul class=log-list><li>Activities you did together (walk, playgroup, adoption showing, and so on)</li><li>Leash manners</li><li>Energy level</li><li>How the dog took to being handled (interactions with you)</li><li>Interests: toys, treats, cuddling, fetch, sniffing</li><li>Commands or tricks the dog knows</li><li>Reaction to other dogs</li><li>Adoption showings</li><li>Whether the dog was cat tested</li><li>Any concerning behaviours</li><li>A free-text note in your own words</li><li>Your name and the date of the visit</li></ul><h2 id=what-shows>What shows on cacc.dog</h2><div class=vis-grid><div class="vis-card shown"><h3><i class="fas fa-eye" aria-hidden=true></i> Shown publicly</h3><ul><li>Date of the visit</li><li>Activities</li><li>Leash manners</li><li>Energy level</li><li>Handling interactions</li><li>Interests</li><li>Commands or tricks</li><li>Reaction to other dogs</li><li>Cat tested</li><li>Your free-text note</li></ul></div><div class="vis-card hidden-list"><h3><i class="fas fa-eye-slash" aria-hidden=true></i> Never shown</h3><ul><li>Your name</li><li>Your email address</li><li>Adoption showing answers</li><li>Concerning behaviours</li></ul></div></div><p>Notes appear only after the volunteer team reviews them. Anything in the free-text note is public, so keep names, phone numbers and other personal details out of it.</p><p>For a dog with two or more visits, an automated summary may be shown above the reviewed notes. It is generated from those notes by software and is not itself reviewed; the notes below it are the record.</p><h2 id=volunteer-mode>Show ＋ Notes on every card</h2><p>Turn this on and every dog without notes gets a dashed <strong>＋</strong> corner on the dashboard, and double-tapping any card opens its notes, so you can start a visit for any dog in one tap. The setting is kept in this browser only.</p><div class=vm-row><label for=vmSwitch><input type=checkbox role=switch id=vmSwitch class=vm-switch> Show ＋ Notes on every card </label><span class=vm-state id=vmState aria-hidden=true>Off</span></div><p class=vm-msg id=vmMsg role=status></p><h2 id=form-paused>If the form won't open</h2><div class=note-box><p style=margin:0>If the form says it is no longer accepting responses, it has been paused by the volunteer team. Contact your volunteer coordinator.</p></div></article><div class=footer><span>Last Updated: November 14, 2026 09:08 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;

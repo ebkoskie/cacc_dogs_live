@@ -255,38 +255,58 @@
     // iPhone and iPad have no menu item for this: Add to Home Screen is in
     // the Share sheet, so every iOS target carries a lede that says so (the
     // generic "browser's menu" sentence sent visitors looking in the wrong
-    // place). Share is the only button a lede draws: where it hides differs
-    // by iOS version and toolbar layout (Safari 26 puts it behind "...",
-    // Safari 27 is reported to use a page menu instead, Safari 18 and older
-    // only hide the whole toolbar on scroll), so the fallback names no other
-    // icon. None of this is checked on a device yet; the exact steps still
-    // wait for `verified`, one target per Safari generation.
-    // No punctuation directly after an icon: it would wrap to the next line
-    // on its own.
-    const PWA_IOS_SAFARI_LEDE = 'Tap [share] and then Add to Home Screen (scroll down or tap View More if you don’t see it). If [share] is not showing, it is inside a menu button next to the address bar.';
-    const PWA_IOS_SAFARI_OLD_LEDE = 'Tap [share] and then Add to Home Screen (scroll down if you don’t see it). If [share] is not showing, tap the address bar to bring the toolbar back.';
-    const PWA_IOS_OTHER_LEDE = 'Tap [share] and then Add to Home Screen (scroll down or tap View More if you don’t see it). If [share] is not showing, open your browser’s menu and tap Share.';
+    // place).
+    //
+    // What each lede rests on (researched 2026-11-14; docs/frontend.md has the
+    // sources). A lede must be true on every toolbar layout of its browser,
+    // because the page cannot tell which layout a visitor uses.
+    // - Safari 26, default Compact layout: Share is behind "..." next to the
+    //   address bar. Bottom and Top layouts show a Share button. Seen on the
+    //   owner's iPhone (Safari 26.6.1, 2026-11-13): "...", Share, View More,
+    //   then Add to Home Screen; the last tap was not made.
+    // - Safari 27, default Compact layout: Apple's guide puts Share inside
+    //   the Page Menu button at the left of the address bar ("..." became a
+    //   Tabs button); touch and hold on the address bar also offers Share.
+    //   Bottom and Top layouts show a Share button. NOT checked on a device.
+    // - Since iOS 26 the share sheet opens collapsed: Add to Home Screen is
+    //   behind its fourth button ("View More" from 26.3, "More" before) or a
+    //   swipe up. iOS 18 and older: one scrolling list.
+    // - Safari 18 and older: Share is in the toolbar, which hides on scroll.
+    // - iPad: Share is in the toolbar at the top.
+    // - Chrome on iPhone (from its source): Share at the right of the address
+    //   bar in portrait, and always "Share..." in the "..." menu.
+    // - Brave on iPhone has no Add to Home Screen at all (from its source).
+    // An icon is drawn only where a device check or the vendor's own text
+    // backs it; Safari 27's Page Menu icon is unsettled, so it is described
+    // by position. No punctuation directly after an icon: it would wrap to
+    // the next line on its own.
+    const PWA_NOTE_FIND = 'Can’t find Add to Home Screen? Swipe the list up, or scroll to its end and tap Edit Actions.';
+    const PWA_NOTE_FIND_OLD = 'Can’t find Add to Home Screen? Scroll to the end of the list and tap Edit Actions.';
+    const PWA_NOTE_SAFARI_FAVS = 'Favorites saved in Safari stay in Safari. Save them again in the app.';
+    const PWA_IOS_OTHER_LEDE = 'Tap [share] if your browser shows it, or open its menu and choose Share. Then tap Add to Home Screen, which may be under View More.';
     const PWA_INSTALL_STEPS = {
-        // Drafted from secondhand descriptions of Safari 27's default (Compact)
-        // toolbar, which agree that Share is inside the Page Menu button to
-        // the left of the address bar. Not checked on a device.
-        'ios-safari-27': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_SAFARI_LEDE,
-            steps: ['Tap the Page Menu button left of the address bar, then tap [share]',
-                    'Scroll down or tap View More, then tap Add to Home Screen', 'Tap Add'],
-            notes: ['No Add to Home Screen in the list? Open this page in Safari first.',
-                    'Favorites saved in Safari stay in Safari. Save them again in the app.'] },
-        'ios-safari-26': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_SAFARI_LEDE,
+        'ios-safari-27': { card: 'yes', family: 'phone', verified: false,
+            lede: 'Tap the button at the left of the address bar and choose Share (or tap [share] if your toolbar shows it). Then tap View More and Add to Home Screen.',
+            steps: ['Tap the button at the left of the address bar, then tap Share',
+                    'Tap View More, then tap Add to Home Screen', 'Tap Add'],
+            notes: ['No button there? Touch and hold the address bar and choose Share.', PWA_NOTE_FIND, PWA_NOTE_SAFARI_FAVS] },
+        'ios-safari-26': { card: 'yes', family: 'phone', verified: false,
+            lede: 'Tap [more] next to the address bar and choose Share (or tap [share] if your toolbar shows it). Then tap View More and Add to Home Screen.',
             steps: ['Tap [more] next to the address bar, then tap [share]',
-                    'Scroll down and tap Add to Home Screen', 'Tap Add'],
-            notes: ['No Add to Home Screen in the list? Open this page in Safari first.',
-                    'Favorites saved in Safari stay in Safari. Save them again in the app.'] },
-        'ios-safari': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_SAFARI_OLD_LEDE,
+                    'Tap View More, then tap Add to Home Screen', 'Tap Add'],
+            notes: [PWA_NOTE_FIND, PWA_NOTE_SAFARI_FAVS] },
+        'ios-safari': { card: 'yes', family: 'phone', verified: false,
+            lede: 'Tap [share] in Safari’s toolbar. Then scroll down the list and tap Add to Home Screen.',
             steps: ['Tap [share] in the toolbar', 'Scroll down and tap Add to Home Screen', 'Tap Add'],
-            notes: ['No Add to Home Screen in the list? Open this page in Safari first.',
-                    'Favorites saved in Safari stay in Safari. Save them again in the app.'] },
-        'ios-chrome': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_OTHER_LEDE,
+            notes: ['Toolbar hidden? Scroll up a little or tap the address bar.', PWA_NOTE_FIND_OLD, PWA_NOTE_SAFARI_FAVS] },
+        'ipad-safari': { card: 'yes', family: 'phone', verified: false,
+            lede: 'Tap [share] in the toolbar at the top of the screen. Then tap Add to Home Screen, which may be under View More.',
+            steps: ['Tap [share] in the toolbar at the top', 'Tap View More, then tap Add to Home Screen', 'Tap Add'],
+            notes: [PWA_NOTE_FIND_OLD, PWA_NOTE_SAFARI_FAVS] },
+        'ios-chrome': { card: 'yes', family: 'phone', verified: false,
+            lede: 'Tap [share] at the right of the address bar, or open the [more] menu and choose Share. Then tap Add to Home Screen, which may be under View More.',
             steps: ['Tap [share] in the address bar', 'Scroll down and tap Add to Home Screen', 'Tap Add'],
-            notes: ['Favorites saved in Chrome stay in Chrome. Save them again in the app.'] },
+            notes: [PWA_NOTE_FIND, 'Favorites saved in Chrome stay in Chrome. Save them again in the app.'] },
         'android-chrome': { card: 'yes', family: 'phone', verified: false,
             steps: ['Tap [menu] at the top right', 'Tap Add to Home screen', 'Tap Install'] },
         'samsung': { card: 'prompt', family: 'phone', verified: false,
@@ -305,7 +325,9 @@
         'ios-inapp': { card: 'no', family: 'phone', inapp: 'Safari' },
         'android-inapp': { card: 'no', family: 'phone', inapp: 'Chrome' },
         'ios-other': { card: 'no', family: 'phone', lede: PWA_IOS_OTHER_LEDE,
-            notes: ['No Add to Home Screen in the list? Open this page in Safari first.'] },
+            notes: ['No Add to Home Screen in the list? Open this page in Safari.'] },
+        'ios-brave': { card: 'no', family: 'phone',
+            lede: 'Brave on iPhone and iPad can’t add pages to the Home Screen. Open this page in Safari to add it.' },
         'android-other': { card: 'no', family: 'phone' },
         // lede replaces the generic sentence where that would send the visitor
         // looking for a menu item their browser does not have.
@@ -332,20 +354,29 @@
         close: { label: 'Close', svg: '<path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>' },
     };
 
-    // Which browser this is (a pure function of the UA, for the tests). iOS
-    // without a Safari/ token is a webview; iPadOS asks for the Mac page, so
-    // touch points tell it apart from a Mac.
-    function pwaDetectInstallTarget(ua, platform, touchPoints) {
+    // Which browser this is (a pure function of its arguments, for the
+    // tests). iOS without a Safari/ token is a webview, though newer Meta
+    // webviews carry one, hence the app tokens; iPadOS asks for the Mac page,
+    // so touch points tell it apart from a Mac. Browsers that add their own
+    // token to Safari's UA (Brave, DuckDuckGo, Ecosia, Edge, Firefox, Opera)
+    // are tested before Safari. brave is navigator.brave, which older Brave
+    // builds have while still sending Safari's exact UA. A Safari view inside
+    // another app, and Firefox on iPad, send Safari's UA and cannot be told
+    // apart; Safari views have offered Add to Home Screen since iOS 17.
+    function pwaDetectInstallTarget(ua, platform, touchPoints, brave) {
         ua = ua || '';
-        const ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && platform === 'MacIntel' && touchPoints > 1);
-        const inapp = /FBAN|FBAV|FB_IAB|FBIOS|Instagram|LinkedInApp|Snapchat|Pinterest|TikTok|musical_ly|Line\/|GSA\/|Twitter/.test(ua);
+        const ipad = /iPad/.test(ua) || (/Macintosh/.test(ua) && platform === 'MacIntel' && touchPoints > 1);
+        const ios = ipad || /iPhone|iPod/.test(ua);
+        const inapp = /FBAN|FBAV|FB_IAB|FBIOS|MetaIAB|Instagram|LinkedInApp|Snapchat|Pinterest|TikTok|musical_ly|BytedanceWebview|MicroMessenger|Line\/|GSA\/|Twitter/.test(ua);
         let v;
         if (ios) {
             if (inapp || !/Safari\//.test(ua)) return 'ios-inapp';
+            if (brave || /\bBrave\b/.test(ua)) return 'ios-brave';
             if (/CriOS\//.test(ua)) return 'ios-chrome';
-            if (/FxiOS|EdgiOS|OPiOS|OPT\/|YaBrowser|DuckDuckGo/.test(ua)) return 'ios-other';
+            if (/FxiOS|EdgiOS|OPiOS|OPT\/|YaBrowser|DuckDuckGo|Ddg\/|Ecosia/.test(ua)) return 'ios-other';
             v = /Version\/(\d+)/.exec(ua);
             if (!v) return 'ios-other';
+            if (ipad) return 'ipad-safari';
             // One target per Safari generation whose toolbar differs, so the
             // owner can verify each one's steps separately.
             if (Number(v[1]) >= 27) return 'ios-safari-27';
@@ -385,7 +416,7 @@
         return !!pwaQaTarget() || (typeof announceQaId === 'function' && !!announceQaId());
     }
     function pwaInstallTarget() {
-        return pwaQaTarget() || pwaDetectInstallTarget(navigator.userAgent, navigator.platform, navigator.maxTouchPoints);
+        return pwaQaTarget() || pwaDetectInstallTarget(navigator.userAgent, navigator.platform, navigator.maxTouchPoints, !!navigator.brave);
     }
 
     // Remembered once the app was added (appinstalled, an accepted prompt, or
@@ -1700,7 +1731,7 @@
         const btn = document.getElementById('mobileMenuBtn');
         if (btn) btn.focus();
     });
-</script><div class=container id=main-content tabindex=-1><div class=feedback-wrap><h1 class=feedback-title><i class="fas fa-comment-dots" aria-hidden=true></i> Feedback</h1><p class=feedback-intro> Spotted a bug, a wrong detail about a dog, or have an idea for the site? Tell us here. Notes are anonymous and go straight to the maintainer. </p><form id=feedbackForm class=card-panel novalidate><fieldset class=field><legend>What kind of note is this?</legend><div class=cat-chips><label class=cat-chip><input type=radio name=type value=idea><i class="fas fa-lightbulb" aria-hidden=true></i> Idea</label><label class=cat-chip><input type=radio name=type value=bug><i class="fas fa-bug" aria-hidden=true></i> Bug</label><label class=cat-chip><input type=radio name=type value=data><i class="fas fa-database" aria-hidden=true></i> Data error</label><label class=cat-chip><input type=radio name=type value=other><i class="fas fa-ellipsis-h" aria-hidden=true></i> Other</label></div></fieldset><label class=field for=fbTitle><span>Summary</span><input type=text id=fbTitle name=title maxlength=120 autocomplete=off placeholder='One line, e.g. "Map won&#39;t load on my phone"' required></label><label class=field for=fbBody><span>Details</span><textarea id=fbBody name=body rows=6 maxlength=2000 placeholder="What happened, which dog or page, what you expected…" required></textarea><small id=fbCount class="count muted" aria-live=polite>0 / 2000</small></label><label class=agree for=fbVolunteer><input type=checkbox id=fbVolunteer name=volunteer><span>I'm a CACC volunteer <small class=muted>(optional)</small></span></label><p class=muted> Please don't include your name or contact details. Your note is stored as a private GitHub issue for the maintainer; see the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>. </p><div id=ts-feedback class=ts-widget></div><button type=submit id=submitBtn class=primary-btn><i class="fas fa-paper-plane" aria-hidden=true></i> Send feedback </button><div id=feedbackStatus class=status role=status aria-live=polite></div></form></div><div class=footer><span>Last Updated: November 14, 2026 06:19 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><div class=feedback-wrap><h1 class=feedback-title><i class="fas fa-comment-dots" aria-hidden=true></i> Feedback</h1><p class=feedback-intro> Spotted a bug, a wrong detail about a dog, or have an idea for the site? Tell us here. Notes are anonymous and go straight to the maintainer. </p><form id=feedbackForm class=card-panel novalidate><fieldset class=field><legend>What kind of note is this?</legend><div class=cat-chips><label class=cat-chip><input type=radio name=type value=idea><i class="fas fa-lightbulb" aria-hidden=true></i> Idea</label><label class=cat-chip><input type=radio name=type value=bug><i class="fas fa-bug" aria-hidden=true></i> Bug</label><label class=cat-chip><input type=radio name=type value=data><i class="fas fa-database" aria-hidden=true></i> Data error</label><label class=cat-chip><input type=radio name=type value=other><i class="fas fa-ellipsis-h" aria-hidden=true></i> Other</label></div></fieldset><label class=field for=fbTitle><span>Summary</span><input type=text id=fbTitle name=title maxlength=120 autocomplete=off placeholder='One line, e.g. "Map won&#39;t load on my phone"' required></label><label class=field for=fbBody><span>Details</span><textarea id=fbBody name=body rows=6 maxlength=2000 placeholder="What happened, which dog or page, what you expected…" required></textarea><small id=fbCount class="count muted" aria-live=polite>0 / 2000</small></label><label class=agree for=fbVolunteer><input type=checkbox id=fbVolunteer name=volunteer><span>I'm a CACC volunteer <small class=muted>(optional)</small></span></label><p class=muted> Please don't include your name or contact details. Your note is stored as a private GitHub issue for the maintainer; see the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>. </p><div id=ts-feedback class=ts-widget></div><button type=submit id=submitBtn class=primary-btn><i class="fas fa-paper-plane" aria-hidden=true></i> Send feedback </button><div id=feedbackStatus class=status role=status aria-live=polite></div></form></div><div class=footer><span>Last Updated: November 14, 2026 09:08 AM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
