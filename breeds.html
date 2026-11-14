@@ -249,20 +249,27 @@
     // (beforeinstallprompt) is available; 'no' = the links only. family picks
     // the wording. steps show only once `verified` is true (the owner checked
     // them on a real device), or under the ?pwaTarget=<id> preview; every
-    // other visitor sees the family's generic sentence. [name] in a step is an
-    // inline icon from PWA_GLYPHS. Copy never says "installed" and never
-    // names the host.
+    // other visitor sees the target's lede, or else the family's generic
+    // sentence. [name] in a step or a lede is an inline icon from PWA_GLYPHS.
+    // Copy never says "installed" and never names the host.
+    // iPhone and iPad have no menu item for this: Add to Home Screen is in
+    // the Share sheet, so every iOS target carries a lede that says so (the
+    // generic "browser's menu" sentence sent visitors looking in the wrong
+    // place). The ledes hedge where Share sits, which varies by iOS version
+    // and toolbar layout; the exact steps still wait for `verified`.
+    const PWA_IOS_SAFARI_LEDE = 'Tap [share], then scroll down and tap Add to Home Screen. If you can’t see [share], tap [more] next to the address bar first.';
+    const PWA_IOS_OTHER_LEDE = 'Tap [share], then scroll down and tap Add to Home Screen. If you can’t see [share], open your browser’s menu first.';
     const PWA_INSTALL_STEPS = {
-        'ios-safari-26': { card: 'yes', family: 'phone', verified: false,
+        'ios-safari-26': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_SAFARI_LEDE,
             steps: ['Tap [more] next to the address bar, then tap [share]',
                     'Scroll down and tap Add to Home Screen', 'Tap Add'],
             notes: ['No Add to Home Screen in the list? Open this page in Safari first.',
                     'Favorites saved in Safari stay in Safari. Save them again in the app.'] },
-        'ios-safari': { card: 'yes', family: 'phone', verified: false,
+        'ios-safari': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_SAFARI_LEDE,
             steps: ['Tap [share] in the toolbar', 'Scroll down and tap Add to Home Screen', 'Tap Add'],
             notes: ['No Add to Home Screen in the list? Open this page in Safari first.',
                     'Favorites saved in Safari stay in Safari. Save them again in the app.'] },
-        'ios-chrome': { card: 'yes', family: 'phone', verified: false,
+        'ios-chrome': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_OTHER_LEDE,
             steps: ['Tap [share] in the address bar', 'Scroll down and tap Add to Home Screen', 'Tap Add'],
             notes: ['Favorites saved in Chrome stay in Chrome. Save them again in the app.'] },
         'android-chrome': { card: 'yes', family: 'phone', verified: false,
@@ -282,7 +289,7 @@
         // the sheet says to open the page in the real browser, with Copy link.
         'ios-inapp': { card: 'no', family: 'phone', inapp: 'Safari' },
         'android-inapp': { card: 'no', family: 'phone', inapp: 'Chrome' },
-        'ios-other': { card: 'no', family: 'phone',
+        'ios-other': { card: 'no', family: 'phone', lede: PWA_IOS_OTHER_LEDE,
             notes: ['No Add to Home Screen in the list? Open this page in Safari first.'] },
         'android-other': { card: 'no', family: 'phone' },
         // lede replaces the generic sentence where that would send the visitor
@@ -520,7 +527,10 @@
             box.appendChild(ol);
             box.appendChild(pwaEl('p', '', words.done));
         } else {
-            box.appendChild(pwaEl('p', '', info.lede || words.generic));
+            // A lede may name a button by its icon, like a step.
+            const lede = pwaEl('p', 'pwa-sheet-lede');
+            pwaStepNodes(info.lede || words.generic).forEach(function (n) { lede.appendChild(n); });
+            box.appendChild(lede);
         }
         (info.notes || []).forEach(function (note) { box.appendChild(pwaEl('p', 'pwa-sheet-note', note)); });
         if (qa) box.appendChild(pwaEl('p', 'pwa-sheet-qa', 'Preview of ' + qa + (info.verified ? '.' : ': not yet checked on a device.')));
@@ -673,7 +683,8 @@
         {
             // On since 2026-11-13, at the owner's call, before the real-device
             // checks: until a target is marked verified in PWA_INSTALL_STEPS,
-            // "Show me how" opens the generic sentence for that browser.
+            // "Show me how" opens the one-sentence fallback for that browser
+            // (its lede, or the generic sentence).
             id: 'install',
             icon: '<img src="assets/icons/apple-touch-icon.png" alt="" width="32" height="32">',
             text: function () {
@@ -1826,7 +1837,7 @@
         const btn = document.getElementById('mobileMenuBtn');
         if (btn) btn.focus();
     });
-</script><div class=container id=main-content tabindex=-1><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart role=img aria-label="Population by Breed doughnut chart. Detailed data is available in the Detailed Statistics table below."></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart role=img aria-label="Outcome Rates by Breed normalized 100% stacked bar chart. Detailed data is available in the Detailed Statistics table below."></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart role=img aria-label="Gender Distribution by Breed bar chart."></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart role=img aria-label="Intake Source by Breed bar chart."></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart role=img aria-label="Median Age by Breed bar chart."></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable() aria-expanded=false><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: November 13, 2026 06:31 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart role=img aria-label="Population by Breed doughnut chart. Detailed data is available in the Detailed Statistics table below."></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart role=img aria-label="Outcome Rates by Breed normalized 100% stacked bar chart. Detailed data is available in the Detailed Statistics table below."></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart role=img aria-label="Gender Distribution by Breed bar chart."></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart role=img aria-label="Intake Source by Breed bar chart."></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart role=img aria-label="Median Age by Breed bar chart."></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable() aria-expanded=false><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: November 13, 2026 07:14 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;

@@ -249,20 +249,27 @@
     // (beforeinstallprompt) is available; 'no' = the links only. family picks
     // the wording. steps show only once `verified` is true (the owner checked
     // them on a real device), or under the ?pwaTarget=<id> preview; every
-    // other visitor sees the family's generic sentence. [name] in a step is an
-    // inline icon from PWA_GLYPHS. Copy never says "installed" and never
-    // names the host.
+    // other visitor sees the target's lede, or else the family's generic
+    // sentence. [name] in a step or a lede is an inline icon from PWA_GLYPHS.
+    // Copy never says "installed" and never names the host.
+    // iPhone and iPad have no menu item for this: Add to Home Screen is in
+    // the Share sheet, so every iOS target carries a lede that says so (the
+    // generic "browser's menu" sentence sent visitors looking in the wrong
+    // place). The ledes hedge where Share sits, which varies by iOS version
+    // and toolbar layout; the exact steps still wait for `verified`.
+    const PWA_IOS_SAFARI_LEDE = 'Tap [share], then scroll down and tap Add to Home Screen. If you can’t see [share], tap [more] next to the address bar first.';
+    const PWA_IOS_OTHER_LEDE = 'Tap [share], then scroll down and tap Add to Home Screen. If you can’t see [share], open your browser’s menu first.';
     const PWA_INSTALL_STEPS = {
-        'ios-safari-26': { card: 'yes', family: 'phone', verified: false,
+        'ios-safari-26': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_SAFARI_LEDE,
             steps: ['Tap [more] next to the address bar, then tap [share]',
                     'Scroll down and tap Add to Home Screen', 'Tap Add'],
             notes: ['No Add to Home Screen in the list? Open this page in Safari first.',
                     'Favorites saved in Safari stay in Safari. Save them again in the app.'] },
-        'ios-safari': { card: 'yes', family: 'phone', verified: false,
+        'ios-safari': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_SAFARI_LEDE,
             steps: ['Tap [share] in the toolbar', 'Scroll down and tap Add to Home Screen', 'Tap Add'],
             notes: ['No Add to Home Screen in the list? Open this page in Safari first.',
                     'Favorites saved in Safari stay in Safari. Save them again in the app.'] },
-        'ios-chrome': { card: 'yes', family: 'phone', verified: false,
+        'ios-chrome': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_OTHER_LEDE,
             steps: ['Tap [share] in the address bar', 'Scroll down and tap Add to Home Screen', 'Tap Add'],
             notes: ['Favorites saved in Chrome stay in Chrome. Save them again in the app.'] },
         'android-chrome': { card: 'yes', family: 'phone', verified: false,
@@ -282,7 +289,7 @@
         // the sheet says to open the page in the real browser, with Copy link.
         'ios-inapp': { card: 'no', family: 'phone', inapp: 'Safari' },
         'android-inapp': { card: 'no', family: 'phone', inapp: 'Chrome' },
-        'ios-other': { card: 'no', family: 'phone',
+        'ios-other': { card: 'no', family: 'phone', lede: PWA_IOS_OTHER_LEDE,
             notes: ['No Add to Home Screen in the list? Open this page in Safari first.'] },
         'android-other': { card: 'no', family: 'phone' },
         // lede replaces the generic sentence where that would send the visitor
@@ -520,7 +527,10 @@
             box.appendChild(ol);
             box.appendChild(pwaEl('p', '', words.done));
         } else {
-            box.appendChild(pwaEl('p', '', info.lede || words.generic));
+            // A lede may name a button by its icon, like a step.
+            const lede = pwaEl('p', 'pwa-sheet-lede');
+            pwaStepNodes(info.lede || words.generic).forEach(function (n) { lede.appendChild(n); });
+            box.appendChild(lede);
         }
         (info.notes || []).forEach(function (note) { box.appendChild(pwaEl('p', 'pwa-sheet-note', note)); });
         if (qa) box.appendChild(pwaEl('p', 'pwa-sheet-qa', 'Preview of ' + qa + (info.verified ? '.' : ': not yet checked on a device.')));
@@ -673,7 +683,8 @@
         {
             // On since 2026-11-13, at the owner's call, before the real-device
             // checks: until a target is marked verified in PWA_INSTALL_STEPS,
-            // "Show me how" opens the generic sentence for that browser.
+            // "Show me how" opens the one-sentence fallback for that browser
+            // (its lede, or the generic sentence).
             id: 'install',
             icon: '<img src="assets/icons/apple-touch-icon.png" alt="" width="32" height="32">',
             text: function () {
@@ -1711,7 +1722,7 @@
         const btn = document.getElementById('mobileMenuBtn');
         if (btn) btn.focus();
     });
-</script><div class=container id=main-content tabindex=-1><div class=info-banner><i class="fas fa-info-circle"></i> These dogs were removed from the public listing without a confirmed Adoption, Rescue, or RTO event. <br><small>They may have been euthanized, died in care, or were lost. Removal can also be a temporary state — for example a doggy day out (DDO) or a medical situation — after which a dog may return to the listing. Data is limited to what is publicly available.</small><nav class=banner-onward aria-label="Happier outcomes"><span>Looking for happier endings?</span><a href="./?filter=adopted">🏠 Adopted</a><span class=onward-sep aria-hidden=true>·</span><a href=rescues.html>🚑 Rescues</a><span class=onward-sep aria-hidden=true>·</span><a href=trends.html>📈 Trends</a></nav></div><div class=stats-container><div class=stats-grid><div class="stat-card removed"><span class=stat-date>Today</span><div class=stat-value><span id=todayRemoved>--</span> <span id=removedIndicator></span></div><div class=stat-label><i class="fas fa-times-circle"></i> Removed</div><div class=stat-sub id=removedSub></div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=medianLOS>--</span></div><div class=stat-label><i class="fas fa-hourglass-half"></i> Median Stay</div><div class=stat-sub>days until removal</div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=avgLOS>--</span></div><div class=stat-label><i class="fas fa-clock"></i> Average Stay</div><div class=stat-sub>days until removal</div></div></div></div><div class=controls-bar><div class=search-container><i class="fas fa-search search-icon"></i><input type=search id=mainSearch class=search-input placeholder="Search Removed Dogs..." aria-label="Search removed dogs by name, ID, or breed" autocomplete=off autocorrect=off autocapitalize=none spellcheck=false enterkeyhint=search><button type=button class=search-clear id=searchClear onclick=clearSearch() aria-label="Clear search" hidden><i class="fas fa-times" aria-hidden=true></i></button></div><select id=sortSelect class=sort-select aria-label="Sort removed dogs" onchange=handleSortChange()><option value=recent>Date Removed (Recent First)</option><option value=oldest>Date Removed (Oldest First)</option><option value=name>Name (A ➝ Z)</option><option value=los>Length of Stay (Longest First)</option></select></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Loading historical records...</p></div><div id=main-view style=display:none;><h2 style="margin: 30px 0 10px 0; font-size:1.2rem; color:var(--text-muted);"><span id=count>0</span> Records Found </h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel style="height: 50px; margin-top: 20px;"></div></div><div class=footer><span>Last Updated: November 13, 2026 06:31 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><div class=info-banner><i class="fas fa-info-circle"></i> These dogs were removed from the public listing without a confirmed Adoption, Rescue, or RTO event. <br><small>They may have been euthanized, died in care, or were lost. Removal can also be a temporary state — for example a doggy day out (DDO) or a medical situation — after which a dog may return to the listing. Data is limited to what is publicly available.</small><nav class=banner-onward aria-label="Happier outcomes"><span>Looking for happier endings?</span><a href="./?filter=adopted">🏠 Adopted</a><span class=onward-sep aria-hidden=true>·</span><a href=rescues.html>🚑 Rescues</a><span class=onward-sep aria-hidden=true>·</span><a href=trends.html>📈 Trends</a></nav></div><div class=stats-container><div class=stats-grid><div class="stat-card removed"><span class=stat-date>Today</span><div class=stat-value><span id=todayRemoved>--</span> <span id=removedIndicator></span></div><div class=stat-label><i class="fas fa-times-circle"></i> Removed</div><div class=stat-sub id=removedSub></div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=medianLOS>--</span></div><div class=stat-label><i class="fas fa-hourglass-half"></i> Median Stay</div><div class=stat-sub>days until removal</div></div><div class="stat-card los"><span class=stat-date>All Records</span><div class=stat-value><span id=avgLOS>--</span></div><div class=stat-label><i class="fas fa-clock"></i> Average Stay</div><div class=stat-sub>days until removal</div></div></div></div><div class=controls-bar><div class=search-container><i class="fas fa-search search-icon"></i><input type=search id=mainSearch class=search-input placeholder="Search Removed Dogs..." aria-label="Search removed dogs by name, ID, or breed" autocomplete=off autocorrect=off autocapitalize=none spellcheck=false enterkeyhint=search><button type=button class=search-clear id=searchClear onclick=clearSearch() aria-label="Clear search" hidden><i class="fas fa-times" aria-hidden=true></i></button></div><select id=sortSelect class=sort-select aria-label="Sort removed dogs" onchange=handleSortChange()><option value=recent>Date Removed (Recent First)</option><option value=oldest>Date Removed (Oldest First)</option><option value=name>Name (A ➝ Z)</option><option value=los>Length of Stay (Longest First)</option></select></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Loading historical records...</p></div><div id=main-view style=display:none;><h2 style="margin: 30px 0 10px 0; font-size:1.2rem; color:var(--text-muted);"><span id=count>0</span> Records Found </h2><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel style="height: 50px; margin-top: 20px;"></div></div><div class=footer><span>Last Updated: November 13, 2026 07:14 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
