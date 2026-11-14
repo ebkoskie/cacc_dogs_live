@@ -255,17 +255,32 @@
     // iPhone and iPad have no menu item for this: Add to Home Screen is in
     // the Share sheet, so every iOS target carries a lede that says so (the
     // generic "browser's menu" sentence sent visitors looking in the wrong
-    // place). The ledes hedge where Share sits, which varies by iOS version
-    // and toolbar layout; the exact steps still wait for `verified`.
-    const PWA_IOS_SAFARI_LEDE = 'Tap [share], then scroll down and tap Add to Home Screen. If you can’t see [share], tap [more] next to the address bar first.';
-    const PWA_IOS_OTHER_LEDE = 'Tap [share], then scroll down and tap Add to Home Screen. If you can’t see [share], open your browser’s menu first.';
+    // place). Share is the only button a lede draws: where it hides differs
+    // by iOS version and toolbar layout (Safari 26 puts it behind "...",
+    // Safari 27 is reported to use a page menu instead, Safari 18 and older
+    // only hide the whole toolbar on scroll), so the fallback names no other
+    // icon. None of this is checked on a device yet; the exact steps still
+    // wait for `verified`, one target per Safari generation.
+    // No punctuation directly after an icon: it would wrap to the next line
+    // on its own.
+    const PWA_IOS_SAFARI_LEDE = 'Tap [share] and then Add to Home Screen (scroll down or tap View More if you don’t see it). If [share] is not showing, it is inside a menu button next to the address bar.';
+    const PWA_IOS_SAFARI_OLD_LEDE = 'Tap [share] and then Add to Home Screen (scroll down if you don’t see it). If [share] is not showing, tap the address bar to bring the toolbar back.';
+    const PWA_IOS_OTHER_LEDE = 'Tap [share] and then Add to Home Screen (scroll down or tap View More if you don’t see it). If [share] is not showing, open your browser’s menu and tap Share.';
     const PWA_INSTALL_STEPS = {
+        // Drafted from secondhand descriptions of Safari 27's default (Compact)
+        // toolbar, which agree that Share is inside the Page Menu button to
+        // the left of the address bar. Not checked on a device.
+        'ios-safari-27': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_SAFARI_LEDE,
+            steps: ['Tap the Page Menu button left of the address bar, then tap [share]',
+                    'Scroll down or tap View More, then tap Add to Home Screen', 'Tap Add'],
+            notes: ['No Add to Home Screen in the list? Open this page in Safari first.',
+                    'Favorites saved in Safari stay in Safari. Save them again in the app.'] },
         'ios-safari-26': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_SAFARI_LEDE,
             steps: ['Tap [more] next to the address bar, then tap [share]',
                     'Scroll down and tap Add to Home Screen', 'Tap Add'],
             notes: ['No Add to Home Screen in the list? Open this page in Safari first.',
                     'Favorites saved in Safari stay in Safari. Save them again in the app.'] },
-        'ios-safari': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_SAFARI_LEDE,
+        'ios-safari': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_SAFARI_OLD_LEDE,
             steps: ['Tap [share] in the toolbar', 'Scroll down and tap Add to Home Screen', 'Tap Add'],
             notes: ['No Add to Home Screen in the list? Open this page in Safari first.',
                     'Favorites saved in Safari stay in Safari. Save them again in the app.'] },
@@ -331,6 +346,9 @@
             if (/FxiOS|EdgiOS|OPiOS|OPT\/|YaBrowser|DuckDuckGo/.test(ua)) return 'ios-other';
             v = /Version\/(\d+)/.exec(ua);
             if (!v) return 'ios-other';
+            // One target per Safari generation whose toolbar differs, so the
+            // owner can verify each one's steps separately.
+            if (Number(v[1]) >= 27) return 'ios-safari-27';
             return Number(v[1]) >= 26 ? 'ios-safari-26' : 'ios-safari';
         }
         if (/Android/.test(ua)) {
@@ -455,11 +473,14 @@
         span.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">' + g.svg + '</svg>';
         return span;
     }
-    // "Tap [share] in the toolbar" -> text and icon nodes.
+    // "Tap [share] in the toolbar" -> text and icon nodes. Only PWA_GLYPHS'
+    // own names become icons; any other [word] stays as written, brackets
+    // and all, so a typo shows up instead of vanishing.
     function pwaStepNodes(step) {
         return String(step).split(/\[(\w+)\]/).map(function (part, i) {
-            if (i % 2 === 1 && PWA_GLYPHS[part]) return pwaGlyph(part);
-            return document.createTextNode(part);
+            if (i % 2 === 0) return document.createTextNode(part);
+            if (Object.prototype.hasOwnProperty.call(PWA_GLYPHS, part)) return pwaGlyph(part);
+            return document.createTextNode('[' + part + ']');
         });
     }
     // Copy link for in-app browsers: the clipboard, then execCommand on a
@@ -513,9 +534,19 @@
         head.appendChild(x);
         box.appendChild(head);
 
+        // The one sentence shown while a target's steps are unverified. A lede
+        // may name a button by its icon, like a step.
+        const addLede = function () {
+            const lede = pwaEl('p', 'pwa-sheet-lede');
+            pwaStepNodes(info.lede || words.generic).forEach(function (n) { lede.appendChild(n); });
+            box.appendChild(lede);
+        };
         if (info.inapp) {
             box.appendChild(pwaEl('p', '', 'This app’s built-in browser can’t add pages to your Home Screen. Copy the link and open it in ' + info.inapp + '.'));
         } else if (info.steps && (info.verified || qa)) {
+            // The preview of an unverified target shows both: the sentence
+            // visitors get today, then the drafted steps to check.
+            if (!info.verified) addLede();
             const ol = pwaEl('ol', 'pwa-sheet-steps');
             info.steps.slice(0, 3).forEach(function (step) {
                 const li = pwaEl('li');
@@ -527,13 +558,14 @@
             box.appendChild(ol);
             box.appendChild(pwaEl('p', '', words.done));
         } else {
-            // A lede may name a button by its icon, like a step.
-            const lede = pwaEl('p', 'pwa-sheet-lede');
-            pwaStepNodes(info.lede || words.generic).forEach(function (n) { lede.appendChild(n); });
-            box.appendChild(lede);
+            addLede();
         }
         (info.notes || []).forEach(function (note) { box.appendChild(pwaEl('p', 'pwa-sheet-note', note)); });
-        if (qa) box.appendChild(pwaEl('p', 'pwa-sheet-qa', 'Preview of ' + qa + (info.verified ? '.' : ': not yet checked on a device.')));
+        if (qa) {
+            box.appendChild(pwaEl('p', 'pwa-sheet-qa', 'Preview of ' + qa + (info.verified ? '.'
+                : (info.steps ? ': not yet checked on a device. Until it is, visitors see only the first sentence.'
+                    : ': not yet checked on a device.'))));
+        }
 
         const actions = pwaEl('div', 'pwa-sheet-actions');
         let primary = null;
@@ -1848,7 +1880,7 @@
         const btn = document.getElementById('mobileMenuBtn');
         if (btn) btn.focus();
     });
-</script><div class=container id=main-content tabindex=-1><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Each pavilion shows its most recent sheet until a newer one replaces it, so re-upload whenever a sheet is rewritten to keep badges current. No passcode needed. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet — the processing service hasn't been deployed. Please check back soon. </div><form id=uploadForm class=card-panel><label class=field for=passcode id=passcodeField hidden><span>Volunteer passcode <small class=muted>(temporarily required)</small></span><div class=password-wrapper><input type=password id=passcode name=passcode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option><option value=E>E</option></select></label><div class=field id=sheetStatusField hidden><span>Last sheet uploaded</span><div id=sheetStatus class=sheet-status role=group aria-label="Last sheet upload per pavilion"></div></div><div class=field><span id=photoLabel>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* required class=visually-hidden aria-labelledby=photoLabel><div class=file-btn-group><button type=button id=snapBtn class=file-btn><i class="fas fa-camera" aria-hidden=true></i> Take photo </button><button type=button id=pickBtn class=file-btn><i class="fas fa-image" aria-hidden=true></i> Choose photo </button></div><span id=photoName class=muted></span></div><label class=agree id=agreeRow for=agreeTerms><input type=checkbox id=agreeTerms name=agreeTerms required><span>I have read and agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>.</span></label><p class="agreed-note muted" id=agreedNote hidden><span>By uploading, you agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a> (accepted <span id=agreedWhen></span>).</span><button type=button class=linklike id=reviewTerms>Review</button></p><div id=ts-upload class=ts-widget></div><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div></form><div id=uploadJobs class=card-panel hidden><span class=jobs-title><i class="fas fa-list-check" aria-hidden=true></i> Sheet processing</span><div id=uploadJobsList role=status aria-live=polite></div></div><details class="card-panel admin-panel" id=adminPanel><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><div class=password-wrapper><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><div id=ts-admin class=ts-widget-admin></div><button type=button class=primary-btn id=adminUnlockBtn><i class="fas fa-lock-open" aria-hidden=true></i> Unlock </button><div id=adminGated hidden><div class=field><span>Pavilion sheets</span><p class=muted> Uploads don't need a passcode, so check replaced sheets. If a bad upload replaced a good sheet, open History and restore the earlier one (up to five are kept per pavilion). </p><div id=adminSheets><p class=muted>Loading sheets…</p></div></div><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>E</code> plus a number (e.g. <code>C 70</code>), or clear it. Optionally pick the walker-level color matching the marker highlight on the sheet (yellow = intermediate, orange = advanced) — setting a kennel with "No color" removes any existing color. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div></div><div id=adminStatus class=status role=status aria-live=polite></div></details><dialog id=uploadSuccessModal class=success-modal closedby=any aria-labelledby=successThanks><div class=success-modal-header><button type=button class=close-modal-btn id=successCloseX aria-label="Close dialog">&times;</button></div><div class=success-modal-body><p class=success-emoji id=successEmoji aria-hidden=true></p><p class=success-thanks id=successThanks></p><p class=success-detail id=successDetail></p><p class=success-timing id=successTiming>Badges can take ~5 minutes to appear on the dashboard.</p><button type=button class=primary-btn id=successCloseBtn autofocus><i class="fas fa-paw" aria-hidden=true></i> Close </button></div></dialog></div><div class=footer><span>Last Updated: November 13, 2026 07:31 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Each pavilion shows its most recent sheet until a newer one replaces it, so re-upload whenever a sheet is rewritten to keep badges current. No passcode needed. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet — the processing service hasn't been deployed. Please check back soon. </div><form id=uploadForm class=card-panel><label class=field for=passcode id=passcodeField hidden><span>Volunteer passcode <small class=muted>(temporarily required)</small></span><div class=password-wrapper><input type=password id=passcode name=passcode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option><option value=E>E</option></select></label><div class=field id=sheetStatusField hidden><span>Last sheet uploaded</span><div id=sheetStatus class=sheet-status role=group aria-label="Last sheet upload per pavilion"></div></div><div class=field><span id=photoLabel>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* required class=visually-hidden aria-labelledby=photoLabel><div class=file-btn-group><button type=button id=snapBtn class=file-btn><i class="fas fa-camera" aria-hidden=true></i> Take photo </button><button type=button id=pickBtn class=file-btn><i class="fas fa-image" aria-hidden=true></i> Choose photo </button></div><span id=photoName class=muted></span></div><label class=agree id=agreeRow for=agreeTerms><input type=checkbox id=agreeTerms name=agreeTerms required><span>I have read and agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>.</span></label><p class="agreed-note muted" id=agreedNote hidden><span>By uploading, you agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a> (accepted <span id=agreedWhen></span>).</span><button type=button class=linklike id=reviewTerms>Review</button></p><div id=ts-upload class=ts-widget></div><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div></form><div id=uploadJobs class=card-panel hidden><span class=jobs-title><i class="fas fa-list-check" aria-hidden=true></i> Sheet processing</span><div id=uploadJobsList role=status aria-live=polite></div></div><details class="card-panel admin-panel" id=adminPanel><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><div class=password-wrapper><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><div id=ts-admin class=ts-widget-admin></div><button type=button class=primary-btn id=adminUnlockBtn><i class="fas fa-lock-open" aria-hidden=true></i> Unlock </button><div id=adminGated hidden><div class=field><span>Pavilion sheets</span><p class=muted> Uploads don't need a passcode, so check replaced sheets. If a bad upload replaced a good sheet, open History and restore the earlier one (up to five are kept per pavilion). </p><div id=adminSheets><p class=muted>Loading sheets…</p></div></div><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>E</code> plus a number (e.g. <code>C 70</code>), or clear it. Optionally pick the walker-level color matching the marker highlight on the sheet (yellow = intermediate, orange = advanced) — setting a kennel with "No color" removes any existing color. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div></div><div id=adminStatus class=status role=status aria-live=polite></div></details><dialog id=uploadSuccessModal class=success-modal closedby=any aria-labelledby=successThanks><div class=success-modal-header><button type=button class=close-modal-btn id=successCloseX aria-label="Close dialog">&times;</button></div><div class=success-modal-body><p class=success-emoji id=successEmoji aria-hidden=true></p><p class=success-thanks id=successThanks></p><p class=success-detail id=successDetail></p><p class=success-timing id=successTiming>Badges can take ~5 minutes to appear on the dashboard.</p><button type=button class=primary-btn id=successCloseBtn autofocus><i class="fas fa-paw" aria-hidden=true></i> Close </button></div></dialog></div><div class=footer><span>Last Updated: November 13, 2026 07:36 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -1908,7 +1940,7 @@
         // pwa notes (partials/pwa.html, also on map.html): iOS has no install
         // event, so pwa_launched is its only signal. Every page view also
         // carries the session property display_mode (standalone | browser).
-        // target is pwaInstallTarget()'s browser id (ios-safari-26,
+        // target is pwaInstallTarget()'s browser id (ios-safari-27, ios-safari-26,
         // android-chrome, ios-inapp...); pwa_install_opened fires whether the
         // browser's prompt or the steps sheet opened. announcement notes
         // (partials/announce.html): n is the show count for that id (2 = the

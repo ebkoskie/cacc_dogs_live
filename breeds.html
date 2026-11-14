@@ -255,17 +255,32 @@
     // iPhone and iPad have no menu item for this: Add to Home Screen is in
     // the Share sheet, so every iOS target carries a lede that says so (the
     // generic "browser's menu" sentence sent visitors looking in the wrong
-    // place). The ledes hedge where Share sits, which varies by iOS version
-    // and toolbar layout; the exact steps still wait for `verified`.
-    const PWA_IOS_SAFARI_LEDE = 'Tap [share], then scroll down and tap Add to Home Screen. If you can’t see [share], tap [more] next to the address bar first.';
-    const PWA_IOS_OTHER_LEDE = 'Tap [share], then scroll down and tap Add to Home Screen. If you can’t see [share], open your browser’s menu first.';
+    // place). Share is the only button a lede draws: where it hides differs
+    // by iOS version and toolbar layout (Safari 26 puts it behind "...",
+    // Safari 27 is reported to use a page menu instead, Safari 18 and older
+    // only hide the whole toolbar on scroll), so the fallback names no other
+    // icon. None of this is checked on a device yet; the exact steps still
+    // wait for `verified`, one target per Safari generation.
+    // No punctuation directly after an icon: it would wrap to the next line
+    // on its own.
+    const PWA_IOS_SAFARI_LEDE = 'Tap [share] and then Add to Home Screen (scroll down or tap View More if you don’t see it). If [share] is not showing, it is inside a menu button next to the address bar.';
+    const PWA_IOS_SAFARI_OLD_LEDE = 'Tap [share] and then Add to Home Screen (scroll down if you don’t see it). If [share] is not showing, tap the address bar to bring the toolbar back.';
+    const PWA_IOS_OTHER_LEDE = 'Tap [share] and then Add to Home Screen (scroll down or tap View More if you don’t see it). If [share] is not showing, open your browser’s menu and tap Share.';
     const PWA_INSTALL_STEPS = {
+        // Drafted from secondhand descriptions of Safari 27's default (Compact)
+        // toolbar, which agree that Share is inside the Page Menu button to
+        // the left of the address bar. Not checked on a device.
+        'ios-safari-27': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_SAFARI_LEDE,
+            steps: ['Tap the Page Menu button left of the address bar, then tap [share]',
+                    'Scroll down or tap View More, then tap Add to Home Screen', 'Tap Add'],
+            notes: ['No Add to Home Screen in the list? Open this page in Safari first.',
+                    'Favorites saved in Safari stay in Safari. Save them again in the app.'] },
         'ios-safari-26': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_SAFARI_LEDE,
             steps: ['Tap [more] next to the address bar, then tap [share]',
                     'Scroll down and tap Add to Home Screen', 'Tap Add'],
             notes: ['No Add to Home Screen in the list? Open this page in Safari first.',
                     'Favorites saved in Safari stay in Safari. Save them again in the app.'] },
-        'ios-safari': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_SAFARI_LEDE,
+        'ios-safari': { card: 'yes', family: 'phone', verified: false, lede: PWA_IOS_SAFARI_OLD_LEDE,
             steps: ['Tap [share] in the toolbar', 'Scroll down and tap Add to Home Screen', 'Tap Add'],
             notes: ['No Add to Home Screen in the list? Open this page in Safari first.',
                     'Favorites saved in Safari stay in Safari. Save them again in the app.'] },
@@ -331,6 +346,9 @@
             if (/FxiOS|EdgiOS|OPiOS|OPT\/|YaBrowser|DuckDuckGo/.test(ua)) return 'ios-other';
             v = /Version\/(\d+)/.exec(ua);
             if (!v) return 'ios-other';
+            // One target per Safari generation whose toolbar differs, so the
+            // owner can verify each one's steps separately.
+            if (Number(v[1]) >= 27) return 'ios-safari-27';
             return Number(v[1]) >= 26 ? 'ios-safari-26' : 'ios-safari';
         }
         if (/Android/.test(ua)) {
@@ -455,11 +473,14 @@
         span.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">' + g.svg + '</svg>';
         return span;
     }
-    // "Tap [share] in the toolbar" -> text and icon nodes.
+    // "Tap [share] in the toolbar" -> text and icon nodes. Only PWA_GLYPHS'
+    // own names become icons; any other [word] stays as written, brackets
+    // and all, so a typo shows up instead of vanishing.
     function pwaStepNodes(step) {
         return String(step).split(/\[(\w+)\]/).map(function (part, i) {
-            if (i % 2 === 1 && PWA_GLYPHS[part]) return pwaGlyph(part);
-            return document.createTextNode(part);
+            if (i % 2 === 0) return document.createTextNode(part);
+            if (Object.prototype.hasOwnProperty.call(PWA_GLYPHS, part)) return pwaGlyph(part);
+            return document.createTextNode('[' + part + ']');
         });
     }
     // Copy link for in-app browsers: the clipboard, then execCommand on a
@@ -513,9 +534,19 @@
         head.appendChild(x);
         box.appendChild(head);
 
+        // The one sentence shown while a target's steps are unverified. A lede
+        // may name a button by its icon, like a step.
+        const addLede = function () {
+            const lede = pwaEl('p', 'pwa-sheet-lede');
+            pwaStepNodes(info.lede || words.generic).forEach(function (n) { lede.appendChild(n); });
+            box.appendChild(lede);
+        };
         if (info.inapp) {
             box.appendChild(pwaEl('p', '', 'This app’s built-in browser can’t add pages to your Home Screen. Copy the link and open it in ' + info.inapp + '.'));
         } else if (info.steps && (info.verified || qa)) {
+            // The preview of an unverified target shows both: the sentence
+            // visitors get today, then the drafted steps to check.
+            if (!info.verified) addLede();
             const ol = pwaEl('ol', 'pwa-sheet-steps');
             info.steps.slice(0, 3).forEach(function (step) {
                 const li = pwaEl('li');
@@ -527,13 +558,14 @@
             box.appendChild(ol);
             box.appendChild(pwaEl('p', '', words.done));
         } else {
-            // A lede may name a button by its icon, like a step.
-            const lede = pwaEl('p', 'pwa-sheet-lede');
-            pwaStepNodes(info.lede || words.generic).forEach(function (n) { lede.appendChild(n); });
-            box.appendChild(lede);
+            addLede();
         }
         (info.notes || []).forEach(function (note) { box.appendChild(pwaEl('p', 'pwa-sheet-note', note)); });
-        if (qa) box.appendChild(pwaEl('p', 'pwa-sheet-qa', 'Preview of ' + qa + (info.verified ? '.' : ': not yet checked on a device.')));
+        if (qa) {
+            box.appendChild(pwaEl('p', 'pwa-sheet-qa', 'Preview of ' + qa + (info.verified ? '.'
+                : (info.steps ? ': not yet checked on a device. Until it is, visitors see only the first sentence.'
+                    : ': not yet checked on a device.'))));
+        }
 
         const actions = pwaEl('div', 'pwa-sheet-actions');
         let primary = null;
@@ -1837,7 +1869,7 @@
         const btn = document.getElementById('mobileMenuBtn');
         if (btn) btn.focus();
     });
-</script><div class=container id=main-content tabindex=-1><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart role=img aria-label="Population by Breed doughnut chart. Detailed data is available in the Detailed Statistics table below."></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart role=img aria-label="Outcome Rates by Breed normalized 100% stacked bar chart. Detailed data is available in the Detailed Statistics table below."></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart role=img aria-label="Gender Distribution by Breed bar chart."></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart role=img aria-label="Intake Source by Breed bar chart."></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart role=img aria-label="Median Age by Breed bar chart."></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable() aria-expanded=false><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: November 13, 2026 07:31 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart role=img aria-label="Population by Breed doughnut chart. Detailed data is available in the Detailed Statistics table below."></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart role=img aria-label="Outcome Rates by Breed normalized 100% stacked bar chart. Detailed data is available in the Detailed Statistics table below."></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart role=img aria-label="Gender Distribution by Breed bar chart."></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart role=img aria-label="Intake Source by Breed bar chart."></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart role=img aria-label="Median Age by Breed bar chart."></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable() aria-expanded=false><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: November 13, 2026 07:36 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -1897,7 +1929,7 @@
         // pwa notes (partials/pwa.html, also on map.html): iOS has no install
         // event, so pwa_launched is its only signal. Every page view also
         // carries the session property display_mode (standalone | browser).
-        // target is pwaInstallTarget()'s browser id (ios-safari-26,
+        // target is pwaInstallTarget()'s browser id (ios-safari-27, ios-safari-26,
         // android-chrome, ios-inapp...); pwa_install_opened fires whether the
         // browser's prompt or the steps sheet opened. announcement notes
         // (partials/announce.html): n is the show count for that id (2 = the
