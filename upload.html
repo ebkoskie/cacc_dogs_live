@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>Pavilion Upload — CACC Dogs</title><link rel=preload href=https://cdn.jsdelivr.net/npm/@fontsource/big-shoulders-text@5.0.13/files/big-shoulders-text-latin-800-normal.woff2 as=font type=font/woff2 crossorigin><link rel=icon type=image/svg+xml href=favicon.svg><link rel=preconnect href=https://us.i.posthog.com><script>
+<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>Walk Sheet Upload — CACC Dogs</title><link rel=preload href=https://cdn.jsdelivr.net/npm/@fontsource/big-shoulders-text@5.0.13/files/big-shoulders-text-latin-800-normal.woff2 as=font type=font/woff2 crossorigin><link rel=icon type=image/svg+xml href=favicon.svg><link rel=preconnect href=https://us.i.posthog.com><script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group identify setPersonProperties setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags resetGroups onFeatureFlags addFeatureFlagsHandler onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
     // Production hosts only. Saved copies opened from file:// and local previews were
     // polluting the project with phantom entry pages ("/C:/Users/.../index.html") and
@@ -673,6 +673,7 @@
     .announce-icon img { width: 32px; height: 32px; border-radius: 8px; display: block; }
     .announce-icon .notes-ear-sample { transform: scale(0.74); margin: -4px -6px; }
     .announce-icon .menu-bone-svg { width: 28px; height: 28px; }
+    .announce-icon .fa-camera { font-size: 22px; color: var(--accent, #41B6E6); }
     .announce-text { flex: 1 1 auto; min-width: 0; margin: 0; padding: 0; }
     .announce-text strong { font-weight: 700; }
     .announce-cta, .announce-x {
@@ -746,10 +747,30 @@
             later: 'The Guide explains the folded corner any time.',
         },
         {
+            // Asks everyone (no network call, no City-WiFi gate: the owner's
+            // call); index.html's walkSheetAnnounceEligible needs uploads
+            // configured, no upload from this device yet and no nudge snooze.
+            // "Show me how" opens the tutorial; its permanent home is the
+            // Guide's Walk sheets row and the nav's Walk Sheet Upload.
+            id: 'walksheet',
+            pages: ['index'],
+            icon: '<i class="fas fa-camera" aria-hidden="true"></i>',
+            title: 'Volunteering?',
+            text: 'Snap a photo of a walk sheet.',
+            cta: { label: 'Show me how', run: function () { if (typeof openWalkSheetGuide === 'function') openWalkSheetGuide('announcement'); } },
+            eligible: function () { return typeof walkSheetAnnounceEligible === 'function' && walkSheetAnnounceEligible(); },
+            from: '2026-11-19',
+            until: '2027-02-28',
+            later: function () {
+                return announceDrawerShown() ? 'It’s in the menu under Walk Sheet Upload.' : 'It’s Walk Sheet Upload in the top navigation.';
+            },
+        },
+        {
             // On since 2026-11-13, at the owner's call, before the real-device
             // checks: until a target is marked verified in PWA_INSTALL_STEPS,
             // "Show me how" opens the one-sentence fallback for that browser
-            // (its lede, or the generic sentence).
+            // (its lede, or the generic sentence). On the dashboard it also
+            // follows the walk-sheet card (array order, one card a day).
             id: 'install',
             icon: '<img src="assets/icons/apple-touch-icon.png" alt="" width="32" height="32">',
             text: function () {
@@ -775,13 +796,13 @@
         },
         {
             // Last, with no `after` and no `pages`. Array order puts it behind
-            // Notes and Install only on the dashboard; on Rescues, Breeds and
+            // Notes, the walk sheet and Install only on the dashboard; on Rescues, Breeds and
             // Trends (no Notes there, Install waiting on Notes) it would be a
             // phone visitor's first card, so minDays: 2 keeps it off day 1
             // and Notes keeps the first-day slot (the owner's call). `after:
             // 'install'` would hide it from every visitor who is never
-            // offered Install. Phones only (the button shows at 950px and
-            // below); opening the menu retires it.
+            // offered Install. Phones and small tablets only (the button
+            // shows at 1050px and below); opening the menu retires it.
             id: 'menu',
             icon: announceMenuIcon,
             text: 'The bone opens the menu: Trends, Map, Rescues and more.',
@@ -1717,7 +1738,7 @@
     .nav-links { display: flex; gap: 8px; align-items: center; }
     .nav-link {
         color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.95rem;
-        padding: 6px 12px; border-radius: 6px; transition: all 0.2s;
+        padding: 6px 12px; border-radius: 6px; transition: all 0.2s; white-space: nowrap;
     }
     .nav-link:hover { color: var(--text); background: var(--nav-item-hover); }
     .nav-link.active { color: var(--accent); background: var(--nav-item-hover); font-weight: 600; }
@@ -1788,17 +1809,19 @@
     .mobile-link:hover { background: var(--row); }
     .mobile-link.active { background: var(--nav-item-hover); border-color: var(--border); color: var(--accent); }
 
-    /* 950px, not 850: the desktop row must fit the brand, six nav links and the
-       actions. Measured 2026-11-13 (Chromium) at 951px on upload.html, the
-       longest brand title ("PAVILION UPLOAD"), with the standalone-only header
-       Reload button showing: 44px spare between brand and nav. Re-measure
-       before adding a nav link or a header button. */
-    @media (max-width: 950px) {
+    /* 1050px: the desktop row must fit the brand, six nav links (one of them
+       "Walk Sheet Upload", kept on one line by .nav-link's nowrap) and the
+       actions. Measured 2026-11-19 (Chromium) on upload.html, the longest
+       brand title ("WALK SHEET UPLOAD"), with the standalone-only header
+       Reload button showing: brand 245px, nav 587px, actions 98px, so at
+       1051px there is 40px spare between brand and nav. Re-measure before
+       adding a nav link or a header button. */
+    @media (max-width: 1050px) {
         .nav-links { display: none; }
         .mobile-menu-btn { display: flex; }
         .pwa-standalone .theme-toggle.pwa-reload { display: none; }
     }
-</style><header class=site-header><div class=header-content><div class=brand-section><h1><a href=./ class=brand-link><i class="fas fa-paw brand-blue-paw"></i><svg class=chistar-svg viewbox="0 0 120 120" xmlns=http://www.w3.org/2000/svg><path fill=#E4002B d="M60 0 L71 41 L112 30 L82 60 L112 90 L71 79 L60 120 L49 79 L8 90 L38 60 L8 30 L49 41 Z"/></svg><span class=brand-chicago>CHI</span><span class=brand-divider>|</span><span class=brand-title> Pavilion Upload </span></a></h1></div><nav class=nav-links><a href=./ class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link ">Breeds</a><a href=upload.html class="nav-link active">Upload</a></nav><div class=actions><button type=button class="theme-toggle pwa-reload" onclick="pwaReload('manual')" title=Reload aria-label="Reload this page"><i class="fas fa-rotate-right" aria-hidden=true></i></button><button type=button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode" aria-label="Toggle dark or light mode"><i class="fas fa-moon" aria-hidden=true></i></button><button type=button class=mobile-menu-btn id=mobileMenuBtn onclick=toggleMobileMenu() aria-label=Menu aria-expanded=false aria-controls=mobileDrawer></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=./ class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link "><i class="fas fa-paw" style=width:20px></i> Breeds</a><a href=upload.html class="mobile-link active"><i class="fas fa-camera" style=width:20px aria-hidden=true></i> Upload</a><a href=notes.html class="mobile-link "><i class="fas fa-clipboard-list" style=width:20px aria-hidden=true></i> Log a visit</a><a href=feedback.html class="mobile-link "><i class="fas fa-comment-dots" style=width:20px aria-hidden=true></i> Feedback</a><button type=button class="mobile-link pwa-install-drawer" onclick="toggleMobileMenu(false); pwaOpenInstall('drawer')"><svg class=pwa-install-icon viewbox="0 0 16 16" width=20 height=16 aria-hidden=true focusable=false><rect x=4 y=1.5 width=8 height=13 rx=1.5 fill=none stroke=currentColor stroke-width=1.3 /><path fill=none stroke=currentColor stroke-width=1.3 stroke-linecap=round stroke-linejoin=round d="M8 4.5v5M6 7.75 8 9.75l2-2"/></svg> Install app</button><button type=button class="mobile-link pwa-reload-link" onclick="pwaReload('manual')"><i class="fas fa-rotate-right" style=width:20px aria-hidden=true></i> Reload</button></div></header><script>
+</style><header class=site-header><div class=header-content><div class=brand-section><h1><a href=./ class=brand-link><i class="fas fa-paw brand-blue-paw"></i><svg class=chistar-svg viewbox="0 0 120 120" xmlns=http://www.w3.org/2000/svg><path fill=#E4002B d="M60 0 L71 41 L112 30 L82 60 L112 90 L71 79 L60 120 L49 79 L8 90 L38 60 L8 30 L49 41 Z"/></svg><span class=brand-chicago>CHI</span><span class=brand-divider>|</span><span class=brand-title> Walk Sheet Upload </span></a></h1></div><nav class=nav-links><a href=./ class="nav-link ">Dashboard</a><a href=map.html class="nav-link ">Map</a><a href=trends.html class="nav-link ">Trends</a><a href=rescues.html class="nav-link ">Rescues</a><a href=breeds.html class="nav-link ">Breeds</a><a href=upload.html class="nav-link active">Walk Sheet Upload</a></nav><div class=actions><button type=button class="theme-toggle pwa-reload" onclick="pwaReload('manual')" title=Reload aria-label="Reload this page"><i class="fas fa-rotate-right" aria-hidden=true></i></button><button type=button class=theme-toggle onclick=toggleTheme() title="Toggle Dark/Light Mode" aria-label="Toggle dark or light mode"><i class="fas fa-moon" aria-hidden=true></i></button><button type=button class=mobile-menu-btn id=mobileMenuBtn onclick=toggleMobileMenu() aria-label=Menu aria-expanded=false aria-controls=mobileDrawer></button></div></div><div class=mobile-nav-drawer id=mobileDrawer><a href=./ class="mobile-link "><i class="fas fa-th-large" style=width:20px></i> Dashboard</a><a href=trends.html class="mobile-link "><i class="fas fa-chart-line" style=width:20px></i> Trends</a><a href=map.html class="mobile-link "><i class="fas fa-map-marked-alt" style=width:20px></i> Map</a><a href=rescues.html class="mobile-link "><i class="fas fa-ambulance" style=width:20px></i> Rescues</a><a href=breeds.html class="mobile-link "><i class="fas fa-paw" style=width:20px></i> Breeds</a><a href=upload.html class="mobile-link active"><i class="fas fa-camera" style=width:20px aria-hidden=true></i> Walk Sheet Upload</a><a href=notes.html class="mobile-link "><i class="fas fa-clipboard-list" style=width:20px aria-hidden=true></i> Log a visit</a><a href=feedback.html class="mobile-link "><i class="fas fa-comment-dots" style=width:20px aria-hidden=true></i> Feedback</a><button type=button class="mobile-link pwa-install-drawer" onclick="toggleMobileMenu(false); pwaOpenInstall('drawer')"><svg class=pwa-install-icon viewbox="0 0 16 16" width=20 height=16 aria-hidden=true focusable=false><rect x=4 y=1.5 width=8 height=13 rx=1.5 fill=none stroke=currentColor stroke-width=1.3 /><path fill=none stroke=currentColor stroke-width=1.3 stroke-linecap=round stroke-linejoin=round d="M8 4.5v5M6 7.75 8 9.75l2-2"/></svg> Install app</button><button type=button class="mobile-link pwa-reload-link" onclick="pwaReload('manual')"><i class="fas fa-rotate-right" style=width:20px aria-hidden=true></i> Reload</button></div></header><script>
     // Keeps <meta name="theme-color"> (partials/pwa.html) in step with the
     // theme, so Android's status bar follows the visitor's choice. Reads --bg
     // from body, where body.light-mode sets the light value.
@@ -1879,8 +1902,8 @@
         }
         return open;
     }
-    // The Menu announcement's eligibility: the button is showing (950px and
-    // below) and the visitor has never opened the menu.
+    // The Menu announcement's eligibility: the button is showing (1050px and
+    // below: phones and small tablets) and the visitor has never opened the menu.
     function menuAnnounceEligible() {
         return typeof announceDrawerShown === 'function' && announceDrawerShown() && !menuFound();
     }
@@ -1913,7 +1936,7 @@
         const btn = document.getElementById('mobileMenuBtn');
         if (btn) btn.focus();
     });
-</script><div class=container id=main-content tabindex=-1><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Each pavilion shows its most recent sheet until a newer one replaces it, so re-upload whenever a sheet is rewritten to keep badges current. No passcode needed. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet — the processing service hasn't been deployed. Please check back soon. </div><form id=uploadForm class=card-panel><label class=field for=passcode id=passcodeField hidden><span>Volunteer passcode <small class=muted>(temporarily required)</small></span><div class=password-wrapper><input type=password id=passcode name=passcode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option><option value=E>E</option></select></label><div class=field id=sheetStatusField hidden><span>Last sheet uploaded</span><div id=sheetStatus class=sheet-status role=group aria-label="Last sheet upload per pavilion"></div></div><div class=field><span id=photoLabel>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* required class=visually-hidden aria-labelledby=photoLabel><div class=file-btn-group><button type=button id=snapBtn class=file-btn><i class="fas fa-camera" aria-hidden=true></i> Take photo </button><button type=button id=pickBtn class=file-btn><i class="fas fa-image" aria-hidden=true></i> Choose photo </button></div><span id=photoName class=muted></span></div><label class=agree id=agreeRow for=agreeTerms><input type=checkbox id=agreeTerms name=agreeTerms required><span>I have read and agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>.</span></label><p class="agreed-note muted" id=agreedNote hidden><span>By uploading, you agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a> (accepted <span id=agreedWhen></span>).</span><button type=button class=linklike id=reviewTerms>Review</button></p><div id=ts-upload class=ts-widget></div><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div></form><div id=uploadJobs class=card-panel hidden><span class=jobs-title><i class="fas fa-list-check" aria-hidden=true></i> Sheet processing</span><div id=uploadJobsList role=status aria-live=polite></div></div><details class="card-panel admin-panel" id=adminPanel><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><div class=password-wrapper><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><div id=ts-admin class=ts-widget-admin></div><button type=button class=primary-btn id=adminUnlockBtn><i class="fas fa-lock-open" aria-hidden=true></i> Unlock </button><div id=adminGated hidden><div class=field><span>Pavilion sheets</span><p class=muted> Uploads don't need a passcode, so check replaced sheets. If a bad upload replaced a good sheet, open History and restore the earlier one (up to five are kept per pavilion). </p><div id=adminSheets><p class=muted>Loading sheets…</p></div></div><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>E</code> plus a number (e.g. <code>C 70</code>), or clear it. Optionally pick the walker-level color matching the marker highlight on the sheet (yellow = intermediate, orange = advanced) — setting a kennel with "No color" removes any existing color. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div></div><div id=adminStatus class=status role=status aria-live=polite></div></details><dialog id=uploadSuccessModal class=success-modal closedby=any aria-labelledby=successThanks><div class=success-modal-header><button type=button class=close-modal-btn id=successCloseX aria-label="Close dialog">&times;</button></div><div class=success-modal-body><p class=success-emoji id=successEmoji aria-hidden=true></p><p class=success-thanks id=successThanks></p><p class=success-detail id=successDetail></p><p class=success-timing id=successTiming>Badges can take ~5 minutes to appear on the dashboard.</p><button type=button class=primary-btn id=successCloseBtn autofocus><i class="fas fa-paw" aria-hidden=true></i> Close </button></div></dialog></div><div class=footer><span>Last Updated: November 19, 2026 04:32 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Each pavilion shows its most recent sheet until a newer one replaces it, so re-upload whenever a sheet is rewritten to keep badges current. No passcode needed. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet: the processing service hasn't been deployed. Please check back soon. </div><form id=uploadForm class=card-panel><label class=field for=passcode id=passcodeField hidden><span>Volunteer passcode <small class=muted>(temporarily required)</small></span><div class=password-wrapper><input type=password id=passcode name=passcode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option><option value=E>E</option></select></label><div class=field id=sheetStatusField hidden><span>Last sheet uploaded</span><div id=sheetStatus class=sheet-status role=group aria-label="Last sheet upload per pavilion"></div></div><div class=field><span id=photoLabel>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* required class=visually-hidden aria-labelledby=photoLabel><div class=file-btn-group><button type=button id=snapBtn class=file-btn><i class="fas fa-camera" aria-hidden=true></i> Take photo </button><button type=button id=pickBtn class=file-btn><i class="fas fa-image" aria-hidden=true></i> Choose photo </button></div><span id=photoName class=muted></span></div><label class=agree id=agreeRow for=agreeTerms><input type=checkbox id=agreeTerms name=agreeTerms required><span>I have read and agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>.</span></label><p class="agreed-note muted" id=agreedNote hidden><span>By uploading, you agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a> (accepted <span id=agreedWhen></span>).</span><button type=button class=linklike id=reviewTerms>Review</button></p><div id=ts-upload class=ts-widget></div><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div></form><div id=uploadJobs class=card-panel hidden><span class=jobs-title><i class="fas fa-list-check" aria-hidden=true></i> Sheet processing</span><div id=uploadJobsList role=status aria-live=polite></div></div><details class="card-panel admin-panel" id=adminPanel><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><div class=password-wrapper><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><div id=ts-admin class=ts-widget-admin></div><button type=button class=primary-btn id=adminUnlockBtn><i class="fas fa-lock-open" aria-hidden=true></i> Unlock </button><div id=adminGated hidden><div class=field><span>Pavilion sheets</span><p class=muted> Uploads don't need a passcode, so check replaced sheets. If a bad upload replaced a good sheet, open History and restore the earlier one (up to five are kept per pavilion). </p><div id=adminSheets><p class=muted>Loading sheets…</p></div></div><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>E</code> plus a number (e.g. <code>C 70</code>), or clear it. Optionally pick the walker-level color matching the marker highlight on the sheet (yellow = intermediate, orange = advanced). Setting a kennel with "No color" removes any existing color. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div></div><div id=adminStatus class=status role=status aria-live=polite></div></details><dialog id=uploadSuccessModal class=success-modal closedby=any aria-labelledby=successThanks><div class=success-modal-header><button type=button class=close-modal-btn id=successCloseX aria-label="Close dialog">&times;</button></div><div class=success-modal-body><p class=success-emoji id=successEmoji aria-hidden=true></p><p class=success-thanks id=successThanks></p><p class=success-detail id=successDetail></p><p class=success-timing id=successTiming>Badges can take ~5 minutes to appear on the dashboard.</p><button type=button class=primary-btn id=successCloseBtn autofocus><i class="fas fa-paw" aria-hidden=true></i> Close </button></div></dialog></div><div class=footer><span>Last Updated: November 19, 2026 05:24 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -1971,8 +1994,11 @@
         //   upload_nudge_shown        stale-sheet nudge dialog opened           {days_stale}
         //   upload_nudge_clicked      nudge CTA followed to upload.html         {days_stale}
         //   upload_nudge_dismissed    nudge closed without the CTA              {method, days_stale}
-        //   sheet_upload_queued       walk sheet accepted for background OCR    {pavilion, legacy?}
-        //   sheet_upload_result       background sheet OCR finished or gave up  {pavilion, state, kennels?, highlights?, matched?, low_rows?, throttled?, overlap?, kept?, city?, rejected?, detected?, model?, poll_ms, legacy?}
+        //   walksheet_guide_opened    Walk Sheet Upload tutorial dialog opened  {source: announcement|legend}
+        //   walksheet_guide_clicked   tutorial CTA followed to upload.html      {source}
+        //   walksheet_guide_dismissed tutorial closed without the CTA          {source, method: not_now|x|light_dismiss}
+        //   sheet_upload_queued       walk sheet accepted for background OCR    {pavilion, legacy?, via?}
+        //   sheet_upload_result       background sheet OCR finished or gave up  {pavilion, state, kennels?, highlights?, matched?, low_rows?, throttled?, overlap?, kept?, city?, rejected?, detected?, model?, poll_ms, legacy?, via?}
         //   admin_sheet_restored      admin restored an earlier pavilion sheet  {pavilion}
         //   air_section_toggled       air.html accordion opened or closed       {section, open}
         //   air_resource_clicked      outbound source link on air.html          {resource}
@@ -2013,6 +2039,14 @@
         // captured_at (null = no sheet has ever been uploaded); method is
         // not_now | x | light_dismiss (Esc and backdrop both funnel through the
         // dialog's close event and can't be told apart).
+        // walksheet_guide notes (index.html): source is announcement (the
+        // dashboard's "Volunteering?" card) | legend (the Guide's row);
+        // method as for upload_nudge. Nothing fires under ?announce= QA.
+        // via (sheet_upload_queued, sheet_upload_result; from 2026-11-19) is
+        // guide | nudge when that upload.html page view was reached through
+        // that dialog's CTA (sessionStorage uploadVia, read and removed on
+        // load, so it covers that one arrival, polled results included);
+        // absent otherwise (nav, drawer, a direct link, a later visit).
         // search_performed notes (index + removed): q_len is the raw input
         // length, unchanged since 2026-08 so it stays comparable with earlier
         // analyses. n_len = normalized query length (searchTokens joined by
@@ -2460,6 +2494,21 @@
         try { return JSON.parse(localStorage.getItem(TERMS_KEY) || 'null'); }
         catch (e) { return null; }
     }
+    // How this page view was reached: index.html's walk-sheet tutorial or
+    // stale-sheet nudge sets sessionStorage uploadVia before following its
+    // CTA. Read once here and removed at once, so it tags only the uploads of
+    // this page view (including results that arrive by polling) and not a
+    // later visit through the nav. Added to the upload events as `via`.
+    const UPLOAD_VIA = (function () {
+        try {
+            const v = sessionStorage.getItem('uploadVia');
+            sessionStorage.removeItem('uploadVia');
+            return v === 'guide' || v === 'nudge' ? v : null;
+        } catch (e) { return null; }
+    })();
+    function withVia(props) {
+        return UPLOAD_VIA ? Object.assign(props, { via: UPLOAD_VIA }) : props;
+    }
 
     // ---- Shared helpers ----------------------------------------------------
     function togglePassword(btn) {
@@ -2571,12 +2620,12 @@
             const sheetDate = /^\d{4}-\d{2}-\d{2}$/.test(info.sheet_date || '') ? info.sheet_date : '';
             chip.title = `Uploaded ${formatLocalTimecode(capturedTs)}` +
                 (sheetDate ? ` · sheet dated ${formatSiteDate(sheetDate)}` : '');
-            chip.setAttribute('aria-label', `Select Pavilion ${pav} — last uploaded ${ageText}`);
+            chip.setAttribute('aria-label', `Select Pavilion ${pav}, last uploaded ${ageText}`);
         } else {
             chip.classList.add('empty');
-            age.textContent = '—';
+            age.textContent = 'none';
             chip.title = 'No sheet on file yet';
-            chip.setAttribute('aria-label', `Select Pavilion ${pav} — no sheet on file yet`);
+            chip.setAttribute('aria-label', `Select Pavilion ${pav}, no sheet on file yet`);
         }
         chip.append(letter, age);
         chip.addEventListener('click', () => { pavilionSelect.value = pav; });
@@ -2684,7 +2733,7 @@
         removePendingJob(id);
         renderJobRow(id, state, text);
         if (state === 'done') markSheetUploaded(pavilion);
-        track('sheet_upload_result', Object.assign({ pavilion: pavilion, state: state }, props || {}));
+        track('sheet_upload_result', withVia(Object.assign({ pavilion: pavilion, state: state }, props || {})));
     }
 
     function schedulePoll(id, pavilion, startedAt) {
@@ -2698,7 +2747,7 @@
             // The workflow may still finish server-side — neutral copy; the
             // freshness chips will show the sheet if it lands.
             finishJob(id, pavilion, 'timeout',
-                `Pavilion ${pavilion} — still processing. Badges will appear once it finishes; no need to re-upload.`,
+                `Pavilion ${pavilion}: still processing. Badges will appear once it finishes; no need to re-upload.`,
                 { poll_ms: elapsed });
             return;
         }
@@ -2712,7 +2761,7 @@
             if (r.status === 401) {
                 // Only a pre-change worker gates polling — it can never succeed.
                 finishJob(id, pavilion, 'failed',
-                    `Pavilion ${pavilion} — this upload can't be tracked right now. Refresh the page to check the sheet's status.`,
+                    `Pavilion ${pavilion}: this upload can't be tracked right now. Refresh the page to check the sheet's status.`,
                     { poll_ms: elapsed });
                 return null;
             }
@@ -2732,16 +2781,16 @@
                     let msg;
                     if (rejected === 'pavilion_mismatch') {
                         msg = det
-                            ? `Pavilion ${pavilion} — this looks like Pavilion ${det}'s sheet, so nothing was changed. Select Pavilion ${det} and upload it again.`
-                            : `Pavilion ${pavilion} — this looks like a different pavilion's sheet, so nothing was changed. Double-check the pavilion and upload again.`;
+                            ? `Pavilion ${pavilion}: this looks like Pavilion ${det}'s sheet, so nothing was changed. Select Pavilion ${det} and upload it again.`
+                            : `Pavilion ${pavilion}: this looks like a different pavilion's sheet, so nothing was changed. Double-check the pavilion and upload again.`;
                     } else if (rejected === 'stale_date') {
-                        msg = `Pavilion ${pavilion} — the sheet already on file is newer than this one, so nothing was changed. If this really is the current sheet, photograph today's page and upload again.`;
+                        msg = `Pavilion ${pavilion}: the sheet already on file is newer than this one, so nothing was changed. If this really is the current sheet, photograph today's page and upload again.`;
                     } else if (rejected === 'unverified_names') {
-                        msg = `Pavilion ${pavilion} — we couldn't match enough names to dogs currently at CACC, so the previous sheet was kept. Retake the photo with the whole sheet flat, in focus and well lit, then upload again.`;
+                        msg = `Pavilion ${pavilion}: we couldn't match enough names to dogs currently at CACC, so the previous sheet was kept. Retake the photo with the whole sheet flat, in focus and well lit, then upload again.`;
                     } else if (rejected === 'verify_unavailable') {
-                        msg = `Pavilion ${pavilion} — we couldn't check the sheet against the current roster just now, so nothing was changed. Please upload it again in a few minutes.`;
+                        msg = `Pavilion ${pavilion}: we couldn't check the sheet against the current roster just now, so nothing was changed. Please upload it again in a few minutes.`;
                     } else {
-                        msg = `Pavilion ${pavilion} — no kennel rows could be read, so the previous sheet was kept. Retake the photo with the whole sheet in frame and upload again.`;
+                        msg = `Pavilion ${pavilion}: no kennel rows could be read, so the previous sheet was kept. Retake the photo with the whole sheet in frame and upload again.`;
                     }
                     finishJob(id, pavilion, 'failed', msg, {
                         rejected: rejected, detected: det, poll_ms: elapsed
@@ -2757,10 +2806,10 @@
                 const readout = n === null ? 'sheet processed'
                     : `read ${n} kennel${n === 1 ? '' : 's'}${h ? ` (${h} highlighted)` : ''}`;
                 const caveat = low
-                    ? ' That is far fewer rows than the last sheet — if the photo cut off part of the page, retake it and upload again.'
+                    ? ' That is far fewer rows than the last sheet. If the photo cut off part of the page, retake it and upload again.'
                     : '';
                 const later = throttled ? ' Saved; badges update at the next scheduled refresh.' : '';
-                finishJob(id, pavilion, 'done', `Pavilion ${pavilion} — ${readout}.${later}${caveat}`, {
+                finishJob(id, pavilion, 'done', `Pavilion ${pavilion}: ${readout}.${later}${caveat}`, {
                     kennels: n, highlights: h, low_rows: low, throttled: throttled,
                     // Log-only kennel continuity vs the replaced sheet, and the
                     // upload's network tag (null from older workers).
@@ -2775,7 +2824,7 @@
                 });
             } else if (data.state === 'failed') {
                 finishJob(id, pavilion, 'failed',
-                    `Pavilion ${pavilion} — we couldn't read that sheet. Try retaking the photo with more light and less glare, then upload it again.`,
+                    `Pavilion ${pavilion}: we couldn't read that sheet. Try retaking the photo with more light and less glare, then upload it again.`,
                     { poll_ms: elapsed });
             } else {
                 // processing / unknown (instance not queryable yet) — keep going.
@@ -2789,7 +2838,7 @@
         const jobs = readPendingJobs().filter(j => !j || j.id !== id);
         jobs.push({ id: id, pavilion: pavilion, t: Date.now() });
         writePendingJobs(jobs);
-        renderJobRow(id, 'processing', `Pavilion ${pavilion} — reading the sheet…`);
+        renderJobRow(id, 'processing', `Pavilion ${pavilion}: reading the sheet…`);
         schedulePoll(id, pavilion, Date.now());
     }
 
@@ -2801,7 +2850,7 @@
             typeof j.t === 'number' && (Date.now() - j.t) < POLL_WALL_MS);
         writePendingJobs(pending);
         pending.forEach(j => {
-            renderJobRow(j.id, 'processing', `Pavilion ${j.pavilion} — reading the sheet…`);
+            renderJobRow(j.id, 'processing', `Pavilion ${j.pavilion}: reading the sheet…`);
             pollJob(j.id, j.pavilion, j.t);
         });
     }
@@ -2867,19 +2916,19 @@
     // A randomized shelter-dog thank-you keeps the moment fun for volunteers.
     const SUCCESS_MESSAGES = [
         "Tail-wag levels: critical. You're the reason. Thank you!",
-        'Somewhere in the pavilion, a good dog just sighed happily. That was your doing — thanks!',
-        "Paws what you're doing — you're amazing. Thanks for logging those walks!",
+        'Somewhere in the pavilion, a good dog just sighed happily. That was your doing. Thanks!',
+        "Paws what you're doing. You're amazing! Thanks for logging those walks!",
         "The pups voted, and you're officially Best Human of the Day. Thank you!",
         'Zoomies have been earned and logged. Thank you for walking the crew!',
         'Sheet received! The dogs would high-five you if they had thumbs. Thank you!',
-        'Another walk sheet in the books — the dogs are wagging in your general direction. Thanks!',
+        'Another walk sheet in the books, and the dogs are wagging in your general direction. Thanks!',
         'You walk, we log, the dogs nap victoriously. Thank you!',
         'Consider yourself officially sniffed and approved. Thanks for uploading!',
-        'Pittie smiles all around — that velvet-hippo joy is because of you. Thank you!',
+        'Pittie smiles all around, and that velvet-hippo joy is because of you. Thank you!',
         'Blocky heads and wiggle butts salute you. Thanks for walking the crew!',
         'A pittie somewhere just did a full-body wag in your honor. Thank you!',
         'The wiggle-butt committee reviewed your upload: five out of five tail wags. Thank you!',
-        'Snoot boops incoming — thanks for logging those walks!'
+        'Snoot boops incoming. Thanks for logging those walks!'
     ];
     const SUCCESS_EMOJI = ['🐕', '🐶', '🐾', '🦴', '🐕❤️', '❤️🐾'];
     const pickRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -2943,11 +2992,11 @@
         // managers report an empty type — let those through (the worker defaults
         // the MIME to image/jpeg).
         if (file.type && !file.type.startsWith('image/')) {
-            setStatus(uploadStatus, "That file isn't a photo — please choose an image.", 'err');
+            setStatus(uploadStatus, "That file isn't a photo. Please choose an image.", 'err');
             return;
         }
         if (file.size > 30 * 1024 * 1024) {
-            setStatus(uploadStatus, 'That photo is too large to process — please retake it or pick a smaller one.', 'err');
+            setStatus(uploadStatus, 'That photo is too large to process. Please retake it or pick a smaller one.', 'err');
             return;
         }
         const agreeEl = document.getElementById('agreeTerms');
@@ -2969,7 +3018,7 @@
         let tsToken = '';
         if (TURNSTILE_SITE_KEY) {
             if (turnstileBlocked()) {
-                setStatus(uploadStatus, 'Security check failed to load — please disable any adblocker/privacy shield and refresh.', 'err');
+                setStatus(uploadStatus, 'Security check failed to load. Please disable any adblocker/privacy shield and refresh.', 'err');
                 return;
             }
             tsToken = (window.turnstile && window.turnstile.getResponse(tsUploadId)) || '';
@@ -2999,7 +3048,7 @@
                     blob = file;
                     filename = file.name || 'sheet';
                 } else {
-                    setStatus(uploadStatus, "Couldn't process that photo on this device, and it's too big to send as-is — please retake it.", 'err');
+                    setStatus(uploadStatus, "Couldn't process that photo on this device, and it's too big to send as-is. Please retake it.", 'err');
                     return;
                 }
             }
@@ -3023,8 +3072,8 @@
                 });
             } catch (err) {
                 setStatus(uploadStatus, err && err.name === 'TimeoutError'
-                    ? 'The upload timed out — check your signal and try again.'
-                    : 'Network problem — check your connection and try again.', 'err');
+                    ? 'The upload timed out. Check your signal and try again.'
+                    : 'Network problem. Check your connection and try again.', 'err');
                 return;
             }
             const data = await resp.json().catch(() => ({}));
@@ -3037,12 +3086,12 @@
                     ? 'Uploads temporarily need the volunteer passcode. Enter it above and upload again.'
                     : 'Passcode rejected. Please check it and try again.', 'err');
             } else if (resp.status === 413) {
-                setStatus(uploadStatus, 'That photo is too large to process — please retake it or pick a smaller one.', 'err');
+                setStatus(uploadStatus, 'That photo is too large to process. Please retake it or pick a smaller one.', 'err');
             } else if (resp.status === 415) {
-                setStatus(uploadStatus, "That file isn't a supported photo — please take or choose a JPEG, PNG or HEIC image.", 'err');
+                setStatus(uploadStatus, "That file isn't a supported photo. Please take or choose a JPEG, PNG or HEIC image.", 'err');
             } else if (resp.status === 403) {
                 // Turnstile tokens expire after a few minutes.
-                setStatus(uploadStatus, 'Security check expired — please redo it and try again.', 'err');
+                setStatus(uploadStatus, 'Security check expired. Please redo it and try again.', 'err');
             } else if (!resp.ok) {
                 // Surface the worker's error detail (setStatus uses textContent,
                 // so echoing it is safe) — the generic message alone once hid an
@@ -3056,11 +3105,11 @@
                 // background workflow — track the job and free the volunteer.
                 // (Branching on response SHAPE, not status code, keeps this
                 // page correct against either worker deploy.)
-                const detail = `Sheet received for Pavilion ${pavilion} — we're reading it now.`;
+                const detail = `Sheet received for Pavilion ${pavilion}. We're reading it now.`;
                 openSuccessModal(detail,
-                    "You're done — feel free to shoot the next pavilion. Badges usually appear within ~5 minutes.");
+                    "You're done! Feel free to shoot the next pavilion. Badges usually appear within ~5 minutes.");
                 addJob(String(data.job_id), pavilion);
-                track('sheet_upload_queued', { pavilion: pavilion });
+                track('sheet_upload_queued', withVia({ pavilion: pavilion }));
                 // Inline echo so a record remains after the dialog is dismissed
                 // (the chip refresh waits for the poll to confirm the read).
                 setStatus(uploadStatus, `Uploaded! 🐾 ${detail}`, 'ok');
@@ -3074,12 +3123,12 @@
                     `${h ? ` (${h} highlighted)` : ''} for Pavilion ${pavilion}.`;
                 openSuccessModal(detail);
                 markSheetUploaded(pavilion);
-                track('sheet_upload_queued', { pavilion: pavilion, legacy: true });
-                track('sheet_upload_result', {
+                track('sheet_upload_queued', withVia({ pavilion: pavilion, legacy: true }));
+                track('sheet_upload_result', withVia({
                     pavilion: pavilion, state: 'done',
                     kennels: data.kennels != null ? data.kennels : null,
                     highlights: h || 0, poll_ms: 0, legacy: true
-                });
+                }));
                 // Inline echo so a record remains after the dialog is dismissed.
                 setStatus(uploadStatus,
                     `Uploaded! 🐾 ${detail} Badges can take ~5 minutes to appear on the dashboard.`, 'ok');
@@ -3161,7 +3210,7 @@
                 rosterReady = true;
                 renderAdmin();
             }).catch(() => {
-                adminResults.innerHTML = '<p class="muted">Could not load the roster — reload the page to retry.</p>';
+                adminResults.innerHTML = '<p class="muted">Could not load the roster. Reload the page to retry.</p>';
             });
     }
 
@@ -3199,7 +3248,7 @@
             let tsToken = '';
             if (TURNSTILE_SITE_KEY) {
                 if (turnstileBlocked()) {
-                    setStatus(adminStatus, 'Security check failed to load — please disable any adblocker/privacy shield and refresh.', 'err');
+                    setStatus(adminStatus, 'Security check failed to load. Please disable any adblocker/privacy shield and refresh.', 'err');
                     return;
                 }
                 tsToken = await getAdminToken();
@@ -3217,7 +3266,7 @@
                 });
             } catch (e) {
                 setStatus(adminStatus, e && e.name === 'TimeoutError'
-                    ? 'Unlock timed out — try again.' : 'Unlock failed — check your connection and try again.', 'err');
+                    ? 'Unlock timed out. Try again.' : 'Unlock failed. Check your connection and try again.', 'err');
                 return;
             }
             if (resp.status === 401) { setStatus(adminStatus, 'Admin passcode rejected.', 'err'); return; }
@@ -3267,7 +3316,7 @@
                 ? ' <span class="who-chip crowd" title="Recently overridden by volunteer consensus (3 matching reports)"><i class="fas fa-users" aria-hidden="true"></i> crowd ×3</span>'
                 : '';
             const flagChip = d.fl
-                ? ` <span class="who-chip flagged" title="${d.fl} anonymous report${d.fl === 1 ? '' : 's'} say this badge is wrong — verify, then Set the correct kennel or Clear"><i class="fas fa-flag" aria-hidden="true"></i> flagged ×${Number(d.fl)}</span>`
+                ? ` <span class="who-chip flagged" title="${d.fl} anonymous report${d.fl === 1 ? '' : 's'} say this badge is wrong. Verify, then Set the correct kennel or Clear"><i class="fas fa-flag" aria-hidden="true"></i> flagged ×${Number(d.fl)}</span>`
                 : '';
             // Suggested kennels are re-validated before rendering (same
             // defense-in-depth posture as the rest of the row).
@@ -3275,7 +3324,7 @@
                 ? Object.entries(d.sg)
                     .filter(([pk, votes]) => /^[A-E]-\d{1,3}$/.test(pk) && Number(votes) > 0)
                     .sort((a, b) => Number(b[1]) - Number(a[1]))
-                    .map(([pk, votes]) => ` <span class="who-chip suggest" title="Pending volunteer correction — promotes automatically at 3 matching reports"><i class="fas fa-arrow-right" aria-hidden="true"></i> ${escapeHtml(pk)} ×${Number(votes)}</span>`)
+                    .map(([pk, votes]) => ` <span class="who-chip suggest" title="Pending volunteer correction: promotes automatically at 3 matching reports"><i class="fas fa-arrow-right" aria-hidden="true"></i> ${escapeHtml(pk)} ×${Number(votes)}</span>`)
                     .join('')
                 : '';
             // Sheet date for OCR badges (sheets persist until replaced), with
@@ -3290,8 +3339,8 @@
                 <input class="kennel field" type="text" placeholder="C 70" value="${escapeHtml(d.pk ? d.pk.replace(/-/g, ' ') : '')}" aria-label="Kennel for ${escapeHtml(d.name)} (${escapeHtml(d.id)})"${disabledAttr}>
                 <select class="hl field" aria-label="Walker-level color for ${escapeHtml(d.name)} (${escapeHtml(d.id)})"${disabledAttr}>
                     <option value="">No color</option>
-                    <option value="yellow"${d.hl === 'yellow' ? ' selected' : ''}>Yellow — intermediate</option>
-                    <option value="orange"${d.hl === 'orange' ? ' selected' : ''}>Orange — advanced</option>
+                    <option value="yellow"${d.hl === 'yellow' ? ' selected' : ''}>Yellow (intermediate)</option>
+                    <option value="orange"${d.hl === 'orange' ? ' selected' : ''}>Orange (advanced)</option>
                 </select>
                 <button type="button" class="ghost-btn" data-action="set"${disabledAttr} aria-label="Set kennel for ${escapeHtml(d.name)}">${inFlight === 'set' ? spinner : 'Set'}</button>
                 <button type="button" class="ghost-btn danger" data-action="clear"${disabledAttr} aria-label="Clear kennel for ${escapeHtml(d.name)}">${inFlight === 'clear' ? spinner : 'Clear'}</button>
@@ -3414,7 +3463,7 @@
         let tsToken = '';
         if (TURNSTILE_SITE_KEY) {
             if (turnstileBlocked()) {
-                failAdminRow(dogId, action, originalHtml, 'Security check failed to load — please disable any adblocker/privacy shield and refresh.');
+                failAdminRow(dogId, action, originalHtml, 'Security check failed to load. Please disable any adblocker/privacy shield and refresh.');
                 return;
             }
             tsToken = await getAdminToken();
@@ -3441,7 +3490,7 @@
                 // explanation after it.
                 failAdminRow(dogId, action, originalHtml, 'Admin passcode rejected.');
                 lockAdmin();
-                setStatus(adminStatus, 'Admin passcode rejected — the panel is locked. Re-enter the passcode and unlock.', 'err');
+                setStatus(adminStatus, 'Admin passcode rejected. The panel is locked. Re-enter the passcode and unlock.', 'err');
                 return;
             }
             if (resp.status === 403) { failAdminRow(dogId, action, originalHtml, 'Security check failed. Please retry.'); return; }
@@ -3467,7 +3516,7 @@
             }
         } catch (e) {
             failAdminRow(dogId, action, originalHtml, e && e.name === 'TimeoutError'
-                ? 'Save timed out — try again.' : 'Save failed. Try again.');
+                ? 'Save timed out. Try again.' : 'Save failed. Try again.');
         } finally {
             // Token is single-use — refresh for the next admin action.
             if (TURNSTILE_SITE_KEY && window.turnstile && tsAdminId !== null) window.turnstile.reset(tsAdminId);
@@ -3508,7 +3557,7 @@
         if (!adminSheets) return;
         if (!sheetStatusData) {
             adminSheets.replaceChildren(Object.assign(document.createElement('p'),
-                { className: 'muted', textContent: 'Sheet status unavailable — reload the page to retry.' }));
+                { className: 'muted', textContent: 'Sheet status unavailable. Reload the page to retry.' }));
             return;
         }
         adminSheets.replaceChildren(...['A', 'B', 'C', 'D', 'E'].map(pav => {
@@ -3520,7 +3569,7 @@
             label.className = 'sheet-admin-info';
             const letter = document.createElement('b');
             letter.textContent = `Pavilion ${pav}`;
-            label.append(letter, ` — ${sheetLabel(info)}`);
+            label.append(letter, `: ${sheetLabel(info)}`);
             row.append(label);
             if (info && info.restorable === true) {
                 const btn = document.createElement('button');
@@ -3543,7 +3592,7 @@
             let tsToken = '';
             if (TURNSTILE_SITE_KEY) {
                 if (turnstileBlocked()) {
-                    setStatus(adminStatus, 'Security check failed to load — please disable any adblocker/privacy shield and refresh.', 'err');
+                    setStatus(adminStatus, 'Security check failed to load. Please disable any adblocker/privacy shield and refresh.', 'err');
                     return null;
                 }
                 tsToken = await getAdminToken();
@@ -3559,7 +3608,7 @@
                 const data = await resp.json().catch(() => ({}));
                 if (resp.status === 401) {
                     lockAdmin();
-                    setStatus(adminStatus, 'Admin passcode rejected — the panel is locked. Re-enter the passcode and unlock.', 'err');
+                    setStatus(adminStatus, 'Admin passcode rejected. The panel is locked. Re-enter the passcode and unlock.', 'err');
                     return null;
                 }
                 if (resp.status === 403) { setStatus(adminStatus, 'Security check failed. Please retry.', 'err'); return null; }
@@ -3571,7 +3620,7 @@
                 return data;
             } catch (e) {
                 setStatus(adminStatus, e && e.name === 'TimeoutError'
-                    ? 'Request timed out — try again.' : 'Request failed — check your connection and try again.', 'err');
+                    ? 'Request timed out. Try again.' : 'Request failed. Check your connection and try again.', 'err');
                 return null;
             } finally {
                 if (TURNSTILE_SITE_KEY && window.turnstile && tsAdminId !== null) window.turnstile.reset(tsAdminId);
