@@ -2213,6 +2213,161 @@ opacity: 0;
 .share-btn { padding: 0 14px; }
 }
 
+/* --- Filters button + panel (the "filter panel" script block) ---
+   One trigger shows per width: the labelled button after the sort select
+   above 600px, the icon twin pinned before the chip row at 600px and below
+   (the search row has no room there). */
+.chip-row { display: flex; align-items: flex-start; gap: 8px; }
+.chip-row .filter-chips { flex: 1; min-width: 0; }
+.filters-btn { position: relative; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 0 14px; border-radius: 8px; font: inherit; font-size: 14px; cursor: pointer; transition: border-color 0.2s; }
+/* Hover styles only where hover is real: iOS keeps :hover on the last tapped
+   element, which made an untapped-looking chip read as selected. */
+@media (hover: hover) {
+    .filters-btn:hover, .fp-opt:hover, .fp-clear:hover { border-color: var(--accent); }
+    .filter-token:hover { background: var(--row-hover); }
+}
+.filters-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.filters-btn.has-active { border-color: var(--accent); color: var(--accent); }
+.filters-btn .chip-badge[hidden] { display: none; }
+.filters-btn-icon { display: none; width: 44px; height: 44px; padding: 0; border-radius: 22px; background: var(--row); }
+.filters-btn-icon .chip-badge { position: absolute; top: -4px; right: -4px; }
+@media (max-width: 600px) {
+    .filters-btn-bar { display: none; }
+    .filters-btn-icon { display: inline-flex; }
+}
+
+/* Panel-only filters applied, one removable token each (under the title). */
+.filter-tokens { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: -8px 0 18px; padding: 0; }
+.filter-tokens[hidden] { display: none; }
+.filter-token { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 4px 8px 4px 12px; border-radius: 16px; border: 1px solid var(--accent); background: var(--info-bg); color: var(--text); font: inherit; font-size: 0.82rem; cursor: pointer; }
+.filter-token:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.filter-token-x { font-size: 1.1em; font-weight: 700; color: var(--text-muted); line-height: 1; }
+@media (max-width: 600px) { .filter-token { min-height: 44px; } }
+
+/* The sheet: a 400px right side sheet, a bottom sheet at 600px and below.
+   The backdrop is light and unblurred so the grid visibly updates behind it.
+   No body scroll lock: overscroll-behavior keeps scrolls in the sheet. */
+.filter-panel {
+    box-sizing: border-box; padding: 0; border: none; margin: 0;
+    inset: 0 0 0 auto; width: min(400px, 100vw); max-width: 100vw; height: 100%; max-height: 100%;
+    background: var(--bg); color: var(--text); border-left: 1px solid var(--border);
+    box-shadow: -12px 0 32px rgba(0, 0, 0, 0.35); overflow: hidden;
+}
+.filter-panel[open] { display: flex; flex-direction: column; }
+.filter-panel:modal { overscroll-behavior: contain; }
+.filter-panel::backdrop { background: rgba(0, 0, 0, 0.3); overflow: hidden; overscroll-behavior: contain; }
+.filter-panel *, .filter-panel *::before, .filter-panel *::after { box-sizing: border-box; }
+/* No double-tap zoom on the toggles: on iOS two quick taps (on, then off)
+   were read as a zoom gesture and the second tap was lost. */
+.filter-panel, .filter-token, .filters-btn { touch-action: manipulation; }
+@media (max-width: 600px) {
+    .filter-panel {
+        inset: auto 0 0 0; width: 100%; height: auto; max-height: 88vh; max-height: 88dvh;
+        border-left: none; border-top: 1px solid var(--border); border-radius: 16px 16px 0 0;
+        box-shadow: 0 -12px 32px rgba(0, 0, 0, 0.35);
+    }
+}
+.fp-head { flex: 0 0 auto; position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--border); }
+.fp-head h2 { margin: 0; font-size: 1.35rem; font-family: 'Big Shoulders Text', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-weight: 800; letter-spacing: 0.03em; color: var(--accent); text-transform: uppercase; }
+.fp-grabber { display: none; position: absolute; top: 6px; left: 50%; width: 36px; height: 4px; margin-left: -18px; border-radius: 2px; background: var(--border); }
+@media (max-width: 600px) {
+    .fp-grabber { display: block; }
+    .fp-head { padding-top: 18px; }
+}
+.fp-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 4px 20px 16px; }
+.fp-view-hint { margin: 12px 0 0; padding: 8px 12px; border-radius: 8px; background: var(--info-bg); color: var(--text); font-size: 0.85rem; }
+.fp-view-hint[hidden] { display: none; }
+.fp-sec { border: none; margin: 0; padding: 16px 0 4px; min-width: 0; }
+.fp-sec + .fp-sec { border-top: 1px solid var(--border); }
+.fp-sec > legend { float: left; width: 100%; padding: 0; margin: 0 0 10px; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+.fp-sec > legend ~ * { clear: both; }
+.fp-sub { border: none; margin: 0 0 12px; padding: 0; min-width: 0; }
+.fp-sub[hidden] { display: none; }
+.fp-sub > legend { float: left; width: 100%; padding: 0; margin: 0 0 6px; font-size: 0.85rem; font-weight: 600; color: var(--text); }
+.fp-sub > legend ~ * { clear: both; }
+.fp-intro { margin: 0 0 10px; font-size: 0.82rem; color: var(--text-muted); }
+.fp-archive-hint { margin: 0 0 12px; font-size: 0.85rem; color: var(--text-muted); }
+.fp-archive-hint[hidden] { display: none; }
+.fp-opts { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+.fp-opt {
+    position: relative; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px;
+    border-radius: 22px; border: 1px solid var(--border); background: var(--row); color: var(--text);
+    font-size: 0.9rem; cursor: pointer; user-select: none; transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+}
+.fp-opt[hidden] { display: none; }
+.fp-opt input { position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none; }
+.fp-opt:has(:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+.fp-opt:has(:checked) { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+/* Multi-select chips carry a fixed-width mark: "+" to add, "✓" once added.
+   The slot is always there, so checking a chip never widens it and shifts
+   the chips after it. Single-select (radio) chips have no mark. */
+.fp-opt:has(input[type="checkbox"]) { padding-left: 10px; }
+.fp-opt:has(input[type="checkbox"])::before { content: '+'; display: inline-block; width: 1em; text-align: center; font-weight: 700; opacity: 0.55; }
+.fp-opt:has(input[type="checkbox"]:checked)::before { content: '\2713'; opacity: 1; }
+/* Counts get a fixed width (tabular digits, so 1ch per digit): a count
+   changing from 1184 to 611 must not resize its chip and re-wrap the row
+   under a finger that is about to tap. In-shelter counts stay under 1,000;
+   Status counts, and every count in an archive view (all-time adopted,
+   rescued, returned; the panel gets .fp-archive), reach four digits. */
+.fp-count { display: inline-block; min-width: 3ch; font-size: 0.8rem; font-variant-numeric: tabular-nums; color: var(--text-muted); }
+.fp-sec-status .fp-count, .filter-panel.fp-archive .fp-count { min-width: 4ch; }
+.fp-opt:has(:checked) .fp-count { color: inherit; opacity: 0.85; }
+.fp-opt:has(input[aria-disabled="true"]:not(:checked)) { opacity: 0.45; cursor: default; }
+.fp-help { font-size: 0.75rem; opacity: 0.85; }
+/* Walker-level options keep the card badge's colours. */
+.fp-opt.lvl-yellow { color: var(--warning-text); background: var(--warning-bg); border-color: var(--warning-border); }
+.fp-opt.lvl-orange { color: var(--hl-orange-text); background: var(--hl-orange-bg); border-color: var(--hl-orange-border); }
+.fp-opt.lvl-yellow:has(:checked) { color: var(--warning-text); background: var(--warning-bg); border-color: var(--warning-text); box-shadow: inset 0 0 0 1px var(--warning-text); }
+.fp-opt.lvl-orange:has(:checked) { color: var(--hl-orange-text); background: var(--hl-orange-bg); border-color: var(--hl-orange-text); box-shadow: inset 0 0 0 1px var(--hl-orange-text); }
+.fp-msg { margin: 0 0 12px; font-size: 0.85rem; color: var(--text-muted); }
+.fp-foot { flex: 0 0 auto; display: flex; gap: 10px; padding: 12px 20px; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--border); background: var(--bg); }
+.fp-clear, .fp-show { min-height: 44px; border-radius: 8px; font: inherit; font-size: 0.95rem; font-weight: 600; cursor: pointer; }
+.fp-clear { padding: 0 16px; background: transparent; border: 1px solid var(--border); color: var(--text); }
+.fp-show { flex: 1; padding: 0 16px; background: var(--accent); border: 1px solid var(--accent); color: var(--on-accent); }
+.fp-clear:focus-visible, .fp-show:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Motion: slide and fade in everywhere @starting-style works; the exit
+   transition only where the top layer can be held open for it (overlay),
+   so other browsers close instantly instead of glitching. Transforms only
+   for visitors who haven't asked for reduced motion. */
+.filter-panel[open] { opacity: 1; transform: none; transition: opacity 0.2s ease-out, transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.filter-panel[open]::backdrop { transition: background-color 0.2s ease-out; }
+@starting-style {
+    .filter-panel[open] { opacity: 0; }
+    .filter-panel[open]::backdrop { background-color: transparent; }
+}
+@media (prefers-reduced-motion: no-preference) {
+    @starting-style { .filter-panel[open] { transform: translateX(100%); } }
+}
+@media (prefers-reduced-motion: no-preference) and (max-width: 600px) {
+    @starting-style { .filter-panel[open] { transform: translateY(100%); } }
+}
+@supports (overlay: auto) {
+    .filter-panel {
+        opacity: 0;
+        transition-property: opacity, transform, display, overlay;
+        transition-duration: 0.2s; transition-timing-function: ease-in;
+        transition-behavior: allow-discrete;
+    }
+    .filter-panel::backdrop {
+        background-color: transparent;
+        transition-property: background-color, display, overlay;
+        transition-duration: 0.2s;
+        transition-behavior: allow-discrete;
+    }
+    .filter-panel[open]::backdrop { background-color: rgba(0, 0, 0, 0.3); }
+    @media (prefers-reduced-motion: no-preference) {
+        .filter-panel { transform: translateX(100%); }
+    }
+    @media (prefers-reduced-motion: no-preference) and (max-width: 600px) {
+        .filter-panel { transform: translateY(100%); }
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .filter-panel, .filter-panel[open] { transition-duration: 0.1s; }
+    .fp-opt { transition: none; }
+}
+
     </style></head><body><a class=skip-link href=#main-content>Skip to main content</a><style>
     @font-face {
         font-family: 'Big Shoulders Text';
@@ -2582,7 +2737,7 @@ opacity: 0;
         const btn = document.getElementById('mobileMenuBtn');
         if (btn) btn.focus();
     });
-</script><div class=container id=main-content tabindex=-1><div class=page-meta><div class=freshness-bar><nav class=today-strip id=todayStrip aria-label="Today at CACC"><button class=today-label id=todayLabel type=button data-updated="November 19, 2026 03:46 PM" aria-expanded=false aria-controls=updatedText aria-describedby=updatedText title="Updated November 19, 2026 03:46 PM"><span class=status-dot aria-hidden=true></span>Today</button><span class=updated-text id=updatedText hidden>Updated November 19, 2026 03:46 PM</span><a class=today-pill data-kind=new href="./?filter=new" hidden><b>0</b> new</a><a class=today-pill data-kind=adopted href="./?filter=adopted" hidden><b>0</b> adopted</a><a class=today-pill data-kind=rto href="./?filter=rto" hidden><b>0</b> RTO</a><a class=today-pill data-kind=rescued href="rescues.html?view=today" hidden><b>0</b> rescued</a><a class=today-pill data-kind=removed href="removed.html?view=today" hidden><b>0</b> removed</a><span class=today-empty id=todayEmpty hidden>No changes recorded yet.</span></nav><button type=button class="legend-toggle push-bell" id=pushBell hidden onclick="pushOpenDialog('bell')" aria-label=Notifications aria-haspopup=dialog><i class="far fa-bell" aria-hidden=true></i> <span class=legend-label>Alerts</span><span class=push-dot id=pushBellDot hidden></span></button><button class=legend-toggle onclick=openLegendModal() aria-label="Dashboard legend & guide"><i class="fas fa-circle-info" aria-hidden=true></i> <span class=legend-label>Guide</span></button></div><dialog id=legendModal class=legend-modal aria-labelledby=legendTitle><div class=legend-modal-header><h2 id=legendTitle>Dashboard Legend & Guide</h2><button class=close-modal-btn onclick=closeLegendModal() aria-label="Close modal">&times;</button></div><div class=legend-modal-body><div class=legend-grid><div class=legend-group-title>Status & Stay Badges</div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge los-green">5 Days</span><span class="status-badge los-yellow">18 Days</span><span class="status-badge los-red">35 Days</span></div><div class=legend-desc><strong>Time at CACC / Stay Duration:</strong> Shows how many days the dog has been at the shelter. Mapped to filters: <span class=los-detail><span class=text-success>Green</span> (0-14 days; matches <strong>Fresh In</strong> for under 7 days), <span class=text-warning>Yellow</span> (15-29 days), and <span class=text-danger>Red</span> (30+ days; matches <strong>Long Stays</strong>). <em>Tapping or clicking the badge reveals the exact date and time they were first listed.</em></span></div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge los-green">Available</span></div><div class=legend-desc><strong>Available Status:</strong> Dogs currently at the shelter that are ready for adoption. Aligns with the <strong>Available</strong> filter. </div></div><div class=legend-group-title>Holds & Rescue Indicators</div><div class=legend-item><div class=legend-badge-wrapper><span class="tag hold"><i class="fas fa-clock"></i> Hold for 3 days · ends Nov 15</span></div><div class=legend-desc><strong>Stray Hold:</strong> The mandatory holding period to give owners time to locate and reclaim their lost pet. The hold is 3 days for unchipped dogs and 7 days for chipped dogs. The badge shows the days left and the date the hold ends. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag hold"><i class="fas fa-ban"></i> Unavailable</span></div><div class=legend-desc><strong>Unavailable:</strong> The dog is newly arrived and undergoing intake processing, medical checks, or observation, and is not yet ready for adoption. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag rescue-only"><i class="fas fa-hands-helping"></i> Rescue Only</span></div><div class=legend-desc><strong>Rescue Only:</strong> The dog can only be transferred to approved rescue organizations (not directly adopted by the public), usually due to special medical or behavioral needs. </div></div><div class=legend-group-title>Stray & Location Indicators</div><div class=legend-item><div class=legend-badge-wrapper><span class="tag stray"><i class="fas fa-map-marker-alt"></i> Stray</span></div><div class=legend-desc><strong>Stray Status:</strong> Found as a stray. Aligns with the <strong>Strays</strong> filter. If a location was recorded, you can click this tag to see where they were found on the map. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag stray chipped"><i class="fas fa-map-marker-alt"></i> <i class="fas fa-microchip"></i> Stray</span></div><div class=legend-desc><strong>Chipped Stray:</strong> Found as a stray with a microchip. The dashed border simply highlights that a chip was detected (which gives them a 7-day holding period instead of 3 days). </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag pavilion"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span><span class="tag pavilion hl-yellow"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span><span class="tag pavilion hl-orange"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span><span class="tag pavilion flagged"><i class="fas fa-warehouse" aria-hidden=true></i> <i class="fas fa-triangle-exclamation pk-flag-mark" aria-hidden=true></i> C-70</span><span class="tag pavilion pk-stale"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span></div><div class=legend-desc><strong>Pavilion Location:</strong> Where the dog was last housed, read from the most recent handwritten walk sheet (pavilion letter + kennel number). A yellow or orange tint mirrors a marker highlight on the sheet — CACC's walker levels: yellow = intermediate-level dog, orange = advanced-level dog. Sheets are uploaded by onsite volunteers; each badge shows the pavilion's latest sheet and stays until a newer one replaces it. A dimmed badge means its sheet is more than a couple of days old — hover or tap for the sheet date. Spot a wrong one? Tap the small flag to report it — the badge stays visible with a warning mark (like the example with the triangle) until volunteers or an admin confirm the right kennel. </div></div><div class=legend-group-title>Special Profile Indicators</div><div class=legend-item><div class=legend-badge-wrapper><span class="tag return"><i class="fas fa-undo-alt"></i> Return</span></div><div class=legend-desc><strong>Return Guest:</strong> This dog has been at CACC before. We detect this automatically by matching their intake ID against past shelter records. Aligns with the <strong>Returns</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><h3 class="dog-name has-aka" style="margin:0; font-size:1.15rem; display:inline-block;">Dog Name</h3></div><div class=legend-desc><strong>FKA (Formerly Known As):</strong> Underlined names mean the dog has a known previous name. Tap or click the name on their card to switch between their current and past name. </div></div><div class=legend-item id=legendNotes><div class=legend-badge-wrapper><span class=notes-ear-sample aria-hidden=true><span class=notes-ear-fold><svg viewbox="0 0 16 16"><path fill=none stroke=currentColor stroke-width=1.5 stroke-linejoin=round d="M3 1.5h6.5L13 5v9.5H3z"/><path fill=currentColor fill-opacity=0.35 stroke=currentColor stroke-width=1.5 stroke-linejoin=round d="M9.5 1.5V5H13"/></svg></span></span></div><div class=legend-desc><strong>Handling Notes:</strong> A folded top corner means volunteers who walk this dog at the shelter logged how it handles: leash manners, energy, interests, commands and how it reacts to other dogs. Tap the folded corner, or double-tap the card, to read them. Volunteers can <a href=notes.html>log a visit</a> from any dog's notes. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class=fav-btn style="border-color:var(--danger-text); color:var(--danger-text); padding:4px 8px; border-radius:6px; font-size:0.9rem; pointer-events:none;"><i class="fas fa-heart"></i> Favorite</span></div><div class=legend-desc><strong>Favorites:</strong> Click the heart icon on any dog's card to save them. View your saved list anytime by clicking the <strong>Favorites</strong> filter. </div></div><div class=legend-group-title>Demographics & Attributes</div><div class=legend-item><div class=legend-badge-wrapper style=gap:4px;><span class="tag male altered"><i class="fas fa-scissors"></i> ♂️ Male</span><span class="tag female">♀️ Female</span></div><div class=legend-desc><strong>Gender & Altered Status:</strong> Shows the dog's gender. A dashed border and scissors icon mean the dog is spayed or neutered. A solid border means CACC hasn't listed them as altered — not necessarily that they are unaltered. Aligns with the <strong>Male</strong>, <strong>Female</strong>, and <strong>S/N</strong> filters. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag age">2 Years</span></div><div class=legend-desc><strong>Age:</strong> Approximate age. Aligns with the <strong>Puppies</strong> (under 12 months) and <strong>Seniors</strong> (5 years and older) filters. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class=chip style="pointer-events:none; padding:4px 10px; font-size:0.8rem; height: auto;">Small</span></div><div class=legend-desc><strong>Small Dog Filter:</strong> Filters for breeds that typically weigh 25 lbs or less when fully grown. Aligns with the <strong>Small</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag color color-black">Black</span><span class="tag color color-tan">Tan</span><span class="tag color color-brindle">Brindle</span></div><div class=legend-desc><strong>Color Pills:</strong> Show the primary colors of the dog's coat. </div></div><div class=legend-group-title>Outcome Badges & Today's Activity</div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-adopted"><i class="fas fa-heart"></i> Adopted: Date</span></div><div class=legend-desc><strong>Adopted:</strong> The dog has been adopted and has left the shelter! Aligns with the <strong>Adopted</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-rto"><i class="fas fa-home"></i> Returned: Date</span></div><div class=legend-desc><strong>Returned to Owner (RTO):</strong> Reunited with their family! Aligns with the <strong>RTO</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-rescue"><i class="fas fa-ambulance"></i> Rescue Partner</span></div><div class=legend-desc><strong>Rescued:</strong> Transferred to an approved rescue group. Tap or click to see the exact transfer date and time. Aligns with the <strong>Rescued</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><div class="dog-card highlight-today" style="border: 1px solid #F9C642; background: rgba(253, 184, 30, 0.05); padding: 8px 12px; border-radius: 8px; display:flex; flex-direction:column; gap:4px; width:100%; box-sizing:border-box; max-width: 150px;"><span class=rescue-today-pill style=align-self:flex-start;><i class="fas fa-star" style=font-size:0.65rem></i> Today</span></div></div><div class=legend-desc><strong>Today's Activity:</strong> A card highlighted with a gold border and a "Today" badge means their adoption or rescue happened today. </div></div><div class="legend-group-title pwa-install-item">Install the app</div><div class="legend-item pwa-install-item" id=legendInstall><div class=legend-badge-wrapper><button type=button class=legend-install-btn onclick="closeLegendModal(); pwaOpenInstall('guide')">Install app</button></div><div class=legend-desc><strong>Home Screen:</strong> Add CACC Dogs to your Home Screen (or your computer) and it opens in its own window, like an app. The steps depend on your browser. </div></div><div class="legend-group-title push-guide-item" hidden>Notifications</div><div class="legend-item push-guide-item" id=legendPush hidden><div class=legend-badge-wrapper><button type=button class=legend-install-btn onclick="closeLegendModal(); pushOpenDialog('guide')">Notifications</button></div><div class=legend-desc><strong>Alerts:</strong> Get a notification when one of your favorites is adopted, rescued or goes home, and, if you like, one alert per site update that finds new adoptions or rescues. </div></div></div></div></dialog><dialog id=notesModal class="legend-modal notes-modal" aria-labelledby=notesTitle><div class=legend-modal-header><div class=notes-title-wrap><h2 id=notesTitle>Handling notes</h2><span class="tag id" id=notesId></span><p class=notes-subtitle>Volunteer observations at the shelter</p></div><button type=button class=close-modal-btn id=notesCloseBtn aria-label="Close handling notes">&times;</button></div><div class=notes-empty-state id=notesEmpty hidden><h3>No notes shown for <span id=notesEmptyName>this dog</span> yet</h3><p>Walked or handled this dog at the shelter? Log your visit on the volunteer form.</p></div><div class=legend-modal-body id=notesBody tabindex=0 aria-live=polite></div><div class=notes-add id=notesAdd><div class=notes-actions><a class="notes-add-btn notes-add-link" id=notesAddLink href=https://docs.google.com/forms/d/e/1FAIpQLSewSDIB4-pA6KDs07Z7Lz6sUsWw0O_C68Fj1u5Pt3ZGSzkOWQ/viewform target=_blank rel=noopener><i class="fas fa-plus" aria-hidden=true></i> Add your visit<span class=visually-hidden> (opens in a new tab)</span></a><a class=notes-link-btn href=notes.html#what-to-log>What to log</a></div><p class=notes-fineprint>Opens the CACC volunteer Google Form (sign-in needed). Visits show here after review.</p><div class=notes-status-row><p class=notes-add-status id=notesAddStatus role=status></p><button type=button class="notes-link-btn subtle notes-vol-toggle" id=notesVolToggle hidden>Show ＋ Notes on every card</button></div></div></dialog><dialog id=reportModal class="legend-modal report-modal" aria-labelledby=reportTitle><div class=legend-modal-header><h2 id=reportTitle><i class="fas fa-flag" aria-hidden=true></i> Wrong location?</h2><button type=button class=close-modal-btn id=reportCloseBtn aria-label="Close dialog">&times;</button></div><div class=report-modal-body><p class=report-context id=reportContext></p><div id=ts-report></div><button type=button class=report-remove-btn id=reportRemoveBtn><i class="fas fa-flag" aria-hidden=true></i> Flag this badge as wrong </button><p class=report-hint>The badge stays visible with a warning mark so others know it was reported, and it's queued for admin review. No passcode needed.</p><div class=report-divider><span>or, volunteers</span></div><form id=reportMoveForm><label class=report-field for=reportKennel><span>It moved — the correct kennel is</span><input type=text id=reportKennel autocomplete=off placeholder="e.g. C 70"></label><p class=report-saved-pass id=reportSavedPass hidden><i class="fas fa-key" aria-hidden=true></i> Using your saved volunteer passcode. <button type=button id=reportChangePass>Change</button></p><label class=report-field for=reportPasscode id=reportPassField><span>Volunteer passcode</span><input type=password id=reportPasscode autocomplete=current-password></label><button type=submit class=report-submit-btn id=reportMoveBtn disabled><i class="fas fa-paper-plane" aria-hidden=true></i> Submit correction </button><p class=report-hint>When enough people report the same kennel, the badge updates automatically.</p></form><div id=reportStatus class=report-status role=status aria-live=polite></div></div></dialog><dialog id=notifyModal class="legend-modal report-modal" aria-labelledby=notifyTitle><div class=legend-modal-header><h2 id=notifyTitle><i class="fas fa-bell" aria-hidden=true></i> Notifications</h2><button type=button class=close-modal-btn id=notifyCloseBtn aria-label="Close dialog">&times;</button></div><div class=report-modal-body><p class=report-context id=pushIntro>Get a notification on this device when dogs leave the shelter.</p><div class=push-rows id=pushRows><div class=push-row><label for=pushFavSwitch>My favorites<small>When a dog you saved is adopted, rescued or goes home.</small></label><input type=checkbox role=switch id=pushFavSwitch class=vm-switch checked></div><div class=push-row><label for=pushAllSwitch>All adoptions and rescues<small>One alert per site update that finds new ones.</small></label><input type=checkbox role=switch id=pushAllSwitch class=vm-switch></div></div><div id=ts-push></div><div class=push-actions id=pushActions><button type=button class=report-submit-btn id=pushOnBtn><i class="fas fa-bell" aria-hidden=true></i> <span id=pushOnLabel>Turn on</span></button><button type=button class=push-off-btn id=pushOffBtn hidden>Turn off notifications on this device</button></div><button type=button class=report-submit-btn id=pushInstallBtn hidden><i class="fas fa-mobile-screen" aria-hidden=true></i> Install app</button><div id=pushStatus class=report-status role=status aria-live=polite></div><p class=report-hint>Your favorites list is sent to our server so alerts can match it. See the <a href=privacy.html#notifications>privacy policy</a>.</p></div></dialog><dialog id=uploadNudgeModal class="legend-modal nudge-modal" closedby=any aria-labelledby=nudgeTitle><div class=nudge-clip><div class=legend-modal-header><h2 id=nudgeTitle><i class="fas fa-paw" aria-hidden=true></i> The trail's gone cold</h2><button type=button class=close-modal-btn id=nudgeCloseX aria-label="Close dialog">&times;</button></div><div class=nudge-modal-body><p class=nudge-lede id=nudgeLede></p><p class=nudge-age id=nudgeAge hidden>Last sheet uploaded <b id=nudgeAgeDays></b> (<span id=nudgeAgeDate></span>).</p><ol class=nudge-steps><li><i class="fas fa-clipboard-list" aria-hidden=true></i><span>Pick the pavilion you're standing in</span></li><li><i class="fas fa-camera" aria-hidden=true></i><span>Tap <b>Take photo</b> and snap the walk sheet &mdash; right from the page</span></li><li><i class="fas fa-location-dot" aria-hidden=true></i><span>Kennel badges refresh for everyone in minutes</span></li></ol><a class=nudge-cta id=nudgeCtaLink href=upload.html autofocus><i class="fas fa-camera" aria-hidden=true></i> Upload a walk sheet </a><button type=button class=nudge-later-btn id=nudgeLaterBtn>Not now</button><p class=nudge-foot id=nudgeFoot></p></div></div><div class=nudge-callout id=nudgeCallout><i class="fas fa-arrow-up nudge-callout-arrow" aria-hidden=true></i><span class=nudge-callout-pill id=nudgeCalloutPill></span></div></dialog></div><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=search id=mainSearch class=search-input placeholder="Name, ID, or breed" aria-label="Search dogs by name, ID, or breed" autocomplete=off autocorrect=off autocapitalize=none spellcheck=false enterkeyhint=search><button type=button class=search-clear id=searchClear onclick=clearSearch() aria-label="Clear search" hidden><i class="fas fa-times" aria-hidden=true></i></button></div><select id=sortSelect class=sort-select aria-label="Sort dogs" onchange=handleSortChange()><option value=longest>Longest stay</option><option value=newest>Newest arrival</option><option value=age_young>Youngest first</option><option value=age_old>Oldest first</option><option value=name_asc>Name A–Z</option><option value=breed_asc>Breed A–Z</option><option value=id_asc>ID A–Z</option></select></div><div class=filter-chips role=toolbar aria-label="Filter dogs"><div class="chip active" id=chip-all role=button tabindex=0 aria-pressed=true onclick="filterByChip('all')">All</div><div class=chip id=chip-favorites role=button tabindex=0 aria-pressed=false onclick="filterByChip('favorites')">Favorites <span class=chip-badge id=fav-count>0</span> <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted role=button tabindex=0 aria-pressed=false onclick="filterByChip('adopted')">Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-new role=button tabindex=0 aria-pressed=false onclick="filterByChip('new')">Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued role=button tabindex=0 aria-pressed=false onclick="filterByChip('rescued')">Rescued <span class=chip-close>&times;</span></div><div class=chip id=chip-rto role=button tabindex=0 aria-pressed=false onclick="filterByChip('rto')">RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-fixed role=button tabindex=0 aria-pressed=false aria-label="Spayed or Neutered" onclick="filterByChip('fixed')">S/N <span class=chip-close>&times;</span></div><div class=chip id=chip-available role=button tabindex=0 aria-pressed=false onclick="filterByChip('available')">Available <span class=chip-close>&times;</span></div><div class=chip id=chip-return_guest role=button tabindex=0 aria-pressed=false onclick="filterByChip('return_guest')">Returns <span class=chip-close>&times;</span></div><div class=chip id=chip-non_pit role=button tabindex=0 aria-pressed=false onclick="filterByChip('non_pit')">Non-Pit <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy role=button tabindex=0 aria-pressed=false onclick="filterByChip('puppy')">Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-female role=button tabindex=0 aria-pressed=false onclick="filterByChip('female')">Female <span class=chip-close>&times;</span></div><div class=chip id=chip-senior role=button tabindex=0 aria-pressed=false onclick="filterByChip('senior')">Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-male role=button tabindex=0 aria-pressed=false onclick="filterByChip('male')">Male <span class=chip-close>&times;</span></div><div class=chip id=chip-small role=button tabindex=0 aria-pressed=false onclick="filterByChip('small')">Small <span class=chip-close>&times;</span></div><div class=chip id=chip-stray role=button tabindex=0 aria-pressed=false onclick="filterByChip('stray')">Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay role=button tabindex=0 aria-pressed=false onclick="filterByChip('long_stay')">Long Stays <span class=chip-close>&times;</span></div></div></div><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><div class=view-title-row><h2 class=section-title id=view-title aria-live=polite>📋 Active Dogs</h2><button type=button class=clear-filters-btn id=clearFiltersBtn onclick="resetAllFilters('view_title')" hidden><i class="fas fa-times" aria-hidden=true></i> Clear filters</button></div><p class=push-fav-hint id=pushFavHint hidden><span>Get a notification when one of your favorites is adopted or rescued.</span> <button type=button onclick="pushOpenDialog('hint')"><i class="far fa-bell" aria-hidden=true></i> Turn on alerts</button></p><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: November 19, 2026 03:46 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><div class=page-meta><div class=freshness-bar><nav class=today-strip id=todayStrip aria-label="Today at CACC"><button class=today-label id=todayLabel type=button data-updated="November 19, 2026 04:18 PM" aria-expanded=false aria-controls=updatedText aria-describedby=updatedText title="Updated November 19, 2026 04:18 PM"><span class=status-dot aria-hidden=true></span>Today</button><span class=updated-text id=updatedText hidden>Updated November 19, 2026 04:18 PM</span><a class=today-pill data-kind=new href="./?filter=new" hidden><b>0</b> new</a><a class=today-pill data-kind=adopted href="./?filter=adopted" hidden><b>0</b> adopted</a><a class=today-pill data-kind=rto href="./?filter=rto" hidden><b>0</b> RTO</a><a class=today-pill data-kind=rescued href="rescues.html?view=today" hidden><b>0</b> rescued</a><a class=today-pill data-kind=removed href="removed.html?view=today" hidden><b>0</b> removed</a><span class=today-empty id=todayEmpty hidden>No changes recorded yet.</span></nav><button type=button class="legend-toggle push-bell" id=pushBell hidden onclick="pushOpenDialog('bell')" aria-label=Notifications aria-haspopup=dialog><i class="far fa-bell" aria-hidden=true></i> <span class=legend-label>Alerts</span><span class=push-dot id=pushBellDot hidden></span></button><button class=legend-toggle onclick=openLegendModal() aria-label="Dashboard legend & guide"><i class="fas fa-circle-info" aria-hidden=true></i> <span class=legend-label>Guide</span></button></div><dialog id=legendModal class=legend-modal aria-labelledby=legendTitle><div class=legend-modal-header><h2 id=legendTitle>Dashboard Legend & Guide</h2><button class=close-modal-btn onclick=closeLegendModal() aria-label="Close modal">&times;</button></div><div class=legend-modal-body><div class=legend-grid><div class=legend-group-title>Status & Stay Badges</div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge los-green">5 Days</span><span class="status-badge los-yellow">18 Days</span><span class="status-badge los-red">35 Days</span></div><div class=legend-desc><strong>Time at CACC / Stay Duration:</strong> Shows how many days the dog has been at the shelter. Mapped to filters: <span class=los-detail><span class=text-success>Green</span> (0-14 days; matches <strong>Fresh In</strong> for under 7 days), <span class=text-warning>Yellow</span> (15-29 days), and <span class=text-danger>Red</span> (30+ days; matches <strong>Long Stays</strong>). <em>Tapping or clicking the badge reveals the exact date and time they were first listed.</em></span></div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge los-green">Available</span></div><div class=legend-desc><strong>Available Status:</strong> Dogs currently at the shelter that are ready for adoption. Aligns with the <strong>Available</strong> filter. </div></div><div class=legend-group-title>Holds & Rescue Indicators</div><div class=legend-item><div class=legend-badge-wrapper><span class="tag hold"><i class="fas fa-clock"></i> Hold for 3 days · ends Nov 15</span></div><div class=legend-desc><strong>Stray Hold:</strong> The mandatory holding period to give owners time to locate and reclaim their lost pet. The hold is 3 days for unchipped dogs and 7 days for chipped dogs. The badge shows the days left and the date the hold ends. To list only dogs on hold, or only Rescue Only dogs, use Stray hold in <strong>Filters</strong>. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag hold"><i class="fas fa-ban"></i> Unavailable</span></div><div class=legend-desc><strong>Unavailable:</strong> The dog is newly arrived and undergoing intake processing, medical checks, or observation, and is not yet ready for adoption. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag rescue-only"><i class="fas fa-hands-helping"></i> Rescue Only</span></div><div class=legend-desc><strong>Rescue Only:</strong> The dog can only be transferred to approved rescue organizations (not directly adopted by the public), usually due to special medical or behavioral needs. </div></div><div class=legend-group-title>Stray & Location Indicators</div><div class=legend-item><div class=legend-badge-wrapper><span class="tag stray"><i class="fas fa-map-marker-alt"></i> Stray</span></div><div class=legend-desc><strong>Stray Status:</strong> Found as a stray. Aligns with the <strong>Strays</strong> filter. If a location was recorded, you can click this tag to see where they were found on the map. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag stray chipped"><i class="fas fa-map-marker-alt"></i> <i class="fas fa-microchip"></i> Stray</span></div><div class=legend-desc><strong>Chipped Stray:</strong> Found as a stray with a microchip. The dashed border simply highlights that a chip was detected (which gives them a 7-day holding period instead of 3 days). </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag pavilion"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span><span class="tag pavilion hl-yellow"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span><span class="tag pavilion hl-orange"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span><span class="tag pavilion flagged"><i class="fas fa-warehouse" aria-hidden=true></i> <i class="fas fa-triangle-exclamation pk-flag-mark" aria-hidden=true></i> C-70</span><span class="tag pavilion pk-stale"><i class="fas fa-warehouse" aria-hidden=true></i> C-70</span></div><div class=legend-desc><strong>Pavilion Location:</strong> Where the dog was last housed, read from the most recent handwritten walk sheet (pavilion letter + kennel number). A yellow or orange tint mirrors a marker highlight on the sheet — CACC's walker levels: yellow = intermediate-level dog, orange = advanced-level dog. Sheets are uploaded by onsite volunteers; each badge shows the pavilion's latest sheet and stays until a newer one replaces it. A dimmed badge means its sheet is more than a couple of days old — hover or tap for the sheet date. Spot a wrong one? Tap the small flag to report it — the badge stays visible with a warning mark (like the example with the triangle) until volunteers or an admin confirm the right kennel. To list one pavilion or one walker level, use <strong>Filters</strong>. </div></div><div class=legend-group-title>Special Profile Indicators</div><div class=legend-item><div class=legend-badge-wrapper><span class="tag return"><i class="fas fa-undo-alt"></i> Return</span></div><div class=legend-desc><strong>Return Guest:</strong> This dog has been at CACC before. We detect this automatically by matching their intake ID against past shelter records. Aligns with the <strong>Returns</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><h3 class="dog-name has-aka" style="margin:0; font-size:1.15rem; display:inline-block;">Dog Name</h3></div><div class=legend-desc><strong>FKA (Formerly Known As):</strong> Underlined names mean the dog has a known previous name. Tap or click the name on their card to switch between their current and past name. </div></div><div class=legend-item id=legendNotes><div class=legend-badge-wrapper><span class=notes-ear-sample aria-hidden=true><span class=notes-ear-fold><svg viewbox="0 0 16 16"><path fill=none stroke=currentColor stroke-width=1.5 stroke-linejoin=round d="M3 1.5h6.5L13 5v9.5H3z"/><path fill=currentColor fill-opacity=0.35 stroke=currentColor stroke-width=1.5 stroke-linejoin=round d="M9.5 1.5V5H13"/></svg></span></span></div><div class=legend-desc><strong>Handling Notes:</strong> A folded top corner means volunteers who walk this dog at the shelter logged how it handles: leash manners, energy, interests, commands and how it reacts to other dogs. Tap the folded corner, or double-tap the card, to read them. Volunteers can <a href=notes.html>log a visit</a> from any dog's notes. To find dogs by the answers volunteers gave most often (energy, leash manners, interests, commands and more), use Volunteer notes in <strong>Filters</strong>. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class=fav-btn style="border-color:var(--danger-text); color:var(--danger-text); padding:4px 8px; border-radius:6px; font-size:0.9rem; pointer-events:none;"><i class="fas fa-heart"></i> Favorite</span></div><div class=legend-desc><strong>Favorites:</strong> Click the heart icon on any dog's card to save them. View your saved list anytime by clicking the <strong>Favorites</strong> filter. </div></div><div class=legend-group-title>Demographics & Attributes</div><div class=legend-item><div class=legend-badge-wrapper style=gap:4px;><span class="tag male altered"><i class="fas fa-scissors"></i> ♂️ Male</span><span class="tag female">♀️ Female</span></div><div class=legend-desc><strong>Gender & Altered Status:</strong> Shows the dog's gender. A dashed border and scissors icon mean the dog is spayed or neutered. A solid border means CACC hasn't listed them as altered — not necessarily that they are unaltered. Aligns with the <strong>Male</strong>, <strong>Female</strong>, and <strong>S/N</strong> filters. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag age">2 Years</span></div><div class=legend-desc><strong>Age:</strong> Approximate age. Aligns with the <strong>Puppies</strong> (under 12 months) and <strong>Seniors</strong> (5 years and older) filters. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class=chip style="pointer-events:none; padding:4px 10px; font-size:0.8rem; height: auto;">Small</span></div><div class=legend-desc><strong>Small Dog Filter:</strong> Filters for breeds that typically weigh 25 lbs or less when fully grown. Aligns with the <strong>Small</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="tag color color-black">Black</span><span class="tag color color-tan">Tan</span><span class="tag color color-brindle">Brindle</span></div><div class=legend-desc><strong>Color Pills:</strong> Show the primary colors of the dog's coat. </div></div><div class=legend-group-title>Outcome Badges & Today's Activity</div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-adopted"><i class="fas fa-heart"></i> Adopted: Date</span></div><div class=legend-desc><strong>Adopted:</strong> The dog has been adopted and has left the shelter! Aligns with the <strong>Adopted</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-rto"><i class="fas fa-home"></i> Returned: Date</span></div><div class=legend-desc><strong>Returned to Owner (RTO):</strong> Reunited with their family! Aligns with the <strong>RTO</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><span class="status-badge status-rescue"><i class="fas fa-ambulance"></i> Rescue Partner</span></div><div class=legend-desc><strong>Rescued:</strong> Transferred to an approved rescue group. Tap or click to see the exact transfer date and time. Aligns with the <strong>Rescued</strong> filter. </div></div><div class=legend-item><div class=legend-badge-wrapper><div class="dog-card highlight-today" style="border: 1px solid #F9C642; background: rgba(253, 184, 30, 0.05); padding: 8px 12px; border-radius: 8px; display:flex; flex-direction:column; gap:4px; width:100%; box-sizing:border-box; max-width: 150px;"><span class=rescue-today-pill style=align-self:flex-start;><i class="fas fa-star" style=font-size:0.65rem></i> Today</span></div></div><div class=legend-desc><strong>Today's Activity:</strong> A card highlighted with a gold border and a "Today" badge means their adoption or rescue happened today. </div></div><div class="legend-group-title pwa-install-item">Install the app</div><div class="legend-item pwa-install-item" id=legendInstall><div class=legend-badge-wrapper><button type=button class=legend-install-btn onclick="closeLegendModal(); pwaOpenInstall('guide')">Install app</button></div><div class=legend-desc><strong>Home Screen:</strong> Add CACC Dogs to your Home Screen (or your computer) and it opens in its own window, like an app. The steps depend on your browser. </div></div><div class="legend-group-title push-guide-item" hidden>Notifications</div><div class="legend-item push-guide-item" id=legendPush hidden><div class=legend-badge-wrapper><button type=button class=legend-install-btn onclick="closeLegendModal(); pushOpenDialog('guide')">Notifications</button></div><div class=legend-desc><strong>Alerts:</strong> Get a notification when one of your favorites is adopted, rescued or goes home, and, if you like, one alert per site update that finds new adoptions or rescues. </div></div></div></div></dialog><dialog id=notesModal class="legend-modal notes-modal" aria-labelledby=notesTitle><div class=legend-modal-header><div class=notes-title-wrap><h2 id=notesTitle>Handling notes</h2><span class="tag id" id=notesId></span><p class=notes-subtitle>Volunteer observations at the shelter</p></div><button type=button class=close-modal-btn id=notesCloseBtn aria-label="Close handling notes">&times;</button></div><div class=notes-empty-state id=notesEmpty hidden><h3>No notes shown for <span id=notesEmptyName>this dog</span> yet</h3><p>Walked or handled this dog at the shelter? Log your visit on the volunteer form.</p></div><div class=legend-modal-body id=notesBody tabindex=0 aria-live=polite></div><div class=notes-add id=notesAdd><div class=notes-actions><a class="notes-add-btn notes-add-link" id=notesAddLink href=https://docs.google.com/forms/d/e/1FAIpQLSewSDIB4-pA6KDs07Z7Lz6sUsWw0O_C68Fj1u5Pt3ZGSzkOWQ/viewform target=_blank rel=noopener><i class="fas fa-plus" aria-hidden=true></i> Add your visit<span class=visually-hidden> (opens in a new tab)</span></a><a class=notes-link-btn href=notes.html#what-to-log>What to log</a></div><p class=notes-fineprint>Opens the CACC volunteer Google Form (sign-in needed). Visits show here after review.</p><div class=notes-status-row><p class=notes-add-status id=notesAddStatus role=status></p><button type=button class="notes-link-btn subtle notes-vol-toggle" id=notesVolToggle hidden>Show ＋ Notes on every card</button></div></div></dialog><dialog id=reportModal class="legend-modal report-modal" aria-labelledby=reportTitle><div class=legend-modal-header><h2 id=reportTitle><i class="fas fa-flag" aria-hidden=true></i> Wrong location?</h2><button type=button class=close-modal-btn id=reportCloseBtn aria-label="Close dialog">&times;</button></div><div class=report-modal-body><p class=report-context id=reportContext></p><div id=ts-report></div><button type=button class=report-remove-btn id=reportRemoveBtn><i class="fas fa-flag" aria-hidden=true></i> Flag this badge as wrong </button><p class=report-hint>The badge stays visible with a warning mark so others know it was reported, and it's queued for admin review. No passcode needed.</p><div class=report-divider><span>or, volunteers</span></div><form id=reportMoveForm><label class=report-field for=reportKennel><span>It moved — the correct kennel is</span><input type=text id=reportKennel autocomplete=off placeholder="e.g. C 70"></label><p class=report-saved-pass id=reportSavedPass hidden><i class="fas fa-key" aria-hidden=true></i> Using your saved volunteer passcode. <button type=button id=reportChangePass>Change</button></p><label class=report-field for=reportPasscode id=reportPassField><span>Volunteer passcode</span><input type=password id=reportPasscode autocomplete=current-password></label><button type=submit class=report-submit-btn id=reportMoveBtn disabled><i class="fas fa-paper-plane" aria-hidden=true></i> Submit correction </button><p class=report-hint>When enough people report the same kennel, the badge updates automatically.</p></form><div id=reportStatus class=report-status role=status aria-live=polite></div></div></dialog><dialog id=notifyModal class="legend-modal report-modal" aria-labelledby=notifyTitle><div class=legend-modal-header><h2 id=notifyTitle><i class="fas fa-bell" aria-hidden=true></i> Notifications</h2><button type=button class=close-modal-btn id=notifyCloseBtn aria-label="Close dialog">&times;</button></div><div class=report-modal-body><p class=report-context id=pushIntro>Get a notification on this device when dogs leave the shelter.</p><div class=push-rows id=pushRows><div class=push-row><label for=pushFavSwitch>My favorites<small>When a dog you saved is adopted, rescued or goes home.</small></label><input type=checkbox role=switch id=pushFavSwitch class=vm-switch checked></div><div class=push-row><label for=pushAllSwitch>All adoptions and rescues<small>One alert per site update that finds new ones.</small></label><input type=checkbox role=switch id=pushAllSwitch class=vm-switch></div></div><div id=ts-push></div><div class=push-actions id=pushActions><button type=button class=report-submit-btn id=pushOnBtn><i class="fas fa-bell" aria-hidden=true></i> <span id=pushOnLabel>Turn on</span></button><button type=button class=push-off-btn id=pushOffBtn hidden>Turn off notifications on this device</button></div><button type=button class=report-submit-btn id=pushInstallBtn hidden><i class="fas fa-mobile-screen" aria-hidden=true></i> Install app</button><div id=pushStatus class=report-status role=status aria-live=polite></div><p class=report-hint>Your favorites list is sent to our server so alerts can match it. See the <a href=privacy.html#notifications>privacy policy</a>.</p></div></dialog><dialog id=uploadNudgeModal class="legend-modal nudge-modal" closedby=any aria-labelledby=nudgeTitle><div class=nudge-clip><div class=legend-modal-header><h2 id=nudgeTitle><i class="fas fa-paw" aria-hidden=true></i> The trail's gone cold</h2><button type=button class=close-modal-btn id=nudgeCloseX aria-label="Close dialog">&times;</button></div><div class=nudge-modal-body><p class=nudge-lede id=nudgeLede></p><p class=nudge-age id=nudgeAge hidden>Last sheet uploaded <b id=nudgeAgeDays></b> (<span id=nudgeAgeDate></span>).</p><ol class=nudge-steps><li><i class="fas fa-clipboard-list" aria-hidden=true></i><span>Pick the pavilion you're standing in</span></li><li><i class="fas fa-camera" aria-hidden=true></i><span>Tap <b>Take photo</b> and snap the walk sheet &mdash; right from the page</span></li><li><i class="fas fa-location-dot" aria-hidden=true></i><span>Kennel badges refresh for everyone in minutes</span></li></ol><a class=nudge-cta id=nudgeCtaLink href=upload.html autofocus><i class="fas fa-camera" aria-hidden=true></i> Upload a walk sheet </a><button type=button class=nudge-later-btn id=nudgeLaterBtn>Not now</button><p class=nudge-foot id=nudgeFoot></p></div></div><div class=nudge-callout id=nudgeCallout><i class="fas fa-arrow-up nudge-callout-arrow" aria-hidden=true></i><span class=nudge-callout-pill id=nudgeCalloutPill></span></div></dialog></div><div class=sticky-header><div class=search-controls><div class=search-container><i class="fas fa-search search-icon"></i><input type=search id=mainSearch class=search-input placeholder="Name, ID, or breed" aria-label="Search dogs by name, ID, or breed" autocomplete=off autocorrect=off autocapitalize=none spellcheck=false enterkeyhint=search><button type=button class=search-clear id=searchClear onclick=clearSearch() aria-label="Clear search" hidden><i class="fas fa-times" aria-hidden=true></i></button></div><select id=sortSelect class=sort-select aria-label="Sort dogs" onchange=handleSortChange()><option value=longest>Longest stay</option><option value=newest>Newest arrival</option><option value=age_young>Youngest first</option><option value=age_old>Oldest first</option><option value=name_asc>Name A–Z</option><option value=breed_asc>Breed A–Z</option><option value=id_asc>ID A–Z</option></select><button type=button class="filters-btn filters-btn-bar" id=filtersBtn aria-haspopup=dialog aria-controls=filterPanel aria-label=Filters onclick=openFilterPanel()><i class="fas fa-sliders" aria-hidden=true></i> <span>Filters</span> <span class=chip-badge hidden></span></button></div><div class=chip-row><button type=button class="filters-btn filters-btn-icon" id=filtersBtnIcon aria-haspopup=dialog aria-controls=filterPanel aria-label=Filters onclick=openFilterPanel()><i class="fas fa-sliders" aria-hidden=true></i><span class=chip-badge hidden></span></button><div class=filter-chips role=toolbar aria-label="Filter dogs"><div class="chip active" id=chip-all role=button tabindex=0 aria-pressed=true onclick="filterByChip('all')">All</div><div class=chip id=chip-favorites role=button tabindex=0 aria-pressed=false onclick="filterByChip('favorites')">Favorites <span class=chip-badge id=fav-count>0</span> <span class=chip-close>&times;</span></div><div class=chip id=chip-adopted role=button tabindex=0 aria-pressed=false onclick="filterByChip('adopted')">Adopted <span class=chip-close>&times;</span></div><div class=chip id=chip-new role=button tabindex=0 aria-pressed=false onclick="filterByChip('new')">Fresh In <span class=chip-close>&times;</span></div><div class=chip id=chip-rescued role=button tabindex=0 aria-pressed=false onclick="filterByChip('rescued')">Rescued <span class=chip-close>&times;</span></div><div class=chip id=chip-rto role=button tabindex=0 aria-pressed=false onclick="filterByChip('rto')">RTO <span class=chip-close>&times;</span></div><div class=chip id=chip-fixed role=button tabindex=0 aria-pressed=false aria-label="Spayed or Neutered" onclick="filterByChip('fixed')">S/N <span class=chip-close>&times;</span></div><div class=chip id=chip-available role=button tabindex=0 aria-pressed=false onclick="filterByChip('available')">Available <span class=chip-close>&times;</span></div><div class=chip id=chip-return_guest role=button tabindex=0 aria-pressed=false onclick="filterByChip('return_guest')">Returns <span class=chip-close>&times;</span></div><div class=chip id=chip-non_pit role=button tabindex=0 aria-pressed=false onclick="filterByChip('non_pit')">Non-Pit <span class=chip-close>&times;</span></div><div class=chip id=chip-puppy role=button tabindex=0 aria-pressed=false onclick="filterByChip('puppy')">Puppies <span class=chip-close>&times;</span></div><div class=chip id=chip-female role=button tabindex=0 aria-pressed=false onclick="filterByChip('female')">Female <span class=chip-close>&times;</span></div><div class=chip id=chip-senior role=button tabindex=0 aria-pressed=false onclick="filterByChip('senior')">Seniors <span class=chip-close>&times;</span></div><div class=chip id=chip-male role=button tabindex=0 aria-pressed=false onclick="filterByChip('male')">Male <span class=chip-close>&times;</span></div><div class=chip id=chip-small role=button tabindex=0 aria-pressed=false onclick="filterByChip('small')">Small <span class=chip-close>&times;</span></div><div class=chip id=chip-stray role=button tabindex=0 aria-pressed=false onclick="filterByChip('stray')">Strays <span class=chip-close>&times;</span></div><div class=chip id=chip-long_stay role=button tabindex=0 aria-pressed=false onclick="filterByChip('long_stay')">Long Stays <span class=chip-close>&times;</span></div></div></div></div><dialog id=filterPanel class=filter-panel closedby=any aria-labelledby=filterPanelTitle><div class=fp-head><span class=fp-grabber aria-hidden=true></span><h2 id=filterPanelTitle>Filters</h2><button type=button class=close-modal-btn aria-label="Close filters" onclick=closeFilterPanel()>&times;</button></div><div class=fp-body id=fpBody><p class=fp-view-hint id=fpViewHint hidden>Showing your Favorites. Choosing a filter leaves that view.</p><fieldset class="fp-sec fp-sec-status"><legend>Status</legend><div class=fp-opts><label class=fp-opt><input type=radio name=fpStatus value><span>In shelter</span> <span class=fp-count></span></label><label class=fp-opt><input type=radio name=fpStatus value=available><span>Available</span> <span class=fp-count></span></label><label class=fp-opt><input type=radio name=fpStatus value=adopted><span>Adopted</span> <span class=fp-count></span></label><label class=fp-opt><input type=radio name=fpStatus value=rescued><span>Rescued</span> <span class=fp-count></span></label><label class=fp-opt><input type=radio name=fpStatus value=rto><span>Returned to owner</span> <span class=fp-count></span></label></div></fieldset><fieldset class=fp-sec><legend>About the dog</legend><div class=fp-opts><label class=fp-opt><input type=checkbox data-filter=female><span>Female</span> <span class=fp-count></span></label><label class=fp-opt><input type=checkbox data-filter=male><span>Male</span> <span class=fp-count></span></label></div><fieldset class=fp-sub><legend>Age</legend><div class=fp-opts><label class=fp-opt><input type=radio name=fpAge value><span>Any</span> <span class=fp-count></span></label><label class=fp-opt><input type=radio name=fpAge value=puppy><span>Puppies</span> <span class=fp-count></span></label><label class=fp-opt><input type=radio name=fpAge value=senior><span>Seniors</span> <span class=fp-count></span></label></div></fieldset><div class=fp-opts><label class=fp-opt><input type=checkbox data-filter=small><span>Small</span> <span class=fp-count></span></label><label class=fp-opt><input type=checkbox data-filter=fixed><span>Spayed/Neutered</span> <span class=fp-count></span></label><label class=fp-opt><input type=checkbox data-filter=non_pit><span>Non-Pit</span> <span class=fp-count></span></label></div></fieldset><fieldset class=fp-sec><legend>Their stay</legend><div class=fp-opts><label class=fp-opt><input type=checkbox data-filter=new><span>Fresh In</span> <span class=fp-count></span></label><label class=fp-opt><input type=checkbox data-filter=long_stay><span>Long Stays</span> <span class=fp-count></span></label><label class=fp-opt><input type=checkbox data-filter=stray><span>Strays</span> <span class=fp-count></span></label><label class=fp-opt><input type=checkbox data-filter=return_guest><span>Returns</span> <span class=fp-count></span></label><label class=fp-opt><input type=checkbox data-filter=has_media><span>Has video or social post</span> <span class=fp-count></span></label></div><p class=fp-archive-hint data-archive-hint hidden>Stray hold, pavilion and walker level apply to dogs in the shelter.</p><fieldset class=fp-sub data-active-only><legend>Stray hold</legend><div class=fp-opts><label class=fp-opt><input type=checkbox data-facet=hold value=on_hold><span>On hold</span> <span class=fp-count></span></label><label class=fp-opt><input type=checkbox data-facet=hold value=rescue_only><span>Rescue only</span> <span class=fp-count></span></label></div></fieldset><fieldset class=fp-sub data-active-only data-needs=pavilion><legend>Pavilion</legend><div class=fp-opts><label class=fp-opt><input type=checkbox data-facet=pavilion value=A><span>A</span> <span class=fp-count></span></label><label class=fp-opt><input type=checkbox data-facet=pavilion value=B><span>B</span> <span class=fp-count></span></label><label class=fp-opt><input type=checkbox data-facet=pavilion value=C><span>C</span> <span class=fp-count></span></label><label class=fp-opt><input type=checkbox data-facet=pavilion value=D><span>D</span> <span class=fp-count></span></label><label class=fp-opt><input type=checkbox data-facet=pavilion value=E><span>E</span> <span class=fp-count></span></label></div></fieldset><fieldset class=fp-sub data-active-only data-needs=level><legend>Walker level</legend><div class=fp-opts><label class="fp-opt lvl-yellow"><input type=checkbox data-facet=level value=yellow><span>Yellow</span> <span class=fp-help>intermediate</span> <span class=fp-count></span></label><label class="fp-opt lvl-orange"><input type=checkbox data-facet=level value=orange><span>Orange</span> <span class=fp-help>advanced</span> <span class=fp-count></span></label></div></fieldset></fieldset><fieldset class=fp-sec id=fpNotesSec><legend>Volunteer notes</legend><p class=fp-archive-hint data-archive-hint hidden>Volunteer notes apply to dogs in the shelter.</p><div class=fp-opts data-active-only><label class=fp-opt><input type=checkbox data-filter=has_notes><span>Has volunteer notes</span> <span class=fp-count></span></label></div><div data-active-only><p class=fp-msg id=fpNotesMsg hidden></p><div id=fpNoteGroups></div></div></fieldset></div><div class=fp-foot><p class=visually-hidden id=fpLive role=status></p><button type=button class=fp-clear id=fpClear>Clear all</button><button type=button class=fp-show id=fpShow onclick=closeFilterPanel()>Show dogs</button></div></dialog><div id=loading-state><i class="fas fa-circle-notch fa-spin fa-3x" style=color:var(--accent)></i><p style=margin-top:20px;>Fetching latest data...</p></div><div id=main-view style=display:none;><div class=view-title-row><h2 class=section-title id=view-title aria-live=polite>📋 Active Dogs</h2><button type=button class=clear-filters-btn id=clearFiltersBtn onclick="resetAllFilters('view_title')" hidden><i class="fas fa-times" aria-hidden=true></i> Clear filters</button></div><ul class=filter-tokens id=filterTokens aria-label="Filters from the Filters panel" hidden></ul><p class=push-fav-hint id=pushFavHint hidden><span>Get a notification when one of your favorites is adopted or rescued.</span> <button type=button onclick="pushOpenDialog('hint')"><i class="far fa-bell" aria-hidden=true></i> Turn on alerts</button></p><div id=dog-grid class=dog-grid></div><div id=scroll-sentinel></div></div><div class=footer><span>Last Updated: November 19, 2026 04:18 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -2601,8 +2756,24 @@ opacity: 0;
         // Custom events captured site-wide:
         //   dog_view_clicked          outbound click to a 24petconnect profile  {dog_id, page}
         //   media_link_opened         outbound click to a social post           {network, page}
-        //   chip_selected             dashboard filter chip                     {chip, active, filters}
+        //   chip_selected             dashboard filter chip                     {chip, active, filters, via}
         //   filters_cleared           "Clear filters" reset to the All view     {source}
+        //   filter_panel_opened       dashboard Filters panel opened            {active}
+        //   facet_selected            panel-only filter turned on or off        {group, value, active, via}
+        // filter notes (index.html): chip_selected.via is chip | panel | today
+        // (TODAY pill) | link (?filter= on load) | clear (Clear filters); events
+        // before 2026-11-19 have no via, and chip re-rank queries should keep
+        // via = chip (or absent). chip_selected.filters lists chip keys only, as
+        // before the panel (panel flags and facets are in facet_selected).
+        // filters_cleared.source is view_title |
+        // empty_state | panel (the panel's Clear all) | token (the last applied
+        // filter removed from its token). filter_panel_opened.active is the
+        // number of filters applied when it opened (Favorites not counted).
+        // facet_selected covers what has no chip: group is hold | pavilion |
+        // level, notes (value has_notes), media (value has_media), or a
+        // volunteer-note group (energy | leash | handling | other_dogs |
+        // interests | commands, value the slug from src/handling_facets.py);
+        // value is a fixed key, never display text; via is panel | token.
         //   sort_changed              sort <select> changed                     {mode, page}
         //   search_performed          debounced search ran (never the query)    {q_len, n_len, words, trail, ws, it, multi, del, sugg?, results, page}
         //   search_suggestion_clicked did-you-mean tap on a zero-result search  {distance, page}
@@ -3144,6 +3315,261 @@ opacity: 0;
     };
     const FILTER_ORDER = ['new', 'fixed', 'available', 'return_guest', 'non_pit', 'puppy',
                           'female', 'senior', 'male', 'small', 'stray', 'long_stay'];
+
+    // --- filter core ---
+    // Pure filter logic shared by the dog list, the Filters panel's counts and
+    // tests/test_filter_core_js.py (which runs this block in node): no DOM here.
+    // State is activeFilters (a Set of chip keys plus the panel-only flags) and
+    // activeFacets (group -> Set of values; OR within a group, AND across groups).
+    const STATUS_KEYS = ['adopted', 'rto', 'rescued', 'available']; // one at a time
+    const AGE_KEYS = ['puppy', 'senior'];                           // one at a time
+    const ARCHIVE_KEYS = ['adopted', 'rescued', 'rto'];
+    // Panel-only boolean filters (no chip). has_notes exists only for dogs in the shelter.
+    const PANEL_FLAG_KEYS = ['has_notes', 'has_media'];
+    const ACTIVE_ONLY_FLAGS = ['has_notes'];
+    // Every key activeFilters may hold (the chip row's plus the panel's flags);
+    // a Back restore keeps only these.
+    const KNOWN_FILTER_KEYS = new Set(['favorites', 'adopted', 'new', 'rescued', 'rto', 'fixed', 'available',
+        'return_guest', 'non_pit', 'puppy', 'female', 'senior', 'male', 'small', 'stray', 'long_stay',
+        'has_notes', 'has_media']);
+    // Facet groups and their values. Every facet group exists only for dogs in
+    // the shelter, so an archive view (Adopted, Rescued, RTO) clears them all.
+    const BASE_FACETS = {
+        hold: ['on_hold', 'rescue_only'],
+        pavilion: ['A', 'B', 'C', 'D', 'E'],
+        level: ['yellow', 'orange'],
+    };
+    // Volunteer-note facets: group -> value -> Set of dog ids (empty until loaded).
+    let noteFacetIndex = {};
+    // handling_notes.json "_f" label -> [group key, panel legend]. A label not
+    // listed here is never shown (src/handling_facets.py FACET_VALUES).
+    const NOTE_FACET_GROUPS = [
+        ['Energy', 'energy', 'Energy'],
+        ['Leash', 'leash', 'On leash'],
+        ['Handling', 'handling', 'With people'],
+        ['Other dogs', 'other_dogs', 'With other dogs'],
+        ['Interests', 'interests', 'Interests'],
+        ['Commands', 'commands', 'Commands'],
+    ];
+    const NOTE_FACET_KEY_RE = /^[a-z_]{1,24}$/;
+
+    // Shape check for "_f": [[label, [[key, display, [dog ids]], ...]], ...].
+    // Returns [{group, name, options: [{value, text, ids}]}] in file order, or
+    // null when absent or malformed (the panel then shows no note groups).
+    // Unknown labels are skipped; ids not in knownIds and options left empty
+    // are dropped. Display text is placed with textContent only.
+    function notesFacetsOk(raw, knownIds) {
+        if (!Array.isArray(raw)) return null;
+        const out = [];
+        for (const entry of raw) {
+            if (!Array.isArray(entry) || entry.length !== 2 || typeof entry[0] !== 'string' || !Array.isArray(entry[1])) return null;
+            const meta = NOTE_FACET_GROUPS.find(g => g[0] === entry[0]);
+            if (!meta || out.some(g => g.group === meta[1])) continue;
+            const options = [];
+            for (const opt of entry[1]) {
+                if (!Array.isArray(opt) || opt.length !== 3 || typeof opt[0] !== 'string' || !NOTE_FACET_KEY_RE.test(opt[0])
+                    || typeof opt[1] !== 'string' || !opt[1] || opt[1].length > 60 || !Array.isArray(opt[2])) return null;
+                if (options.some(o => o.value === opt[0])) continue;
+                const ids = new Set(opt[2].filter(id => typeof id === 'string' && knownIds.has(id)));
+                if (ids.size) options.push({ value: opt[0], text: opt[1], ids: ids });
+            }
+            if (options.length) out.push({ group: meta[1], name: meta[2], options: options });
+        }
+        return out.length ? out : null;
+    }
+
+    function setNoteFacets(groups) {
+        noteFacetIndex = {};
+        (groups || []).forEach(g => {
+            const idx = {};
+            g.options.forEach(o => { idx[o.value] = o.ids; });
+            noteFacetIndex[g.group] = idx;
+        });
+    }
+
+    function isArchiveFilterSet(filters) {
+        return filters.has('rto') || filters.has('rescued') || filters.has('adopted');
+    }
+
+    function dogHasMedia(dog) {
+        return !!(dog.facebook_url || dog.instagram_url || dog.youtube_urls);
+    }
+
+    function facetValuesFor(group) {
+        if (Object.prototype.hasOwnProperty.call(BASE_FACETS, group)) return BASE_FACETS[group];
+        const idx = Object.prototype.hasOwnProperty.call(noteFacetIndex, group) ? noteFacetIndex[group] : null;
+        return idx ? Object.keys(idx) : null;
+    }
+
+    function facetMatches(dog, group, values) {
+        if (group === 'hold') {
+            return (values.has('on_hold') && !!dog._isOnHold) || (values.has('rescue_only') && !!dog._isRescueOnly);
+        }
+        if (group === 'pavilion') return !!dog.pk && values.has(String(dog.pk).charAt(0).toUpperCase());
+        if (group === 'level') return !!dog.hl && values.has(dog.hl);
+        const idx = Object.prototype.hasOwnProperty.call(noteFacetIndex, group) ? noteFacetIndex[group] : null;
+        if (!idx) return false;
+        for (const v of values) {
+            const ids = Object.prototype.hasOwnProperty.call(idx, v) ? idx[v] : null;
+            if (ids && ids.has(String(dog.id))) return true;
+        }
+        return false;
+    }
+
+    // One dog against the whole filter state. Each filter key keeps its own
+    // literal `type === '<key>'` test (tests/test_repo_invariants.py looks for them).
+    function dogPasses(dog, filters, facets, isArchiveMode) {
+        if (filters.has('rto') && dog.status !== 'RTO') return false;
+        if (filters.has('rescued') && dog.status !== 'Rescued') return false;
+        if (filters.has('adopted') && dog.status !== 'Adopted') return false;
+        if (!isArchiveMode && !dog.is_active) return false;
+
+        const days = dog._daysSinceIntake;
+
+        for (const type of filters) {
+            if (type === 'rto' || type === 'rescued' || type === 'adopted') continue;
+            if (type === 'long_stay' && days < 30) return false;
+            if (type === 'new' && days >= 7) return false;
+            if (type === 'stray' && !dog.is_stray) return false;
+            if (type === 'male' && !(dog.gender || '').includes('Male')) return false;
+            if (type === 'female' && !(dog.gender || '').includes('Female')) return false;
+            if (type === 'puppy' && dog.ageMonths >= 12) return false;
+            if (type === 'senior' && (dog.ageMonths < 60 || dog.ageMonths === 999)) return false;
+            if (type === 'available' && dog.status !== 'Available') return false;
+            if (type === 'small' && !dog.is_small) return false;
+            if (type === 'fixed' && !dog.is_altered) return false;
+            if (type === 'return_guest' && !dog._isReturnGuest) return false;
+            if (type === 'has_notes' && !dog.hn) return false;
+            if (type === 'has_media' && !dogHasMedia(dog)) return false;
+            if (type === 'non_pit') {
+                if (!dog.breed) return false;
+                const b = dog.breed.toLowerCase();
+                if (b.includes('pit bull') || b.includes('pitbull') || b.includes('bully') || b.includes('staffordshire')) {
+                    return false;
+                }
+            }
+        }
+        for (const group in facets) {
+            const values = facets[group];
+            if (values && values.size && !facetMatches(dog, group, values)) return false;
+        }
+        return true;
+    }
+
+    function facetCount(facets) {
+        let n = 0;
+        for (const group in facets) n += facets[group].size;
+        return n;
+    }
+
+    function cloneFacets(facets) {
+        const out = {};
+        for (const group in facets) out[group] = new Set(facets[group]);
+        return out;
+    }
+
+    // State transitions, shared by the chips, the panel, the tokens and the counts.
+    // Any filter exits the Favorites view; Adopted, Rescued and RTO clear what
+    // exists only in the shelter, and choosing any of that leaves the archive view.
+    function setFilterKey(filters, facets, type, on) {
+        const want = on === undefined ? !filters.has(type) : !!on;
+        filters.delete('favorites');
+        if (!want) { filters.delete(type); return; }
+        if (STATUS_KEYS.includes(type)) STATUS_KEYS.forEach(t => filters.delete(t));
+        if (AGE_KEYS.includes(type)) AGE_KEYS.forEach(t => filters.delete(t));
+        if (ARCHIVE_KEYS.includes(type)) {
+            ACTIVE_ONLY_FLAGS.forEach(t => filters.delete(t));
+            for (const group in facets) facets[group].clear();
+        }
+        if (ACTIVE_ONLY_FLAGS.includes(type)) ARCHIVE_KEYS.forEach(t => filters.delete(t));
+        filters.add(type);
+    }
+
+    function setFacetValue(filters, facets, group, value, on) {
+        const set = facets[group] || (facets[group] = new Set());
+        const want = on === undefined ? !set.has(value) : !!on;
+        filters.delete('favorites');
+        if (!want) { set.delete(value); return; }
+        ARCHIVE_KEYS.forEach(t => filters.delete(t));
+        set.add(value);
+    }
+
+    // Only known keys and values survive (a Back restore reads sessionStorage).
+    function sanitizeFilterState(rawFilters, rawFacets) {
+        const filters = new Set();
+        const facets = {};
+        const keys = Array.isArray(rawFilters) ? rawFilters.filter(k => typeof k === 'string' && KNOWN_FILTER_KEYS.has(k)) : [];
+        if (keys.includes('favorites')) { filters.add('favorites'); return { filters, facets }; }
+        keys.forEach(k => setFilterKey(filters, facets, k, true));
+        if (rawFacets && typeof rawFacets === 'object' && !Array.isArray(rawFacets)) {
+            for (const group of Object.keys(rawFacets)) {
+                const allowed = facetValuesFor(group);
+                if (!allowed || !Array.isArray(rawFacets[group])) continue;
+                rawFacets[group].forEach(v => {
+                    if (typeof v === 'string' && allowed.includes(v)) setFacetValue(filters, facets, group, v, true);
+                });
+            }
+        }
+        return { filters, facets };
+    }
+
+    // Counting runs over the one pool a state can match: in-shelter dogs, or
+    // one archive status.
+    function buildFilterPools(dogs) {
+        const pools = { active: [], Adopted: [], Rescued: [], RTO: [] };
+        for (const dog of dogs) {
+            if (dog.is_active) pools.active.push(dog);
+            else if (Object.prototype.hasOwnProperty.call(pools, dog.status)) pools[dog.status].push(dog);
+        }
+        return pools;
+    }
+
+    function countMatching(pools, filters, facets) {
+        const pool = filters.has('adopted') ? pools.Adopted : filters.has('rescued') ? pools.Rescued
+            : filters.has('rto') ? pools.RTO : pools.active;
+        const archive = isArchiveFilterSet(filters);
+        let n = 0;
+        for (const dog of pool) if (dogPasses(dog, filters, facets, archive)) n++;
+        return n;
+    }
+
+    // How many dogs the list would hold after choosing one panel option:
+    //   {kind: 'status' | 'age', key}: single-select, replaces its own set ('' = none),
+    //     so the panel can swap Puppies for Seniors exactly as the chips do;
+    //   {kind: 'filter', key}: added (AND);
+    //   {kind: 'facet', group, value}: replaces its own group's selection, so the
+    //     options in one group count independently (disjunctive counts).
+    // The Favorites view and the search box don't count: any choice leaves both.
+    function optionCount(pools, filters, facets, opt) {
+        const f = new Set(filters);
+        const fc = cloneFacets(facets);
+        f.delete('favorites');
+        if (opt.kind === 'status' || opt.kind === 'age') {
+            (opt.kind === 'status' ? STATUS_KEYS : AGE_KEYS).forEach(k => f.delete(k));
+            if (opt.key) setFilterKey(f, fc, opt.key, true);
+        } else if (opt.kind === 'filter') {
+            setFilterKey(f, fc, opt.key, true);
+        } else {
+            if (fc[opt.group]) fc[opt.group].clear();
+            setFacetValue(f, fc, opt.group, opt.value, true);
+        }
+        return countMatching(pools, f, fc);
+    }
+
+    // chip_selected's `filters`: the chip keys only, sorted and comma-joined,
+    // as before the panel existed (panel flags and facets report facet_selected).
+    function chipFilterKeys(filters) {
+        return [...filters].filter(k => !PANEL_FLAG_KEYS.includes(k)).sort().join(',');
+    }
+    // --- end filter core ---
+
+    let activeFacets = {};
+    // Filters applied in any form (chips, panel flags, facets), Favorites included.
+    function filterCount() { return activeFilters.size + facetCount(activeFacets); }
+    function clearAllFilterState() {
+        activeFilters.clear();
+        for (const group in activeFacets) activeFacets[group].clear();
+    }
 
     // --- Favorites (localStorage-backed) ---
     const FAV_KEY = 'cacc_favorites';
@@ -3772,6 +4198,8 @@ opacity: 0;
             const anchor = window.scrollY > 0 ? viewAnchor() : null;
             sessionStorage.setItem(VIEW_STATE_KEY, JSON.stringify({
                 filters: [...activeFilters],
+                facets: Object.fromEntries(Object.keys(activeFacets)
+                    .filter(g => activeFacets[g].size).map(g => [g, [...activeFacets[g]]])),
                 q: document.getElementById('mainSearch').value.trim().slice(0, 40),
                 userSort: userSort,
                 anchorDogId: anchor ? anchor.id : null,
@@ -3789,7 +4217,7 @@ opacity: 0;
         userSort = sortValues.includes(s.userSort) ? s.userSort : null;
         const q = typeof s.q === 'string' ? s.q : '';
         const tokens = searchTokens(q);
-        activeFilters.clear();
+        clearAllFilterState();
         if (tokens.length) {
             // Search mode, as handleGlobalSearch leaves it: no chip lit.
             updateChipUI(); // also empties the box; refilled below
@@ -3799,11 +4227,15 @@ opacity: 0;
             document.getElementById('searchClear').hidden = false;
             renderSearchResults(tokens);
         } else {
-            (Array.isArray(s.filters) ? s.filters : []).forEach(f => {
-                if (typeof f === 'string' && document.getElementById('chip-' + f)) activeFilters.add(f);
-            });
+            // Known keys and values only (filter core). Note facets are not
+            // known until handling_notes.json loads: restoreNoteFacets adds
+            // them afterwards (or drops them).
+            const clean = sanitizeFilterState(s.filters, s.facets);
+            clean.filters.forEach(f => activeFilters.add(f));
+            Object.assign(activeFacets, clean.facets);
             updateChipUI();
             applyFiltersAndSort();
+            restoreNoteFacets(s.facets, s.anchorDogId, Number(s.anchorOffset) || 0);
         }
         const lit = [...activeFilters].find(f => f !== 'favorites');
         if (lit) revealChip(lit);
@@ -3981,7 +4413,7 @@ opacity: 0;
             });
         })();
 
-        activeFilters.clear();
+        clearAllFilterState();
         setupObserver();
         updateFavCount();
         renderTodayStrip();
@@ -4001,10 +4433,10 @@ opacity: 0;
         if (viewRestore) {
             restoredViewOnce = true; // a Retry after a failed load must not restore twice
         } else if (['adopted', 'new', 'rto'].includes(filterParam)) {
-            filterByChip(filterParam);
+            filterByChip(filterParam, 'link');
         } else if (filterParam === 'favorites') {
             // A collapsed "N of your favorites have news" alert.
-            filterByChip('favorites');
+            filterByChip('favorites', 'link');
         } else if (PUSH_DOG_ID_RE.test(favParam)) {
             // Shown through the untracked ID search, so a tap is not a search_performed.
             document.getElementById('mainSearch').value = favParam;
@@ -4122,31 +4554,24 @@ opacity: 0;
         // rather than reloading the dashboard (this also keeps the adoption celebration).
         if (kind === 'new' || kind === 'adopted' || kind === 'rto') {
             e.preventDefault();
-            filterByChip(kind);
+            filterByChip(kind, 'today');
         }
     });
 
-    async function filterByChip(type) {
+    // via: chip (the row) | panel (Filters panel) | today (TODAY pill) | link
+    // (?filter= on load) | clear (Clear filters, through resetAllFilters).
+    async function filterByChip(type, via) {
+        via = via || 'chip';
         if (type === 'all') {
-            activeFilters.clear();
+            clearAllFilterState();
             userSort = null; // All (and Clear filters, which calls this) restores the default sort
         } else if (type === 'favorites') {
-            // Exclusive view: turning it on clears everything else
+            // Exclusive view: turning it on clears everything else, panel filters included
             if (activeFilters.has('favorites')) activeFilters.delete('favorites');
-            else { activeFilters.clear(); activeFilters.add('favorites'); }
+            else { clearAllFilterState(); activeFilters.add('favorites'); }
         } else {
-            activeFilters.delete('favorites'); // any other filter exits the favorites view
-            const exclusiveOutcomes = ['adopted', 'rto', 'rescued', 'available'];
-            const exclusiveAges = ['puppy', 'senior'];
-
-            if (exclusiveOutcomes.includes(type)) {
-                exclusiveOutcomes.forEach(t => { if (t !== type) activeFilters.delete(t); });
-            }
-            if (exclusiveAges.includes(type)) {
-                exclusiveAges.forEach(t => { if (t !== type) activeFilters.delete(t); });
-            }
-
-            if (type === 'adopted' && !activeFilters.has('adopted')) {
+            // The celebration belongs to the chip and the TODAY pill, not the panel.
+            if (type === 'adopted' && !activeFilters.has('adopted') && via !== 'panel') {
                 const countToday = fullDataset.filter(d =>
                     d.status === 'Adopted' && normalizeDate(d.outcome_date) === TODAY_STR
                 ).length;
@@ -4155,8 +4580,9 @@ opacity: 0;
                     requestAnimationFrame(() => triggerAdoptionCelebration());
                 }
             }
-
-            activeFilters.has(type) ? activeFilters.delete(type) : activeFilters.add(type);
+            // Exits Favorites; Adopted/RTO/Rescued/Available and Puppies/Seniors
+            // are each one at a time; an archive view clears the in-shelter-only filters.
+            setFilterKey(activeFilters, activeFacets, type);
         }
         // Phase 1: Lightweight UI feedback (paints immediately)
         updateChipUI();
@@ -4166,7 +4592,8 @@ opacity: 0;
         track('chip_selected', {
             chip: type,
             active: type === 'all' ? true : activeFilters.has(type),
-            filters: [...activeFilters].sort().join(',')
+            filters: chipFilterKeys(activeFilters),
+            via: via
         });
         // Yield: let the browser paint the chip state change
         await yieldToMain();
@@ -4205,7 +4632,8 @@ opacity: 0;
 
     function updateChipUI() {
         document.querySelectorAll('.filter-chips .chip').forEach(c => c.classList.remove('active'));
-        if (activeFilters.size === 0) {
+        // All is lit only when nothing at all is applied (panel filters included).
+        if (filterCount() === 0) {
             document.getElementById('chip-all').classList.add('active');
         } else {
             activeFilters.forEach(f => {
@@ -4230,7 +4658,7 @@ opacity: 0;
         // and shows for any applied filter, favorites included. Never during search:
         // typing already clears the chips, and the search box has its own ✕.
         const clearBtn = document.getElementById('clearFiltersBtn');
-        if (clearBtn) clearBtn.hidden = activeFilters.size === 0;
+        if (clearBtn) clearBtn.hidden = filterCount() === 0;
         // The favorites view's "Turn on alerts" hint (push client block).
         if (typeof pushRenderHint === 'function') pushRenderHint();
         // The (count) is wrapped in .title-count so it reads as muted/secondary against the
@@ -4255,14 +4683,17 @@ opacity: 0;
         if (activeFilters.has('rescued')) { titleEl.innerHTML = '🚑 Rescued Dogs'; return; }
         if (activeFilters.has('adopted')) { titleEl.innerHTML = '🏠 Adopted Dogs'; return; }
 
-        // Active (in-shelter) views — always counted.
-        if (activeFilters.size === 0) { titleEl.innerHTML = '📋 Active Dogs' + count; return; }
-        if (activeFilters.size === 1) {
+        // Active (in-shelter) views — always counted. Panel-only filters (flags,
+        // facets) have no FILTER_META entry and read as "Filtered Results"; a note
+        // value never reaches this innerHTML (the tokens row names them, as text).
+        const n = filterCount();
+        if (n === 0) { titleEl.innerHTML = '📋 Active Dogs' + count; return; }
+        if (n === 1 && activeFilters.size === 1) {
             const meta = FILTER_META[[...activeFilters][0]];
             titleEl.innerHTML = (meta ? meta.label : '🔎 Filtered Results') + count;
             return;
         }
-        // Multiple filters: prefix the selected filters' emojis (canonical order) instead of 🔎.
+        // Multiple filters: prefix the selected chip filters' emojis (canonical order) instead of 🔎.
         const emojis = FILTER_ORDER.filter(k => activeFilters.has(k)).map(k => FILTER_META[k].emoji).join('');
         titleEl.innerHTML = (emojis || '🔎') + ' Filtered Results' + count;
     }
@@ -4290,7 +4721,8 @@ opacity: 0;
         try {
             const url = new URL(window.location.href);
             let desired = null;
-            if (activeFilters.size === 1) {
+            // Panel filters never reach the URL, so any of them strips ?filter=.
+            if (filterCount() === 1 && activeFilters.size === 1) {
                 const only = [...activeFilters][0];
                 if (only === 'new' || only === 'adopted' || only === 'rto') desired = only;
             }
@@ -4310,9 +4742,7 @@ opacity: 0;
     // order and leave it untouched, so it applies again once the search ends.
     let userSort = null;
 
-    function isArchiveFilterSet(filters) {
-        return filters.has('rto') || filters.has('rescued') || filters.has('adopted');
-    }
+    // isArchiveFilterSet lives in the filter core.
 
     // The sort a view gets when the visitor hasn't picked one (a sortDogs mode).
     function defaultSortFor(filters, isArchiveMode) {
@@ -4355,41 +4785,7 @@ opacity: 0;
             return;
         }
 
-        const showRTO = activeFilters.has('rto');
-        const showRescued = activeFilters.has('rescued');
-        const showAdopted = activeFilters.has('adopted');
-
-        let filtered = fullDataset.filter(dog => {
-            if (showRTO && dog.status !== 'RTO') return false;
-            if (showRescued && dog.status !== 'Rescued') return false;
-            if (showAdopted && dog.status !== 'Adopted') return false;
-            if (!isArchiveMode && !dog.is_active) return false;
-
-            const days = dog._daysSinceIntake;
-
-            for (let type of activeFilters) {
-                if (type === 'rto' || type === 'rescued' || type === 'adopted') continue;
-                if (type === 'long_stay' && days < 30) return false;
-                if (type === 'new' && days >= 7) return false;
-                if (type === 'stray' && !dog.is_stray) return false;
-                if (type === 'male' && !(dog.gender || '').includes('Male')) return false;
-                if (type === 'female' && !(dog.gender || '').includes('Female')) return false;
-                if (type === 'puppy' && dog.ageMonths >= 12) return false;
-                if (type === 'senior' && (dog.ageMonths < 60 || dog.ageMonths === 999)) return false;
-                if (type === 'available' && dog.status !== 'Available') return false;
-                if (type === 'small' && !dog.is_small) return false;
-                if (type === 'fixed' && !dog.is_altered) return false;
-                if (type === 'return_guest' && !dog._isReturnGuest) return false;
-                if (type === 'non_pit') {
-                    if (!dog.breed) return false;
-                    const b = dog.breed.toLowerCase();
-                    if (b.includes('pit bull') || b.includes('pitbull') || b.includes('bully') || b.includes('staffordshire')) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        });
+        const filtered = fullDataset.filter(dog => dogPasses(dog, activeFilters, activeFacets, isArchiveMode));
 
         currentDisplayList = sortDogs(filtered, sortMode);
         resetGrid();
@@ -4446,7 +4842,7 @@ opacity: 0;
             // be cleared, but never take the empty-query branch below — it lights
             // chip-all without clearing activeFilters, leaving two chips lit.
             clearBtn.hidden = false;
-            if (activeFilters.size > 0) return;
+            if (filterCount() > 0) return;
             document.getElementById('chip-all').classList.add('active');
             syncChipPressed();
             await yieldToMain();
@@ -4458,7 +4854,7 @@ opacity: 0;
             clearBtn.hidden = false;
             document.querySelectorAll('.filter-chips .chip').forEach(c => c.classList.remove('active'));
             syncChipPressed();
-            activeFilters.clear();
+            clearAllFilterState(); // typing a search clears panel filters too, as it does chips
         } else {
             clearBtn.hidden = true;
             document.getElementById('chip-all').classList.add('active');
@@ -4580,14 +4976,16 @@ opacity: 0;
         handleGlobalSearch();
     }
 
-    // source: 'view_title' (title-row button) | 'empty_state' (no-results CTA).
+    // source: 'view_title' (title-row button) | 'empty_state' (no-results CTA) |
+    // 'panel' (the Filters panel's Clear all) | 'token' (the last applied filter's
+    // token removed, which also returns the view to All).
     // filterByChip('all') still fires its own chip_selected {chip:'all'} — this is
     // the affordance-level signal on top of it.
     function resetAllFilters(source) {
         track('filters_cleared', { source: source });
         document.getElementById('mainSearch').value = '';
         document.getElementById('searchClear').hidden = true;
-        filterByChip('all');
+        filterByChip('all', 'clear');
     }
 
     // --- Shared <dialog> helpers (legend modal + report dialog) ---
@@ -4627,6 +5025,396 @@ opacity: 0;
     document.addEventListener('DOMContentLoaded', () => {
         bindLightDismiss(document.getElementById('legendModal'));
     });
+
+    // --- filter panel ---
+    // The Filters dialog, the two trigger badges and the applied-filter tokens.
+    // Builds DOM with textContent only (tests/test_template_escaping.py pins
+    // it): note options are read from handling_notes.json. State changes go
+    // through the filter core (setFilterKey / setFacetValue); chip keys go
+    // through filterByChip(key, 'panel') so the chip row stays in sync.
+    const filterPanel = document.getElementById('filterPanel');
+    const FACET_GROUP_NAMES = { hold: 'Stray hold', pavilion: 'Pavilion', level: 'Walker level' };
+    const FACET_VALUE_NAMES = { on_hold: 'On hold', rescue_only: 'Rescue only', yellow: 'Yellow', orange: 'Orange' };
+    const PANEL_FLAG_NAMES = { has_notes: 'Has volunteer notes', has_media: 'Has video or social post' };
+    // facet_selected's group for the two panel-only flags.
+    const PANEL_FLAG_GROUPS = { has_notes: 'notes', has_media: 'media' };
+    const FP_LIVE_MS = 700;
+    let filterPools = null;
+    let filterPoolsFor = null;
+    let fpLiveTimer = null;
+    let fpLastAnnounced = null;
+
+    function getFilterPools() {
+        if (filterPoolsFor !== fullDataset) { filterPools = buildFilterPools(fullDataset); filterPoolsFor = fullDataset; }
+        return filterPools;
+    }
+
+    // Volunteer-note groups from "_f" (notesFacetsOk), loaded on first open.
+    let noteFacetGroups = [];
+    let noteFacetsLoad = null; // in-flight or settled load; cleared after a failure so a reopen retries
+    let noteFacetsAwaitData = false; // opened before the dogs loaded: load the groups once they do
+    const NOTE_FACETS_TIMEOUT_MS = 3000; // Back restore only
+
+    function facetGroupOrder() { return Object.keys(BASE_FACETS).concat(Object.keys(noteFacetIndex)); }
+    function noteGroup(group) { return noteFacetGroups.find(g => g.group === group) || null; }
+    function facetGroupName(group) {
+        const g = noteGroup(group);
+        return FACET_GROUP_NAMES[group] || (g ? g.name : group);
+    }
+    function facetValueName(group, value) {
+        const g = noteGroup(group);
+        const o = g ? g.options.find(x => x.value === value) : null;
+        return o ? o.text : (FACET_VALUE_NAMES[value] || value);
+    }
+
+    function showNotesMsg(text) {
+        const el = document.getElementById('fpNotesMsg');
+        if (!el) return;
+        el.textContent = text;
+        el.hidden = !text;
+    }
+
+    // One fieldset per note group, options as toggle chips (textContent only).
+    function renderNoteFacetGroups(groups) {
+        const box = document.getElementById('fpNoteGroups');
+        if (!box) return;
+        box.replaceChildren();
+        if (!groups.length) return;
+        const intro = document.createElement('p');
+        intro.className = 'fp-intro';
+        intro.textContent = 'From volunteer visits, by what was reported most often. Not a behavior assessment.';
+        box.append(intro);
+        groups.forEach(g => {
+            const fs = document.createElement('fieldset');
+            fs.className = 'fp-sub';
+            const legend = document.createElement('legend');
+            legend.textContent = g.name;
+            const opts = document.createElement('div');
+            opts.className = 'fp-opts';
+            g.options.forEach(o => {
+                const label = document.createElement('label');
+                label.className = 'fp-opt';
+                const input = document.createElement('input');
+                input.type = 'checkbox';
+                input.dataset.facet = g.group;
+                input.value = o.value;
+                const text = document.createElement('span');
+                text.textContent = o.text;
+                const count = document.createElement('span');
+                count.className = 'fp-count';
+                label.append(input, text, document.createTextNode(' '), count);
+                opts.append(label);
+            });
+            fs.append(legend, opts);
+            box.append(fs);
+        });
+    }
+
+    // Loads "_f" once (handling_notes.json, shared with the notes dialog).
+    // Absent or invalid: no note groups, no message. A failed fetch says so
+    // quietly and retries on the next open. Opened before site_data.json has
+    // loaded, it waits: syncFilterPanel() calls it again once the dogs arrive.
+    function ensureNoteFacets() {
+        if (noteFacetsLoad) return noteFacetsLoad;
+        if (!fullDataset.length) { noteFacetsAwaitData = true; return Promise.resolve([]); }
+        noteFacetsAwaitData = false;
+        if (!fullDataset.some(d => d.hn)) { noteFacetsLoad = Promise.resolve([]); return noteFacetsLoad; }
+        showNotesMsg('Loading…');
+        noteFacetsLoad = loadHandlingNotes().then(data => {
+            const ids = new Set(fullDataset.map(d => String(d.id)));
+            noteFacetGroups = notesFacetsOk(data._f, ids) || [];
+            setNoteFacets(noteFacetGroups);
+            renderNoteFacetGroups(noteFacetGroups);
+            showNotesMsg('');
+            if (filterPanel && filterPanel.open) syncFilterPanelBody();
+            return noteFacetGroups;
+        }, err => {
+            noteFacetsLoad = null;
+            showNotesMsg("Volunteer notes didn't load. Close and reopen Filters to try again.");
+            throw err;
+        });
+        return noteFacetsLoad;
+    }
+
+    function filterStateKey() {
+        return JSON.stringify([[...activeFilters].sort(),
+            Object.keys(activeFacets).sort().map(g => [g, [...activeFacets[g]].sort()])]);
+    }
+
+    // Back restore of note facets: they are known only once the notes load.
+    // Waits up to 3 s; applies them only if nothing changed meanwhile, then
+    // re-anchors. On failure they are dropped. Fires no events.
+    function restoreNoteFacets(savedFacets, anchorId, anchorOffset) {
+        const wanted = savedFacets && typeof savedFacets === 'object' && !Array.isArray(savedFacets)
+            ? Object.keys(savedFacets).filter(g => !Object.prototype.hasOwnProperty.call(BASE_FACETS, g)) : [];
+        if (!wanted.length) return;
+        const before = filterStateKey();
+        // Re-anchor only if the visitor has not touched the page meanwhile:
+        // scrolling (wheel, touch, keys, scrollbar) keeps their position.
+        let interacted = false;
+        const INPUTS = ['wheel', 'touchstart', 'keydown', 'pointerdown'];
+        const mark = () => { interacted = true; };
+        INPUTS.forEach(t => window.addEventListener(t, mark, { passive: true, capture: true }));
+        const stop = () => INPUTS.forEach(t => window.removeEventListener(t, mark, { capture: true }));
+        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), NOTE_FACETS_TIMEOUT_MS));
+        Promise.race([ensureNoteFacets(), timeout]).then(() => {
+            stop();
+            if (filterStateKey() !== before || isArchiveFilterSet(activeFilters)) return;
+            const clean = sanitizeFilterState([...activeFilters], savedFacets);
+            if (facetCount(clean.facets) === facetCount(activeFacets)) return;
+            clearAllFilterState();
+            clean.filters.forEach(f => activeFilters.add(f));
+            Object.assign(activeFacets, clean.facets);
+            updateChipUI();
+            applyFiltersAndSort();
+            if (!interacted) scrollToViewAnchor(anchorId, anchorOffset);
+        }).catch(() => { stop(); /* notes unavailable: the view stays without them */ });
+    }
+
+    // The badge counts filters, not the Favorites view (its chip shows that).
+    function panelBadgeCount() { return filterCount() - (activeFilters.has('favorites') ? 1 : 0); }
+
+    function openFilterPanel() {
+        if (!filterPanel || filterPanel.open) return;
+        track('filter_panel_opened', { active: panelBadgeCount() });
+        fpLastAnnounced = null;
+        syncFilterPanel(true);
+        filterPanel.showModal();
+        ensureNoteFacets().catch(() => { /* message shown in the panel */ });
+    }
+
+    // Every close path (Show N dogs, x, Esc, backdrop) ends here or in 'close'.
+    function filterPanelCleanup() {
+        clearTimeout(fpLiveTimer);
+        fpLiveTimer = null;
+    }
+    function closeFilterPanel() {
+        if (filterPanel && filterPanel.open) filterPanel.close();
+        filterPanelCleanup();
+    }
+
+    async function afterPanelChange(props) {
+        updateChipUI(); // also empties the search box: any filter change ends a search
+        track('facet_selected', props);
+        await yieldToMain();
+        applyFiltersAndSort();
+    }
+    // The panel-only flags (has_notes, has_media).
+    function setPanelFlag(key, on, via) {
+        setFilterKey(activeFilters, activeFacets, key, on);
+        return afterPanelChange({ group: PANEL_FLAG_GROUPS[key], value: key, active: activeFilters.has(key), via: via });
+    }
+    // value is the slug key, never display text.
+    function setFacet(group, value, on, via) {
+        setFacetValue(activeFilters, activeFacets, group, value, on);
+        return afterPanelChange({ group: group, value: value, active: activeFacets[group].has(value), via: via });
+    }
+
+    // Panel-only filters as {text, remove()}, in panel order. Chip-row filters
+    // are left out: the chip row already shows them.
+    function appliedPanelFilters() {
+        const out = [];
+        PANEL_FLAG_KEYS.forEach(key => {
+            if (activeFilters.has(key)) out.push({ text: PANEL_FLAG_NAMES[key], remove: () => setPanelFlag(key, false, 'token') });
+        });
+        facetGroupOrder().forEach(group => {
+            const set = activeFacets[group];
+            if (!set || !set.size) return;
+            (facetValuesFor(group) || []).forEach(value => {
+                if (set.has(value)) out.push({
+                    text: facetGroupName(group) + ': ' + facetValueName(group, value),
+                    remove: () => setFacet(group, value, false, 'token'),
+                });
+            });
+        });
+        return out;
+    }
+
+    function visibleFiltersBtn() {
+        const bar = document.getElementById('filtersBtn');
+        return bar && bar.offsetParent !== null ? bar : document.getElementById('filtersBtnIcon');
+    }
+
+    function renderFilterTokens() {
+        const list = document.getElementById('filterTokens');
+        if (!list) return;
+        const applied = appliedPanelFilters();
+        list.replaceChildren();
+        applied.forEach((item, i) => {
+            const li = document.createElement('li');
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'filter-token';
+            btn.setAttribute('aria-label', 'Remove filter: ' + item.text);
+            const label = document.createElement('span');
+            label.textContent = item.text;
+            const x = document.createElement('span');
+            x.className = 'filter-token-x';
+            x.setAttribute('aria-hidden', 'true');
+            x.textContent = '×';
+            btn.append(label, x);
+            // One removal per token: a double tap lands twice before the row
+            // is rebuilt, which would remove and track it twice.
+            let removing = false;
+            btn.addEventListener('click', async () => {
+                if (removing) return;
+                removing = true;
+                await item.remove();
+                if (filterCount() === 0) track('filters_cleared', { source: 'token' });
+                // The row was rebuilt: keep focus on the next token, else the Filters button.
+                const tokens = list.querySelectorAll('.filter-token');
+                const next = tokens[Math.min(i, tokens.length - 1)] || visibleFiltersBtn();
+                if (next) next.focus();
+            });
+            li.append(btn);
+            list.append(li);
+        });
+        list.hidden = applied.length === 0;
+    }
+
+    // Badges, tokens and (while open) the panel body. Called from resetGrid(),
+    // so it runs after every list change, whatever caused it.
+    function syncFilterPanel(force) {
+        const badge = panelBadgeCount();
+        ['filtersBtn', 'filtersBtnIcon'].forEach(id => {
+            const btn = document.getElementById(id);
+            if (!btn) return;
+            const b = btn.querySelector('.chip-badge');
+            b.textContent = String(badge);
+            b.hidden = badge === 0;
+            btn.classList.toggle('has-active', badge > 0);
+            btn.setAttribute('aria-label', badge ? 'Filters, ' + badge + ' applied' : 'Filters');
+        });
+        renderFilterTokens();
+        if (filterPanel && (filterPanel.open || force)) syncFilterPanelBody();
+        // Opened before the dogs loaded: fetch the note groups now that they have.
+        if (noteFacetsAwaitData && fullDataset.length && filterPanel && filterPanel.open) {
+            ensureNoteFacets().catch(() => { /* message shown in the panel */ });
+        }
+    }
+
+    function panelOptionFor(input) {
+        if (input.name === 'fpStatus') return { kind: 'status', key: input.value };
+        if (input.name === 'fpAge') return { kind: 'age', key: input.value };
+        if (input.dataset.filter) return { kind: 'filter', key: input.dataset.filter };
+        if (input.dataset.facet) return { kind: 'facet', group: input.dataset.facet, value: input.value };
+        return null;
+    }
+
+    function panelOptionChecked(opt) {
+        if (opt.kind === 'status' || opt.kind === 'age') {
+            const keys = opt.kind === 'status' ? STATUS_KEYS : AGE_KEYS;
+            return opt.key ? activeFilters.has(opt.key) : !keys.some(k => activeFilters.has(k));
+        }
+        if (opt.kind === 'filter') return activeFilters.has(opt.key);
+        return !!(activeFacets[opt.group] && activeFacets[opt.group].has(opt.value));
+    }
+
+    function syncFilterPanelBody() {
+        const archive = isArchiveFilterSet(activeFilters);
+        const pools = getFilterPools();
+        const has = {
+            pavilion: pools.active.some(d => d.pk),
+            level: pools.active.some(d => d.hl),
+        };
+        // The view the panel's choices will leave: Favorites, or a search. The
+        // counts are for the filtered list without the search, which any choice ends.
+        const searching = (document.getElementById('mainSearch').value || '').trim().length > 0;
+        const viewHint = document.getElementById('fpViewHint');
+        viewHint.textContent = activeFilters.has('favorites')
+            ? 'Showing your Favorites. Choosing a filter leaves that view.'
+            : searching ? 'Showing search results. Choosing a filter ends the search, so the counts here leave it out.' : '';
+        viewHint.hidden = !viewHint.textContent;
+        filterPanel.classList.toggle('fp-archive', archive); // wider count slots (CSS)
+        filterPanel.querySelectorAll('[data-archive-hint]').forEach(el => { el.hidden = !archive; });
+        filterPanel.querySelectorAll('[data-active-only]').forEach(el => {
+            const need = el.dataset.needs;
+            el.hidden = archive || (need ? !has[need] : false);
+        });
+        filterPanel.querySelectorAll('.fp-opt input').forEach(input => {
+            const opt = panelOptionFor(input);
+            if (!opt) return;
+            const checked = panelOptionChecked(opt);
+            input.checked = checked;
+            if (input.closest('[hidden]')) return; // no counting for hidden groups
+            const n = optionCount(pools, activeFilters, activeFacets, opt);
+            const countEl = input.parentElement.querySelector('.fp-count');
+            if (countEl) countEl.textContent = String(n);
+            // Muted, never hard-disabled or removed: it may hold focus.
+            if (n === 0 && !checked) input.setAttribute('aria-disabled', 'true');
+            else input.removeAttribute('aria-disabled');
+        });
+        const shown = currentDisplayList.length;
+        document.getElementById('fpShow').textContent = searching
+            ? 'Show ' + shown + (shown === 1 ? ' result' : ' results')
+            : 'Show ' + shown + (shown === 1 ? ' dog' : ' dogs');
+        // A separate, debounced live line: the button text changes on every tap.
+        clearTimeout(fpLiveTimer);
+        if (fpLastAnnounced === null) { fpLastAnnounced = shown; return; }
+        fpLiveTimer = setTimeout(() => {
+            if (!filterPanel.open || shown === fpLastAnnounced) return;
+            fpLastAnnounced = shown;
+            document.getElementById('fpLive').textContent = shown + (shown === 1 ? ' dog matches' : ' dogs match');
+        }, FP_LIVE_MS);
+    }
+
+    if (filterPanel) {
+        filterPanel.addEventListener('change', (e) => {
+            const input = e.target;
+            if (!(input instanceof HTMLInputElement)) return;
+            const opt = panelOptionFor(input);
+            if (!opt) return;
+            // A greyed (aria-disabled) option would empty the list: undo the
+            // browser's toggle, keep focus where it is, and say why.
+            if (input.checked && input.getAttribute('aria-disabled') === 'true') {
+                syncFilterPanelBody(); // restores every checked state from the filter state
+                document.getElementById('fpLive').textContent = 'No dogs match that with the current filters.';
+                return;
+            }
+            if (opt.kind === 'status' || opt.kind === 'age') {
+                // A radio only fires when it becomes checked: turn that key on,
+                // or for In shelter / Any turn the current one off.
+                const keys = opt.kind === 'status' ? STATUS_KEYS : AGE_KEYS;
+                const target = opt.key || keys.find(k => activeFilters.has(k));
+                if (target) filterByChip(target, 'panel');
+            } else if (opt.kind === 'filter') {
+                if (PANEL_FLAG_KEYS.includes(opt.key)) setPanelFlag(opt.key, input.checked, 'panel');
+                else if (activeFilters.has(opt.key) !== input.checked) filterByChip(opt.key, 'panel');
+            } else {
+                setFacet(opt.group, opt.value, input.checked, 'panel');
+            }
+        });
+        // Status and Age radios use manual activation: arrow keys move focus
+        // within the group without choosing (choosing Adopted, Rescued or RTO
+        // clears the in-shelter filters, so passing over it must not); Space,
+        // Enter or a tap chooses.
+        filterPanel.addEventListener('keydown', (e) => {
+            const input = e.target;
+            if (!(input instanceof HTMLInputElement) || input.type !== 'radio') return;
+            if (e.key === 'Enter') { e.preventDefault(); if (!input.checked) input.click(); return; }
+            const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+            if (!step) return;
+            e.preventDefault();
+            const group = [...filterPanel.querySelectorAll('input[type="radio"][name="' + input.name + '"]')]
+                .filter(r => !r.closest('[hidden]'));
+            const next = group[(group.indexOf(input) + step + group.length) % group.length];
+            if (next) next.focus();
+        });
+        document.getElementById('fpClear').addEventListener('click', () => resetAllFilters('panel'));
+        filterPanel.addEventListener('close', filterPanelCleanup);
+        // closedby="any" gives native backdrop light-dismiss; this covers
+        // browsers without it (the upload nudge's pattern).
+        if (!('closedBy' in HTMLDialogElement.prototype)) {
+            filterPanel.addEventListener('click', (event) => {
+                if (event.target !== filterPanel) return;
+                const rect = filterPanel.getBoundingClientRect();
+                const inDialog = (rect.top <= event.clientY && event.clientY <= rect.top + rect.height
+                    && rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
+                if (!inDialog) closeFilterPanel();
+            });
+        }
+    }
+    // --- end filter panel ---
 
     // --- Handling notes (volunteer sheet; built by src/handling.py) ---
     // Cards with `hn` carry a .notes-ear button (the folded corner) and
@@ -5361,6 +6149,7 @@ opacity: 0;
         renderViewTitle();
         syncTodayPills();
         syncFilterParam();
+        syncFilterPanel(); // badges, tokens, and the panel's counts while it is open
         document.getElementById('dog-grid').innerHTML = '';
         if (currentDisplayList.length === 0) {
             const searchQuery = document.getElementById('mainSearch').value.trim();
