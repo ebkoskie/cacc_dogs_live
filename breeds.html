@@ -7,6 +7,20 @@
     // array.js and stubs out capture/identify/etc. from *inside* init, so off-host
     // `posthog` stays a bare array with no .capture — which is exactly the condition
     // base.html's track() checks before firing.
+    // ?internal=1 / ?internal=0 tags or untags this device as the owner's (a
+    // device-level super property, never a person property). The parameter is
+    // stripped on every host before anything else, so a shared link carries it
+    // no further and a local build can check the strip.
+    var caccInternal = null;
+    try {
+        var caccQs = new URLSearchParams(location.search);
+        if (caccQs.has('internal')) {
+            caccInternal = caccQs.get('internal');
+            caccQs.delete('internal');
+            var caccRest = caccQs.toString();
+            history.replaceState(history.state, '', location.pathname + (caccRest ? '?' + caccRest : '') + location.hash);
+        }
+    } catch (e) { /* never break the page over a QA flag */ }
     if (/(^|\.)cacc\.dog$/.test(location.hostname)) {
         posthog.init('phc_lza7BKDzKEmNeMw4V2psaoRFTDqKENUudMMrcp2pR2S', {
             api_host: 'https://us.i.posthog.com',
@@ -22,6 +36,9 @@
                 maskInputOptions: { password: true }
             }
         });
+        // Queued by the loader stub until array.js loads.
+        if (caccInternal === '1') posthog.register({ internal: true });
+        else if (caccInternal === '0') posthog.unregister('internal');
     }
 </script><link rel=manifest href=manifest.webmanifest><meta name=theme-color content=#0d1117><meta name=mobile-web-app-capable content=yes><meta name=apple-mobile-web-app-capable content=yes><meta name=apple-mobile-web-app-title content="CACC Dogs"><meta name=apple-mobile-web-app-status-bar-style content=black><link rel=apple-touch-icon href=assets/icons/apple-touch-icon.png><style>
     /* "Updated · Refresh" (a newer build exists after an installed copy resumed)
@@ -105,10 +122,11 @@
 </style><script>
     // map.html has no base.html track(); this fallback has the same guard. On
     // base.html pages the real function declaration later replaces it.
-    window.track = window.track || function (event, props) {
+    window.track = window.track || function (event, props, opts) {
         try {
             if (typeof posthog !== 'undefined' && typeof posthog.capture === 'function') {
-                posthog.capture(event, props || {});
+                if (opts) posthog.capture(event, props || {}, opts);
+                else posthog.capture(event, props || {});
             }
         } catch (e) { /* analytics must never break the page */ }
     };
@@ -1925,7 +1943,7 @@
         const btn = document.getElementById('mobileMenuBtn');
         if (btn) btn.focus();
     });
-</script><div class=container id=main-content tabindex=-1><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart role=img aria-label="Population by Breed doughnut chart. Detailed data is available in the Detailed Statistics table below."></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart role=img aria-label="Outcome Rates by Breed normalized 100% stacked bar chart. Detailed data is available in the Detailed Statistics table below."></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart role=img aria-label="Gender Distribution by Breed bar chart."></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart role=img aria-label="Intake Source by Breed bar chart."></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart role=img aria-label="Median Age by Breed bar chart."></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable() aria-expanded=false><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: November 22, 2026 12:19 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart role=img aria-label="Population by Breed doughnut chart. Detailed data is available in the Detailed Statistics table below."></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart role=img aria-label="Outcome Rates by Breed normalized 100% stacked bar chart. Detailed data is available in the Detailed Statistics table below."></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart role=img aria-label="Gender Distribution by Breed bar chart."></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart role=img aria-label="Intake Source by Breed bar chart."></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart role=img aria-label="Median Age by Breed bar chart."></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable() aria-expanded=false><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: November 22, 2026 01:22 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -1947,6 +1965,7 @@
         //   chip_selected             dashboard filter chip                     {chip, active, filters, via}
         //   filters_cleared           "Clear filters" reset to the All view     {source}
         //   filter_panel_opened       dashboard Filters panel opened            {active}
+        //   filter_panel_closed       dashboard Filters panel closed (once per open) {method, changes, changed, active, shown}
         //   facet_selected            panel-only filter turned on or off        {group, value, active, via}
         // filter notes (index.html): chip_selected.via is chip | panel | today
         // (TODAY pill) | link (?filter= on load) | clear (Clear filters); events
@@ -1957,6 +1976,12 @@
         // empty_state | panel (the panel's Clear all) | token (the last applied
         // filter removed from its token). filter_panel_opened.active is the
         // number of filters applied when it opened (Favorites not counted).
+        // filter_panel_closed (from 2026-11-22): method is show (Show N dogs) |
+        // x | dismiss (Esc or backdrop); changes counts the choices made in that
+        // open (Clear all counts one); changed = the applied filters differ from
+        // when it opened (a choice undone reads changes > 0, changed false);
+        // active as for filter_panel_opened, at close; shown = the count on the
+        // Show button when it was last updated.
         // facet_selected covers what has no chip: group is hold | pavilion |
         // level, notes (value has_notes), media (value has_media), or a
         // volunteer-note group (energy | leash | handling | other_dogs |
@@ -2007,12 +2032,22 @@
         //   push_prefs_changed        the two switches saved while on           {all, fav}
         //   push_unsubscribed         notifications turned off                  {source: dialog|revoked|server}
         //   push_opened               page opened from a notification tap        {kind: fav|batch|fallback|other, page}
+        //   push_state_mismatch       browser subscribed, no local record (diagnostics) {pending, pending_age_h}
         // push notes (index.html, sw.js): state is on | off | denied | ios-tab |
         // unsupported | storage | unavailable. reason is denied | dismissed |
         // host | subscribe | turnstile | full | geo | server. favorites is the
         // count of synced favorite ids, never the ids. source revoked = the
         // browser lost the permission or subscription; server = the worker
-        // no longer had the row (404 from /push/sync).
+        // no longer had the row (404 from /push/sync). push_state_mismatch
+        // (from 2026-11-22) fires at most once per tab when the dashboard finds
+        // permission granted and a browser subscription with the page's key but
+        // no local caccPush record, outside the expected 404 case
+        // (caccPushServerGone). pending = the caccPushPending marker set just
+        // before /push/subscribe was still there (the page died between the
+        // browser subscribing and the worker answering); pending_age_h is its
+        // age in hours (null without it). It can't tell whether the worker
+        // stored a row: the notify step's 🔔 Notifications summary line has the
+        // subscriber count.
         // pwa notes (partials/pwa.html, also on map.html): iOS has no install
         // event, so pwa_launched is its only signal. Every page view also
         // carries the session property display_mode (standalone | browser).
@@ -2070,10 +2105,35 @@
         // volunteer is the self-reported checkbox; status is the worker's HTTP
         // status (null on a network error or timeout). The note's title and
         // text are never sent.
-        function track(event, props) {
+        // Device super properties (posthog.register, never person properties):
+        // internal = true on the owner's devices, set by visiting any page with
+        // ?internal=1 (?internal=0 removes it; partials/posthog.html strips the
+        // parameter on load). Installed apps with their own storage can't take
+        // it, so analyses also exclude the owner's person_ids (posthog-analysis
+        // skill). Tagged, not excluded: queries filter internal != true.
+        // volunteer = true, volunteer_<signal> = true and volunteer_via (the
+        // first signal, register_once) are set by markVolunteer() from
+        // 2026-11-22. signal: mode (volunteer mode turned on, or already on at
+        // page load) | form (handling_add_clicked; weak, the public sees that
+        // link) | upload (sheet_upload_queued) | admin (admin passcode
+        // accepted). Strict volunteer segment: volunteer_upload or
+        // volunteer_mode. Always exclude internal = true too: the owner's
+        // devices carry volunteer as well.
+        // Delivery (track's third argument, passed to posthog.capture): events
+        // that happen once per device or right before the page navigates away
+        // skip the SDK's batch queue, which a closed tab or app can lose.
+        // TRACK_NOW (send_instantly): push_subscribed, push_subscribe_failed,
+        // push_unsubscribed, push_state_mismatch, sheet_upload_queued.
+        // TRACK_LEAVING (sendBeacon + send_instantly, PostHog's pattern for a
+        // capture just before unload): walksheet_guide_clicked,
+        // upload_nudge_clicked.
+        const TRACK_NOW = { send_instantly: true };
+        const TRACK_LEAVING = { transport: 'sendBeacon', send_instantly: true };
+        function track(event, props, opts) {
             try {
                 if (typeof posthog !== 'undefined' && typeof posthog.capture === 'function') {
-                    posthog.capture(event, props || {});
+                    if (opts) posthog.capture(event, props || {}, opts);
+                    else posthog.capture(event, props || {});
                 }
             } catch (e) { /* analytics must never break the page */ }
         }
@@ -2112,11 +2172,28 @@
             applyVolunteerMode();
             if (after !== before) {
                 track('volunteer_mode_changed', { on: after, source: source });
+                if (after) markVolunteer('mode');
                 document.dispatchEvent(new CustomEvent('volunteermodechange', { detail: { on: after } }));
             }
             return after;
         }
+        // Device-level volunteer flag for analytics (super properties via
+        // posthog.register / register_once only, never person properties):
+        // volunteer, volunteer_<signal> and the first signal as volunteer_via.
+        // signal: mode (volunteer mode on) | form (visit-form link-out, weak:
+        // the public sees that link too) | upload (sheet queued) | admin
+        // (admin passcode accepted). Same guard as track(): a no-op off-host.
+        function markVolunteer(signal) {
+            try {
+                if (typeof posthog !== 'undefined' && typeof posthog.register === 'function') {
+                    posthog.register({ volunteer: true, ['volunteer_' + signal]: true });
+                    posthog.register_once({ volunteer_via: signal });
+                }
+            } catch (e) { /* analytics must never break the page */ }
+        }
         applyVolunteerMode();
+        // Existing volunteers are flagged without toggling.
+        if (isVolunteerMode()) markVolunteer('mode');
         // bfcache restores skip scripts: re-sync with a change made on another page.
         window.addEventListener('pageshow', (e) => {
             const was = document.body.classList.contains('volunteer-mode');
