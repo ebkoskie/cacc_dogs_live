@@ -1943,7 +1943,7 @@
         const btn = document.getElementById('mobileMenuBtn');
         if (btn) btn.focus();
     });
-</script><div class=container id=main-content tabindex=-1><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart role=img aria-label="Population by Breed doughnut chart. Detailed data is available in the Detailed Statistics table below."></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart role=img aria-label="Outcome Rates by Breed normalized 100% stacked bar chart. Detailed data is available in the Detailed Statistics table below."></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart role=img aria-label="Gender Distribution by Breed bar chart."></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart role=img aria-label="Intake Source by Breed bar chart."></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart role=img aria-label="Median Age by Breed bar chart."></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable() aria-expanded=false><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: November 23, 2026 04:32 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><div class=controls-bar><fieldset class=date-range><legend>Date range</legend><div class=control-group><label for=startDate>From:</label><input type=date id=startDate class=date-input></div><div class=control-group><label for=endDate>To:</label><input type=date id=endDate class=date-input></div></fieldset><button onclick=applyCustomRange() class=btn-apply><i class="fas fa-filter"></i> Apply</button><div class=quick-btns><button class=quick-btn onclick="quickSelect(7, this)">7d</button><button class="quick-btn active" onclick="quickSelect(30, this)">30d</button><button class=quick-btn onclick="quickSelect(90, this)">90d</button><button class=quick-btn onclick="quickSelect(0, this)">All</button></div></div><div id=loading-overlay><i class="fas fa-circle-notch fa-spin fa-2x"></i><p style=margin-top:10px>Processing dataset...</p></div><div id=mainContent class=animate-fade style=display:none;><div class=dashboard-grid><div class="chart-card pie-container"><div class=chart-title>Population by Breed (Selected Range)</div><div class=chart-canvas-wrapper><canvas id=breedPieChart role=img aria-label="Population by Breed doughnut chart. Detailed data is available in the Detailed Statistics table below."></canvas></div></div><div class="chart-card outcome-rate-container"><div class=chart-title>Outcome Rates by Breed (Normalized)</div><div class=chart-canvas-wrapper><canvas id=outcomeRateChart role=img aria-label="Outcome Rates by Breed normalized 100% stacked bar chart. Detailed data is available in the Detailed Statistics table below."></canvas></div><div class=chart-footnote id=outcomeRateFootnote></div></div></div><div class=analysis-grid><div class="chart-card analysis-container"><div class=chart-title>Gender Distribution by Breed</div><div class=chart-canvas-wrapper><canvas id=genderChart role=img aria-label="Gender Distribution by Breed bar chart."></canvas></div><div class=chart-footnote id=genderFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Intake Source by Breed: Stray vs. Non-Stray</div><div class=chart-canvas-wrapper><canvas id=strayChart role=img aria-label="Intake Source by Breed bar chart."></canvas></div><div class=chart-footnote id=strayFootnote></div></div><div class="chart-card analysis-container"><div class=chart-title>Median Age by Breed</div><div class=chart-canvas-wrapper><canvas id=ageChart role=img aria-label="Median Age by Breed bar chart."></canvas></div><div class=chart-footnote id=ageFootnote></div></div></div><div class=section-divider>Detailed Statistics</div><div class=table-collapse-wrapper><div class=table-container id=tableContainer><table id=breed_tbl><thead><tr><th width=50>Rank</th><th>Breed</th><th width=100>Total</th><th width=100>Rescued</th><th width=100>Adopted</th><th width=100>Returned</th><th width=100>Other</th></tr></thead><tbody id=tableBody></tbody></table></div><button id=tableToggle class=table-toggle-btn onclick=toggleTable() aria-expanded=false><span id=toggleText>Show all breeds</span><i id=toggleIcon class="fas fa-chevron-down"></i></button></div></div><div class=footer><span>Last Updated: November 23, 2026 05:06 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -1996,10 +1996,9 @@
         //   legend_opened             dashboard legend modal opened             {source?: announcement}
         //   handling_notes_opened     volunteer handling-notes dialog opened    {dog_id, method: cue|add_cue|double_tap, has_notes}
         //   handling_add_clicked      link out to the volunteer visit form      {dog_id, source: dialog|empty|page, has_notes}
-        //   volunteer_mode_changed    "＋ Notes on every card" switched         {on, source: page|dialog}
         //   handling_summary_shown    automated notes summary rendered (beside a profile: its sentence only) {dog_id, visits, has_sentence}
         //   handling_visits_expanded  "Visit by visit" (or "All visits") opened {dog_id, visits}
-        //   handling_summary_flagged  volunteer flagged an automated summary    {dog_id, reason}
+        //   handling_summary_flagged  a visitor flagged an automated summary    {dog_id, reason}
         //   location_report_submitted kennel-badge report or correction         {kind}
         //   today_strip_clicked       "Today at CACC" pill                      {kind, count}
         //   freshness_time_toggled    "Today" label tapped to show/hide time    {shown}
@@ -2125,10 +2124,13 @@
         // in one browser session). upload_tip_dismissed: the regulars' note
         // (shown until 2026-12-14 to devices that accepted the Terms before).
         // handling notes: method add_cue is the "＋" corner on a note-less
-        // card (volunteer mode only); has_notes says whether the dog had
-        // published notes. handling_add_clicked fires on click and auxclick
-        // (middle-click), so it counts link-outs, never form submissions: the
-        // site cannot see those. dog_id is null for the blank form on notes.html.
+        // card (volunteer mode only until 2026-11-23, public since: analyses
+        // filter on has_notes, and add_cue, double_tap {has_notes: false} and
+        // the form link-out are no longer volunteer signals from that date);
+        // has_notes says whether the dog had published notes.
+        // handling_add_clicked fires on click and auxclick (middle-click), so
+        // it counts link-outs, never form submissions: the site cannot see
+        // those. dog_id is null for the blank form on notes.html.
         // feedback_submitted notes: type is idea | bug | data | other;
         // volunteer is the self-reported checkbox; status is the worker's HTTP
         // status (null on a network error or timeout). The note's title and
@@ -2141,12 +2143,13 @@
         // skill). Tagged, not excluded: queries filter internal != true.
         // volunteer = true, volunteer_<signal> = true and volunteer_via (the
         // first signal, register_once) are set by markVolunteer() from
-        // 2026-11-22. signal: mode (volunteer mode turned on, or already on at
-        // page load) | form (handling_add_clicked; weak, the public sees that
-        // link) | upload (sheet_upload_queued) | admin (admin passcode
-        // accepted). Strict volunteer segment: volunteer_upload or
-        // volunteer_mode. Always exclude internal = true too: the owner's
-        // devices carry volunteer as well.
+        // 2026-11-22. signal: mode (legacy: the removed volunteer mode; since
+        // 2026-11-23 set only once, by the load-time migration on a device that
+        // still had it on) | form (handling_add_clicked; weaker still now that
+        // every visitor sees the "＋" corner) | upload (sheet_upload_queued) |
+        // admin (admin passcode accepted). Strict volunteer segment:
+        // volunteer_upload, plus volunteer_mode as a legacy tag. Always exclude
+        // internal = true too: the owner's devices carry volunteer as well.
         // Delivery (track's third argument, passed to posthog.capture): events
         // that happen once per device or right before the page navigates away
         // skip the SDK's batch queue, which a closed tab or app can lose.
@@ -2177,40 +2180,13 @@
             if (!dog) return HANDLING_FORM_URL;
             return HANDLING_FORM_URL + '?usp=pp_url&' + HANDLING_FORM_DOG_ENTRY + '=' + encodeURIComponent(dog);
         }
-        // Volunteer mode shows a "＋" corner on every card without notes.
-        // Opt-in only (never auto-enabled), stored per browser, and mirrored as
-        // body.volunteer-mode. Blocked storage simply means "off".
-        const VOLUNTEER_MODE_KEY = 'caccVolunteerMode';
-        function isVolunteerMode() {
-            try { return localStorage.getItem(VOLUNTEER_MODE_KEY) === '1'; } catch (e) { return false; }
-        }
-        function applyVolunteerMode() {
-            document.body.classList.toggle('volunteer-mode', isVolunteerMode());
-        }
-        // Returns the stored state read back after writing, so a blocked or
-        // full storage reports "off". Fires volunteer_mode_changed and the
-        // DOM event only when the state really changed.
-        function setVolunteerMode(on, source) {
-            const before = isVolunteerMode();
-            try {
-                if (on) localStorage.setItem(VOLUNTEER_MODE_KEY, '1');
-                else localStorage.removeItem(VOLUNTEER_MODE_KEY);
-            } catch (e) { /* storage blocked: stays as it was */ }
-            const after = isVolunteerMode();
-            applyVolunteerMode();
-            if (after !== before) {
-                track('volunteer_mode_changed', { on: after, source: source });
-                if (after) markVolunteer('mode');
-                document.dispatchEvent(new CustomEvent('volunteermodechange', { detail: { on: after } }));
-            }
-            return after;
-        }
         // Device-level volunteer flag for analytics (super properties via
         // posthog.register / register_once only, never person properties):
         // volunteer, volunteer_<signal> and the first signal as volunteer_via.
-        // signal: mode (volunteer mode on) | form (visit-form link-out, weak:
-        // the public sees that link too) | upload (sheet queued) | admin
-        // (admin passcode accepted). Same guard as track(): a no-op off-host.
+        // signal: mode (legacy, set once by the migration below) | form
+        // (visit-form link-out, weakest: every visitor sees that link) | upload
+        // (sheet queued) | admin (admin passcode accepted). Same guard as
+        // track(): a no-op off-host.
         function markVolunteer(signal) {
             try {
                 if (typeof posthog !== 'undefined' && typeof posthog.register === 'function') {
@@ -2219,17 +2195,10 @@
                 }
             } catch (e) { /* analytics must never break the page */ }
         }
-        applyVolunteerMode();
-        // Existing volunteers are flagged without toggling.
-        if (isVolunteerMode()) markVolunteer('mode');
-        // bfcache restores skip scripts: re-sync with a change made on another page.
-        window.addEventListener('pageshow', (e) => {
-            const was = document.body.classList.contains('volunteer-mode');
-            applyVolunteerMode();
-            if (e.persisted && was !== isVolunteerMode()) {
-                document.dispatchEvent(new CustomEvent('volunteermodechange', { detail: { on: isVolunteerMode() } }));
-            }
-        });
+        // One-time migration (2026-11-23): volunteer mode was removed when the
+        // "＋" corner became public. A device that had it on keeps its legacy
+        // volunteer_mode tag, then the stored flag is dropped.
+        try { if (localStorage.getItem('caccVolunteerMode') === '1') markVolunteer('mode'); localStorage.removeItem('caccVolunteerMode'); } catch (e) {}
 
         // Outbound conversions. Document-level on purpose: index.html portals its media
         // menus to <body>, so a container-scoped listener would miss every social link.

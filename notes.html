@@ -1384,27 +1384,6 @@
 .vis-card li { font-size: 0.9rem; }
 .vis-card.shown h3 { color: var(--success-text); }
 .vis-card.hidden-list h3 { color: var(--text-muted); }
-.vm-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; background: var(--row); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
-.vm-row label { display: flex; align-items: center; gap: 12px; min-height: 44px; cursor: pointer; font-weight: 600; }
-.vm-switch {
-    appearance: none; -webkit-appearance: none; margin: 0; flex: 0 0 auto; cursor: pointer;
-    width: 46px; height: 26px; border-radius: 13px; position: relative;
-    background: var(--border); border: 1px solid var(--border); transition: background-color 0.2s, border-color 0.2s;
-}
-.vm-switch::before {
-    content: ""; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%;
-    background: var(--text); transition: transform 0.2s;
-}
-.vm-switch:checked { background: var(--accent); border-color: var(--accent); }
-.vm-switch:checked::before { transform: translateX(20px); background: var(--on-accent); }
-.vm-switch:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-@media (prefers-reduced-motion: reduce) {
-    .vm-switch, .vm-switch::before { transition: none; }
-}
-.vm-state { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); min-width: 2.2em; text-align: right; }
-.vm-state.on { color: var(--success-text); }
-.vm-msg { font-size: 0.85rem; color: var(--warning-text); margin: 8px 0 0; }
-.vm-msg:empty { display: none; }
 .note-box { background: var(--info-bg); border: 1px solid var(--info-border); border-radius: 10px; padding: 12px 14px; }
 @media (max-width: 600px) {
     .vis-grid { grid-template-columns: 1fr; }
@@ -1782,7 +1761,7 @@
         const btn = document.getElementById('mobileMenuBtn');
         if (btn) btn.focus();
     });
-</script><div class=container id=main-content tabindex=-1><article class=guide><h1><i class="fas fa-clipboard-list" aria-hidden=true></i> Log a handling visit</h1><p class=lede> Walked or handled an adoptable dog at CACC? Log it on the volunteer team's handling form. Your notes help other volunteers, staff and adopters know how the dog does on leash, around people and around other dogs. </p><section class=guide-hero aria-label=Start><a class=guide-cta id=openForm href=https://docs.google.com/forms/d/e/1FAIpQLSewSDIB4-pA6KDs07Z7Lz6sUsWw0O_C68Fj1u5Pt3ZGSzkOWQ/viewform target=_blank rel=noopener><i class="fas fa-pen" aria-hidden=true></i> Open the visit form<span class=visually-hidden> (opens in a new tab)</span></a><p class=guide-fine>Opens the CACC volunteer Google Form in a new tab. You need to be signed in to Google.</p><p class=tip><strong>Tip:</strong> start from a dog's notes on the <a href=./ >dashboard</a> instead. The form then opens with the dog's name and ID already filled in.</p></section><h2 id=how-it-works>How it works</h2><ol class=steps><li>After your visit, open the dog's notes on the dashboard and tap <strong>Add your visit</strong> (for a dog without notes, turn on <a href=#volunteer-mode>＋ Notes</a> below), or use the blank form above.</li><li>The volunteer team reviews new visits before they are published.</li><li>Reviewed visits appear in the dog's notes on cacc.dog the next time the site updates, so yours won't show right away.</li></ol><h2 id=what-to-log>What to log</h2><p>The form asks about:</p><ul class=log-list><li>Activities you did together (walk, playgroup, adoption showing, and so on)</li><li>Leash manners</li><li>Energy level</li><li>How the dog took to being handled (interactions with you)</li><li>Interests: toys, treats, cuddling, fetch, sniffing</li><li>Commands or tricks the dog knows</li><li>Reaction to other dogs</li><li>Adoption showings</li><li>Whether the dog was cat tested</li><li>Any concerning behaviours</li><li>A free-text note in your own words</li><li>Your name and the date of the visit</li></ul><h2 id=what-shows>What shows on cacc.dog</h2><div class=vis-grid><div class="vis-card shown"><h3><i class="fas fa-eye" aria-hidden=true></i> Shown publicly</h3><ul><li>Date of the visit</li><li>Activities</li><li>Leash manners</li><li>Energy level</li><li>Handling interactions</li><li>Interests</li><li>Commands or tricks</li><li>Reaction to other dogs</li><li>Cat tested</li></ul></div><div class="vis-card hidden-list"><h3><i class="fas fa-eye-slash" aria-hidden=true></i> Never shown</h3><ul><li>Your name</li><li>Your email address</li><li>Adoption showing answers</li><li>Concerning behaviours</li></ul></div></div><p>Notes appear only after the volunteer team reviews them.</p><p id=free-text-paused>Free-text notes are not shown on cacc.dog for now. If they are shown again later, the free-text notes already on the form will be included, so keep names, phone numbers and other personal details out of them.</p><p id=combined-answers>A dog's notes open on one combined answer per question, the answer most visits gave and how many gave it, with each visit still listed under "Visit by visit" when there are two or more.</p><p id=filter-answers>The everyday answers (energy, leash manners, handling, other dogs, interests and commands) can also be used as filters on the dashboard. Other answers stay in a dog's notes and are not filter options.</p><h2 id=volunteer-mode>Show ＋ Notes on every card</h2><p>Turn this on and every dog without notes gets a dashed <strong>＋</strong> corner on the dashboard, and double-tapping any card opens its notes, so you can start a visit for any dog in one tap. The setting is kept in this browser only.</p><div class=vm-row><label for=vmSwitch><input type=checkbox role=switch id=vmSwitch class=vm-switch> Show ＋ Notes on every card </label><span class=vm-state id=vmState aria-hidden=true>Off</span></div><p class=vm-msg id=vmMsg role=status></p><h2 id=form-paused>If the form won't open</h2><div class=note-box><p style=margin:0>If the form says it is no longer accepting responses, it has been paused by the volunteer team. Contact your volunteer coordinator.</p></div></article><div class=footer><span>Last Updated: November 23, 2026 04:32 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><article class=guide><h1><i class="fas fa-clipboard-list" aria-hidden=true></i> Log a handling visit</h1><p class=lede> Walked or handled an adoptable dog at CACC? Log it on the volunteer team's handling form. Your notes help other volunteers, staff and adopters know how the dog does on leash, around people and around other dogs. </p><section class=guide-hero aria-label=Start><a class=guide-cta id=openForm href=https://docs.google.com/forms/d/e/1FAIpQLSewSDIB4-pA6KDs07Z7Lz6sUsWw0O_C68Fj1u5Pt3ZGSzkOWQ/viewform target=_blank rel=noopener><i class="fas fa-pen" aria-hidden=true></i> Open the visit form<span class=visually-hidden> (opens in a new tab)</span></a><p class=guide-fine>Opens the CACC volunteer Google Form in a new tab. You need to be signed in to Google.</p><p class=tip><strong>Tip:</strong> start from a dog's notes on the <a href=./ >dashboard</a> instead. The form then opens with the dog's name and ID already filled in.</p></section><h2 id=how-it-works>How it works</h2><ol class=steps><li>After your visit, open the dog's notes from the corner of its card on the dashboard (folded, or a dashed <strong>＋</strong> when it has no notes yet) and tap <strong>Add your visit</strong>, or use the blank form above.</li><li>The volunteer team reviews new visits before they are published.</li><li>Reviewed visits appear in the dog's notes on cacc.dog the next time the site updates, so yours won't show right away.</li></ol><h2 id=what-to-log>What to log</h2><p>The form asks about:</p><ul class=log-list><li>Activities you did together (walk, playgroup, adoption showing, and so on)</li><li>Leash manners</li><li>Energy level</li><li>How the dog took to being handled (interactions with you)</li><li>Interests: toys, treats, cuddling, fetch, sniffing</li><li>Commands or tricks the dog knows</li><li>Reaction to other dogs</li><li>Adoption showings</li><li>Whether the dog was cat tested</li><li>Any concerning behaviours</li><li>A free-text note in your own words</li><li>Your name and the date of the visit</li></ul><h2 id=what-shows>What shows on cacc.dog</h2><div class=vis-grid><div class="vis-card shown"><h3><i class="fas fa-eye" aria-hidden=true></i> Shown publicly</h3><ul><li>Date of the visit</li><li>Activities</li><li>Leash manners</li><li>Energy level</li><li>Handling interactions</li><li>Interests</li><li>Commands or tricks</li><li>Reaction to other dogs</li><li>Cat tested</li></ul></div><div class="vis-card hidden-list"><h3><i class="fas fa-eye-slash" aria-hidden=true></i> Never shown</h3><ul><li>Your name</li><li>Your email address</li><li>Adoption showing answers</li><li>Concerning behaviours</li></ul></div></div><p>Notes appear only after the volunteer team reviews them.</p><p id=free-text-paused>Free-text notes are not shown on cacc.dog for now. If they are shown again later, the free-text notes already on the form will be included, so keep names, phone numbers and other personal details out of them.</p><p id=combined-answers>A dog's notes open on one combined answer per question, the answer most visits gave and how many gave it, with each visit still listed under "Visit by visit" when there are two or more.</p><p id=filter-answers>The everyday answers (energy, leash manners, handling, other dogs, interests and commands) can also be used as filters on the dashboard. Other answers stay in a dog's notes and are not filter options.</p><h2 id=form-paused>If the form won't open</h2><div class=note-box><p style=margin:0>If the form says it is no longer accepting responses, it has been paused by the volunteer team. Contact your volunteer coordinator.</p></div></article><div class=footer><span>Last Updated: November 23, 2026 05:06 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -1835,10 +1814,9 @@
         //   legend_opened             dashboard legend modal opened             {source?: announcement}
         //   handling_notes_opened     volunteer handling-notes dialog opened    {dog_id, method: cue|add_cue|double_tap, has_notes}
         //   handling_add_clicked      link out to the volunteer visit form      {dog_id, source: dialog|empty|page, has_notes}
-        //   volunteer_mode_changed    "＋ Notes on every card" switched         {on, source: page|dialog}
         //   handling_summary_shown    automated notes summary rendered (beside a profile: its sentence only) {dog_id, visits, has_sentence}
         //   handling_visits_expanded  "Visit by visit" (or "All visits") opened {dog_id, visits}
-        //   handling_summary_flagged  volunteer flagged an automated summary    {dog_id, reason}
+        //   handling_summary_flagged  a visitor flagged an automated summary    {dog_id, reason}
         //   location_report_submitted kennel-badge report or correction         {kind}
         //   today_strip_clicked       "Today at CACC" pill                      {kind, count}
         //   freshness_time_toggled    "Today" label tapped to show/hide time    {shown}
@@ -1964,10 +1942,13 @@
         // in one browser session). upload_tip_dismissed: the regulars' note
         // (shown until 2026-12-14 to devices that accepted the Terms before).
         // handling notes: method add_cue is the "＋" corner on a note-less
-        // card (volunteer mode only); has_notes says whether the dog had
-        // published notes. handling_add_clicked fires on click and auxclick
-        // (middle-click), so it counts link-outs, never form submissions: the
-        // site cannot see those. dog_id is null for the blank form on notes.html.
+        // card (volunteer mode only until 2026-11-23, public since: analyses
+        // filter on has_notes, and add_cue, double_tap {has_notes: false} and
+        // the form link-out are no longer volunteer signals from that date);
+        // has_notes says whether the dog had published notes.
+        // handling_add_clicked fires on click and auxclick (middle-click), so
+        // it counts link-outs, never form submissions: the site cannot see
+        // those. dog_id is null for the blank form on notes.html.
         // feedback_submitted notes: type is idea | bug | data | other;
         // volunteer is the self-reported checkbox; status is the worker's HTTP
         // status (null on a network error or timeout). The note's title and
@@ -1980,12 +1961,13 @@
         // skill). Tagged, not excluded: queries filter internal != true.
         // volunteer = true, volunteer_<signal> = true and volunteer_via (the
         // first signal, register_once) are set by markVolunteer() from
-        // 2026-11-22. signal: mode (volunteer mode turned on, or already on at
-        // page load) | form (handling_add_clicked; weak, the public sees that
-        // link) | upload (sheet_upload_queued) | admin (admin passcode
-        // accepted). Strict volunteer segment: volunteer_upload or
-        // volunteer_mode. Always exclude internal = true too: the owner's
-        // devices carry volunteer as well.
+        // 2026-11-22. signal: mode (legacy: the removed volunteer mode; since
+        // 2026-11-23 set only once, by the load-time migration on a device that
+        // still had it on) | form (handling_add_clicked; weaker still now that
+        // every visitor sees the "＋" corner) | upload (sheet_upload_queued) |
+        // admin (admin passcode accepted). Strict volunteer segment:
+        // volunteer_upload, plus volunteer_mode as a legacy tag. Always exclude
+        // internal = true too: the owner's devices carry volunteer as well.
         // Delivery (track's third argument, passed to posthog.capture): events
         // that happen once per device or right before the page navigates away
         // skip the SDK's batch queue, which a closed tab or app can lose.
@@ -2016,40 +1998,13 @@
             if (!dog) return HANDLING_FORM_URL;
             return HANDLING_FORM_URL + '?usp=pp_url&' + HANDLING_FORM_DOG_ENTRY + '=' + encodeURIComponent(dog);
         }
-        // Volunteer mode shows a "＋" corner on every card without notes.
-        // Opt-in only (never auto-enabled), stored per browser, and mirrored as
-        // body.volunteer-mode. Blocked storage simply means "off".
-        const VOLUNTEER_MODE_KEY = 'caccVolunteerMode';
-        function isVolunteerMode() {
-            try { return localStorage.getItem(VOLUNTEER_MODE_KEY) === '1'; } catch (e) { return false; }
-        }
-        function applyVolunteerMode() {
-            document.body.classList.toggle('volunteer-mode', isVolunteerMode());
-        }
-        // Returns the stored state read back after writing, so a blocked or
-        // full storage reports "off". Fires volunteer_mode_changed and the
-        // DOM event only when the state really changed.
-        function setVolunteerMode(on, source) {
-            const before = isVolunteerMode();
-            try {
-                if (on) localStorage.setItem(VOLUNTEER_MODE_KEY, '1');
-                else localStorage.removeItem(VOLUNTEER_MODE_KEY);
-            } catch (e) { /* storage blocked: stays as it was */ }
-            const after = isVolunteerMode();
-            applyVolunteerMode();
-            if (after !== before) {
-                track('volunteer_mode_changed', { on: after, source: source });
-                if (after) markVolunteer('mode');
-                document.dispatchEvent(new CustomEvent('volunteermodechange', { detail: { on: after } }));
-            }
-            return after;
-        }
         // Device-level volunteer flag for analytics (super properties via
         // posthog.register / register_once only, never person properties):
         // volunteer, volunteer_<signal> and the first signal as volunteer_via.
-        // signal: mode (volunteer mode on) | form (visit-form link-out, weak:
-        // the public sees that link too) | upload (sheet queued) | admin
-        // (admin passcode accepted). Same guard as track(): a no-op off-host.
+        // signal: mode (legacy, set once by the migration below) | form
+        // (visit-form link-out, weakest: every visitor sees that link) | upload
+        // (sheet queued) | admin (admin passcode accepted). Same guard as
+        // track(): a no-op off-host.
         function markVolunteer(signal) {
             try {
                 if (typeof posthog !== 'undefined' && typeof posthog.register === 'function') {
@@ -2058,17 +2013,10 @@
                 }
             } catch (e) { /* analytics must never break the page */ }
         }
-        applyVolunteerMode();
-        // Existing volunteers are flagged without toggling.
-        if (isVolunteerMode()) markVolunteer('mode');
-        // bfcache restores skip scripts: re-sync with a change made on another page.
-        window.addEventListener('pageshow', (e) => {
-            const was = document.body.classList.contains('volunteer-mode');
-            applyVolunteerMode();
-            if (e.persisted && was !== isVolunteerMode()) {
-                document.dispatchEvent(new CustomEvent('volunteermodechange', { detail: { on: isVolunteerMode() } }));
-            }
-        });
+        // One-time migration (2026-11-23): volunteer mode was removed when the
+        // "＋" corner became public. A device that had it on keeps its legacy
+        // volunteer_mode tag, then the stored flag is dropped.
+        try { if (localStorage.getItem('caccVolunteerMode') === '1') markVolunteer('mode'); localStorage.removeItem('caccVolunteerMode'); } catch (e) {}
 
         // Outbound conversions. Document-level on purpose: index.html portals its media
         // menus to <body>, so a container-scoped listener would miss every social link.
@@ -2380,25 +2328,5 @@
         }
         openForm.addEventListener('click', onOpen);
         openForm.addEventListener('auxclick', onOpen);
-
-        const sw = document.getElementById('vmSwitch');
-        const state = document.getElementById('vmState');
-        const msg = document.getElementById('vmMsg');
-        function sync() {
-            const on = isVolunteerMode();
-            sw.checked = on;
-            state.textContent = on ? 'On' : 'Off';
-            state.classList.toggle('on', on);
-        }
-        sw.addEventListener('change', () => {
-            const want = sw.checked;
-            const on = setVolunteerMode(want, 'page');
-            sync();
-            msg.textContent = on === want ? ''
-                : "This browser didn't save the setting (site storage may be blocked).";
-        });
-        document.addEventListener('volunteermodechange', sync);
-        window.addEventListener('pageshow', sync);
-        sync();
     })();
 </script></body></html>
