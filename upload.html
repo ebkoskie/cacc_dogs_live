@@ -1380,45 +1380,91 @@
     overflow: hidden; clip: rect(0, 0, 0, 0); clip-path: inset(50%);
     white-space: nowrap; border: 0;
 }
-.file-btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
-.file-btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 8px 12px; font-size: 0.85rem; cursor: pointer; border-radius: 6px;
-    background: transparent; color: var(--text); border: 1px solid var(--border);
-    font-family: inherit; transition: background-color 0.2s, border-color 0.2s;
+/* Capture, preview, upload. The primary action is always one full-width
+   button: "Take photo of sheet" before a photo, "Upload sheet" after. */
+.panel-title { display: flex; align-items: center; gap: 8px; font-size: 1rem; font-weight: 700; margin: 0 0 12px; }
+.capture-btns { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.primary-btn { min-height: 52px; }
+.secondary-btn {
+    width: 100%; min-height: 48px; padding: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    background: transparent; color: var(--text); border: 1px solid var(--border); border-radius: 8px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: inherit;
 }
-.file-btn:hover { background: var(--row-hover); }
-.file-btn:focus,
-.file-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-#photoName { display: inline-block; margin-top: 6px; margin-left: 8px; vertical-align: middle; }
-/* Per-pavilion sheet freshness chips (fed by the worker's /sheet-status).
-   Tapping a chip selects that pavilion; a chip whose upload is older than
-   PK_STALE_DAYS dims, matching the dashboard's stale-badge convention. */
-.sheet-status { display: flex; flex-wrap: wrap; gap: 8px; }
-.sheet-chip {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 6px 10px; font-size: 0.8rem; cursor: pointer; border-radius: 12px;
-    background: transparent; color: var(--text); border: 1px solid var(--border);
-    font-family: inherit; transition: background-color 0.2s, border-color 0.2s;
+.secondary-btn:hover { background: var(--row-hover); }
+.primary-btn:focus-visible, .secondary-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.preview { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
+.preview img {
+    width: 120px; height: 160px; object-fit: cover; flex: 0 0 auto;
+    border-radius: 8px; border: 1px solid var(--border); background: var(--input-bg);
 }
-.sheet-chip:hover { background: var(--row-hover); }
-.sheet-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.sheet-chip .age { color: var(--text-muted); }
-.sheet-chip.stale { opacity: 0.65; }
-.sheet-chip.empty .age { font-style: italic; }
+.preview-side { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.preview-side .muted { margin: 0; overflow-wrap: anywhere; }
+.preview[hidden], .capture-btns[hidden], .notice[hidden] { display: none; }
+.ask-line { margin: 10px 0 0; font-weight: 600; color: var(--warning-text); }
 .status { margin-top: 12px; font-size: 0.9rem; min-height: 1.2em; }
 .status.ok { color: var(--success-text); }
 .status.err { color: var(--danger-text); }
-/* Background-OCR job tracker: one row per queued sheet upload, updated by the
-   /upload-status poll. Terminal states reuse the status palette above. */
-#uploadJobs .jobs-title { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
-.job-row { display: flex; align-items: baseline; gap: 8px; padding: 8px 0; font-size: 0.9rem; }
+/* Old-worker fallback picker (a 400 "invalid pavilion" for pavilion=auto). */
+.pick-area { margin-top: 12px; }
+.pick-area p { margin: 0 0 8px; font-size: 0.9rem; }
+.letter-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.letter-btn {
+    min-width: 52px; min-height: 52px; padding: 8px 14px; font-size: 1.1rem; font-weight: 700; cursor: pointer;
+    background: var(--input-bg); color: var(--text); border: 2px solid var(--accent); border-radius: 10px;
+    font-family: inherit;
+}
+.letter-btn:hover { background: var(--row-hover); }
+.letter-btn:disabled { opacity: 0.5; cursor: progress; }
+.letter-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+/* "Your uploads": one row per sheet sent from this tab, updated by the
+   /upload-status poll. [thumbnail] [state text + actions]. The rows are not
+   a live region; #srStatus announces short sentences instead. */
+.job-row { display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: start; padding: 10px 0; font-size: 0.9rem; }
 .job-row + .job-row { border-top: 1px solid var(--border); }
-.job-row i { flex: 0 0 auto; }
-.job-row .job-state { flex: 1; min-width: 0; }
-.job-row.done { color: var(--success-text); }
-.job-row.failed { color: var(--danger-text); }
-.job-row.timeout { color: var(--text-muted); }
+.job-thumb {
+    width: 40px; height: 40px; border-radius: 6px; object-fit: cover; box-sizing: border-box;
+    background: var(--input-bg); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center; color: var(--text-muted);
+}
+.job-body { min-width: 0; }
+.job-state { display: block; overflow-wrap: anywhere; }
+.job-state i { margin-right: 6px; }
+.job-hint { display: block; margin-top: 4px; color: var(--text-muted); font-size: 0.85rem; }
+.job-row.done .job-state { color: var(--success-text); }
+.job-row.failed .job-state { color: var(--danger-text); }
+.job-row.timeout .job-state { color: var(--text-muted); }
+.job-row.ask .job-state { font-weight: 600; }
+.job-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.job-actions .ghost-btn { min-height: 48px; }
+/* "Pavilion sheets" status board: five fixed rows, never interactive. The
+   meaning is in the words and the dot's shape (filled = a sheet from today,
+   ring = an earlier one, dashed ring = none), never in colour alone. */
+.board { list-style: none; margin: 0; padding: 0; }
+.board-row {
+    display: grid; grid-template-columns: 14px 1.4em 1fr; column-gap: 10px; align-items: baseline;
+    padding: 10px 0; min-height: 2.9em; box-sizing: border-box;
+}
+.board-row + .board-row { border-top: 1px solid var(--border); }
+.board-dot { width: 12px; height: 12px; border-radius: 50%; box-sizing: border-box; align-self: center; border: 2px solid var(--text-muted); }
+.board-row[data-state="today"] .board-dot { background: var(--success-text); border-color: var(--success-text); }
+.board-row[data-state="stale"] .board-dot { border-color: var(--warning-text); }
+.board-row[data-state="none"] .board-dot,
+.board-row[data-state="loading"] .board-dot { border-style: dashed; }
+.board-letter { font-weight: 700; }
+.board-text { min-width: 0; }
+.board-primary { display: block; }
+.board-row[data-state="today"] .board-primary { color: var(--success-text); }
+.board-row[data-state="stale"] .board-primary { color: var(--warning-text); }
+.board-row[data-state="loading"] .board-primary,
+.board-row[data-state="none"] .board-primary { color: var(--text-muted); }
+.board-second, .board-note { display: block; color: var(--text-muted); font-size: 0.85rem; }
+.board-note[hidden], .board-second:empty { display: none; }
+.board-msg { margin: 10px 0 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.board-msg[hidden] { display: none; }
+.board-msg .ghost-btn { min-height: 44px; }
+.tip { display: flex; align-items: center; gap: 10px; }
+.tip span { flex: 1; }
+.tip .ghost-btn { min-height: 44px; flex: 0 0 auto; }
 /* Admin "Pavilion sheets" restore list: one row per pavilion, the earlier
    sheets (from /admin/history) expand beneath it. */
 .sheet-admin-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px 0; font-size: 0.9rem; }
@@ -1539,7 +1585,10 @@
 .agreed-note a { color: var(--accent); }
 .linklike { background: none; border: none; padding: 0; font: inherit; color: var(--accent); text-decoration: underline; cursor: pointer; }
 /* The flex rules above override the UA [hidden] rule, so restore it explicitly. */
-.agree[hidden], .agreed-note[hidden], .field[hidden], .primary-btn[hidden] { display: none; }
+.agree[hidden], .agreed-note[hidden], .field[hidden], .primary-btn[hidden], .secondary-btn[hidden], .pick-area[hidden], .ask-line[hidden] { display: none; }
+@media (prefers-reduced-motion: reduce) {
+    .row-flash-success, .row-flash-error { animation: none; }
+}
 .password-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
 .password-wrapper input { padding-right: 42px; }
 .password-toggle {
@@ -1956,7 +2005,7 @@
         const btn = document.getElementById('mobileMenuBtn');
         if (btn) btn.focus();
     });
-</script><div class=container id=main-content tabindex=-1><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Each pavilion shows its most recent sheet until a newer one replaces it, so re-upload whenever a sheet is rewritten to keep badges current. No passcode needed. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet: the processing service hasn't been deployed. Please check back soon. </div><div id=tsBlocked class=notice hidden> The security check didn't load, so uploads can't be sent from this browser yet. If you use an ad blocker or privacy shield, allow challenges.cloudflare.com, then refresh the page. </div><form id=uploadForm class=card-panel><label class=field for=passcode id=passcodeField hidden><span>Volunteer passcode <small class=muted>(temporarily required)</small></span><div class=password-wrapper><input type=password id=passcode name=passcode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option><option value=E>E</option></select></label><div class=field id=sheetStatusField hidden><span>Last sheet uploaded</span><div id=sheetStatus class=sheet-status role=group aria-label="Last sheet upload per pavilion"></div></div><div class=field><span id=photoLabel>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* required class=visually-hidden aria-labelledby=photoLabel><div class=file-btn-group><button type=button id=snapBtn class=file-btn><i class="fas fa-camera" aria-hidden=true></i> Take photo </button><button type=button id=pickBtn class=file-btn><i class="fas fa-image" aria-hidden=true></i> Choose photo </button></div><span id=photoName class=muted></span></div><label class=agree id=agreeRow for=agreeTerms><input type=checkbox id=agreeTerms name=agreeTerms required><span>I have read and agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>.</span></label><p class="agreed-note muted" id=agreedNote hidden><span>By uploading, you agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a> (accepted <span id=agreedWhen></span>).</span><button type=button class=linklike id=reviewTerms>Review</button></p><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div><div id=ts-upload class=ts-widget></div></form><div id=uploadJobs class=card-panel hidden><span class=jobs-title><i class="fas fa-list-check" aria-hidden=true></i> Sheet processing</span><div id=uploadJobsList role=status aria-live=polite></div></div><details class="card-panel admin-panel" id=adminPanel><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><div class=password-wrapper><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><div id=ts-admin class=ts-widget-admin></div><button type=button class=primary-btn id=adminUnlockBtn><i class="fas fa-lock-open" aria-hidden=true></i> Unlock </button><div id=adminGated hidden><div class=field><span>Pavilion sheets</span><p class=muted> Uploads don't need a passcode, so check replaced sheets. If a bad upload replaced a good sheet, open History and restore the earlier one (up to five are kept per pavilion). </p><div id=adminSheets><p class=muted>Loading sheets…</p></div></div><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>E</code> plus a number (e.g. <code>C 70</code>), or clear it. Optionally pick the walker-level color matching the marker highlight on the sheet (yellow = intermediate, orange = advanced). Setting a kennel with "No color" removes any existing color. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div></div><div id=adminStatus class=status role=status aria-live=polite></div></details><dialog id=uploadSuccessModal class=success-modal closedby=any aria-labelledby=successThanks><div class=success-modal-header><button type=button class=close-modal-btn id=successCloseX aria-label="Close dialog">&times;</button></div><div class=success-modal-body><p class=success-emoji id=successEmoji aria-hidden=true></p><p class=success-thanks id=successThanks></p><p class=success-detail id=successDetail></p><p class=success-timing id=successTiming>Badges can take ~5 minutes to appear on the dashboard.</p><button type=button class=primary-btn id=successCloseBtn autofocus><i class="fas fa-paw" aria-hidden=true></i> Close </button></div></dialog></div><div class=footer><span>Last Updated: November 23, 2026 02:33 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Photograph a pavilion's walk sheet and we'll read which pavilion it is, the kennel numbers and the dogs' names, then update the location badge on each dog's card. Upload again whenever more rows are filled in. </p><div id=srStatus class=visually-hidden role=status aria-live=polite></div><div id=offlineNotice class=notice hidden> You're offline. Photos can't be sent and sheet times can't load until the connection is back. </div><div id=notConfigured class=notice hidden> Uploads aren't switched on yet: the processing service hasn't been deployed. Please check back soon. </div><div id=tsBlocked class=notice hidden> The security check didn't load, so uploads can't be sent from this browser yet. If you use an ad blocker or privacy shield, allow challenges.cloudflare.com, then refresh the page. </div><div id=regularsTip class="notice tip" hidden><span>New: no need to pick a pavilion. We read it from the sheet.</span><button type=button class=ghost-btn id=regularsTipClose>Got it</button></div><form id=uploadForm class=card-panel><label class=field for=passcode id=passcodeField hidden><span>Volunteer passcode <small class=muted>(temporarily required)</small></span><div class=password-wrapper><input type=password id=passcode name=passcode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><input type=file id=photo name=photo accept=image/* class=visually-hidden tabindex=-1 aria-hidden=true><div class=capture-btns id=captureBtns><button type=button id=snapBtn class=primary-btn><i class="fas fa-camera" aria-hidden=true></i> Take photo of sheet </button><button type=button id=pickBtn class=secondary-btn><i class="fas fa-image" aria-hidden=true></i> Choose from library </button></div><div class=preview id=preview hidden><img id=previewImg alt="The photo you're about to upload"><div class=preview-side><p class=muted id=photoName></p><button type=button id=retakeBtn class=secondary-btn><i class="fas fa-camera-rotate" aria-hidden=true></i> Retake </button></div></div><label class=agree id=agreeRow for=agreeTerms><input type=checkbox id=agreeTerms name=agreeTerms required><span>I have read and agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>.</span></label><p class="agreed-note muted" id=agreedNote hidden><span>By uploading, you agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a> (accepted <span id=agreedWhen></span>).</span><button type=button class=linklike id=reviewTerms>Review</button></p><button type=submit class=primary-btn id=submitBtn hidden><i class="fas fa-upload" aria-hidden=true></i> <span id=submitLabel>Upload sheet</span></button><p class=ask-line id=askLine hidden></p><div id=uploadStatus class=status></div><div class=pick-area id=pickArea hidden><p>Which pavilion is this sheet from?</p><div class=letter-btns id=pickBtns></div></div><div id=ts-upload class=ts-widget></div></form><section id=uploadJobs class=card-panel hidden aria-labelledby=uploadJobsTitle><h2 class=panel-title id=uploadJobsTitle><i class="fas fa-list-check" aria-hidden=true></i> Your uploads</h2><div id=uploadJobsList></div></section><section class=card-panel id=sheetBoardPanel aria-labelledby=sheetBoardTitle><h2 class=panel-title id=sheetBoardTitle><i class="fas fa-clipboard-list" aria-hidden=true></i> Pavilion sheets</h2><ul class=board id=sheetBoard><li class=board-row data-pav=A data-state=loading><span class=board-dot aria-hidden=true></span><span class=board-letter>A<span class=visually-hidden>:</span></span><span class=board-text><span class=board-primary>Loading…</span><span class=board-second></span><span class=board-note hidden></span></span></li><li class=board-row data-pav=B data-state=loading><span class=board-dot aria-hidden=true></span><span class=board-letter>B<span class=visually-hidden>:</span></span><span class=board-text><span class=board-primary>Loading…</span><span class=board-second></span><span class=board-note hidden></span></span></li><li class=board-row data-pav=C data-state=loading><span class=board-dot aria-hidden=true></span><span class=board-letter>C<span class=visually-hidden>:</span></span><span class=board-text><span class=board-primary>Loading…</span><span class=board-second></span><span class=board-note hidden></span></span></li><li class=board-row data-pav=D data-state=loading><span class=board-dot aria-hidden=true></span><span class=board-letter>D<span class=visually-hidden>:</span></span><span class=board-text><span class=board-primary>Loading…</span><span class=board-second></span><span class=board-note hidden></span></span></li><li class=board-row data-pav=E data-state=loading><span class=board-dot aria-hidden=true></span><span class=board-letter>E<span class=visually-hidden>:</span></span><span class=board-text><span class=board-primary>Loading…</span><span class=board-second></span><span class=board-note hidden></span></span></li></ul><p class="board-msg muted" id=boardMsg hidden><span id=boardMsgText>Couldn't load sheet times.</span><button type=button class=ghost-btn id=boardRetry>Retry</button></p></section><details class="card-panel admin-panel" id=adminPanel><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><div class=password-wrapper><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><div id=ts-admin class=ts-widget-admin></div><button type=button class=primary-btn id=adminUnlockBtn><i class="fas fa-lock-open" aria-hidden=true></i> Unlock </button><div id=adminGated hidden><div class=field><span>Restore sheets</span><p class=muted> Uploads don't need a passcode, so check replaced sheets. If a bad upload replaced a good sheet, open History and restore the earlier one (up to five are kept per pavilion). </p><div id=adminSheets><p class=muted>Loading sheets…</p></div></div><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>E</code> plus a number (e.g. <code>C 70</code>), or clear it. Optionally pick the walker-level color matching the marker highlight on the sheet (yellow = intermediate, orange = advanced). Setting a kennel with "No color" removes any existing color. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div></div><div id=adminStatus class=status role=status aria-live=polite></div></details><dialog id=uploadSuccessModal class=success-modal closedby=any aria-labelledby=successThanks><div class=success-modal-header><button type=button class=close-modal-btn id=successCloseX aria-label="Close dialog">&times;</button></div><div class=success-modal-body><p class=success-emoji id=successEmoji aria-hidden=true></p><p class=success-thanks id=successThanks></p><p class=success-detail id=successDetail></p><p class=success-timing id=successTiming>Badges can take ~5 minutes to appear on the dashboard.</p><button type=button class=primary-btn id=successCloseBtn autofocus><i class="fas fa-paw" aria-hidden=true></i> Close </button></div></dialog></div><div class=footer><span>Last Updated: November 23, 2026 03:07 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -2024,9 +2073,12 @@
         //   walksheet_guide_opened    Walk Sheet Upload tutorial dialog opened  {source: announcement|legend}
         //   walksheet_guide_clicked   tutorial CTA followed to upload.html      {source}
         //   walksheet_guide_dismissed tutorial closed without the CTA          {source, method: not_now|x|light_dismiss}
-        //   sheet_upload_queued       walk sheet accepted for background OCR    {pavilion, ts_ms?, ts_wait_ms?, legacy?, via?}
+        //   sheet_upload_queued       walk sheet accepted for background OCR    {pavilion, auto?, ts_ms?, ts_wait_ms?, send_ms?, legacy?, via?}
         //   sheet_upload_blocked      upload stopped by the security check      {reason, code, via?}
-        //   sheet_upload_result       background sheet OCR finished or gave up  {pavilion, state, kennels?, highlights?, matched?, low_rows?, throttled?, overlap?, kept?, city?, rejected?, detected?, model?, poll_ms, legacy?, via?}
+        //   sheet_upload_result       background sheet OCR finished or gave up  {pavilion, state, auto?, merged?, carried?, resolve?, kennels?, highlights?, matched?, low_rows?, throttled?, overlap?, kept?, city?, rejected?, detected?, range?, model?, poll_ms, legacy?, via?}
+        //   sheet_question_answered   "Which pavilion?" answered or dismissed   {choice, detected, range, via?}
+        //   sheet_milestone_shown     upload milestone dialog opened            {kind, via?}
+        //   upload_tip_dismissed      "no need to pick a pavilion" note closed  {via?}
         //   admin_sheet_restored      admin restored an earlier pavilion sheet  {pavilion}
         //   air_section_toggled       air.html accordion opened or closed       {section, open}
         //   air_resource_clicked      outbound source link on air.html          {resource}
@@ -2106,7 +2158,7 @@
         // state=failed) is the worker's persist-guard verdict —
         // no_rows | stale_date | pavilion_mismatch | unverified_names (too few
         // rows anchor to the roster) | verify_unavailable (roster fetch
-        // failed) — with detected = the
+        // failed) | pavilion_unclear (state=ask, below) — with detected = the
         // pavilion letter the sheet actually belongs to on a mismatch;
         // low_rows=true marks an accepted sheet with far fewer rows than the
         // one it replaced.
@@ -2117,6 +2169,23 @@
         // reason is blocked (api.js never loaded) | timeout (no token in 20 s)
         // | interactive (timed out while the check asked for a tap); code is
         // the widget's last error-callback code, or null. Nothing was sent.
+        // Pavilion auto-detect (from 2026-11-23; upload.html sends
+        // pavilion=auto): sheet_upload_queued.pavilion is null and auto=true
+        // until an older worker forces the letter picker (then the letter);
+        // send_ms is first byte to last byte sent. sheet_upload_result.pavilion
+        // is the letter the worker filed (or checked) the sheet under, null
+        // until known; state adds ask (rejected = pavilion_unclear, or
+        // verify_unavailable on a resolve: the page asks "Which pavilion?",
+        // with detected = the header letter and range = the modal kennel
+        // range); resolve=true marks the result of an answer (POST
+        // /upload-resolve); merged/carried mark a short sheet merged into the
+        // one on file. The legacy synchronous path is gone (no legacy=true
+        // after 2026-11-23). sheet_question_answered.choice is the letter
+        // tapped, or dismiss. sheet_milestone_shown.kind is all_five (every
+        // pavilion has a sheet from today, checked when this device's sheet
+        // lands; once per Chicago day) | third_upload (third accepted upload
+        // in one browser session). upload_tip_dismissed: the regulars' note
+        // (shown until 2026-12-14 to devices that accepted the Terms before).
         // handling notes: method add_cue is the "＋" corner on a note-less
         // card (volunteer mode only); has_notes says whether the dog had
         // published notes. handling_add_clicked fires on click and auxclick
@@ -2244,8 +2313,9 @@
 
         // Pavilion sheets persist until a newer upload replaces them; data whose
         // source sheet is older than this many days counts as stale. Shared by
-        // the dashboard (badge dimming, upload nudge) and upload.html (freshness
-        // chips, admin roster notes) — declared once here so it can't drift.
+        // the dashboard (badge dimming, upload nudge) and upload.html (the
+        // "Pavilion sheets" board, admin roster notes) — declared once here so
+        // it can't drift.
         const PK_STALE_DAYS = 2;
 
         // --- Kennel-entry helpers (shared by upload.html admin panel and the
@@ -2604,6 +2674,9 @@
         if (!window.turnstile || tsUploadId === null) return;
         uploadTsStartedAt = Date.now();
         uploadTsSolveMs = null;
+        // A new challenge: its before-interactive-callback says again if it
+        // needs a tap.
+        uploadTsInteractive = false;
         window.turnstile.reset(tsUploadId);
     }
     // Resolve the upload token, waiting (up to timeoutMs) for a challenge still
@@ -2681,7 +2754,7 @@
     // TERMS_VERSION in sync with the "Effective date" in templates/terms.html and
     // templates/privacy.html so a Terms change automatically re-prompts everyone.
     const TERMS_VERSION = '2026-11-18';
-    const TERMS_KEY = 'pavilionTermsAccepted';  // localStorage: {v, ts}
+    const TERMS_KEY = 'pavilionTermsAccepted';  // localStorage: {v, ts, page?}
     function readTermsAccepted() {
         try { return JSON.parse(localStorage.getItem(TERMS_KEY) || 'null'); }
         catch (e) { return null; }
@@ -2771,18 +2844,185 @@
         form.addEventListener('touchstart', warmApi, { once: true, passive: true });
     }
 
-    // ---- Sheet freshness chips ----------------------------------------------
-    // "Last sheet uploaded" per pavilion, from the worker's public
-    // /sheet-status endpoint (timestamps only — no kennel data). Tapping a
-    // chip selects that pavilion, so a volunteer can spot the most outdated
-    // sheet and go shoot it. The block stays hidden when the endpoint is
-    // unconfigured, unreachable, or an older worker deploy (404).
-    const sheetStatusField = document.getElementById('sheetStatusField');
-    const sheetStatusEl = document.getElementById('sheetStatus');
-    const pavilionSelect = document.getElementById('pavilion');
+    // Read by renderBoard (which re-renders the admin restore list when the
+    // panel is unlocked), so it is declared before any board code can run: a
+    // `let` read before its declaration throws and would stop the script.
+    let adminUnlocked = false;
+    const PAVILIONS = ['A', 'B', 'C', 'D', 'E'];
 
-    // Compact relative age for a chip label; the absolute time lives in the
-    // chip's title. Future/invalid timestamps degrade to "just now".
+    // Screen-reader announcer: short sentences only. Cleared first so the
+    // same sentence twice in a row is announced twice.
+    const srStatus = document.getElementById('srStatus');
+    function announce(msg) {
+        srStatus.textContent = '';
+        setTimeout(() => { srStatus.textContent = msg; }, 60);
+    }
+    // The form's status line plus the same words for screen readers.
+    function say(msg, kind) {
+        setStatus(uploadStatus, msg, kind || '');
+        announce(msg);
+    }
+
+    // Chicago-clock helpers (the shelter's clock, like every date on the site).
+    function siteDayOf(ts) {
+        return isFinite(ts) ? new Date(ts).toLocaleDateString('en-CA', { timeZone: SITE_TZ }) : null;
+    }
+    function siteClock(ts) {
+        return new Date(ts).toLocaleTimeString('en-US', { timeZone: SITE_TZ, hour: 'numeric', minute: '2-digit' })
+            .replace(/\s+/g, ' ').toLowerCase();
+    }
+
+    // ---- "Pavilion sheets" status board --------------------------------------
+    // When each pavilion's sheet was last uploaded, from the worker's public
+    // /sheet-status (timestamps and counts only, never kennel data). Five
+    // fixed rows in the HTML; this only fills in words (DOM APIs and
+    // textContent only). Wording is by Chicago calendar day of captured_at.
+    const boardPanel = document.getElementById('sheetBoardPanel');
+    const boardEl = document.getElementById('sheetBoard');
+    const boardMsg = document.getElementById('boardMsg');
+    const boardMsgText = document.getElementById('boardMsgText');
+    const boardNotes = {};  // pavilion -> note line ("From your upload just now")
+    let sheetStatusData = null;  // kept for the admin restore list and local updates
+    let boardLoadFailed = false;
+
+    function boardWords(info) {
+        const ts = info && info.captured_at ? Date.parse(info.captured_at) : NaN;
+        if (!isFinite(ts)) return { state: 'none', primary: 'No sheet yet', second: null };
+        const diff = siteDayDiff(siteDayOf(ts), siteToday());
+        let state = 'earlier', primary;
+        if (diff === null || diff <= 0) { state = 'today'; primary = `Today, ${siteClock(ts)}`; }
+        else if (diff === 1) primary = 'Yesterday';
+        else if (diff > PK_STALE_DAYS) { state = 'stale'; primary = `${diff} days ago, needs a new sheet`; }
+        else primary = `${diff} days ago`;
+        const carried = Number(info.carried) > 0 ? Number(info.carried) : 0;
+        const rows = Number(info.rows) > 0 ? Number(info.rows) : 0;
+        let second = null;
+        if (carried && rows > carried) {
+            const fresh = rows - carried;
+            second = { text: `${fresh} kennel${fresh === 1 ? '' : 's'} from this sheet, ${carried} carried over` };
+        } else if (carried) {
+            second = { text: `${carried} kennel${carried === 1 ? '' : 's'} carried over from an earlier sheet` };
+        } else if (/^\d{4}-\d{2}-\d{2}$/.test(info.sheet_date || '')) {
+            second = { date: info.sheet_date };
+        }
+        return { state, primary, second };
+    }
+
+    // newData: the sheet data changed (a load or a landed upload), so the
+    // admin restore list is rebuilt too. The 60 s and visibility re-renders
+    // only refresh the board's words: rebuilding the admin list there would
+    // drop a keyboard admin's focus and re-enable a History button mid-load.
+    function renderBoard(newData) {
+        PAVILIONS.forEach(pav => {
+            const row = boardEl.querySelector(`[data-pav="${pav}"]`);
+            if (!row) return;
+            const w = sheetStatusData ? boardWords(sheetStatusData[pav]) : { state: 'loading', primary: 'Loading…', second: null };
+            row.dataset.state = w.state;
+            row.querySelector('.board-primary').textContent = w.primary;
+            const second = row.querySelector('.board-second');
+            second.replaceChildren();
+            if (w.second && w.second.text) second.textContent = w.second.text;
+            else if (w.second && w.second.date) {
+                const t = document.createElement('time');
+                t.dateTime = w.second.date;
+                t.textContent = formatSiteDate(w.second.date, { weekday: 'short', month: 'short', day: 'numeric' }).replace(',', '');
+                second.append('Sheet dated ', t);
+            }
+            const note = row.querySelector('.board-note');
+            note.textContent = boardNotes[pav] || '';
+            note.hidden = !boardNotes[pav];
+        });
+        if (newData && adminUnlocked) renderAdminSheets();
+    }
+
+    function showBoardMessage(msg) {
+        boardMsgText.textContent = msg;
+        boardMsg.hidden = false;
+    }
+
+    // noStore bypasses the endpoint's 60 s private cache: after an admin
+    // restore, and for the all-five check when this device's sheet lands.
+    function loadSheetStatus(noStore) {
+        if (!PAVILION_API_BASE) return Promise.resolve(null);
+        return fetch(`${PAVILION_API_BASE}/sheet-status`, noStore ? { cache: 'no-store' } : undefined)
+            .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+            .then(data => {
+                const pavs = data && typeof data.pavilions === 'object' && data.pavilions && !Array.isArray(data.pavilions)
+                    ? data.pavilions : null;
+                if (!pavs) throw new Error('shape');
+                sheetStatusData = pavs;
+                boardLoadFailed = false;
+                boardMsg.hidden = true;
+                renderBoard(true);
+                return pavs;
+            })
+            .catch(() => {
+                boardLoadFailed = true;
+                // Keep showing what we had; only an empty board says so.
+                if (!sheetStatusData) {
+                    showBoardMessage(navigator.onLine === false
+                        ? "Couldn't load sheet times while offline."
+                        : "Couldn't load sheet times.");
+                    PAVILIONS.forEach(pav => {
+                        const row = boardEl.querySelector(`[data-pav="${pav}"]`);
+                        if (row) { row.dataset.state = 'none'; row.querySelector('.board-primary').textContent = 'Not loaded'; }
+                    });
+                }
+                return null;
+            });
+    }
+    if (PAVILION_API_BASE) {
+        loadSheetStatus(false);
+        document.getElementById('boardRetry').addEventListener('click', () => {
+            boardMsg.hidden = true;
+            loadSheetStatus(true);
+        });
+        // Words like "Today, 2:41 pm" and "Yesterday" go out of date.
+        setInterval(() => { if (sheetStatusData) renderBoard(); }, 60000);
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState !== 'visible') return;
+            if (boardLoadFailed) loadSheetStatus(true); else renderBoard();
+        });
+    } else {
+        boardPanel.hidden = true;
+    }
+
+    // Offline notice; on reconnect, retry what failed.
+    const offlineNotice = document.getElementById('offlineNotice');
+    function syncOnline() { offlineNotice.hidden = navigator.onLine !== false; }
+    window.addEventListener('offline', syncOnline);
+    window.addEventListener('online', () => {
+        syncOnline();
+        if (boardLoadFailed) { boardMsg.hidden = true; loadSheetStatus(true); }
+    });
+    syncOnline();
+
+    // Reflect a landed upload at once (a refetch within 60 s would hit the
+    // endpoint's cache anyway), then briefly highlight the row.
+    function markSheetUploaded(pav, data) {
+        if (!/^[A-E]$/.test(pav || '')) return;
+        boardNotes[pav] = 'From your upload';
+        if (sheetStatusData) {
+            const prev = sheetStatusData[pav];
+            const fresh = typeof data.kennels === 'number' ? data.kennels : 0;
+            const carried = typeof data.carried === 'number' ? data.carried : 0;
+            // The replaced sheet went onto the worker's restore history.
+            sheetStatusData[pav] = {
+                captured_at: new Date().toISOString(), sheet_date: null,
+                restorable: !!(prev && (prev.captured_at || prev.restorable)), city: null,
+                carried: carried, rows: fresh + carried
+            };
+        }
+        renderBoard(true);
+        const row = boardEl.querySelector(`[data-pav="${pav}"]`);
+        if (row) {
+            row.classList.remove('row-flash-success');
+            void row.offsetWidth;  // restart the animation
+            row.classList.add('row-flash-success');
+        }
+    }
+
+    // Compact relative age for the admin restore list.
     function relAge(iso) {
         const ms = Date.now() - Date.parse(iso);
         if (!isFinite(ms) || ms < 60000) return 'just now';
@@ -2794,89 +3034,35 @@
         return days === 1 ? 'yesterday' : `${days}d ago`;
     }
 
-    // Build one chip via DOM APIs — fetched data never reaches innerHTML
-    // (same defense-in-depth posture as the rest of the page).
-    function buildSheetChip(pav, info) {
-        const capturedTs = info && info.captured_at ? Date.parse(info.captured_at) : NaN;
-        const chip = document.createElement('button');
-        chip.type = 'button';
-        chip.className = 'sheet-chip';
-        const letter = document.createElement('b');
-        letter.textContent = pav;
-        const age = document.createElement('span');
-        age.className = 'age';
-        if (isFinite(capturedTs)) {
-            const ageText = relAge(info.captured_at);
-            age.textContent = ageText;
-            if (Date.now() - capturedTs > PK_STALE_DAYS * 86400000) chip.classList.add('stale');
-            const sheetDate = /^\d{4}-\d{2}-\d{2}$/.test(info.sheet_date || '') ? info.sheet_date : '';
-            chip.title = `Uploaded ${formatLocalTimecode(capturedTs)}` +
-                (sheetDate ? ` · sheet dated ${formatSiteDate(sheetDate)}` : '');
-            chip.setAttribute('aria-label', `Select Pavilion ${pav}, last uploaded ${ageText}`);
-        } else {
-            chip.classList.add('empty');
-            age.textContent = 'none';
-            chip.title = 'No sheet on file yet';
-            chip.setAttribute('aria-label', `Select Pavilion ${pav}, no sheet on file yet`);
-        }
-        chip.append(letter, age);
-        chip.addEventListener('click', () => { pavilionSelect.value = pav; });
-        return chip;
-    }
 
-    function renderSheetStatus(pavilions) {
-        sheetStatusEl.replaceChildren(
-            ...['A', 'B', 'C', 'D', 'E'].map(p => buildSheetChip(p, pavilions[p])));
-        sheetStatusField.hidden = false;
-        if (adminUnlocked) renderAdminSheets();
-    }
-
-    let sheetStatusData = null;  // kept so a successful upload can refresh its chip
-    // noStore bypasses the endpoint's 60 s private cache — used right after an
-    // admin restore, when the cached answer is known to be stale.
-    function loadSheetStatus(noStore) {
-        if (!PAVILION_API_BASE) return Promise.resolve();
-        return fetch(`${PAVILION_API_BASE}/sheet-status`, noStore ? { cache: 'no-store' } : undefined)
-            .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-            .then(data => {
-                const pavs = data && typeof data.pavilions === 'object' && !Array.isArray(data.pavilions)
-                    ? data.pavilions : null;
-                if (!pavs) return;
-                sheetStatusData = pavs;
-                renderSheetStatus(pavs);
-            })
-            .catch(() => { /* freshness is a nicety — fail silently, stay hidden */ });
-    }
-    loadSheetStatus(false);
-
-    // Reflect a successful upload immediately ("just now") without refetching
-    // (a refetch within 60 s would hit the endpoint's Cache-Control anyway).
-    // The new sheet's OCR'd date isn't in the upload response, so the tooltip
-    // shows only the upload time until the next page load.
-    function markSheetUploaded(pav) {
-        if (!sheetStatusData) return;  // strip never rendered (old worker / fetch failed)
-        const prev = sheetStatusData[pav];
-        // The replaced sheet went onto the worker's restore history.
-        sheetStatusData[pav] = {
-            captured_at: new Date().toISOString(), sheet_date: null,
-            restorable: !!(prev && (prev.captured_at || prev.restorable)), city: null
-        };
-        renderSheetStatus(sheetStatusData);
-    }
-
-    // ---- Background-job tracker ---------------------------------------------
-    // The worker stages each upload and OCRs it in a background workflow
-    // (202 + job_id). Each queued job gets a tracker row and a chained
-    // setTimeout poll of /upload-status — 5 s for the first minute, then 10 s,
-    // giving up at a 9-minute wall (just past the worker's worst case of two
-    // models × three 75 s attempts + backoff ≈ 8.2 min). Pending jobs persist
-    // in sessionStorage so a reload resumes polling; a closed tab is fine —
-    // the workflow finishes server-side and the chips show it next visit.
-    const JOBS_KEY = 'pavilionPendingJobs';   // sessionStorage: [{id, pavilion, t}]
+    // ---- "Your uploads" -------------------------------------------------------
+    // The worker stages each upload and reads it in a background workflow
+    // (202 + job_id). Each job gets a row and a chained setTimeout poll of
+    // /upload-status: 5 s for the first minute, then 10 s, giving up at a
+    // 9-minute wall (just past the worker's worst case of two models × three
+    // 75 s attempts + backoff ≈ 8.2 min). Jobs persist in sessionStorage so a
+    // reload resumes them; a closed tab is fine (the workflow finishes
+    // server-side and the board shows it next visit). An auto upload the
+    // worker couldn't place asks "Which pavilion?" and stays stored until
+    // answered; the answer goes through /upload-resolve and the stored entry
+    // swaps to the resolve job's id, so a reload never asks twice.
+    const JOBS_KEY = 'pavilionPendingJobs';   // sessionStorage: [{id, pavilion|null, t, p?, ask?, resolveOf?}]
+    // t: when the photo was sent (labels the row). p: when polling started (a
+    // resolve restarts it). ask: {candidates, range, detected, at} while
+    // waiting for an answer. resolveOf: the job a resolve answers.
     const POLL_FAST_MS = 5000, POLL_SLOW_MS = 10000, POLL_SLOW_AFTER_MS = 60000;
     const POLL_WALL_MS = 9 * 60000;
+    const ASK_WINDOW_MS = 30 * 60000;  // the worker's /upload-resolve window
+    const JOB_ID_SHAPE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
     const uploadJobsPanel = document.getElementById('uploadJobs');
     const uploadJobsList = document.getElementById('uploadJobsList');
+    const askLine = document.getElementById('askLine');
+    const jobThumbs = new Map();   // job id -> object URL of its photo (this page view only)
+    const askingJobs = new Set();  // job ids waiting for an answer
+    const BASE_TITLE = document.title;
+    // A milestone dialog waiting for its moment (never over a question or
+    // another dialog). Declared here: the resume block below reads it.
+    let pendingMilestone = null;
 
     function readPendingJobs() {
         // Must always return an array — a corrupted stored value throwing out
@@ -2893,158 +3079,404 @@
     function removePendingJob(id) {
         writePendingJobs(readPendingJobs().filter(j => !j || j.id !== id));
     }
+    // Store `job`, dropping any entry with its id or `replaceId` (the swap
+    // from an answered question to its resolve job).
+    function savePendingJob(job, replaceId) {
+        const jobs = readPendingJobs().filter(j => j && j.id !== job.id && j.id !== replaceId);
+        jobs.push(job);
+        writePendingJobs(jobs);
+    }
 
-    // One row per job, rebuilt in place on each state change. DOM APIs only —
-    // fetched data never reaches innerHTML (same posture as the sheet chips).
+    function photoWords(job) { return `your ${siteClock(job.t)} photo`; }
+    // "Pavilion C: we couldn't…" once the letter is known; letterless before.
+    function withLead(letter, sentence) {
+        return letter ? `Pavilion ${letter}: ${sentence.charAt(0).toLowerCase()}${sentence.slice(1)}` : sentence;
+    }
+
+    // Plain-language copy per worker reject reason (pinned against the
+    // worker's REJECT_REASONS by tests/test_pavilion_resolve.py).
+    // pavilion_unclear normally becomes the question instead.
+    const REJECT_COPY = {
+        no_rows: c => withLead(c.letter, "We couldn't read any kennel rows in this photo, so nothing changed. Photograph the whole sheet, flat and in focus, and upload it again."),
+        stale_date: c => withLead(c.letter, "The sheet on file is dated later than this one, so nothing changed. If this is the sheet on the wall today, photograph it again and upload."),
+        pavilion_mismatch: c => withLead(c.letter, c.detected
+            ? `This looks like Pavilion ${c.detected}'s sheet, so nothing changed. Upload it again and choose ${c.detected}.`
+            : "This looks like a different pavilion's sheet, so nothing changed. Upload it again and choose the pavilion on the sheet."),
+        unverified_names: c => (typeof c.kennels === 'number' && c.kennels < 5)
+            ? 'We need at least five dogs written on a sheet to check it. Photograph it again once a few more are filled in.'
+            : withLead(c.letter, "We couldn't match enough names to dogs at CACC, so nothing changed. Photograph the whole sheet flat, in focus and well lit, then upload it again."),
+        verify_unavailable: c => withLead(c.letter, "We couldn't check the sheet against the list of dogs just now, so nothing changed. Please upload it again in a few minutes."),
+        pavilion_unclear: () => "We couldn't tell which pavilion this sheet is from, so nothing changed. Photograph it again with the top of the sheet in the photo."
+    };
+
+    // One row per job: [thumbnail] [state text, hint, actions]. The thumbnail
+    // element is created once and kept, so its object URL can be revoked when
+    // the job ends without blanking the picture. DOM APIs only.
     const JOB_ICONS = {
         processing: 'fas fa-spinner fa-spin',
         done: 'fas fa-circle-check',
         failed: 'fas fa-triangle-exclamation',
-        timeout: 'fas fa-clock'
+        timeout: 'fas fa-clock',
+        ask: 'fas fa-circle-question'
     };
-    function renderJobRow(id, state, text) {
+    function jobRow(id) {
         let row = uploadJobsList.querySelector(`[data-job="${CSS.escape(id)}"]`);
         if (!row) {
             row = document.createElement('div');
             row.dataset.job = id;
-            uploadJobsList.appendChild(row);
+            let thumb;
+            if (jobThumbs.has(id)) {
+                thumb = document.createElement('img');
+                thumb.src = jobThumbs.get(id);
+                thumb.alt = '';
+            } else {
+                // After a reload the photo is gone: the capture time names it.
+                thumb = document.createElement('span');
+                const i = document.createElement('i');
+                i.className = 'fas fa-image';
+                i.setAttribute('aria-hidden', 'true');
+                thumb.append(i);
+            }
+            thumb.className = 'job-thumb';
+            const body = document.createElement('div');
+            body.className = 'job-body';
+            row.append(thumb, body);
+            uploadJobsList.prepend(row);  // newest first
         }
+        uploadJobsPanel.hidden = false;
+        return row;
+    }
+    function renderJobRow(id, state, text, opts) {
+        const row = jobRow(id);
         row.className = `job-row ${state}`;
+        const msg = document.createElement('span');
+        msg.className = 'job-state';
         const icon = document.createElement('i');
         icon.className = JOB_ICONS[state] || JOB_ICONS.processing;
         icon.setAttribute('aria-hidden', 'true');
-        const msg = document.createElement('span');
-        msg.className = 'job-state';
-        msg.textContent = text;
-        row.replaceChildren(icon, msg);
-        uploadJobsPanel.hidden = false;
+        msg.append(icon, text);
+        const parts = [msg];
+        if (opts && opts.hint) {
+            const hint = document.createElement('span');
+            hint.className = 'job-hint';
+            hint.textContent = opts.hint;
+            parts.push(hint);
+        }
+        if (opts && opts.actions && opts.actions.length) {
+            const actions = document.createElement('div');
+            actions.className = 'job-actions';
+            actions.append(...opts.actions);
+            parts.push(actions);
+        }
+        row.querySelector('.job-body').replaceChildren(...parts);
+        return row;
+    }
+    function renameJobRow(oldId, newId) {
+        const row = uploadJobsList.querySelector(`[data-job="${CSS.escape(oldId)}"]`);
+        if (row) row.dataset.job = newId;
+        if (jobThumbs.has(oldId)) { jobThumbs.set(newId, jobThumbs.get(oldId)); jobThumbs.delete(oldId); }
+    }
+    function releaseThumb(id) {
+        const url = jobThumbs.get(id);
+        if (url) { URL.revokeObjectURL(url); jobThumbs.delete(id); }
     }
 
-    // Terminal state: stop polling, drop the sessionStorage entry, log it.
-    function finishJob(id, pavilion, state, text, props) {
-        removePendingJob(id);
-        renderJobRow(id, state, text);
-        if (state === 'done') markSheetUploaded(pavilion);
-        track('sheet_upload_result', withVia(Object.assign({ pavilion: pavilion, state: state }, props || {})));
+    // "1 sheet needs your answer below" by the Upload button and a "(1)" in
+    // the tab title, so a question isn't missed while photographing the next.
+    function updateAskIndicators() {
+        const n = askingJobs.size;
+        document.title = n ? `(${n}) ${BASE_TITLE}` : BASE_TITLE;
+        askLine.textContent = n === 1 ? '1 sheet needs your answer below' : `${n} sheets need your answer below`;
+        askLine.hidden = n === 0;
+        if (n === 0) maybeShowMilestone();
     }
 
-    function schedulePoll(id, pavilion, startedAt) {
-        const wait = (Date.now() - startedAt) > POLL_SLOW_AFTER_MS ? POLL_SLOW_MS : POLL_FAST_MS;
-        setTimeout(() => pollJob(id, pavilion, startedAt), wait);
+    // Terminal state: drop the stored entry and the photo URL, log it.
+    function finishJob(job, state, text, props, opts) {
+        removePendingJob(job.id);
+        askingJobs.delete(job.id);
+        renderJobRow(job.id, state, text, opts);
+        releaseThumb(job.id);
+        updateAskIndicators();
+        track('sheet_upload_result', withVia(Object.assign({ state: state }, props || {})));
     }
 
-    function pollJob(id, pavilion, startedAt) {
-        const elapsed = Date.now() - startedAt;
+    function schedulePoll(job) {
+        const started = typeof job.p === 'number' ? job.p : job.t;
+        const wait = (Date.now() - started) > POLL_SLOW_AFTER_MS ? POLL_SLOW_MS : POLL_FAST_MS;
+        setTimeout(() => pollJob(job), wait);
+    }
+
+    function pollJob(job) {
+        const started = typeof job.p === 'number' ? job.p : job.t;
+        const elapsed = Date.now() - started;
+        const base = { pavilion: job.pavilion || null, resolve: !!job.resolveOf, poll_ms: elapsed };
         if (elapsed > POLL_WALL_MS) {
-            // The workflow may still finish server-side — neutral copy; the
-            // freshness chips will show the sheet if it lands.
-            finishJob(id, pavilion, 'timeout',
-                `Pavilion ${pavilion}: still processing. Badges will appear once it finishes; no need to re-upload.`,
-                { poll_ms: elapsed });
+            // The workflow may still finish server-side: neutral copy; the
+            // board shows the sheet if it lands.
+            finishJob(job, 'timeout',
+                `Still reading ${photoWords(job)}. Badges will appear once it's done; no need to upload it again.`, base);
             return;
         }
         // No passcode: the unguessable job id is the capability. A saved
         // passcode still rides along so a pre-change worker keeps answering.
         const saved = localStorage.getItem(PASS_KEY) || '';
-        fetch(`${PAVILION_API_BASE}/upload-status?id=${encodeURIComponent(id)}`, {
+        fetch(`${PAVILION_API_BASE}/upload-status?id=${encodeURIComponent(job.id)}`, {
             headers: saved ? { 'X-Volunteer-Passcode': saved } : {},
             signal: AbortSignal.timeout(15000)
         }).then(r => {
             if (r.status === 401) {
-                // Only a pre-change worker gates polling — it can never succeed.
-                finishJob(id, pavilion, 'failed',
-                    `Pavilion ${pavilion}: this upload can't be tracked right now. Refresh the page to check the sheet's status.`,
-                    { poll_ms: elapsed });
+                // Only a pre-change worker gates polling: it can never succeed.
+                finishJob(job, 'failed',
+                    "This upload can't be followed from here right now. Refresh the page and check Pavilion sheets below.", base);
                 return null;
             }
             if (!r.ok) throw new Error(r.status);
             return r.json();
         }).then(data => {
             if (!data) return; // 401 handled above
-            if (data.state === 'done') {
-                // Persist-guard rejection (newer workers): the sheet was read
-                // fine but NOT applied — the reason is a fixed enum and the
-                // copy tells the volunteer exactly what to do. Old workers
-                // never send `rejected`, so this whole branch is skipped.
-                const rejected = typeof data.rejected === 'string' ? data.rejected : null;
-                if (rejected) {
-                    const det = typeof data.detected === 'string' && /^[A-E]$/.test(data.detected)
-                        ? data.detected : null;
-                    let msg;
-                    if (rejected === 'pavilion_mismatch') {
-                        msg = det
-                            ? `Pavilion ${pavilion}: this looks like Pavilion ${det}'s sheet, so nothing was changed. Select Pavilion ${det} and upload it again.`
-                            : `Pavilion ${pavilion}: this looks like a different pavilion's sheet, so nothing was changed. Double-check the pavilion and upload again.`;
-                    } else if (rejected === 'stale_date') {
-                        msg = `Pavilion ${pavilion}: the sheet already on file is newer than this one, so nothing was changed. If this really is the current sheet, photograph today's page and upload again.`;
-                    } else if (rejected === 'unverified_names') {
-                        msg = `Pavilion ${pavilion}: we couldn't match enough names to dogs currently at CACC, so the previous sheet was kept. Retake the photo with the whole sheet flat, in focus and well lit, then upload again.`;
-                    } else if (rejected === 'verify_unavailable') {
-                        msg = `Pavilion ${pavilion}: we couldn't check the sheet against the current roster just now, so nothing was changed. Please upload it again in a few minutes.`;
-                    } else {
-                        msg = `Pavilion ${pavilion}: no kennel rows could be read, so the previous sheet was kept. Retake the photo with the whole sheet in frame and upload again.`;
-                    }
-                    finishJob(id, pavilion, 'failed', msg, {
-                        rejected: rejected, detected: det, poll_ms: elapsed
-                    });
-                    return;
-                }
-                const n = typeof data.kennels === 'number' ? data.kennels : null;
-                const h = typeof data.highlights === 'number' ? data.highlights : 0;
-                const low = data.low_rows === true;
-                // Rebuild throttle (newer workers): saved, but this pavilion
-                // already rebuilt several times this hour, so no rebuild now.
-                const throttled = data.throttled === true;
-                const readout = n === null ? 'sheet processed'
-                    : `read ${n} kennel${n === 1 ? '' : 's'}${h ? ` (${h} highlighted)` : ''}`;
-                const caveat = low
-                    ? ' That is far fewer rows than the last sheet. If the photo cut off part of the page, retake it and upload again.'
-                    : '';
-                const later = throttled ? ' Saved; badges update at the next scheduled refresh.' : '';
-                finishJob(id, pavilion, 'done', `Pavilion ${pavilion}: ${readout}.${later}${caveat}`, {
-                    kennels: n, highlights: h, low_rows: low, throttled: throttled,
-                    // Log-only kennel continuity vs the replaced sheet, and the
-                    // upload's network tag (null from older workers).
-                    overlap: typeof data.overlap === 'number' ? data.overlap : null,
-                    kept: typeof data.kept === 'number' ? data.kept : null,
-                    city: typeof data.city === 'boolean' ? data.city : null,
-                    // v2 worker: rows Gemini anchored to the reference roster
-                    // (null from older workers — additive, no new event).
-                    matched: typeof data.matched === 'number' ? data.matched : null,
-                    model: typeof data.model === 'string' ? data.model : null,
-                    poll_ms: elapsed
-                });
-            } else if (data.state === 'failed') {
-                finishJob(id, pavilion, 'failed',
-                    `Pavilion ${pavilion}: we couldn't read that sheet. Try retaking the photo with more light and less glare, then upload it again.`,
-                    { poll_ms: elapsed });
+            if (data.state === 'done') landJob(job, data, elapsed);
+            else if (data.state === 'failed') {
+                finishJob(job, 'failed',
+                    `We couldn't read ${photoWords(job)}. Try another photo with more light and less glare.`, base);
             } else {
-                // processing / unknown (instance not queryable yet) — keep going.
-                schedulePoll(id, pavilion, startedAt);
+                schedulePoll(job);  // processing / unknown (not queryable yet)
             }
-        }).catch(() => { schedulePoll(id, pavilion, startedAt); }); // network blip — retry
+        }).catch(() => { schedulePoll(job); }); // network blip: retry
+    }
+
+    // A finished job: the question, a rejection, or a saved sheet.
+    function landJob(job, data, elapsed) {
+        const letter = /^[A-E]$/.test(data.pavilion || '') ? data.pavilion : (job.pavilion || null);
+        const rejected = typeof data.rejected === 'string' ? data.rejected : null;
+        const detected = /^[A-E]$/.test(data.detected || '') ? data.detected : null;
+        const n = typeof data.kennels === 'number' ? data.kennels : null;
+        const merged = data.merged === true;
+        const carried = typeof data.carried === 'number' ? data.carried : 0;
+        const props = {
+            pavilion: letter, auto: data.auto === true, merged: merged, carried: carried,
+            resolve: !!job.resolveOf, poll_ms: elapsed,
+            model: typeof data.model === 'string' ? data.model : null
+        };
+        if (rejected === 'pavilion_unclear') {
+            const candidates = (Array.isArray(data.candidates) ? data.candidates : []).filter(p => /^[A-E]$/.test(p));
+            const range = /^[A-E]$/.test(data.range || '') ? data.range : null;
+            if (candidates.length) {
+                track('sheet_upload_result', withVia(Object.assign({}, props, {
+                    state: 'ask', rejected: rejected, detected: detected, range: range, kennels: n
+                })));
+                askJob(job, { candidates: candidates, range: range, detected: detected, at: Date.now() });
+                return;
+            }
+        }
+        if (rejected === 'verify_unavailable' && job.resolveOf && job.ask) {
+            // A roster hiccup while filing the answer: ask again. The worker
+            // gives the next answer a fresh resolve.
+            track('sheet_upload_result', withVia(Object.assign({}, props, { state: 'ask', rejected: rejected })));
+            const original = { id: job.resolveOf, pavilion: null, t: job.t };
+            removePendingJob(job.id);
+            renameJobRow(job.id, original.id);
+            askJob(original, job.ask, "We couldn't check the sheet just now. Tap the pavilion again in a minute.");
+            return;
+        }
+        if (rejected) {
+            // After an answer, no_rows (every row fell outside that pavilion's
+            // range) or unverified_names (too few left to check) means the
+            // letter didn't fit the sheet, not that the photo was bad, and the
+            // worker won't take a second answer for the same photo.
+            const wrongLetter = job.resolveOf && letter && (rejected === 'no_rows' || rejected === 'unverified_names');
+            const copy = wrongLetter
+                ? (rejected === 'no_rows'
+                    ? `None of the rows fit Pavilion ${letter}. If that was the wrong letter, upload the photo again.`
+                    : `Too few rows fit Pavilion ${letter} to check the sheet. If that was the wrong letter, upload the photo again.`)
+                : (REJECT_COPY[rejected] || REJECT_COPY.no_rows)({ letter: letter, detected: detected, kennels: n });
+            finishJob(job, 'failed', copy, Object.assign(props, { rejected: rejected, detected: detected, kennels: n }));
+            announce(letter ? `Pavilion ${letter} sheet not saved. See Your uploads.` : 'Sheet not saved. See Your uploads.');
+            return;
+        }
+        const h = typeof data.highlights === 'number' ? data.highlights : 0;
+        const low = data.low_rows === true;
+        // Rebuild throttle: saved, but this pavilion already rebuilt several
+        // times this hour, so no rebuild now.
+        const throttled = data.throttled === true;
+        const s = (k) => (k === 1 ? '' : 's');
+        let text;
+        // merged with nothing carried (every earlier row moved or aged out)
+        // reads as a plain save, never "kept 0".
+        if (merged && carried > 0 && n !== null) {
+            text = withLead(letter, `Updated ${n} kennel${s(n)}, kept ${carried} from the earlier sheet. Photograph it again anytime as more rows are filled in.`);
+        } else if (low && n !== null) {
+            // low_rows now means "not merged because the sheet on file was
+            // more than a week old": the photo was fine, so no retake prompt.
+            text = withLead(letter, `Saved ${n} kennel${s(n)}. The earlier sheet was more than a week old, so it was not carried over.`);
+        } else {
+            text = withLead(letter, n === null ? 'Sheet saved.'
+                : `Read ${n} kennel${s(n)}${h ? ` (${h} highlighted)` : ''}.`);
+        }
+        if (throttled) text += ' Saved; badges update at the next scheduled refresh.';
+        finishJob(job, 'done', text, Object.assign(props, {
+            kennels: n, highlights: h, low_rows: low, throttled: throttled,
+            // Log-only kennel continuity vs the replaced sheet, the upload's
+            // network tag and the rows anchored to the roster.
+            overlap: typeof data.overlap === 'number' ? data.overlap : null,
+            kept: typeof data.kept === 'number' ? data.kept : null,
+            city: typeof data.city === 'boolean' ? data.city : null,
+            matched: typeof data.matched === 'number' ? data.matched : null
+        }));
+        markSheetUploaded(letter, data);
+        announce(letter ? `Pavilion ${letter} sheet saved.` : 'Sheet saved.');
+        checkAllFive();
+    }
+
+    // ---- The one question: "Which pavilion is this sheet from?" ------------
+    function askJob(job, ask, note) {
+        job.ask = ask;
+        delete job.resolveOf;
+        savePendingJob({ id: job.id, pavilion: null, t: job.t, ask: ask });
+        askingJobs.add(job.id);
+        renderQuestion(job, note);
+        updateAskIndicators();
+        announce('A sheet needs your answer: which pavilion is it from?');
+    }
+
+    function renderQuestion(job, note) {
+        const ask = job.ask;
+        const buttons = ask.candidates.map(p => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'letter-btn';
+            b.textContent = p;
+            b.setAttribute('aria-label', `Pavilion ${p}`);
+            b.addEventListener('click', () => answerJob(job, p, controls));
+            return b;
+        });
+        const dismiss = document.createElement('button');
+        dismiss.type = 'button';
+        dismiss.className = 'ghost-btn';
+        dismiss.textContent = 'Dismiss';
+        dismiss.addEventListener('click', () => dismissJob(job));
+        // Disabled together while an answer is on its way, so a late reply
+        // can't bring back a dismissed row.
+        const controls = [...buttons, dismiss];
+        const likely = [ask.detected, ask.range].filter((p, i, all) =>
+            p && all.indexOf(p) === i && ask.candidates.includes(p));
+        // The capture time names the photo (after a reload there's no thumbnail).
+        const hint = `Your ${siteClock(job.t)} photo. ` +
+            (note || (likely.length ? `Looks like ${likely.join(' or ')}.` : ''));
+        renderJobRow(job.id, 'ask', "Which pavilion is this sheet from? We couldn't tell from the photo.",
+            { hint: hint, actions: [...buttons, dismiss] });
+        // Move focus only when it isn't somewhere the volunteer put it.
+        const active = document.activeElement;
+        if (!active || active === document.body || active === submitBtn) buttons[0].focus();
+    }
+
+    // Retryable answer failures (429, 5xx) allowed per question before the
+    // page stops offering taps: the worker's own 429 also means it has run
+    // out of fresh resolves for this photo, which no wait will fix.
+    const MAX_ANSWER_RETRIES = 3;
+    async function answerJob(job, letter, controls) {
+        controls.forEach(b => { b.disabled = true; });
+        const answered = () => track('sheet_question_answered',
+            withVia({ choice: letter, detected: job.ask.detected || null, range: job.ask.range || null }));
+        let resp = null, data = {};
+        try {
+            resp = await fetch(`${PAVILION_API_BASE}/upload-resolve`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ job_id: job.id, pavilion: letter }),
+                signal: AbortSignal.timeout(20000)
+            });
+            data = await resp.json().catch(() => ({}));
+        } catch (e) {
+            renderQuestion(job, "Couldn't send your answer. Check your connection and tap again.");
+            return;
+        }
+        if (resp.ok && typeof data.job_id === 'string' && JOB_ID_SHAPE.test(data.job_id)) {
+            answered();
+            // Swap the stored entry to the resolve job so a reload follows the
+            // answer and never asks again. The question info rides along in
+            // case the roster hiccups and it must be asked once more. The
+            // letter shown is the worker's, never the one tapped: a repeat
+            // answer (double tap, second tab) gets the first answer's job.
+            const filed = /^[A-E]$/.test(data.pavilion || '') ? data.pavilion : null;
+            const next = { id: data.job_id, pavilion: filed, t: job.t, p: Date.now(), resolveOf: job.id, ask: job.ask };
+            askingJobs.delete(job.id);
+            savePendingJob(next, job.id);
+            renameJobRow(job.id, next.id);
+            renderJobRow(next.id, 'processing', filed
+                ? `Filing ${photoWords(job)} under Pavilion ${filed}…`
+                : `Filing ${photoWords(job)}…`);
+            updateAskIndicators();
+            announce(filed ? `Thanks. Filing it under Pavilion ${filed}.` : 'Thanks. Filing it now.');
+            schedulePoll(next);
+            return;
+        }
+        const props = { pavilion: null, auto: true, rejected: 'pavilion_unclear', poll_ms: null };
+        const retryable = resp.status === 429 || resp.status >= 500;
+        job.answerRetries = (job.answerRetries || 0) + (retryable ? 1 : 0);
+        if (retryable && job.answerRetries < MAX_ANSWER_RETRIES) {
+            // Not an outcome yet: no event, the question stays.
+            renderQuestion(job, "Couldn't send your answer just now. Tap again in a moment.");
+            return;
+        }
+        answered();
+        if (resp.status === 410) {
+            finishJob(job, 'failed', `This question has expired. Please upload ${photoWords(job)} again.`, props);
+        } else {
+            finishJob(job, 'failed', `We couldn't file ${photoWords(job)}. Please upload it again.`, props);
+        }
+    }
+
+    function dismissJob(job) {
+        removePendingJob(job.id);
+        askingJobs.delete(job.id);
+        const row = uploadJobsList.querySelector(`[data-job="${CSS.escape(job.id)}"]`);
+        if (row) row.remove();
+        releaseThumb(job.id);
+        if (!uploadJobsList.children.length) uploadJobsPanel.hidden = true;
+        updateAskIndicators();
+        track('sheet_question_answered', withVia({ choice: 'dismiss', detected: job.ask.detected || null, range: job.ask.range || null }));
     }
 
     // Queue a fresh upload's job: persist, render its row, start polling.
-    function addJob(id, pavilion) {
-        const jobs = readPendingJobs().filter(j => !j || j.id !== id);
-        jobs.push({ id: id, pavilion: pavilion, t: Date.now() });
-        writePendingJobs(jobs);
-        renderJobRow(id, 'processing', `Pavilion ${pavilion}: reading the sheet…`);
-        schedulePoll(id, pavilion, Date.now());
+    // `pavilion` is null for an auto upload (the letter arrives with the result).
+    function addJob(id, pavilion, thumbUrl) {
+        const job = { id: id, pavilion: pavilion || null, t: Date.now() };
+        if (thumbUrl) jobThumbs.set(id, thumbUrl);
+        savePendingJob(job);
+        renderJobRow(id, 'processing', `Reading ${photoWords(job)}…`);
+        schedulePoll(job);
     }
 
-    // Resume polling for jobs that were pending when the page was last closed
-    // or reloaded; expired (> wall cap) and junk entries are pruned silently.
+    // Resume jobs that were pending when the page was last closed or
+    // reloaded: questions still inside the worker's window are asked again,
+    // the rest resume polling. Expired and junk entries are pruned silently.
+    function validAsk(a) {
+        return !!a && typeof a === 'object' && Array.isArray(a.candidates) && a.candidates.length > 0 &&
+            a.candidates.every(p => /^[A-E]$/.test(p)) && typeof a.at === 'number';
+    }
     if (PAVILION_API_BASE) {
+        const now = Date.now();
         const pending = readPendingJobs().filter(j =>
-            j && typeof j.id === 'string' && /^[A-E]$/.test(j.pavilion) &&
-            typeof j.t === 'number' && (Date.now() - j.t) < POLL_WALL_MS);
+            j && typeof j.id === 'string' && JOB_ID_SHAPE.test(j.id) &&
+            (j.pavilion == null || /^[A-E]$/.test(j.pavilion)) && typeof j.t === 'number' &&
+            (j.ask && !j.resolveOf
+                ? validAsk(j.ask) && now - j.ask.at < ASK_WINDOW_MS
+                : now - (typeof j.p === 'number' ? j.p : j.t) < POLL_WALL_MS));
         writePendingJobs(pending);
         pending.forEach(j => {
-            renderJobRow(j.id, 'processing', `Pavilion ${j.pavilion}: reading the sheet…`);
-            pollJob(j.id, j.pavilion, j.t);
+            if (j.ask && !j.resolveOf) {
+                askingJobs.add(j.id);
+                renderQuestion(j);
+            } else {
+                if (j.ask && !validAsk(j.ask)) delete j.ask;
+                renderJobRow(j.id, 'processing', j.resolveOf && j.pavilion
+                    ? `Filing ${photoWords(j)} under Pavilion ${j.pavilion}…`
+                    : `Reading ${photoWords(j)}…`);
+                pollJob(j);
+            }
         });
+        updateAskIndicators();
     }
 
     passInput.value = localStorage.getItem(PASS_KEY) || '';
@@ -3075,6 +3507,30 @@
     if (acceptedRec && acceptedRec.v === TERMS_VERSION) showAgreed(acceptedRec.ts);
     else showAgreeCheckbox();
 
+    // Note for regulars: devices that accepted the Terms before (any version)
+    // have uploaded with the old pavilion pick. Dismissible; gone after
+    // REGULARS_TIP_UNTIL (three weeks after the change).
+    const REGULARS_TIP_UNTIL = '2026-12-14';
+    const TIP_KEY = 'pavilionAutoTipDismissed';
+    const regularsTip = document.getElementById('regularsTip');
+    let tipDismissed = false;
+    try { tipDismissed = localStorage.getItem(TIP_KEY) === '1'; } catch (e) {}
+    // "Accepted before" = a record without page: 'auto'. A date cutoff can't
+    // hold for an unknown ship date; this marker holds whenever the page ships,
+    // since only this page writes it.
+    const acceptedOnOldPage = !!acceptedRec && acceptedRec.page !== 'auto';
+    if (regularsTip && PAVILION_API_BASE && acceptedOnOldPage && !tipDismissed && siteToday() < REGULARS_TIP_UNTIL) {
+        regularsTip.hidden = false;
+        document.getElementById('regularsTipClose').addEventListener('click', () => {
+            regularsTip.hidden = true;
+            try { localStorage.setItem(TIP_KEY, '1'); } catch (e) {}
+            track('upload_tip_dismissed', withVia({}));
+            // The visible primary control: Upload while a photo is held,
+            // else Take photo (the capture buttons are hidden with a photo).
+            (submitBtn.hidden ? snapBtn : submitBtn).focus();
+        });
+    }
+
     // "Review" lets a volunteer re-open and re-affirm (or withdraw) at any time.
     const reviewTermsBtn = document.getElementById('reviewTerms');
     if (reviewTermsBtn) reviewTermsBtn.addEventListener('click', () => {
@@ -3083,26 +3539,97 @@
         if (agreeCheckbox) agreeCheckbox.focus();
     });
 
+    // ---- Capture, preview, upload --------------------------------------------
     // One hidden input, two triggers: Android Chromium only offers the gallery for a
     // plain image input, so we toggle `capture` per button to force the camera vs. the
     // library. click() must fire synchronously inside the user gesture for iOS Safari.
     const photoInput = document.getElementById('photo');
     const snapBtn = document.getElementById('snapBtn');
     const pickBtn = document.getElementById('pickBtn');
+    const retakeBtn = document.getElementById('retakeBtn');
+    const captureBtns = document.getElementById('captureBtns');
+    const previewBox = document.getElementById('preview');
+    const previewImg = document.getElementById('previewImg');
     const photoName = document.getElementById('photoName');
-    if (photoInput && snapBtn && pickBtn && photoName) {
-        snapBtn.addEventListener('click', () => {
-            photoInput.setAttribute('capture', 'environment');
-            photoInput.click();
-        });
-        pickBtn.addEventListener('click', () => {
-            photoInput.removeAttribute('capture');
-            photoInput.click();
-        });
-        photoInput.addEventListener('change', function () {
-            photoName.textContent = (this.files && this.files.length > 0) ? this.files[0].name : '';
-        });
+    const submitLabel = document.getElementById('submitLabel');
+    const pickArea = document.getElementById('pickArea');
+    const pickBtnsEl = document.getElementById('pickBtns');
+    const MAX_RAW_SEND = 10 * 1024 * 1024;
+    // The photo being uploaded, kept until the worker accepts it so a network
+    // error, timeout, 403 or 429 is retried without a retake. `prepared`
+    // starts compressing as soon as the photo is chosen and resolves to
+    // {blob, filename}, or null when the photo can't be sent.
+    let held = null;  // {file, url, prepared}
+    // An older worker answered 400 to pavilion=auto: ask for the letter
+    // before sending (rolling the worker back restores the pick).
+    let needsLetter = false;
+
+    function openPhotoPicker(camera) {
+        if (camera) photoInput.setAttribute('capture', 'environment');
+        else photoInput.removeAttribute('capture');
+        photoInput.value = '';  // so choosing the same photo again still fires change
+        photoInput.click();
     }
+    if (!PAVILION_API_BASE) { snapBtn.disabled = true; pickBtn.disabled = true; }
+    snapBtn.addEventListener('click', () => openPhotoPicker(true));
+    pickBtn.addEventListener('click', () => openPhotoPicker(false));
+    retakeBtn.addEventListener('click', () => openPhotoPicker(true));
+
+    // Downscale + re-encode right away, while the volunteer checks the preview.
+    function preparePhoto(file) {
+        // 2048px/q0.8 (was 1600/q0.75): a ~35-row sheet needs the extra
+        // resolution for handwriting OCR, and the resulting ~2 MB (~2.7 MB
+        // base64) still sits far under Gemini's ~20 MB inline cap and KV's
+        // 25 MiB value limit.
+        return compressImage(file, 2048, 0.8)
+            .then(blob => ({ blob: blob, filename: 'sheet.jpg' }))
+            .catch(() => {
+                // Decode/encode failed (exotic format, low memory, …). The worker
+                // forwards any image/* (incl. HEIC) to Gemini, whose inline-data
+                // request cap is ~20MB base64 — a 10MB original (~13.3MB base64)
+                // is safely under it, so send it as-is rather than failing.
+                return file.size <= MAX_RAW_SEND ? { blob: file, filename: file.name || 'sheet' } : null;
+            });
+    }
+
+    function setSubmitLabel(text) { submitLabel.textContent = text; }
+
+    // keepUrl: the accepted photo's URL lives on as its row's thumbnail.
+    function dropHeld(keepUrl) {
+        if (held && !keepUrl) URL.revokeObjectURL(held.url);
+        held = null;
+        previewImg.removeAttribute('src');
+        previewBox.hidden = true;
+        captureBtns.hidden = false;
+        submitBtn.hidden = true;
+        pickArea.hidden = true;
+        setSubmitLabel('Upload sheet');
+    }
+
+    photoInput.addEventListener('change', function () {
+        const file = this.files && this.files[0];
+        if (!file) return;
+        // Some Android file managers report an empty type: let those through
+        // (the worker sniffs the bytes).
+        if (file.type && !file.type.startsWith('image/')) {
+            say("That file isn't a photo. Please choose an image.", 'err');
+            return;
+        }
+        if (file.size > 30 * 1024 * 1024) {
+            say('That photo is too large to process. Please retake it or pick a smaller one.', 'err');
+            return;
+        }
+        dropHeld(false);
+        const url = URL.createObjectURL(file);
+        held = { file: file, url: url, prepared: preparePhoto(file) };
+        previewImg.src = url;
+        photoName.textContent = 'Check the whole sheet is in the photo and readable.';
+        previewBox.hidden = false;
+        captureBtns.hidden = true;
+        submitBtn.hidden = false;
+        setStatus(uploadStatus, '', '');
+        submitBtn.focus();
+    });
 
     // --- Upload-success celebration dialog ----------------------------------
     // A randomized shelter-dog thank-you keeps the moment fun for volunteers.
@@ -3120,25 +3647,90 @@
         'Blocky heads and wiggle butts salute you. Thanks for walking the crew!',
         'A pittie somewhere just did a full-body wag in your honor. Thank you!',
         'The wiggle-butt committee reviewed your upload: five out of five tail wags. Thank you!',
-        'Snoot boops incoming. Thanks for logging those walks!'
+        'Snoot boops incoming. Thanks for logging those walks!',
+        // Drafts added 2026-11-23, for the owner's approval.
+        'Nose prints on the glass and a sheet in the system. Thank you!',
+        'Every kennel you log is one less mystery for the next walker. Thanks!',
+        'The dogs can\'t read, but they can definitely tell you helped. Thank you!',
+        'Leash clipped, sheet snapped, badges on the way. You\'re a pro. Thanks!',
+        'Somewhere a senior dog just stretched in approval. Thank you!',
+        'That photo just saved a fellow volunteer a lap around the pavilion. Thanks!'
     ];
-    const SUCCESS_EMOJI = ['🐕', '🐶', '🐾', '🦴', '🐕❤️', '❤️🐾'];
+    const SUCCESS_EMOJI = ['🐕', '🐶', '🐾', '🦴', '🐕❤️', '❤️🐾', '🐕‍🦺', '🎾'];
     const pickRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
+    // Milestone dialogs (drafts for the owner's approval): all five
+    // pavilions have a sheet from today, and a third upload in one visit.
+    const MILESTONES = {
+        all_five: {
+            emoji: '🏆',
+            thanks: 'All five pavilions have a sheet from today!',
+            detail: 'A through E are up to date, so every kennel badge on the site is fresh. Thank you and today\'s whole crew.',
+            timing: 'That\'s the full shelter. Go give someone a well-earned scratch behind the ears.'
+        },
+        third_upload: {
+            emoji: '🐾🐾🐾',
+            thanks: 'Three sheets in one visit! You\'re on a roll.',
+            detail: 'Got it! We\'re reading your sheet. You can photograph the next one.',
+            timing: 'Badges usually appear within about 5 minutes.'
+        }
+    };
+
     const successModal = document.getElementById('uploadSuccessModal');
-    // Default (legacy sync) timing line; the async flow passes its own copy.
-    const DEFAULT_SUCCESS_TIMING = 'Badges can take ~5 minutes to appear on the dashboard.';
+    const DEFAULT_SUCCESS_TIMING = 'Badges usually appear within about 5 minutes.';
     function closeSuccessModal() {
         if (successModal) successModal.close();
     }
-    function openSuccessModal(detail, timing) {
-        if (!successModal) return;
-        document.getElementById('successEmoji').textContent = pickRandom(SUCCESS_EMOJI);
-        document.getElementById('successThanks').textContent = pickRandom(SUCCESS_MESSAGES);
+    // opts: {emoji, thanks} for a milestone; a random thank-you otherwise.
+    function openSuccessModal(detail, timing, opts) {
+        if (!successModal || successModal.open) return;
+        document.getElementById('successEmoji').textContent = (opts && opts.emoji) || pickRandom(SUCCESS_EMOJI);
+        document.getElementById('successThanks').textContent = (opts && opts.thanks) || pickRandom(SUCCESS_MESSAGES);
         document.getElementById('successDetail').textContent = detail;
         document.getElementById('successTiming').textContent = timing || DEFAULT_SUCCESS_TIMING;
         successModal.showModal();
         document.body.style.overflow = 'hidden';
+    }
+    // A milestone waits for its moment: never over a question or another dialog.
+    function queueMilestone(kind) {
+        pendingMilestone = kind;
+        maybeShowMilestone();
+    }
+    function maybeShowMilestone() {
+        if (!pendingMilestone || askingJobs.size || !successModal || successModal.open) return;
+        const kind = pendingMilestone;
+        pendingMilestone = null;
+        const m = MILESTONES[kind];
+        if (!m) return;
+        openSuccessModal(m.detail, m.timing, { emoji: m.emoji, thanks: m.thanks });
+        track('sheet_milestone_shown', withVia({ kind: kind }));
+    }
+    // Uploads accepted in this browser session (the third earns a milestone).
+    const UPLOADS_KEY = 'pavilionUploadsThisSession';
+    function bumpUploadCount() {
+        let n = 0;
+        try {
+            n = (parseInt(sessionStorage.getItem(UPLOADS_KEY) || '0', 10) || 0) + 1;
+            sessionStorage.setItem(UPLOADS_KEY, String(n));
+        } catch (e) {}
+        return n;
+    }
+    // When this device's sheet lands, check (bypassing the cache) whether all
+    // five pavilions now have a sheet from today. Once per Chicago day.
+    const ALL_FIVE_KEY = 'pavilionAllFiveShown';
+    function checkAllFive() {
+        let shown = null;
+        try { shown = localStorage.getItem(ALL_FIVE_KEY); } catch (e) {}
+        if (shown === siteToday()) return;
+        loadSheetStatus(true).then(pavs => {
+            if (!pavs) return;
+            const today = siteToday();
+            const allToday = PAVILIONS.every(p =>
+                pavs[p] && siteDayOf(Date.parse(pavs[p].captured_at)) === today);
+            if (!allToday) return;
+            try { localStorage.setItem(ALL_FIVE_KEY, today); } catch (e) {}
+            queueMilestone('all_five');
+        });
     }
     if (successModal) {
         // closedby="any" handles backdrop light-dismiss natively; this click
@@ -3154,46 +3746,123 @@
         }
         // 'close' fires on every dismissal path (buttons, Esc, light-dismiss),
         // so the scroll lock is released exactly once, there.
-        successModal.addEventListener('close', () => { document.body.style.overflow = ''; });
+        successModal.addEventListener('close', () => {
+            document.body.style.overflow = '';
+            maybeShowMilestone();
+        });
         document.getElementById('successCloseX').addEventListener('click', closeSuccessModal);
         document.getElementById('successCloseBtn').addEventListener('click', closeSuccessModal);
     }
 
-    // Post-upload form reset shared by both success paths. form.reset()
-    // unchecks the (possibly hidden) Terms box — re-sync from the stored
-    // acceptance record so the next upload isn't blocked with no visible
-    // checkbox to tick.
+    // Post-upload form reset. form.reset() unchecks the (possibly hidden)
+    // Terms box — re-sync from the stored acceptance record so the next upload
+    // isn't blocked with no visible checkbox to tick.
     function resetAfterUpload() {
         form.reset();
-        photoName.textContent = '';
         passInput.value = localStorage.getItem(PASS_KEY) || '';
         const rec = readTermsAccepted();
         if (rec && rec.v === TERMS_VERSION) showAgreed(rec.ts); else showAgreeCheckbox();
     }
 
+    // One upload over XMLHttpRequest (fetch has no upload progress), so the
+    // status line can say "Sending photo… 40%". Timers: abort after 30 s
+    // without upload progress; once the body is sent, a 30 s response timer
+    // (siteverify alone can take 8 s); 180 s overall. Resolves
+    // {status, data, sendMs}; rejects with name TimeoutError or NetworkError.
+    const UPLOAD_STALL_MS = 30000, UPLOAD_RESPONSE_MS = 30000, UPLOAD_CAP_MS = 180000;
+    function sendUpload(blob, filename, pavilion, token) {
+        return new Promise((resolve, reject) => {
+            const body = new FormData();
+            body.append('pavilion', pavilion);
+            body.append('image', blob, filename);
+            if (token) body.append('cf-turnstile-response', token);
+            const xhr = new XMLHttpRequest();
+            const startedAt = Date.now();
+            let sentAt = 0, settled = false;
+            let stallTimer = 0, responseTimer = 0, capTimer = 0;
+            const clearTimers = () => { clearTimeout(stallTimer); clearTimeout(responseTimer); clearTimeout(capTimer); };
+            const fail = (name) => {
+                if (settled) return;
+                settled = true;
+                clearTimers();
+                try { xhr.abort(); } catch (e) {}
+                const err = new Error(name);
+                err.name = name;
+                reject(err);
+            };
+            const armStall = () => {
+                clearTimeout(stallTimer);
+                stallTimer = setTimeout(() => fail('TimeoutError'), UPLOAD_STALL_MS);
+            };
+            xhr.open('POST', `${PAVILION_API_BASE}/upload`);
+            // Uploads are open; a saved passcode is sent only so the kill
+            // switch (or a pre-change worker) still lets it in.
+            if (passInput.value) xhr.setRequestHeader('X-Volunteer-Passcode', passInput.value);
+            xhr.upload.onprogress = (e) => {
+                armStall();
+                if (e.lengthComputable && e.total > 0) {
+                    const pct = Math.min(99, Math.round((e.loaded / e.total) * 100));
+                    setStatus(uploadStatus, `Sending photo… ${pct}%`, '');
+                }
+            };
+            xhr.upload.onload = () => {
+                clearTimeout(stallTimer);
+                sentAt = Date.now();
+                setStatus(uploadStatus, 'Photo sent. Checking it in…', '');
+                responseTimer = setTimeout(() => fail('TimeoutError'), UPLOAD_RESPONSE_MS);
+            };
+            xhr.onload = () => {
+                if (settled) return;
+                settled = true;
+                clearTimers();
+                let data = {};
+                try { data = JSON.parse(xhr.responseText || '{}') || {}; } catch (e) { data = {}; }
+                resolve({ status: xhr.status, data: data, sendMs: (sentAt || Date.now()) - startedAt });
+            };
+            xhr.onerror = () => fail('NetworkError');
+            capTimer = setTimeout(() => fail('TimeoutError'), UPLOAD_CAP_MS);
+            armStall();
+            xhr.send(body);
+        });
+    }
+
+    // Old-worker fallback: ask for the letter in the status area, then
+    // resend the held photo with it.
+    function showLetterPicker() {
+        pickBtnsEl.replaceChildren(...PAVILIONS.map(p => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'letter-btn';
+            b.textContent = p;
+            b.setAttribute('aria-label', `Pavilion ${p}`);
+            b.addEventListener('click', () => {
+                pickArea.hidden = true;
+                sendHeld(p);
+            });
+            return b;
+        }));
+        pickArea.hidden = false;
+        announce('Which pavilion is this sheet from? Tap its letter to send it.');
+        const active = document.activeElement;
+        if (!active || active === document.body || active === submitBtn) pickBtnsEl.firstChild.focus();
+    }
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        if (!PAVILION_API_BASE) return;
-        const pavilion = document.getElementById('pavilion').value;
-        const file = document.getElementById('photo').files[0];
-        if (!pavilion || !file || (!passcodeField.hidden && !passInput.value)) {
-            setStatus(uploadStatus, 'Please fill in every field.', 'err');
+        if (!PAVILION_API_BASE || submitBtn.disabled) return;
+        if (!held) {
+            say('Take a photo of the sheet first.', 'err');
+            snapBtn.focus();
             return;
         }
-        // Sanity guards before we attempt an expensive decode. Some Android file
-        // managers report an empty type — let those through (the worker defaults
-        // the MIME to image/jpeg).
-        if (file.type && !file.type.startsWith('image/')) {
-            setStatus(uploadStatus, "That file isn't a photo. Please choose an image.", 'err');
-            return;
-        }
-        if (file.size > 30 * 1024 * 1024) {
-            setStatus(uploadStatus, 'That photo is too large to process. Please retake it or pick a smaller one.', 'err');
+        if (!passcodeField.hidden && !passInput.value) {
+            say('Enter the volunteer passcode above first.', 'err');
+            passInput.focus();
             return;
         }
         const agreeEl = document.getElementById('agreeTerms');
         if (!agreeEl.checked) {
-            setStatus(uploadStatus, 'Please agree to the Terms of Use and Privacy Policy to continue.', 'err');
+            say('Please agree to the Terms of Use and Privacy Policy to continue.', 'err');
             return;
         }
         // Record first acceptance of this Terms version so repeat volunteers
@@ -3201,9 +3870,20 @@
         // record, so the displayed acceptance date stays accurate.
         const priorAccept = readTermsAccepted();
         if (!priorAccept || priorAccept.v !== TERMS_VERSION) {
-            try { localStorage.setItem(TERMS_KEY, JSON.stringify({ v: TERMS_VERSION, ts: Date.now() })); } catch (e) {}
+            // page: 'auto' marks an acceptance made on this pick-free page, so
+            // the note for regulars skips it (see REGULARS_TIP_UNTIL).
+            try { localStorage.setItem(TERMS_KEY, JSON.stringify({ v: TERMS_VERSION, ts: Date.now(), page: 'auto' })); } catch (e) {}
         }
         if (passInput.value) localStorage.setItem(PASS_KEY, passInput.value);
+        if (needsLetter) { showLetterPicker(); return; }
+        await sendHeld('auto');
+    });
+
+    // Send the held photo: `pavilion` is 'auto' (the worker reads it from the
+    // sheet) or a letter (old-worker fallback).
+    async function sendHeld(pavilion) {
+        if (!held || submitBtn.disabled) return;
+        const photo = held;
         // The security check runs alongside compression: a challenge still
         // solving (or api.js still loading on a slow connection) is waited
         // for instead of failing the tap. Only a script that never loaded
@@ -3212,39 +3892,23 @@
         let tokenP = null, tokenAt = 0;
         if (TURNSTILE_SITE_KEY) {
             if (turnstileBlocked()) {
-                setStatus(uploadStatus, "The security check didn't load. If you use an ad blocker or privacy shield, allow challenges.cloudflare.com, then refresh the page.", 'err');
+                say("The security check didn't load. If you use an ad blocker or privacy shield, allow challenges.cloudflare.com, then refresh the page.", 'err');
                 track('sheet_upload_blocked', withVia({ reason: 'blocked', code: null }));
                 return;
             }
             tokenP = getUploadToken(20000).then(t => { tokenAt = Date.now(); return t; });
         }
         submitBtn.disabled = true;
-        setStatus(uploadStatus, 'Compressing photo…', '');
-        // Set just before the network call: only an attempt that reached the
+        retakeBtn.disabled = true;
+        setStatus(uploadStatus, 'Preparing photo…', '');
+        // Set just before each network call: only an attempt that reached the
         // worker spends the single-use token, so only then is it reset.
         let sent = false;
         try {
-            // Compression and the network call fail in different ways and need
-            // different messages, so each stage gets its own try/catch.
-            let blob, filename = 'sheet.jpg';
-            try {
-                // 2048px/q0.8 (was 1600/q0.75): a ~35-row sheet needs the
-                // extra resolution for handwriting OCR, and the resulting
-                // ~2 MB (~2.7 MB base64) still sits far under Gemini's
-                // ~20 MB inline cap and KV's 25 MiB value limit.
-                blob = await compressImage(file, 2048, 0.8);
-            } catch (err) {
-                // Decode/encode failed (exotic format, low memory, …). The worker
-                // forwards any image/* (incl. HEIC) to Gemini, whose inline-data
-                // request cap is ~20MB base64 — a 10MB original (~13.3MB base64)
-                // is safely under it, so send it as-is rather than failing.
-                if (file.size <= 10 * 1024 * 1024) {
-                    blob = file;
-                    filename = file.name || 'sheet';
-                } else {
-                    setStatus(uploadStatus, "Couldn't process that photo on this device, and it's too big to send as-is. Please retake it.", 'err');
-                    return;
-                }
+            const prepared = await photo.prepared;
+            if (!prepared) {
+                say("Couldn't process that photo on this device, and it's too big to send as-is. Please retake it.", 'err');
+                return;
             }
             let tsToken = '', tsWaitMs = 0;
             if (tokenP) {
@@ -3260,118 +3924,116 @@
                 if (!tsToken) {
                     // Nothing was sent, so the photo and the token state stay as
                     // they are and the next tap tries again.
-                    setStatus(uploadStatus, 'The security check is taking too long. Tap Upload to try again.', 'err');
+                    say('The security check is taking too long. Tap Upload to try again.', 'err');
                     track('sheet_upload_blocked', withVia({
                         reason: uploadTsInteractive ? 'interactive' : 'timeout', code: uploadTsCode
                     }));
                     return;
                 }
             }
-            setStatus(uploadStatus, 'Uploading photo…', '');
-            const body = new FormData();
-            body.append('pavilion', pavilion);
-            body.append('image', blob, filename);
-            if (tsToken) body.append('cf-turnstile-response', tsToken);
-            let resp;
+            announce('Sending photo.');
             sent = true;
-            try {
-                resp = await fetch(`${PAVILION_API_BASE}/upload`, {
-                    method: 'POST',
-                    // Uploads are open; a saved passcode is sent only so the
-                    // kill switch (or a pre-change worker) still lets it in.
-                    headers: passInput.value ? { 'X-Volunteer-Passcode': passInput.value } : {},
-                    body,
-                    // Bounds only the multipart body upload — the worker
-                    // enqueues OCR to a background workflow and returns
-                    // immediately (generous for a legacy sync worker too).
-                    signal: AbortSignal.timeout(60000)
-                });
-            } catch (err) {
-                setStatus(uploadStatus, err && err.name === 'TimeoutError'
-                    ? 'The upload timed out. Check your signal and try again.'
-                    : 'Network problem. Check your connection and try again.', 'err');
-                return;
+            let res = await sendUpload(prepared.blob, prepared.filename, pavilion, tsToken);
+            if (res.status === 403 && TURNSTILE_SITE_KEY) {
+                // Turnstile said no (expired or reused token): one silent
+                // retry with a fresh token before saying anything.
+                resetUploadWidget();
+                sent = false;
+                // The fresh challenge may ask for a tap: same prompt, wait and
+                // timeout report as the first token.
+                uploadTsWaiting = true;
+                if (uploadTsInteractive) showTsTapPrompt();
+                let fresh = '';
+                try { fresh = await getUploadToken(20000); } finally { uploadTsWaiting = false; }
+                if (!fresh) {
+                    say('The security check is taking too long. Tap Try again to send the same photo.', 'err');
+                    setSubmitLabel('Try again');
+                    track('sheet_upload_blocked', withVia({
+                        reason: uploadTsInteractive ? 'interactive' : 'timeout', code: uploadTsCode
+                    }));
+                    return;
+                }
+                sent = true;
+                res = await sendUpload(prepared.blob, prepared.filename, pavilion, fresh);
             }
-            const data = await resp.json().catch(() => ({}));
-            if (resp.status === 401) {
+            const data = res.data || {};
+            const tryAgain = (msg) => { say(msg, 'err'); setSubmitLabel('Try again'); };
+            if (res.status === 401) {
                 // The worker's kill switch is on: reveal the passcode field.
                 const wasHidden = passcodeField.hidden;
                 passcodeField.hidden = false;
                 passInput.focus();
-                setStatus(uploadStatus, wasHidden || !passInput.value
+                say(wasHidden || !passInput.value
                     ? 'Uploads temporarily need the volunteer passcode. Enter it above and upload again.'
                     : 'Passcode rejected. Please check it and try again.', 'err');
-            } else if (resp.status === 413) {
-                setStatus(uploadStatus, 'That photo is too large to process. Please retake it or pick a smaller one.', 'err');
-            } else if (resp.status === 415) {
-                setStatus(uploadStatus, "That file isn't a supported photo. Please take or choose a JPEG, PNG or HEIC image.", 'err');
-            } else if (resp.status === 403) {
-                // Turnstile said no (expired or reused token, or a failed
-                // check). The widget is reset below, so a second tap gets a
-                // fresh token.
-                setStatus(uploadStatus, "The security check didn't go through. Tap Upload to try again.", 'err');
-            } else if (!resp.ok) {
-                // Surface the worker's error detail (setStatus uses textContent,
-                // so echoing it is safe) — the generic message alone once hid an
-                // "invalid pavilion" rejection from a stale worker deploy.
+            } else if (res.status === 413) {
+                say('That photo is too large to process. Please retake it or pick a smaller one.', 'err');
+            } else if (res.status === 415) {
+                say("That file isn't a supported photo. Please take or choose a JPEG, PNG or HEIC image.", 'err');
+            } else if (res.status === 403) {
+                tryAgain("The security check didn't go through. Tap Try again to send the same photo.");
+            } else if (res.status === 429) {
+                tryAgain('Lots of uploads at once right now. Wait a minute, then tap Try again.');
+            } else if (res.status === 400 && pavilion === 'auto' && data.error === 'invalid pavilion') {
+                // An older worker that still needs the letter (or a rollback):
+                // ask once here and remember for the rest of this visit.
+                needsLetter = true;
+                setStatus(uploadStatus, '', '');
+                showLetterPicker();
+            } else if (res.status < 200 || res.status >= 300) {
+                // Surface the worker's error detail (say uses textContent, so
+                // echoing it is safe).
                 const detail = typeof data.error === 'string' ? data.error.slice(0, 140) : '';
-                setStatus(uploadStatus,
-                    `Upload failed (HTTP ${resp.status}${detail ? ': ' + detail : ''}). ` +
-                    'Please try again in a moment.', 'err');
-            } else if (data.job_id) {
-                // New async worker: the sheet is staged and OCR runs in a
-                // background workflow — track the job and free the volunteer.
-                // (Branching on response SHAPE, not status code, keeps this
-                // page correct against either worker deploy.)
-                const detail = `Sheet received for Pavilion ${pavilion}. We're reading it now.`;
-                openSuccessModal(detail,
-                    "You're done! Feel free to shoot the next pavilion. Badges usually appear within ~5 minutes.");
-                addJob(String(data.job_id), pavilion);
+                tryAgain(`Upload failed (HTTP ${res.status}${detail ? ': ' + detail : ''}). Please try again in a moment.`);
+            } else if (typeof data.job_id === 'string' && JOB_ID_SHAPE.test(data.job_id)) {
+                // Accepted: the sheet is staged and read in a background
+                // workflow. Track the job and free the volunteer.
+                const letter = /^[A-E]$/.test(data.pavilion || '') ? data.pavilion
+                    : (pavilion !== 'auto' ? pavilion : null);
+                const thumbUrl = photo.url;
+                dropHeld(true);  // the URL is the row's thumbnail now
+                addJob(data.job_id, letter, thumbUrl);
+                const uploads = bumpUploadCount();
+                // The milestone waits for any open question (maybeShowMilestone);
+                // the plain thank-you is skipped while one is waiting.
+                if (uploads === 3) queueMilestone('third_upload');
+                else if (!askingJobs.size) openSuccessModal("Got it! We're reading your sheet. You can photograph the next one.");
                 // ts_ms: how long the token in hand took to solve (null when
-                // Turnstile is off); ts_wait_ms: how long this tap waited on it.
+                // Turnstile is off); ts_wait_ms: how long this tap waited on
+                // it; send_ms: from the first byte to the last one sent.
                 track('sheet_upload_queued', withVia({
-                    pavilion: pavilion,
+                    pavilion: letter,
+                    auto: pavilion === 'auto',
                     ts_ms: TURNSTILE_SITE_KEY ? uploadTsSolveMs : null,
-                    ts_wait_ms: TURNSTILE_SITE_KEY ? tsWaitMs : null
+                    ts_wait_ms: TURNSTILE_SITE_KEY ? tsWaitMs : null,
+                    send_ms: res.sendMs
                 }), TRACK_NOW);
                 markVolunteer('upload');
-                // Inline echo so a record remains after the dialog is dismissed
-                // (the chip refresh waits for the poll to confirm the read).
-                setStatus(uploadStatus, `Uploaded! 🐾 ${detail}`, 'ok');
+                // Inline echo so a record remains after the dialog is dismissed.
+                say("Uploaded! 🐾 We're reading your sheet now. You can photograph the next one.", 'ok');
                 resetAfterUpload();
             } else {
-                // Legacy sync worker (pre-async deploy): OCR already ran inside
-                // this request and the counts are in the response.
-                const n = data.kennels != null ? data.kennels : '';
-                const h = data.highlights;
-                const detail = `Read ${n} kennel row${n === 1 ? '' : 's'}` +
-                    `${h ? ` (${h} highlighted)` : ''} for Pavilion ${pavilion}.`;
-                openSuccessModal(detail);
-                markSheetUploaded(pavilion);
-                track('sheet_upload_queued', withVia({ pavilion: pavilion, legacy: true }), TRACK_NOW);
-                markVolunteer('upload');
-                track('sheet_upload_result', withVia({
-                    pavilion: pavilion, state: 'done',
-                    kennels: data.kennels != null ? data.kennels : null,
-                    highlights: h || 0, poll_ms: 0, legacy: true
-                }));
-                // Inline echo so a record remains after the dialog is dismissed.
-                setStatus(uploadStatus,
-                    `Uploaded! 🐾 ${detail} Badges can take ~5 minutes to appear on the dashboard.`, 'ok');
-                resetAfterUpload();
+                // An OK without a job id is not an accepted upload.
+                tryAgain('Upload failed. Please try again in a moment.');
             }
         } catch (err) {
-            // Compression and network stages handle their own failures above;
-            // this only catches the unexpected.
-            setStatus(uploadStatus, 'Something went wrong. Please try again.', 'err');
+            if (err && err.name === 'TimeoutError') {
+                say('The upload timed out. Check your signal, then tap Try again. Your photo is kept.', 'err');
+            } else if (err && err.name === 'NetworkError') {
+                say("Couldn't send the photo. Check your connection, then tap Try again. Your photo is kept.", 'err');
+            } else {
+                say('Something went wrong. Please try again.', 'err');
+            }
+            setSubmitLabel('Try again');
         } finally {
             // Turnstile tokens are single-use: reset after any attempt that
             // reached the network so the next upload gets a fresh one. A
             // failure that sent nothing keeps its still-valid token.
             if (sent && TURNSTILE_SITE_KEY) resetUploadWidget();
             submitBtn.disabled = !PAVILION_API_BASE;
+            retakeBtn.disabled = false;
         }
-    });
+    }
 
     // The challenge wants a tap while a submit is waiting: point at the box
     // (interaction-only makes it appear below the button) and keep the photo.
@@ -3390,8 +4052,8 @@
     const adminUnlockBtn = document.getElementById('adminUnlockBtn');
     // The console (search + roster + override controls) stays hidden until the
     // worker confirms the passcode via /admin/verify. Closing the panel
-    // re-locks it, so every open requires an explicit Unlock.
-    let adminUnlocked = false;
+    // re-locks it, so every open requires an explicit Unlock. (adminUnlocked
+    // is declared above the status board, which reads it.)
     let unlockInFlight = false;
     let roster = [];
     // Row-level busy state: dogId -> 'set' | 'clear' while a request is in flight.
@@ -3780,7 +4442,12 @@
             parts.push('no sheet on file');
         }
         if (info && /^\d{4}-\d{2}-\d{2}$/.test(info.sheet_date || '')) parts.push(`dated ${formatSiteDate(info.sheet_date)}`);
-        if (info && typeof info.rows === 'number') parts.push(`${info.rows} row${info.rows === 1 ? '' : 's'}`);
+        // A merged sheet: "5 new / 29 carried" instead of the row total.
+        const carried = info && typeof info.carried === 'number' ? info.carried : 0;
+        if (info && typeof info.rows === 'number' && carried > 0) parts.push(`${Math.max(0, info.rows - carried)} new / ${carried} carried`);
+        else if (info && typeof info.rows === 'number') parts.push(`${info.rows} row${info.rows === 1 ? '' : 's'}`);
+        if (info && info.auto === true) parts.push('auto');
+        if (info && info.asked === true) parts.push('pavilion answered by the uploader');
         if (info && info.city === true) parts.push('shelter WiFi');
         else if (info && info.city === false) parts.push('off-network');
         // History entries only: flags the replacing upload cleared (evidence
