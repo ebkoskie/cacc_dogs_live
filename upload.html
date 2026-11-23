@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>Walk Sheet Upload — CACC Dogs</title><link rel=preload href=https://cdn.jsdelivr.net/npm/@fontsource/big-shoulders-text@5.0.13/files/big-shoulders-text-latin-800-normal.woff2 as=font type=font/woff2 crossorigin><link rel=icon type=image/svg+xml href=favicon.svg><link rel=preconnect href=https://us.i.posthog.com><script>
+<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>Walk Sheet Upload — CACC Dogs</title><link rel=preload href=https://cdn.jsdelivr.net/npm/@fontsource/big-shoulders-text@5.0.13/files/big-shoulders-text-latin-800-normal.woff2 as=font type=font/woff2 crossorigin><link rel=icon type=image/svg+xml href=favicon.svg><link rel=preconnect href=https://challenges.cloudflare.com><link rel=preconnect href=https://us.i.posthog.com><script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group identify setPersonProperties setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags resetGroups onFeatureFlags addFeatureFlagsHandler onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
     // Production hosts only. Saved copies opened from file:// and local previews were
     // polluting the project with phantom entry pages ("/C:/Users/.../index.html") and
@@ -1549,7 +1549,9 @@
     font-size: 1.1rem; opacity: 0.7; transition: opacity 0.2s, color 0.2s;
 }
 .password-toggle:hover { opacity: 1; color: var(--text); }
-.ts-widget { margin-bottom: 14px; }
+/* Interaction-only: empty unless Turnstile needs a tap, so it sits below the
+   button and status line instead of pushing the form down. */
+.ts-widget { margin-top: 12px; }
 .ts-widget-admin { margin: 10px 0; }
 
 /* --- Upload-success celebration dialog (modeled on index.html's legend-modal) --- */
@@ -1954,7 +1956,7 @@
         const btn = document.getElementById('mobileMenuBtn');
         if (btn) btn.focus();
     });
-</script><div class=container id=main-content tabindex=-1><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Each pavilion shows its most recent sheet until a newer one replaces it, so re-upload whenever a sheet is rewritten to keep badges current. No passcode needed. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet: the processing service hasn't been deployed. Please check back soon. </div><form id=uploadForm class=card-panel><label class=field for=passcode id=passcodeField hidden><span>Volunteer passcode <small class=muted>(temporarily required)</small></span><div class=password-wrapper><input type=password id=passcode name=passcode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option><option value=E>E</option></select></label><div class=field id=sheetStatusField hidden><span>Last sheet uploaded</span><div id=sheetStatus class=sheet-status role=group aria-label="Last sheet upload per pavilion"></div></div><div class=field><span id=photoLabel>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* required class=visually-hidden aria-labelledby=photoLabel><div class=file-btn-group><button type=button id=snapBtn class=file-btn><i class="fas fa-camera" aria-hidden=true></i> Take photo </button><button type=button id=pickBtn class=file-btn><i class="fas fa-image" aria-hidden=true></i> Choose photo </button></div><span id=photoName class=muted></span></div><label class=agree id=agreeRow for=agreeTerms><input type=checkbox id=agreeTerms name=agreeTerms required><span>I have read and agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>.</span></label><p class="agreed-note muted" id=agreedNote hidden><span>By uploading, you agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a> (accepted <span id=agreedWhen></span>).</span><button type=button class=linklike id=reviewTerms>Review</button></p><div id=ts-upload class=ts-widget></div><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div></form><div id=uploadJobs class=card-panel hidden><span class=jobs-title><i class="fas fa-list-check" aria-hidden=true></i> Sheet processing</span><div id=uploadJobsList role=status aria-live=polite></div></div><details class="card-panel admin-panel" id=adminPanel><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><div class=password-wrapper><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><div id=ts-admin class=ts-widget-admin></div><button type=button class=primary-btn id=adminUnlockBtn><i class="fas fa-lock-open" aria-hidden=true></i> Unlock </button><div id=adminGated hidden><div class=field><span>Pavilion sheets</span><p class=muted> Uploads don't need a passcode, so check replaced sheets. If a bad upload replaced a good sheet, open History and restore the earlier one (up to five are kept per pavilion). </p><div id=adminSheets><p class=muted>Loading sheets…</p></div></div><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>E</code> plus a number (e.g. <code>C 70</code>), or clear it. Optionally pick the walker-level color matching the marker highlight on the sheet (yellow = intermediate, orange = advanced). Setting a kennel with "No color" removes any existing color. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div></div><div id=adminStatus class=status role=status aria-live=polite></div></details><dialog id=uploadSuccessModal class=success-modal closedby=any aria-labelledby=successThanks><div class=success-modal-header><button type=button class=close-modal-btn id=successCloseX aria-label="Close dialog">&times;</button></div><div class=success-modal-body><p class=success-emoji id=successEmoji aria-hidden=true></p><p class=success-thanks id=successThanks></p><p class=success-detail id=successDetail></p><p class=success-timing id=successTiming>Badges can take ~5 minutes to appear on the dashboard.</p><button type=button class=primary-btn id=successCloseBtn autofocus><i class="fas fa-paw" aria-hidden=true></i> Close </button></div></dialog></div><div class=footer><span>Last Updated: November 23, 2026 01:33 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
+</script><div class=container id=main-content tabindex=-1><div class=upload-wrap><h1 class=upload-title><i class="fas fa-camera" aria-hidden=true></i> Pavilion Walk Sheet Upload</h1><p class=upload-intro> Snap a clear photo of a pavilion walk sheet. We read the kennel numbers and dog names and show a location badge on each dog's card. Each pavilion shows its most recent sheet until a newer one replaces it, so re-upload whenever a sheet is rewritten to keep badges current. No passcode needed. </p><div id=notConfigured class=notice hidden> Uploads aren't switched on yet: the processing service hasn't been deployed. Please check back soon. </div><div id=tsBlocked class=notice hidden> The security check didn't load, so uploads can't be sent from this browser yet. If you use an ad blocker or privacy shield, allow challenges.cloudflare.com, then refresh the page. </div><form id=uploadForm class=card-panel><label class=field for=passcode id=passcodeField hidden><span>Volunteer passcode <small class=muted>(temporarily required)</small></span><div class=password-wrapper><input type=password id=passcode name=passcode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><label class=field for=pavilion><span>Pavilion</span><select id=pavilion name=pavilion required><option value>Choose…</option><option value=A>A</option><option value=B>B</option><option value=C>C</option><option value=D>D</option><option value=E>E</option></select></label><div class=field id=sheetStatusField hidden><span>Last sheet uploaded</span><div id=sheetStatus class=sheet-status role=group aria-label="Last sheet upload per pavilion"></div></div><div class=field><span id=photoLabel>Photo of the sheet</span><input type=file id=photo name=photo accept=image/* required class=visually-hidden aria-labelledby=photoLabel><div class=file-btn-group><button type=button id=snapBtn class=file-btn><i class="fas fa-camera" aria-hidden=true></i> Take photo </button><button type=button id=pickBtn class=file-btn><i class="fas fa-image" aria-hidden=true></i> Choose photo </button></div><span id=photoName class=muted></span></div><label class=agree id=agreeRow for=agreeTerms><input type=checkbox id=agreeTerms name=agreeTerms required><span>I have read and agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a>.</span></label><p class="agreed-note muted" id=agreedNote hidden><span>By uploading, you agree to the <a href=terms.html target=_blank rel=noopener>Terms of Use</a> and <a href=privacy.html target=_blank rel=noopener>Privacy Policy</a> (accepted <span id=agreedWhen></span>).</span><button type=button class=linklike id=reviewTerms>Review</button></p><button type=submit class=primary-btn id=submitBtn><i class="fas fa-upload" aria-hidden=true></i> Upload &amp; Process </button><div id=uploadStatus class=status role=status aria-live=polite></div><div id=ts-upload class=ts-widget></div></form><div id=uploadJobs class=card-panel hidden><span class=jobs-title><i class="fas fa-list-check" aria-hidden=true></i> Sheet processing</span><div id=uploadJobsList role=status aria-live=polite></div></div><details class="card-panel admin-panel" id=adminPanel><summary><i class="fas fa-user-shield" aria-hidden=true></i> Administrator corrections</summary><label class=field for=adminPasscode><span>Admin passcode</span><div class=password-wrapper><input type=password id=adminPasscode name=adminPasscode autocomplete=current-password><button type=button class=password-toggle aria-label="Show password"><i class="fas fa-eye" aria-hidden=true></i></button></div></label><div id=ts-admin class=ts-widget-admin></div><button type=button class=primary-btn id=adminUnlockBtn><i class="fas fa-lock-open" aria-hidden=true></i> Unlock </button><div id=adminGated hidden><div class=field><span>Pavilion sheets</span><p class=muted> Uploads don't need a passcode, so check replaced sheets. If a bad upload replaced a good sheet, open History and restore the earlier one (up to five are kept per pavilion). </p><div id=adminSheets><p class=muted>Loading sheets…</p></div></div><label class=field for=adminSearch><span>Find a dog (name or ID)</span><input type=search id=adminSearch name=adminSearch placeholder="e.g. Bella or A312345"></label><p class=muted> Set a kennel as <code>A</code>–<code>E</code> plus a number (e.g. <code>C 70</code>), or clear it. Optionally pick the walker-level color matching the marker highlight on the sheet (yellow = intermediate, orange = advanced). Setting a kennel with "No color" removes any existing color. Overrides win over uploaded sheets and expire automatically after a day or two. </p><div id=adminResults><p class=muted>Loading roster…</p></div></div><div id=adminStatus class=status role=status aria-live=polite></div></details><dialog id=uploadSuccessModal class=success-modal closedby=any aria-labelledby=successThanks><div class=success-modal-header><button type=button class=close-modal-btn id=successCloseX aria-label="Close dialog">&times;</button></div><div class=success-modal-body><p class=success-emoji id=successEmoji aria-hidden=true></p><p class=success-thanks id=successThanks></p><p class=success-detail id=successDetail></p><p class=success-timing id=successTiming>Badges can take ~5 minutes to appear on the dashboard.</p><button type=button class=primary-btn id=successCloseBtn autofocus><i class="fas fa-paw" aria-hidden=true></i> Close </button></div></dialog></div><div class=footer><span>Last Updated: November 23, 2026 02:19 PM CST</span><div class=disclaimer> © 2026 CACC Dog Bot. This website is an independent, non-commercial project developed and maintained by a CACC volunteer residing in Chicago, IL. It is <strong>not</strong> officially affiliated with, endorsed by, or a representative of Chicago Animal Care &amp; Control (CACC) or the City of Chicago. All data is aggregated from public records and provided "as is," with <strong>no warranty</strong> of accuracy, completeness, or timeliness. Do not rely on it for adoption, rescue, or other decisions &mdash; always confirm directly with CACC. To the fullest extent permitted by law, the maintainer is not liable for any loss or damage arising from use of this site. See the <a href=terms.html>Terms of Use</a> for details. </div><nav class=footer-links aria-label=Site><a href=terms.html>Terms of Use</a><span aria-hidden=true>·</span><a href=privacy.html>Privacy Policy</a><span aria-hidden=true>·</span><a href=feedback.html>Feedback</a><span aria-hidden=true>·</span><a href=notes.html>Log a visit</a><span class=pwa-install-item><span aria-hidden=true>·</span> <button type=button class=pwa-install-link onclick="pwaOpenInstall('footer')">Install app</button></span></nav></div></div><script>
         // Optimization: Global Debounce Utility
         function debounce(func, wait) {
             let timeout;
@@ -2022,7 +2024,8 @@
         //   walksheet_guide_opened    Walk Sheet Upload tutorial dialog opened  {source: announcement|legend}
         //   walksheet_guide_clicked   tutorial CTA followed to upload.html      {source}
         //   walksheet_guide_dismissed tutorial closed without the CTA          {source, method: not_now|x|light_dismiss}
-        //   sheet_upload_queued       walk sheet accepted for background OCR    {pavilion, legacy?, via?}
+        //   sheet_upload_queued       walk sheet accepted for background OCR    {pavilion, ts_ms?, ts_wait_ms?, legacy?, via?}
+        //   sheet_upload_blocked      upload stopped by the security check      {reason, code, via?}
         //   sheet_upload_result       background sheet OCR finished or gave up  {pavilion, state, kennels?, highlights?, matched?, low_rows?, throttled?, overlap?, kept?, city?, rejected?, detected?, model?, poll_ms, legacy?, via?}
         //   admin_sheet_restored      admin restored an earlier pavilion sheet  {pavilion}
         //   air_section_toggled       air.html accordion opened or closed       {section, open}
@@ -2107,6 +2110,13 @@
         // pavilion letter the sheet actually belongs to on a mismatch;
         // low_rows=true marks an accepted sheet with far fewer rows than the
         // one it replaced.
+        // ts_ms (from 2026-11-23) is how long the upload widget took to mint the
+        // token that was sent (render or reset to callback; null without
+        // Turnstile or when it was unknown); ts_wait_ms is how long that tap
+        // waited on it after Upload (0 = ready already). sheet_upload_blocked
+        // reason is blocked (api.js never loaded) | timeout (no token in 20 s)
+        // | interactive (timed out while the check asked for a tap); code is
+        // the widget's last error-callback code, or null. Nothing was sent.
         // handling notes: method add_cue is the "＋" corner on a note-less
         // card (volunteer mode only); has_notes says whether the dog had
         // published notes. handling_add_clicked fires on click and auxclick
@@ -2512,25 +2522,128 @@
             } catch (e) { /* must never block the page */ }
         })();
         // --- end push landing ---
-    </script><script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad" async defer></script><script>
+    </script><script>
+    window.onTurnstileLoad = function () {
+        if (typeof turnstileReady === 'function') turnstileReady();
+    };
+    window.onTurnstileScriptError = function () {
+        window.turnstileScriptFailed = true;
+        var n = document.getElementById('tsBlocked');
+        if (n) n.hidden = false;
+    };
+</script><script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad" async defer onerror=onTurnstileScriptError()></script><script>
     const PAVILION_API_BASE = "https://pavilion-worker.caccdog.workers.dev";
     // Public Turnstile site key (safe to expose). Empty when not configured, in
     // which case the widgets are absent and the worker skips token verification.
     const TURNSTILE_SITE_KEY = "0x4AAAAAADg9jPJwIBGf1aqy";
 
     // Explicit render: this page has two widgets (upload + admin), so we capture
-    // each widget id and address them individually. Populated by onTurnstileLoad.
+    // each widget id and address them individually. The upload widget renders as
+    // soon as api.js is ready; the admin widget only when the admin panel opens,
+    // so a volunteer's page load runs one challenge, not two.
     let tsUploadId = null, tsAdminId = null;
-    // Admin tokens are single-use and the widget re-solves *asynchronously* after
-    // each reset, so back-to-back admin actions would read an empty token. The
-    // render callback hands fresh tokens to whoever is awaiting getAdminToken().
+    // Tokens are single-use and a widget re-solves *asynchronously* after each
+    // reset, so a caller can find no token yet. Each render callback hands the
+    // fresh token to whoever is awaiting getUploadToken() / getAdminToken().
     let adminTsWaiters = [];
-    window.onTurnstileLoad = function () {
-        if (!window.turnstile) return;
+    let uploadTsWaiters = [];
+    // Upload widget timings for sheet_upload_queued: when the current challenge
+    // started (render or reset) and how long it took to mint the token in hand.
+    let uploadTsStartedAt = 0, uploadTsSolveMs = null;
+    let uploadTsCode = null;          // last error-callback code (analytics only)
+    let uploadTsInteractive = false;  // the challenge is asking for a tap
+    let uploadTsWaiting = false;      // a submit is waiting on the token
+    // Once the check asks for a tap, a waiting submit gets this long from that
+    // moment (a person has to find and tap the box), instead of what is left
+    // of the 20 s the tap on Upload started.
+    const UPLOAD_TS_TAP_MS = 60000;
+    let extendUploadTokenWait = null;  // set while getUploadToken is waiting
+    // Called by onTurnstileLoad and once at the end of this script; idempotent.
+    function turnstileReady() {
+        ensureUploadWidget();
+        const panel = document.getElementById('adminPanel');
+        if (panel && panel.open) ensureAdminWidget();
+    }
+    function ensureUploadWidget() {
+        if (!TURNSTILE_SITE_KEY || !window.turnstile || tsUploadId !== null) return;
         const up = document.getElementById('ts-upload');
+        if (!up) return;
+        uploadTsStartedAt = Date.now();
         // `action` must match what the worker expects per endpoint
         // (verifyTurnstile): upload for /upload, admin for every /admin* call.
-        if (up) tsUploadId = window.turnstile.render(up, { sitekey: TURNSTILE_SITE_KEY, action: 'upload' });
+        tsUploadId = window.turnstile.render(up, {
+            sitekey: TURNSTILE_SITE_KEY,
+            action: 'upload',
+            // Invisible unless Cloudflare needs a tap; the container stays in
+            // the layout below the button so the box appears where we point.
+            appearance: 'interaction-only',
+            // A failed challenge retries after 3 s instead of the default 8 s.
+            'retry-interval': 3000,
+            callback: (token) => {
+                uploadTsSolveMs = Date.now() - uploadTsStartedAt;
+                uploadTsInteractive = false;
+                uploadTsWaiters.splice(0).forEach(fn => fn(token));
+            },
+            'error-callback': (code) => {
+                uploadTsCode = code ? String(code).slice(0, 16) : 'error';
+                // Falsy on purpose: Cloudflare's own example returns false to
+                // "let Turnstile handle the retry". The cost is a console warning.
+                return false;
+            },
+            // Turnstile refreshes an expired token itself (refresh-expired:
+            // auto); time the refresh like any other solve.
+            'expired-callback': () => { uploadTsStartedAt = Date.now(); },
+            'before-interactive-callback': () => {
+                uploadTsInteractive = true;
+                if (extendUploadTokenWait) extendUploadTokenWait();
+                if (uploadTsWaiting) showTsTapPrompt();
+            }
+        });
+    }
+    function resetUploadWidget() {
+        if (!window.turnstile || tsUploadId === null) return;
+        uploadTsStartedAt = Date.now();
+        uploadTsSolveMs = null;
+        window.turnstile.reset(tsUploadId);
+    }
+    // Resolve the upload token, waiting (up to timeoutMs) for a challenge still
+    // running, an expired token being refreshed, or api.js still loading. If
+    // the check asks for a tap, the wait becomes UPLOAD_TS_TAP_MS from that
+    // moment (or from now, when it was already asking). Resolves '' on timeout.
+    function getUploadToken(timeoutMs = 20000) {
+        ensureUploadWidget();
+        if (window.turnstile && tsUploadId !== null) {
+            let expired = false;
+            try { expired = window.turnstile.isExpired(tsUploadId) === true; } catch (e) {}
+            if (expired) resetUploadWidget();
+            else {
+                const existing = window.turnstile.getResponse(tsUploadId) || '';
+                if (existing) return Promise.resolve(existing);
+            }
+        }
+        return new Promise(resolve => {
+            let timer = 0;
+            const extend = () => arm(UPLOAD_TS_TAP_MS);
+            const settle = (token) => {
+                clearTimeout(timer);
+                if (extendUploadTokenWait === extend) extendUploadTokenWait = null;
+                resolve(token);
+            };
+            const done = token => settle(token);
+            const arm = (ms) => {
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    uploadTsWaiters = uploadTsWaiters.filter(fn => fn !== done);
+                    settle('');
+                }, ms);
+            };
+            arm(uploadTsInteractive ? Math.max(timeoutMs, UPLOAD_TS_TAP_MS) : timeoutMs);
+            extendUploadTokenWait = extend;
+            uploadTsWaiters.push(done);
+        });
+    }
+    function ensureAdminWidget() {
+        if (!TURNSTILE_SITE_KEY || !window.turnstile || tsAdminId !== null) return;
         const ad = document.getElementById('ts-admin');
         if (ad) tsAdminId = window.turnstile.render(ad, {
             sitekey: TURNSTILE_SITE_KEY,
@@ -2538,10 +2651,11 @@
             appearance: 'interaction-only',
             callback: (token) => { adminTsWaiters.splice(0).forEach(fn => fn(token)); }
         });
-    };
+    }
     // Resolve the current admin token, or wait for the widget to mint the next
     // one (post-reset). Resolves '' on timeout so callers show the retry message.
     function getAdminToken(timeoutMs = 15000) {
+        ensureAdminWidget();
         const existing = (window.turnstile && tsAdminId !== null && window.turnstile.getResponse(tsAdminId)) || '';
         if (existing) return Promise.resolve(existing);
         return new Promise(resolve => {
@@ -2550,8 +2664,9 @@
         });
     }
     // True when Turnstile is required but its script failed to load (e.g. blocked
-    // by an adblocker/privacy shield) — used to give the user an actionable message.
-    function turnstileBlocked() { return TURNSTILE_SITE_KEY && !window.turnstile; }
+    // by an adblocker/privacy shield): the api.js tag's onerror sets the flag. A
+    // script that is merely still loading is waited for, not reported.
+    function turnstileBlocked() { return !!TURNSTILE_SITE_KEY && !window.turnstile && window.turnstileScriptFailed === true; }
     // Passcode caching trade-off (both are shared secrets, not per-user creds):
     // the low-stakes volunteer passcode is cached in localStorage for convenience
     // across visits; the more sensitive admin passcode uses sessionStorage so it
@@ -3089,23 +3204,25 @@
             try { localStorage.setItem(TERMS_KEY, JSON.stringify({ v: TERMS_VERSION, ts: Date.now() })); } catch (e) {}
         }
         if (passInput.value) localStorage.setItem(PASS_KEY, passInput.value);
-        // Verify Turnstile up front — before the (mobile-expensive) image
-        // compression — so we don't burn battery/CPU on a request the worker
-        // would reject anyway.
-        let tsToken = '';
+        // The security check runs alongside compression: a challenge still
+        // solving (or api.js still loading on a slow connection) is waited
+        // for instead of failing the tap. Only a script that never loaded
+        // stops here.
+        const submitAt = Date.now();
+        let tokenP = null, tokenAt = 0;
         if (TURNSTILE_SITE_KEY) {
             if (turnstileBlocked()) {
-                setStatus(uploadStatus, 'Security check failed to load. Please disable any adblocker/privacy shield and refresh.', 'err');
+                setStatus(uploadStatus, "The security check didn't load. If you use an ad blocker or privacy shield, allow challenges.cloudflare.com, then refresh the page.", 'err');
+                track('sheet_upload_blocked', withVia({ reason: 'blocked', code: null }));
                 return;
             }
-            tsToken = (window.turnstile && window.turnstile.getResponse(tsUploadId)) || '';
-            if (!tsToken) {
-                setStatus(uploadStatus, 'Please complete the security check, then upload.', 'err');
-                return;
-            }
+            tokenP = getUploadToken(20000).then(t => { tokenAt = Date.now(); return t; });
         }
         submitBtn.disabled = true;
         setStatus(uploadStatus, 'Compressing photo…', '');
+        // Set just before the network call: only an attempt that reached the
+        // worker spends the single-use token, so only then is it reset.
+        let sent = false;
         try {
             // Compression and the network call fail in different ways and need
             // different messages, so each stage gets its own try/catch.
@@ -3129,12 +3246,34 @@
                     return;
                 }
             }
+            let tsToken = '', tsWaitMs = 0;
+            if (tokenP) {
+                // Copy only while the check is still pending: a token that was
+                // ready before compression finished sends without a word.
+                if (!tokenAt) {
+                    uploadTsWaiting = true;
+                    if (uploadTsInteractive) showTsTapPrompt();
+                    else setStatus(uploadStatus, 'One moment, finishing a quick security check…', '');
+                }
+                try { tsToken = await tokenP; } finally { uploadTsWaiting = false; }
+                tsWaitMs = Math.max(0, tokenAt - submitAt);
+                if (!tsToken) {
+                    // Nothing was sent, so the photo and the token state stay as
+                    // they are and the next tap tries again.
+                    setStatus(uploadStatus, 'The security check is taking too long. Tap Upload to try again.', 'err');
+                    track('sheet_upload_blocked', withVia({
+                        reason: uploadTsInteractive ? 'interactive' : 'timeout', code: uploadTsCode
+                    }));
+                    return;
+                }
+            }
             setStatus(uploadStatus, 'Uploading photo…', '');
             const body = new FormData();
             body.append('pavilion', pavilion);
             body.append('image', blob, filename);
             if (tsToken) body.append('cf-turnstile-response', tsToken);
             let resp;
+            sent = true;
             try {
                 resp = await fetch(`${PAVILION_API_BASE}/upload`, {
                     method: 'POST',
@@ -3167,8 +3306,10 @@
             } else if (resp.status === 415) {
                 setStatus(uploadStatus, "That file isn't a supported photo. Please take or choose a JPEG, PNG or HEIC image.", 'err');
             } else if (resp.status === 403) {
-                // Turnstile tokens expire after a few minutes.
-                setStatus(uploadStatus, 'Security check expired. Please redo it and try again.', 'err');
+                // Turnstile said no (expired or reused token, or a failed
+                // check). The widget is reset below, so a second tap gets a
+                // fresh token.
+                setStatus(uploadStatus, "The security check didn't go through. Tap Upload to try again.", 'err');
             } else if (!resp.ok) {
                 // Surface the worker's error detail (setStatus uses textContent,
                 // so echoing it is safe) — the generic message alone once hid an
@@ -3186,7 +3327,13 @@
                 openSuccessModal(detail,
                     "You're done! Feel free to shoot the next pavilion. Badges usually appear within ~5 minutes.");
                 addJob(String(data.job_id), pavilion);
-                track('sheet_upload_queued', withVia({ pavilion: pavilion }), TRACK_NOW);
+                // ts_ms: how long the token in hand took to solve (null when
+                // Turnstile is off); ts_wait_ms: how long this tap waited on it.
+                track('sheet_upload_queued', withVia({
+                    pavilion: pavilion,
+                    ts_ms: TURNSTILE_SITE_KEY ? uploadTsSolveMs : null,
+                    ts_wait_ms: TURNSTILE_SITE_KEY ? tsWaitMs : null
+                }), TRACK_NOW);
                 markVolunteer('upload');
                 // Inline echo so a record remains after the dialog is dismissed
                 // (the chip refresh waits for the poll to confirm the read).
@@ -3218,11 +3365,21 @@
             // this only catches the unexpected.
             setStatus(uploadStatus, 'Something went wrong. Please try again.', 'err');
         } finally {
-            // Turnstile tokens are single-use — reset so the next upload gets a fresh one.
-            if (TURNSTILE_SITE_KEY && window.turnstile && tsUploadId !== null) window.turnstile.reset(tsUploadId);
+            // Turnstile tokens are single-use: reset after any attempt that
+            // reached the network so the next upload gets a fresh one. A
+            // failure that sent nothing keeps its still-valid token.
+            if (sent && TURNSTILE_SITE_KEY) resetUploadWidget();
             submitBtn.disabled = !PAVILION_API_BASE;
         }
     });
+
+    // The challenge wants a tap while a submit is waiting: point at the box
+    // (interaction-only makes it appear below the button) and keep the photo.
+    function showTsTapPrompt() {
+        setStatus(uploadStatus, 'Tap the box below to finish the security check. Your photo will send right after.', '');
+        const box = document.getElementById('ts-upload');
+        if (box && box.scrollIntoView) box.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
 
     // ---- Admin corrections -------------------------------------------------
     const adminPass = document.getElementById('adminPasscode');
@@ -3301,7 +3458,9 @@
         setStatus(adminStatus, '', '');
     }
     adminPanel.addEventListener('toggle', function () {
-        if (!this.open) lockAdmin();
+        // The admin challenge starts only when an admin opens the panel.
+        if (this.open) ensureAdminWidget();
+        else lockAdmin();
     });
 
     function unlockAdmin() {
@@ -3774,4 +3933,8 @@
         }
     });
 
+    // api.js may have loaded (and called onTurnstileLoad, finding no
+    // turnstileReady yet) before this script ran: start the widgets now.
+    // Last in the script, so everything turnstileReady touches is declared.
+    if (window.turnstile) turnstileReady();
 </script></body></html>
